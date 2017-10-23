@@ -1,0 +1,33 @@
+{
+  "name": "astroffers",
+  "version": "1.0.0",
+  "description": "Take offers to watch at given nights by the NGC2000 catalog",
+  "main": "lib",
+  "typings": "lib",
+  "scripts": {
+    "build": "rimraf lib && tsc",
+    "build:w": "tsc -w"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jayhasyee/astroffers.git"
+  },
+  "keywords": [],
+  "author": "Péter Hauszknecht",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jayhasyee/astroffers/issues"
+  },
+  "homepage": "https://github.com/jayhasyee/astroffers#readme",
+  "dependencies": {
+    "moment": "^2.19.1"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.46",
+    "rimraf": "^2.6.2",
+    "typescript": "^2.5.3"
+  }
+}
