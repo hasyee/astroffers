@@ -1,5 +1,6 @@
 import { hmsToRad, dmsToRad, radToHms, PI2 } from './units';
-import { Rad, Deg, Eq, Az, Loc } from './types';
+import { getLst } from './lst';
+import { Rad, Deg, Eq, Az, Loc, Timestamp } from './types';
 
 const { sin, cos, atan2, asin } = Math;
 
@@ -8,7 +9,8 @@ export const getEqCoordsOfObject = ({ ra_hr, ra_min, dec_deg, dec_min }) => ({
   de: dmsToRad({ deg: Number(dec_deg), min: Number(dec_min) })
 });
 
-export const eqToAz = (lst: Rad, { lat }: Loc, { ra, de }: Eq): Az => {
+export const eqToAz = (time: Timestamp, { lat, lon }: Loc, { ra, de }: Eq): Az => {
+  const lst = getLst(time, lon);
   const h = lst - ra;
   const sinLat = sin(lat);
   const cosLat = cos(lat);
