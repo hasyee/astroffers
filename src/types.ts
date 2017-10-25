@@ -1,26 +1,40 @@
+export type Timestamp = number; // ms
+
+export type Day = number;
+
+export type Hour = number;
+
+export type ArcMin = number;
+
+export type ArcSec = number;
+
+export type Rad = number;
+
+export type Deg = number;
+
 export type Loc = {
-  lat: number;
-  lon: number;
+  lat: Rad;
+  lon: Rad;
 };
 
 export type Eq = {
-  ra: number;
-  de: number;
+  ra: Rad;
+  de: Rad;
 };
 
 export type Az = {
-  az: number;
-  alt: number;
+  az: Rad;
+  alt: Rad;
 };
 
 export type Hms = {
-  hour?: number;
-  min?: number;
-  sec?: number;
+  hour?: Hour;
+  min?: ArcMin;
+  sec?: ArcSec;
 };
 
 export type Dms = {
-  deg?: number;
-  min?: number;
-  sec?: number;
+  deg?: Deg;
+  min?: ArcMin;
+  sec?: ArcSec;
 };

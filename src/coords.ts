@@ -1,17 +1,23 @@
-import { hmsToDeg, dmsToDeg } from './units';
-import { Eq, Az } from './types';
+import { hmsToRad, dmsToRad, radToHms, PI2 } from './units';
+import { Rad, Deg, Eq, Az, Loc } from './types';
 
-export const raToAz = (lst: number, ra: number): number => (lst - ra) % 360;
+const { sin, cos, atan2, asin } = Math;
 
-export const deToAlt = (lat: number, de: number): number => de + (90 - lat);
-
-export const getRaOfObject = ({ ra_hr, ra_min }): number => hmsToDeg({ hour: Number(ra_hr), min: Number(ra_min) });
-
-export const getDeOfObject = ({ dec_deg, dec_min }): number => dmsToDeg({ deg: Number(dec_deg), min: Number(dec_min) });
-
-export const getEqCoordsOfObject = object => ({ ra: getRaOfObject(object), de: getDeOfObject(object) });
-
-export const eqToAz = (lst: number, lat: number, { ra, de }: Eq): Az => ({
-  az: raToAz(lst, ra),
-  alt: deToAlt(lat, de)
+export const getEqCoordsOfObject = ({ ra_hr, ra_min, dec_deg, dec_min }) => ({
+  ra: hmsToRad({ hour: Number(ra_hr), min: Number(ra_min) }),
+  de: dmsToRad({ deg: Number(dec_deg), min: Number(dec_min) })
 });
+
+export const eqToAz = (lst: Rad, { lat }: Loc, { ra, de }: Eq): Az => {
+  const h = lst - ra;
+  const sinLat = sin(lat);
+  const cosLat = cos(lat);
+  const sinH = sin(h);
+  const cosH = cos(h);
+  const sinDe = sin(de);
+  const cosDe = cos(de);
+  return {
+    az: PI2 - atan2(cosDe * sinH, -sinLat * cosDe * cosH + cosLat * sinDe),
+    alt: asin(sinLat * sinDe + cosLat * cosDe * cosH)
+  };
+};
