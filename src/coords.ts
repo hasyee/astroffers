@@ -4,14 +4,11 @@ import { Rad, Deg, Eq, Az, Loc, Timestamp } from './types';
 
 const { sin, cos, atan2, asin } = Math;
 
-export const getEqCoordsOfObject = ({ ra_hr, ra_min, dec_deg, dec_min }) => ({
-  ra: hmsToRad({ hour: Number(ra_hr), min: Number(ra_min) }),
-  de: dmsToRad({ deg: Number(dec_deg), min: Number(dec_min) })
-});
-
 export const eqToAz = (time: Timestamp, { lat, lon }: Loc, { ra, de }: Eq): Az => {
   const lst = getLst(time, lon);
+  //console.log('LST:', radToHms(lst));
   const h = lst - ra;
+  console.log('H:', radToHms(h));
   const sinLat = sin(lat);
   const cosLat = cos(lat);
   const sinH = sin(h);
