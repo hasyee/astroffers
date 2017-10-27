@@ -1,16 +1,17 @@
-const catalog = require('../data/SAC Deep Sky Database 8.1.json');
-import { radToHms, radToDms, degToRad } from './units';
-import { getEqCoordsOfObject, eqToAz } from './coords';
+const catalog = require('../data/ngc.json');
+import { radToHms, radToDms, degToRad, hmsToRad, dmsToRad } from './units';
+import { eqToAz } from './coords';
 
 const time = Date.now();
 const location = { lat: degToRad(47), lon: degToRad(20) };
 
-const andromeda = catalog.find(({ object }) => object === 'NGC224');
+const andromeda = catalog.find(({ ngc }) => ngc === 224);
+const helix = catalog.find(({ ngc }) => ngc === 7293);
 
-//console.log(andromeda);
+console.log(helix);
+const { ra, de } = helix.eqCoords;
 
-const eq = getEqCoordsOfObject(andromeda);
-const azCoords = eqToAz(time, location, eq);
+const azCoords = eqToAz(time, location, { ra: hmsToRad(ra), de: dmsToRad(de) });
 
 //console.log('EQ:', radToHms(eq.ra), radToDms(eq.de));
 console.log('AZ:', radToDms(azCoords.az), 'ALT:', radToDms(azCoords.alt));

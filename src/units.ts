@@ -15,7 +15,8 @@ export const radToHours = (rad: Rad): Hour => normalizeRad(rad) / PI2 * 24;
 
 export const hmsToRad = ({ hour = 0, min = 0, sec = 0 }: Hms): Rad => (hour + (min + sec / 60) / 60) / 24 * PI2;
 
-export const dmsToRad = ({ deg = 0, min = 0, sec = 0 }: Dms): Rad => degToRad(deg + (min + sec / 60) / 60);
+export const dmsToRad = ({ angle = 0, arcMin = 0, arcSec = 0 }: Dms): Rad =>
+  degToRad(angle + (arcMin + arcSec / 60) / 60);
 
 export const radToHms = (rad: Rad): Hms => {
   const hourWithDecimals = radToHours(rad);
@@ -28,13 +29,13 @@ export const radToHms = (rad: Rad): Hms => {
 };
 
 export const radToDms = (rad: Rad): Dms => {
-  const degWithDecimals = radToDeg(rad);
-  const deg = Math.floor(degWithDecimals);
-  const minWithDecimals = (degWithDecimals - deg) * 60;
-  const min = Math.floor(minWithDecimals);
-  const secWithDecimals = (minWithDecimals - min) * 60;
-  const sec = Math.floor(secWithDecimals);
-  return { deg, min, sec };
+  const angleWithDecimals = radToDeg(rad);
+  const angle = Math.floor(angleWithDecimals);
+  const arcMinWithDecimals = (angleWithDecimals - angle) * 60;
+  const arcMin = Math.floor(arcMinWithDecimals);
+  const arcSecWithDecimals = (arcMinWithDecimals - arcMin) * 60;
+  const arcSec = Math.floor(arcSecWithDecimals);
+  return { angle, arcMin, arcSec };
 };
 
 /* export const degToHours = (deg: number): number => (deg % 360) / 360 * 24; */
