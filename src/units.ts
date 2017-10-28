@@ -13,10 +13,10 @@ export const normalizeRad = (rad: Rad) => {
 
 export const radToHours = (rad: Rad): Hour => normalizeRad(rad) / PI2 * 24;
 
-export const hmsToRad = ({ hour = 0, min = 0, sec = 0 }: Hms): Rad => (hour + (min + sec / 60) / 60) / 24 * PI2;
+export const hmsToRad = ({ hour = 0, min = 0, sec = 0 }: Hms): Rad => (hour + min / 60 + sec / 3600) / 24 * PI2;
 
 export const dmsToRad = ({ angle = 0, arcMin = 0, arcSec = 0 }: Dms): Rad =>
-  degToRad(angle + (arcMin + arcSec / 60) / 60);
+  (angle < 0 ? -1 : +1) * degToRad(Math.abs(angle) + arcMin / 60 + arcSec / 3600);
 
 export const radToHms = (rad: Rad): Hms => {
   const hourWithDecimals = radToHours(rad);

@@ -2,8 +2,8 @@ const catalog = require('../data/ngc.json');
 import { radToHms, radToDms, degToRad, hmsToRad, dmsToRad } from './units';
 import { eqToAz } from './coords';
 
-const time = Date.now();
-const location = { lat: degToRad(47), lon: degToRad(20) };
+const time = Date.parse("2017-10-29T00:00:00.000");
+const location = { lat: degToRad(47.4925), lon: degToRad(19.0514) };
 
 const andromeda = catalog.find(({ ngc }) => ngc === 224);
 const helix = catalog.find(({ ngc }) => ngc === 7293);
