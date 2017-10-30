@@ -8,9 +8,10 @@ export const eqToAz = (time: Timestamp, { lat, lon }: Loc, { ra, de }: Eq): Az =
   //console.log('DE:', de);
   //console.log('RA:', ra);
   const lst = getLst(time, lon);
-  //console.log('LST:', radToHms(lst));
+  //const lst = hmsToRad({ hour: 2, min: 53, sec: 50.2 });
+  console.log('LST:', radToHms(lst));
   const h = lst - ra;
-  //console.log('H:', radToHms(h));
+  console.log('H:', radToHms(h));
   const sinLat = sin(lat);
   const cosLat = cos(lat);
   const sinH = sin(h);
