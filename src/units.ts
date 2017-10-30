@@ -13,6 +13,8 @@ export const normalizeRad = (rad: Rad) => {
 
 export const radToHours = (rad: Rad): Hour => normalizeRad(rad) / PI2 * 24;
 
+export const hoursToRad = (hours: Hour): Rad => hours / 24 * PI2;
+
 export const hmsToRad = ({ hour = 0, min = 0, sec = 0 }: Hms): Rad => (hour + min / 60 + sec / 3600) / 24 * PI2;
 
 export const dmsToRad = ({ angle = 0, arcMin = 0, arcSec = 0 }: Dms): Rad =>
