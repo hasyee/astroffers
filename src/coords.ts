@@ -1,17 +1,15 @@
-import { hmsToRad, dmsToRad, radToHms, PI2 } from './units';
+import { hmsToRad, dmsToRad, radToHmsString, PI2 } from './units';
 import { getLst } from './lst';
 import { Rad, Deg, Eq, Az, Loc, Timestamp } from './types';
 
 const { sin, cos, atan2, asin } = Math;
 
 export const eqToAz = (time: Timestamp, { lat, lon }: Loc, { ra, de }: Eq): Az => {
-  //console.log('DE:', de);
-  //console.log('RA:', ra);
   const lst = getLst(time, lon);
-  //const lst = hmsToRad({ hour: 2, min: 53, sec: 50.2 });
-  console.log('LST:', radToHms(lst));
+  //const lst = hmsToRad({ hour: 2, min: 53, sec: 50.6 });
+  console.log('LST:', radToHmsString(lst));
   const h = lst - ra;
-  console.log('H:', radToHms(h));
+  console.log('H:', radToHmsString(h));
   const sinLat = sin(lat);
   const cosLat = cos(lat);
   const sinH = sin(h);
