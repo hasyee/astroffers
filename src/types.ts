@@ -34,7 +34,7 @@ export type Hms = {
 };
 
 export type Dms = {
-  angle?: Deg;
+  deg?: Deg;
   arcMin?: ArcMin;
   arcSec?: ArcSec;
 };

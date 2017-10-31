@@ -1,20 +1,22 @@
 const catalog = require('../data/ngc.json');
-import { radToHms, radToDms, degToRad, dmsToRad, hmsToRad, hoursToRad } from './units';
+import { radToHms, radToDmsString, radToHmsString, degToRad, dmsToRad, hmsToRad, hoursToRad } from './units';
 import { eqToAz } from './coords';
 
-console.log('%%%%%%%%%%%%%', radToHms(hoursToRad(2.83)));
+const time = '2017-10-30T00:00:00+01:00';
+const lat = 47;
+const lon = 20;
+console.log('TIME:', time, 'LAT:', lat, 'LON:', lon);
+const location = { lat: degToRad(lat), lon: degToRad(lon) };
 
-const time = Date.parse('2017-10-30T00:00:00.000');
-const location = { lat: degToRad(47), lon: degToRad(20) };
+//const andromeda = catalog.find(({ ngc }) => ngc === 224);
+const helix = catalog.find(({ ngc }) => ngc === 7293);
 
-const andromeda = catalog.find(({ ngc }) => ngc === 224);
-//const helix = catalog.find(({ ngc }) => ngc === 7293);
+//console.log(andromeda);
+const ra = hmsToRad(helix.eqCoords.ra);
+const de = dmsToRad(helix.eqCoords.de);
+console.log(de)
+const { az, alt } = eqToAz(Date.parse(time), location, { ra, de });
 
-console.log(andromeda);
-const { ra, de } = andromeda.eqCoords;
-
-const azCoords = eqToAz(time, location, { ra: hmsToRad(ra), de: dmsToRad(de) });
-
-//console.log('EQ:', radToHms(eq.ra), radToDms(eq.de));
-console.log('AZ:', radToDms(azCoords.az), 'ALT:', radToDms(azCoords.alt));
+console.log('RA:', radToHmsString(ra), 'DE:', radToDmsString(de));
+console.log('AZ:', radToDmsString(az), 'ALT:', radToDmsString(alt));
 //console.log(azCoords.az, degToDms(azCoords.alt));
