@@ -1,12 +1,15 @@
-import { Deg, Rad, Hour, Hms, Dms, ArcMin, ArcSec } from './types';
+import { Deg, Rad, Hour, Hms, Dms, ArcMin, ArcSec, Timestamp, Day, Year, Century } from './types';
 
 const { round, floor, ceil, abs, PI } = Math;
 
 export const PI2 = 2 * PI;
+export const COMPLETE_ARC_SECS = 1296000;
+export const EPOCH_JULIAN_DATE = 2451545;
 
-export const ARC_SECS = 1296000;
-
-export const roundTo = (decimals: number) => (value: number) => round(value * 100) / 100;
+export const roundTo = (decimals: number) => {
+  const precision = 10 ** decimals;
+  return (value: number) => round(value * precision) / precision;
+};
 
 export const roundTo2 = roundTo(2);
 
@@ -31,7 +34,7 @@ export const hmsToRad = ({ hour = 0, min = 0, sec = 0 }: Hms): Rad => (hour + mi
 
 export const dmsToRad = ({ deg = 0, arcMin = 0, arcSec = 0 }: Dms): Rad => degToRad(deg + arcMin / 60 + arcSec / 3600);
 
-export const radToArcSec = (rad: Rad): ArcSec => (rad % PI2) / PI2 * ARC_SECS;
+export const radToArcSec = (rad: Rad): ArcSec => (rad % PI2) / PI2 * COMPLETE_ARC_SECS;
 
 export const radToHms = (rad: Rad): Hms => {
   const hourWithDecimals = radToHours(rad);
@@ -62,3 +65,11 @@ export const dmsToString = ({ deg, arcMin, arcSec }: Dms): string => {
 export const radToHmsString = (rad: Rad): string => hmsToString(radToHms(rad));
 
 export const radToDmsString = (rad: Rad): string => dmsToString(radToDms(rad));
+
+export const timeToJulianDate = (time: Timestamp): Day => Number(time / 86400000 + 2440587.5);
+
+export const julianDateToTime = (julianDate: Day): Timestamp => (julianDate - 2440587.5) * 86400000;
+
+export const julianDateToEpochDayNumber = (julianDate: Day): Day => julianDate - EPOCH_JULIAN_DATE;
+
+export const timeToEpochDayNumber = (time: Timestamp): Day => julianDateToEpochDayNumber(timeToJulianDate(time));
