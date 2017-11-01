@@ -1,5 +1,9 @@
 export type Timestamp = number; // ms
 
+export type Year = number;
+
+export type Century = number;
+
 export type Day = number;
 
 export type Hour = number;
