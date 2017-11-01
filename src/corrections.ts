@@ -1,3 +1,7 @@
+/**
+ * SOURCE: http://www.cv.nrao.edu/~rfisher/Ephemerides/earth_rot.html
+ */
+
 import moment = require('moment');
 import { Rad, Timestamp, Eq } from './types';
 import { hmsToRad, dmsToRad, timeToEpochDayNumber } from './units';
@@ -5,10 +9,6 @@ import { hmsToRad, dmsToRad, timeToEpochDayNumber } from './units';
 const { sin, cos, tan } = Math;
 
 const MILLENIUM = '2000-01-01T00:00:00.000Z';
-
-/**
- * SOURCE: http://www.cv.nrao.edu/~rfisher/Ephemerides/earth_rot.html
- */
 
 export const getEqCoordsOnDate = ({ ra, de }: Eq, time: Timestamp): Eq => {
   const { ra: deltaRa, de: deltaDe } = getCorrectionOfPrecession({ ra, de }, time);
