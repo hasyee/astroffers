@@ -44,8 +44,8 @@ export type Dms = {
 };
 
 export type HalfDayArc = {
-  rise: Timestamp;
-  set: Timestamp;
+  rise?: Timestamp;
+  set?: Timestamp;
 };
 
 export type NGCObject = {
