@@ -11,13 +11,27 @@ const getElapsedSeconds = (localTime: Timestamp): number => (localTime - GST_REF
 /**
  * Get Greenwich Local Sidereal Time in degrees
  */
-const getGst = (localTime: Timestamp): Rad => {
+const timeToGst = (localTime: Timestamp): Rad => {
   const elapsedSeconds = getElapsedSeconds(localTime);
   return GST_REFERENCE + elapsedSeconds * EARTH_ANGLULAR_SPEED;
 };
 
-export const getLst = (localTime: Timestamp, longitude: Rad = 0, normalize = true): Rad => {
-  const gst = getGst(localTime);
+export const timeToLst = (localTime: Timestamp, longitude: Rad = 0, normalize = true): Rad => {
+  const gst = timeToGst(localTime);
   const unnormalized = gst + longitude;
   return normalize ? unnormalized % PI2 : unnormalized;
+};
+
+/** 
+ * These functions work properly if LST is not normalized
+*/
+
+const gstToTime = (gst: Rad): Timestamp => {
+  const elapsedSeconds = (gst - GST_REFERENCE) / EARTH_ANGLULAR_SPEED;
+  return Math.round((GST_REFERENCE_TIME + elapsedSeconds) * 1000);
+};
+
+export const lstToTime = (lst: Rad, longitude: Rad = 0): Timestamp => {
+  const gst = lst - longitude;
+  return gstToTime(gst);
 };
