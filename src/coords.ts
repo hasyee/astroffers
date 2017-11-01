@@ -6,7 +6,6 @@ const { sin, cos, atan2, asin } = Math;
 
 export const eqToAz = (time: Timestamp, { lat, lon }: Loc, { ra, de }: Eq): Az => {
   const lst = getLst(time, lon);
-  //const lst = hmsToRad({ hour: 2, min: 53, sec: 50.6 });
   console.log('LST:', radToHmsString(lst));
   const h = lst - ra;
   console.log('HA:', radToHmsString(h));
