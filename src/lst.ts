@@ -13,11 +13,11 @@ const getElapsedSeconds = (localTime: Timestamp): number => (localTime - GST_REF
  */
 const getGst = (localTime: Timestamp): Rad => {
   const elapsedSeconds = getElapsedSeconds(localTime);
-  const sum = GST_REFERENCE + elapsedSeconds * EARTH_ANGLULAR_SPEED;
-  return sum % PI2;
+  return GST_REFERENCE + elapsedSeconds * EARTH_ANGLULAR_SPEED;
 };
 
-export const getLst = (localTime: Timestamp, longitude: Rad): Rad => {
+export const getLst = (localTime: Timestamp, longitude: Rad = 0, normalize = true): Rad => {
   const gst = getGst(localTime);
-  return (gst + longitude) % PI2;
+  const unnormalized = gst + longitude;
+  return normalize ? unnormalized % PI2 : unnormalized;
 };
