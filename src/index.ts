@@ -10,15 +10,18 @@ console.log('TIME:', time, 'LAT:', lat, 'LON:', lon);
 const location = { lat: degToRad(lat), lon: degToRad(lon) };
 const timestamp = Date.parse(time);
 
-//const andromeda = catalog.find(({ ngc }) => ngc === 224);
-const helix = catalog.find(({ ngc }) => ngc === 7293);
+const HELIX = 7293;
+const ANDROMEDA = 224;
+const NGC = HELIX;
+
+const object = catalog.find(({ ngc }) => ngc === NGC);
 
 //console.log(andromeda);
-const ra = hmsToRad(helix.eqCoords.ra);
-const de = dmsToRad(helix.eqCoords.de);
+const ra = hmsToRad(object.eqCoords.ra);
+const de = dmsToRad(object.eqCoords.de);
 const eqCoordsOnJ2000 = { ra, de };
 const eqCoordsOnDate = getEqCoordsOnDate(eqCoordsOnJ2000, timestamp);
-const { az, alt } = eqToAz(timestamp, location, eqCoordsOnJ2000);
+const { az, alt } = eqToAz(timestamp, location, eqCoordsOnDate);
 console.log('J2000 -', 'RA:', radToHmsString(ra), 'DE:', radToDmsString(de));
 console.log('ON DATE -', 'RA:', radToHmsString(eqCoordsOnDate.ra), 'DE:', radToDmsString(eqCoordsOnDate.de));
 console.log('AZ:', radToDmsString(az), 'ALT:', radToDmsString(alt));
