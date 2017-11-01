@@ -12,7 +12,8 @@ const timestamp = Date.parse(time);
 
 const HELIX = 7293;
 const ANDROMEDA = 224;
-const NGC = HELIX;
+const ORION = 1976;
+const NGC = ORION;
 
 const object = catalog.find(({ ngc }) => ngc === NGC);
 
