@@ -2,6 +2,7 @@ import { NGCObject } from './types';
 import { radToHms, radToDmsString, radToHmsString, degToRad, dmsToRad, hmsToRad, hoursToRad } from './units';
 import { eqToAz } from './coords';
 import { getEqCoordsOnDate } from './corrections';
+import { getHalfDayArcFactory } from './halfDaysArcs';
 const catalog: NGCObject[] = require('../data/ngc.json');
 
 const time = '2017-10-31T15:00:00+01:00';
@@ -27,4 +28,6 @@ const { az, alt } = eqToAz(timestamp, location, eqCoordsOnDate);
 console.log('J2000 -', 'RA:', radToHmsString(ra), 'DE:', radToDmsString(de));
 console.log('ON DATE -', 'RA:', radToHmsString(eqCoordsOnDate.ra), 'DE:', radToDmsString(eqCoordsOnDate.de));
 console.log('AZ:', radToDmsString(az), 'ALT:', radToDmsString(alt));
+
+getHalfDayArcFactory(Date.parse('2017-11-01 12:00:00'), location)(eqCoordsOnJ2000);
 //console.log(azCoords.az, degToDms(azCoords.alt));

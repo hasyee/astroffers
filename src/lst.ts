@@ -18,8 +18,8 @@ const timeToGst = (localTime: Timestamp): Rad => {
 
 export const timeToLst = (localTime: Timestamp, longitude: Rad = 0, normalize = true): Rad => {
   const gst = timeToGst(localTime);
-  const unnormalized = gst + longitude;
-  return normalize ? unnormalized % PI2 : unnormalized;
+  const lst = gst + longitude;
+  return normalize ? lst % PI2 : lst;
 };
 
 /** 
@@ -28,7 +28,7 @@ export const timeToLst = (localTime: Timestamp, longitude: Rad = 0, normalize = 
 
 const gstToTime = (gst: Rad): Timestamp => {
   const elapsedSeconds = (gst - GST_REFERENCE) / EARTH_ANGLULAR_SPEED;
-  return Math.round((GST_REFERENCE_TIME + elapsedSeconds) * 1000);
+  return Math.round(GST_REFERENCE_TIME + elapsedSeconds * 1000);
 };
 
 export const lstToTime = (lst: Rad, longitude: Rad = 0): Timestamp => {

@@ -43,6 +43,11 @@ export type Dms = {
   arcSec?: ArcSec;
 };
 
+export type HalfDayArc = {
+  rise: Timestamp;
+  set: Timestamp;
+};
+
 export type NGCObject = {
   ngc: number;
   eqCoords: {
