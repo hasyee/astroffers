@@ -1,7 +1,8 @@
-const catalog = require('../data/ngc.json');
+import { NGCObject } from './types';
 import { radToHms, radToDmsString, radToHmsString, degToRad, dmsToRad, hmsToRad, hoursToRad } from './units';
 import { eqToAz } from './coords';
 import { getEqCoordsOnDate } from './corrections';
+const catalog: NGCObject[] = require('../data/ngc.json');
 
 const time = '2017-10-31T15:00:00+01:00';
 const lat = 47;

@@ -42,3 +42,16 @@ export type Dms = {
   arcMin?: ArcMin;
   arcSec?: ArcSec;
 };
+
+export type NGCObject = {
+  ngc: number;
+  eqCoords: {
+    ra: Hms;
+    de: Dms;
+  };
+  type: string;
+  constellation: string;
+  size: string;
+  magnitude: number;
+  surfaceBrightness: number;
+};
