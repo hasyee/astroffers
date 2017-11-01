@@ -29,8 +29,7 @@ export const hoursToRad = (hours: Hour): Rad => hours / 24 * PI2;
 
 export const hmsToRad = ({ hour = 0, min = 0, sec = 0 }: Hms): Rad => (hour + min / 60 + sec / 3600) / 24 * PI2;
 
-export const dmsToRad = ({ deg = 0, arcMin = 0, arcSec = 0 }: Dms): Rad =>
-  getSign(deg) * degToRad(abs(deg) + arcMin / 60 + arcSec / 3600);
+export const dmsToRad = ({ deg = 0, arcMin = 0, arcSec = 0 }: Dms): Rad => degToRad(deg + arcMin / 60 + arcSec / 3600);
 
 export const radToArcSec = (rad: Rad): ArcSec => (rad % PI2) / PI2 * ARC_SECS;
 
