@@ -3,9 +3,10 @@ import { radToHms, radToDmsString, radToHmsString, degToRad, dmsToRad, hmsToRad,
 import { eqToAz } from './coords';
 import { getEqCoordsOnDate } from './corrections';
 import { getHalfDayArcFactory } from './halfDaysArcs';
+import { getSunriseAndSunset } from './sun';
 const catalog: NGCObject[] = require('../data/ngc.json');
 
-const time = '2017-10-31T15:00:00+01:00';
+const time = '2017-11-05T12:00:00+00:00';
 const lat = 47;
 const lon = 20;
 console.log('TIME:', time, 'LAT:', lat, 'LON:', lon);
@@ -30,7 +31,11 @@ console.log('J2000 -', 'RA:', radToHmsString(ra), 'DE:', radToDmsString(de));
 console.log('ON DATE -', 'RA:', radToHmsString(eqCoordsOnDate.ra), 'DE:', radToDmsString(eqCoordsOnDate.de));
 console.log('AZ:', radToDmsString(az), 'ALT:', radToDmsString(alt));
 
-const { rise, set } = getHalfDayArcFactory(Date.parse('2017-11-01 12:00:00'), location)(eqCoordsOnJ2000);
+/* const { rise, set } = getHalfDayArcFactory(Date.parse('2017-11-01 12:00:00'), location)(eqCoordsOnJ2000);
+console.log('RISING:', new Date(rise).toLocaleString());
+console.log('SETTING:', new Date(set).toLocaleString()); */
+//console.log(azCoords.az, degToDms(azCoords.alt));
+
+const { rise, set } = getSunriseAndSunset(timestamp, location);
 console.log('RISING:', new Date(rise).toLocaleString());
 console.log('SETTING:', new Date(set).toLocaleString());
-//console.log(azCoords.az, degToDms(azCoords.alt));
