@@ -9,11 +9,19 @@ import store from './store';
 import App from './components/App';
 
 const theme = require('../theme.json');
+const { version, description, author, license, bugs: { url: feedback }, homepage } = require('../package.json');
 
 ReactDOM.render(
   <Provider store={store as any}>
     <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
-      <App />
+      <App
+        version={version}
+        description={description}
+        author={author}
+        license={license}
+        feedback={feedback}
+        homepage={homepage}
+      />
     </MuiThemeProvider>
   </Provider>,
   document.getElementById('app')
