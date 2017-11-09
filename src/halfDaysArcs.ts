@@ -15,12 +15,12 @@ export const isRising = (siderealTime: Rad, lat: Rad, ra: Rad, de: Rad): boolean
 };
 
 export const getHalfDayArcFactory = (solarNoon: Timestamp, { lat, lon }: Loc) => (eqCoordsOnJ2000: Eq): HalfDayArc => {
-  const siderealNoon = timeToLst(solarNoon, lon, false);
+  const siderealSolarNoon = timeToLst(solarNoon, lon, false);
   const { ra, de } = getEqCoordsOnDate(eqCoordsOnJ2000, solarNoon);
   const psi = acos(-tan(lat) * tan(de));
   if (!Number.isFinite(psi)) return {};
-  const k1 = floor((ra + psi - siderealNoon) / PI2);
-  const k2 = floor((ra - psi - siderealNoon) / PI2);
+  const k1 = floor((ra + psi - siderealSolarNoon) / PI2);
+  const k2 = floor((ra - psi - siderealSolarNoon) / PI2);
   const nextCrossing1 = ra + psi - PI2 * k1;
   const nextCrossing2 = ra - psi - PI2 * k2;
   const startsWithRising = isRising(nextCrossing1, lat, ra, de);

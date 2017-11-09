@@ -12,7 +12,7 @@ import {
 import { eqToAz } from './coords';
 import { getEqCoordsOnDate } from './corrections';
 import { getHalfDayArcFactory } from './halfDaysArcs';
-import { getSunriseAndSunset } from './sun';
+import { getHalfDayArcOfSun } from './sun';
 const catalog: NGCObject[] = require('../data/ngc.json');
 
 /**
@@ -41,5 +41,5 @@ const eqCoordsOnDate = getEqCoordsOnDate(eqCoordsOnJ2000, timestamp);
 const ngcHda = getHalfDayArcFactory(timestamp, location)(eqCoordsOnJ2000);
 console.log(halfDayArcToString(ngcHda));
 
-const sunHda = getSunriseAndSunset(timestamp, location);
+const sunHda = getHalfDayArcOfSun(timestamp, location);
 console.log(halfDayArcToString(sunHda));

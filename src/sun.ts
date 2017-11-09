@@ -50,7 +50,7 @@ export const getEclipticCoords = (time: Timestamp): Ecl => {
   };
 };
 
-export const getSunriseAndSunset = (time: Timestamp, { lat, lon }: Loc): HalfDayArc => {
+export const getHalfDayArcOfSun = (time: Timestamp, { lat, lon }: Loc): HalfDayArc => {
   const y = getFractionalYear(time);
   const eqTime = getEqTime(y);
   const de = getDeclination(y);
