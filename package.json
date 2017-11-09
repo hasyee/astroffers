@@ -6,7 +6,9 @@
   "typings": "lib",
   "scripts": {
     "build": "rimraf lib && tsc",
-    "build:w": "tsc -w"
+    "build:w": "tsc -w",
+    "start": "electron lib/main",
+    "start-prod": "NODE_ENV=production npm start"
   },
   "files": [
     "lib"
@@ -23,7 +25,13 @@
   },
   "homepage": "https://github.com/jayhasyee/astroffers#readme",
   "dependencies": {
-    "moment": "^2.19.1"
+    "electron": "^1.7.9",
+    "moment": "^2.19.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "repatch": "^1.3.12"
   },
   "devDependencies": {
     "@types/node": "^8.0.46",
