@@ -12,7 +12,7 @@ export default class extends React.PureComponent {
           <AppBar title="Astroffers" showMenuIconButton={false} />
         </header>
         <main className="fitted layout">
-          <div className="dynamic column layout high">
+          <div className="dynamic column layout high panel">
             <Filter />
           </div>
           <div className="fitted column layout overflow-y content">

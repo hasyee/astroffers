@@ -15,6 +15,7 @@ class Filter extends React.PureComponent<{ filter: IFilter; changeFilter: typeof
   };
 
   handleDateChange = (_, dateObject) => this.props.changeFilter('date', dateObject.getTime());
+  handleSetToday = () => this.props.changeFilter('date', Date.now());
   handleMagnitudeChange = evt => this.props.changeFilter('magnitude', Number(evt.target.value));
   handleLatitudeChange = evt => this.props.changeFilter('latitude', Number(evt.target.value));
   handleLongitudeChange = evt => this.props.changeFilter('longitude', Number(evt.target.value));
@@ -39,6 +40,7 @@ class Filter extends React.PureComponent<{ filter: IFilter; changeFilter: typeof
             value={new Date(date)}
             onChange={this.handleDateChange}
           />
+          <FlatButton label="Set today" style={{ cssFloat: 'right' }} onClick={this.handleSetToday} />
           <TextField
             floatingLabelText="Latitude"
             floatingLabelFixed
