@@ -52,6 +52,7 @@ export type Dms = {
 
 export type HalfDayArc = {
   rise?: Timestamp;
+  noon?: Timestamp;
   set?: Timestamp;
 };
 
