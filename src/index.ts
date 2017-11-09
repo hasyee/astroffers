@@ -19,31 +19,20 @@ console.log('TIME:', time, 'LAT:', lat, 'LON:', lon);
 const location = { lat: degToRad(lat), lon: degToRad(lon) };
 const timestamp = Date.parse(time);
 
-/* const HELIX = 7293;
+const HELIX = 7293;
 const ANDROMEDA = 224;
 const ORION = 1976;
 const M51 = 5194;
 const NGC = ORION;
-
 const object = catalog.find(({ ngc }) => ngc === NGC);
-
-//console.log(andromeda);
 const ra = hmsToRad(object.eqCoords.ra);
 const de = dmsToRad(object.eqCoords.de);
-console.log(radToHmsString(Math.PI * 2 - de));
-
 const eqCoordsOnJ2000 = { ra, de };
 const eqCoordsOnDate = getEqCoordsOnDate(eqCoordsOnJ2000, timestamp);
-const { az, alt } = eqToAz(timestamp, location, eqCoordsOnDate);
-console.log('J2000 -', 'RA:', radToHmsString(ra), 'DE:', radToDmsString(de));
-console.log('ON DATE -', 'RA:', radToHmsString(eqCoordsOnDate.ra), 'DE:', radToDmsString(eqCoordsOnDate.de));
-console.log('AZ:', radToDmsString(az), 'ALT:', radToDmsString(alt)); */
+const { rise: ngcRise, set: ngcSet } = getHalfDayArcFactory(timestamp, location)(eqCoordsOnJ2000);
+console.log('RISING:', new Date(ngcRise).toLocaleString());
+console.log('SETTING:', new Date(ngcSet).toLocaleString());
 
-/* const { rise, set } = getHalfDayArcFactory(Date.parse('2017-11-06 12:00:00'), location)(eqCoordsOnJ2000);
-console.log('RISING:', new Date(rise).toLocaleString());
-console.log('SETTING:', new Date(set).toLocaleString()); */
-//console.log(azCoords.az, degToDms(azCoords.alt));
-
-const { rise, set } = getSunriseAndSunset(timestamp, location);
-console.log('RISING:', new Date(rise).toLocaleString());
-console.log('SETTING:', new Date(set).toLocaleString());
+const { rise: sunRise, set: sunSet } = getSunriseAndSunset(timestamp, location);
+console.log('SUN RISE:', new Date(sunRise).toLocaleString());
+console.log('SUN SET:', new Date(sunSet).toLocaleString());
