@@ -30,8 +30,17 @@ body {
   flex: 1 1 0;
 }
 
+.center {
+  justify-content: center;
+  align-items: center;
+}
+
 .overflow-y {
   overflow-y: auto;
+}
+
+.high {
+  z-index: 1;
 }
 
 .input-label {
@@ -44,8 +53,9 @@ body {
 }
 
 .filter {
+  background-color: white;
   width: 300px;
-  box-shadow: 0px 2px 10px -3px rgba(0, 0, 0, 0.35);
+  box-shadow: 0px 2px 10px -3px rgba(0, 0, 0, 0.5);
 }
 
 .filter > .inputs {
@@ -54,4 +64,19 @@ body {
 
 .filter > .button-container {
   padding: 15px;
+}
+
+.content {
+  background-color: #f8f8f8;
+  padding: 20px;
+}
+
+.sun-card {
+  background-color: white;
+  box-shadow: 0px 2px 10px -3px rgba(0, 0, 0, 0.5);
+  padding: 30px; 
+}
+
+.sun-card .center {
+  padding: 10px;
 }

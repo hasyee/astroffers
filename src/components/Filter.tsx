@@ -29,7 +29,7 @@ class Filter extends React.PureComponent<{ filter: IFilter; changeFilter: typeof
   render() {
     const { filter: { date, magnitude, latitude, longitude } } = this.props;
     return (
-      <div className="dynamic column layout filter">
+      <div className="fitted column layout filter">
         <div className="fitted overflow-y inputs">
           <DatePicker
             floatingLabelText="Date"

@@ -2,6 +2,7 @@ import * as React from 'react';
 import DatePicker from 'material-ui/DatePicker';
 import AppBar from 'material-ui/AppBar';
 import Filter from './Filter';
+import SunCard from './SunCard';
 
 export default class extends React.PureComponent {
   render() {
@@ -11,7 +12,12 @@ export default class extends React.PureComponent {
           <AppBar title="Astroffers" showMenuIconButton={false} />
         </header>
         <main className="fitted layout">
-          <Filter />
+          <div className="dynamic column layout high">
+            <Filter />
+          </div>
+          <div className="fitted column layout overflow-y content">
+            <SunCard />
+          </div>
         </main>
       </div>
     );
