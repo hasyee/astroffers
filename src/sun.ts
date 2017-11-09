@@ -55,10 +55,11 @@ export const getSunriseAndSunset = (time: Timestamp, { lat, lon }: Loc): HalfDay
   const eqTime = getEqTime(y);
   const de = getDeclination(y);
   const ha = acos(cos(PI / 2) / (cos(lat) * cos(de)) - tan(lat) * tan(de));
-  const rise = 720 + 4 * radToDeg(-lon - ha) - eqTime;
-  const set = 720 + 4 * radToDeg(-lon + ha) - eqTime;
-  return {
-    rise: moment.utc(time).startOf('day').add(rise, 'minutes').valueOf(),
-    set: moment.utc(time).startOf('day').add(set, 'minutes').valueOf()
-  };
+  const riseMins = 720 + 4 * radToDeg(-lon - ha) - eqTime;
+  const setMins = 720 + 4 * radToDeg(-lon + ha) - eqTime;
+  const noonMins = 720 + 4 * radToDeg(-lon) - eqTime;
+  const rise = moment.utc(time).startOf('day').add(riseMins, 'minutes').valueOf();
+  const set = moment.utc(time).startOf('day').add(setMins, 'minutes').valueOf();
+  const noon = moment.utc(time).startOf('day').add(noonMins, 'minutes').valueOf();
+  return { rise, noon, set };
 };
