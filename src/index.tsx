@@ -8,18 +8,11 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import store from './store';
 import App from './components/App';
 
-const theme = {
-  palette: {
-    primary1Color: '#ffeb3b',
-    accent1Color: '#ff5252',
-    accent3Color: '#ff8a80',
-    accent2Color: '#ff1744'
-  }
-};
+const theme = require('../theme.json');
 
 ReactDOM.render(
   <Provider store={store as any}>
-    <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme, theme)}>
+    <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
       <App />
     </MuiThemeProvider>
   </Provider>,

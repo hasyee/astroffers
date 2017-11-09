@@ -1,14 +1,14 @@
 import * as React from 'react';
 import AppBar from 'material-ui/AppBar';
 import DatePicker from 'material-ui/DatePicker';
-import Panel from './Panel';
+import Filter from './Filter';
 
 export default class extends React.PureComponent {
   render() {
     return (
-      <div className="absolute layout">
-        <Panel />
-        <div className="fitted layout" />
+      <div className="dynamic column layout panel">
+        <AppBar title="Astroffers" showMenuIconButton={false} />
+        <Filter />
       </div>
     );
   }
