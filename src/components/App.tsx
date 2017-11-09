@@ -4,12 +4,10 @@ import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import Divider from 'material-ui/Divider';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import Filter from './Filter';
 import SunCard from './SunCard';
+import About from './About';
 
 export default class extends React.PureComponent<{
   version: string;
@@ -25,63 +23,6 @@ export default class extends React.PureComponent<{
 
   handleAboutOpen = () => this.setState({ isAboutOpen: true });
   handleAboutClose = () => this.setState({ isAboutOpen: false });
-
-  renderAboutDialog() {
-    const { version, description, author, license, feedback, homepage } = this.props;
-    const actions = [ <FlatButton label="Close" primary={true} onClick={this.handleAboutClose} /> ];
-
-    return (
-      <Dialog
-        title="About Astroffers"
-        actions={actions}
-        modal={false}
-        open={this.state.isAboutOpen}
-        onRequestClose={this.handleAboutClose}
-        autoScrollBodyContent
-      >
-        <table className="about-table">
-          <tr>
-            <td>
-              <b>Version</b>
-            </td>
-            <td>{version}</td>
-          </tr>
-          <tr>
-            <td>
-              <b>Author</b>
-            </td>
-            <td>{author}</td>
-          </tr>
-          <tr>
-            <td>
-              <b>License</b>
-            </td>
-            <td>{license}</td>
-          </tr>
-          <tr>
-            <td>
-              <b>Feedback</b>
-            </td>
-            <td>
-              <a href={feedback} target="_blank">
-                {feedback}
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <b>Homepage</b>
-            </td>
-            <td>
-              <a href={homepage} target="_blank">
-                {homepage}
-              </a>
-            </td>
-          </tr>
-        </table>
-      </Dialog>
-    );
-  }
 
   renderMenu() {
     return (
@@ -100,6 +41,7 @@ export default class extends React.PureComponent<{
   }
 
   render() {
+    const { version, description, author, license, feedback, homepage } = this.props;
     return (
       <div className="absolute column layout">
         <header className="dynamic">
@@ -113,7 +55,16 @@ export default class extends React.PureComponent<{
             <SunCard />
           </div>
         </main>
-        {this.renderAboutDialog()}
+        <About
+          isOpen={this.state.isAboutOpen}
+          onClose={this.handleAboutClose}
+          version={version}
+          description={description}
+          author={author}
+          license={license}
+          feedback={feedback}
+          homepage={homepage}
+        />
       </div>
     );
   }
