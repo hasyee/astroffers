@@ -52,6 +52,10 @@ body {
   color: rgba(0, 0, 0, 0.3);
 }
 
+.about-table td {
+  padding: 1vw;
+}
+
 .panel {
   width: 30%;
 }
