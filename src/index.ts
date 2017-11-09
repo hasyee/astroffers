@@ -1,5 +1,14 @@
 import { NGCObject } from './types';
-import { radToHms, radToDmsString, radToHmsString, degToRad, dmsToRad, hmsToRad, hoursToRad } from './units';
+import {
+  radToHms,
+  radToDmsString,
+  radToHmsString,
+  degToRad,
+  dmsToRad,
+  hmsToRad,
+  hoursToRad,
+  halfDayArcToString
+} from './units';
 import { eqToAz } from './coords';
 import { getEqCoordsOnDate } from './corrections';
 import { getHalfDayArcFactory } from './halfDaysArcs';
@@ -29,10 +38,8 @@ const ra = hmsToRad(object.eqCoords.ra);
 const de = dmsToRad(object.eqCoords.de);
 const eqCoordsOnJ2000 = { ra, de };
 const eqCoordsOnDate = getEqCoordsOnDate(eqCoordsOnJ2000, timestamp);
-const { rise: ngcRise, set: ngcSet } = getHalfDayArcFactory(timestamp, location)(eqCoordsOnJ2000);
-console.log('RISING:', new Date(ngcRise).toLocaleString());
-console.log('SETTING:', new Date(ngcSet).toLocaleString());
+const ngcHda = getHalfDayArcFactory(timestamp, location)(eqCoordsOnJ2000);
+console.log(halfDayArcToString(ngcHda));
 
-const { rise: sunRise, set: sunSet } = getSunriseAndSunset(timestamp, location);
-console.log('SUN RISE:', new Date(sunRise).toLocaleString());
-console.log('SUN SET:', new Date(sunSet).toLocaleString());
+const sunHda = getSunriseAndSunset(timestamp, location);
+console.log(halfDayArcToString(sunHda));
