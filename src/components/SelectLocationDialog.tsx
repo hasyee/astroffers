@@ -27,6 +27,15 @@ export default class extends React.PureComponent<
     this.props.onSubmit(this.state);
   };
 
+  componentWillUpdate(nextProps) {
+    if (nextProps.latitude !== this.props.latitude || nextProps.longitude !== this.props.longitude) {
+      this.setState({
+        latitude: nextProps.latitude,
+        longitude: nextProps.longitude
+      });
+    }
+  }
+
   render() {
     const { onCancel, onSubmit, isOpen } = this.props;
     const { latitude, longitude } = this.state;
