@@ -74,11 +74,9 @@ export const timeToJulianDate = (time: Timestamp): Day => time / MILLISECONDS_OF
 export const julianDateToTime = (julianDate: Day): Timestamp =>
   (julianDate - JULIAND_DATE_OF_UTC_EPOCH) * MILLISECONDS_OF_DAY;
 
-export const julianDateToEpochDayNumber = (julianDate: Day): Day =>
-  julianDate - JULIAN_DATE_OF_MILLENIUM;
+export const julianDateToEpochDayNumber = (julianDate: Day): Day => julianDate - JULIAN_DATE_OF_MILLENIUM;
 
-export const epochDayNumberToJulanDate = (epochDayNumber: Day): Day =>
-  epochDayNumber + JULIAN_DATE_OF_MILLENIUM;
+export const epochDayNumberToJulanDate = (epochDayNumber: Day): Day => epochDayNumber + JULIAN_DATE_OF_MILLENIUM;
 
 export const timeToEpochDayNumber = (time: Timestamp): Day => julianDateToEpochDayNumber(timeToJulianDate(time));
 

@@ -16,6 +16,8 @@ export type Rad = number;
 
 export type Deg = number;
 
+export type AU = number;
+
 export type Loc = {
   lat: Rad;
   lon: Rad;
@@ -29,6 +31,11 @@ export type Eq = {
 export type Az = {
   az: Rad;
   alt: Rad;
+};
+
+export type Ecl = {
+  lat: Rad;
+  lon: Rad;
 };
 
 export type Hms = {
