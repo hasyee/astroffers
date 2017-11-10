@@ -7,6 +7,7 @@ import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import Filter from './Filter';
 import SunCard from './SunCard';
+import MoonCard from './MoonCard';
 import About from './About';
 
 export default class extends React.PureComponent<{
@@ -53,6 +54,7 @@ export default class extends React.PureComponent<{
           </div>
           <div className="fitted column layout overflow-y content">
             <SunCard />
+            <MoonCard />
           </div>
         </main>
         <About
