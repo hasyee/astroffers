@@ -1,4 +1,5 @@
 import React = require('react');
+import moment = require('moment');
 import { NightInfo } from '../calcs/types';
 
 export default class extends React.PureComponent<{ nightInfo: NightInfo }> {
@@ -11,30 +12,30 @@ export default class extends React.PureComponent<{ nightInfo: NightInfo }> {
             <tr>
               <td>Night</td>
               <td>Sunset</td>
-              <td>{new Date(night.start).toLocaleString()}</td>
+              <td>{moment(night.start).format('HH:mm')}</td>
               <td>Sunrise</td>
-              <td>{new Date(night.end).toLocaleString()}</td>
+              <td>{moment(night.end).format('HH:mm')}</td>
             </tr>
             <tr>
               <td>Astro night</td>
               <td>From</td>
-              <td>{new Date(astroNight.start).toLocaleString()}</td>
+              <td>{moment(astroNight.start).format('HH:mm')}</td>
               <td>To</td>
-              <td>{new Date(astroNight.end).toLocaleString()}</td>
+              <td>{moment(astroNight.end).format('HH:mm')}</td>
             </tr>
             <tr>
               <td>Moon</td>
               <td>Moonset</td>
-              <td>{new Date(moonNight.start).toLocaleString()}</td>
+              <td>{moment(moonNight.start).format('HH:mm')}</td>
               <td>Moonrise</td>
-              <td>{new Date(moonNight.end).toLocaleString()}</td>
+              <td>{moment(moonNight.end).format('HH:mm')}</td>
             </tr>
             <tr>
               <td>Moonless night</td>
               <td>From</td>
-              <td>{new Date(moonlessNight.start).toLocaleString()}</td>
+              <td>{moment(moonlessNight.start).format('HH:mm')}</td>
               <td>To</td>
-              <td>{new Date(moonlessNight.end).toLocaleString()}</td>
+              <td>{moment(moonlessNight.end).format('HH:mm')}</td>
             </tr>
           </tbody>
         </table>
