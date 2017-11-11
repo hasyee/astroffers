@@ -127,3 +127,11 @@ body {
 .night.card > table td:nth-child(even) {
   text-align: right;
 }
+
+.list.card .sorter {
+  cursor: pointer;
+}
+
+.list.card .sorter:hover {
+  text-decoration: underline;
+}

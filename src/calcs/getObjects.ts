@@ -15,18 +15,19 @@ export default (
   magnitudeLimit: number
 ): NgcInfo[] => {
   const location = getLocation(latitude, longitude);
-  const noon = toNoon(date);
-  const getHalfDayArc = getHalfDayArcFactory(noon, location, degToRad(altitideLimit));
+  const ngcNoon = toNoon(date);
+  const getHalfDayArc = getHalfDayArcFactory(ngcNoon, location, degToRad(altitideLimit));
   return ngcObjects
     .filter(object => Number.isFinite(object.magnitude) && object.magnitude < magnitudeLimit)
     .map(object => {
       const ra = hmsToRad(object.eqCoords.ra);
       const de = dmsToRad(object.eqCoords.de);
       const eqCoordsOnJ2000 = { ra, de };
-      const eqCoordsOnDate = getEqCoordsOnDate(eqCoordsOnJ2000, noon);
-      const ngcHda = getHalfDayArc(eqCoordsOnJ2000);
-      const intersection = getIntersection(ngcHda, astroNight);
-      return { object, eqCoordsOnDate, intersection };
+      const eqCoordsOnDate = getEqCoordsOnDate(eqCoordsOnJ2000, ngcNoon);
+      const hda = getHalfDayArc(eqCoordsOnJ2000);
+      const noon = Math.round((hda.start + hda.end) / 2);
+      const intersection = getIntersection(hda, astroNight);
+      return { object, eqCoordsOnDate, intersection, noon };
     })
     .filter(ngcInfo => ngcInfo.intersection);
 };
