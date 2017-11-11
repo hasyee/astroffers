@@ -114,15 +114,16 @@ body {
   border-collapse: collapse;
 }
 
+.night.card > table tr:not(:last-child) {
+  border-bottom: 1px solid rgb(224, 224, 224);
+}
+
 .night.card > table td {
   padding: 10px;
   vertical-align: middle;
+  font-size: 13px;
 }
 
 .night.card > table td:nth-child(even) {
   text-align: right;
-}
-
-.night.card > table tr:nth-child(even) {
-  background-color: #f2f2f2;
 }
