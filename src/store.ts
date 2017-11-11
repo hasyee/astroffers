@@ -10,4 +10,8 @@ const initialState: State = {
   }
 };
 
-export default new Store<State>(initialState).addMiddleware(thunk.withExtraArgument({}));
+const store = new Store<State>(initialState).addMiddleware(thunk.withExtraArgument({}));
+
+window['store'] = store;
+
+export default store;
