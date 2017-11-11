@@ -9,6 +9,8 @@ import SelectLocationDialog from './SelectLocationDialog';
 import { State, Filter as IFilter } from '../types';
 import { changeFilter } from '../actions';
 
+const resolveValue = (value: number) => (Number.isFinite(value) ? value : '');
+
 class Filter extends React.PureComponent<{ filter: IFilter; changeFilter: typeof changeFilter }> {
   state = {
     isOpenDialog: false
@@ -16,7 +18,10 @@ class Filter extends React.PureComponent<{ filter: IFilter; changeFilter: typeof
 
   handleDateChange = (_, dateObject) => this.props.changeFilter('date', dateObject.getTime());
   handleSetToday = () => this.props.changeFilter('date', Date.now());
-  handleChange = (prop: string) => evt => this.props.changeFilter(prop, Number(evt.target.value));
+  handleChange = (prop: string) => evt => {
+    const value = parseFloat(evt.target.value);
+    this.props.changeFilter(prop, Number.isFinite(value) ? value : null);
+  };
   handleDialogOpen = () => this.setState({ isOpenDialog: true });
   handleDialogCancel = () => this.setState({ isOpenDialog: false });
   handleDialogSubmit = ({ latitude, longitude }) => {
@@ -43,7 +48,7 @@ class Filter extends React.PureComponent<{ filter: IFilter; changeFilter: typeof
             floatingLabelText="Latitude ( ° )"
             floatingLabelFixed
             fullWidth
-            value={latitude}
+            value={resolveValue(latitude)}
             onChange={this.handleChange('latitude')}
             type="number"
           />
@@ -51,7 +56,7 @@ class Filter extends React.PureComponent<{ filter: IFilter; changeFilter: typeof
             floatingLabelText="Longitude ( ° )"
             floatingLabelFixed
             fullWidth
-            value={longitude}
+            value={resolveValue(longitude)}
             onChange={this.handleChange('longitude')}
             type="number"
           />
@@ -67,7 +72,7 @@ class Filter extends React.PureComponent<{ filter: IFilter; changeFilter: typeof
             floatingLabelText="Magnitude limit ( ° )"
             floatingLabelFixed
             fullWidth
-            value={magnitude}
+            value={resolveValue(magnitude)}
             onChange={this.handleChange('magnitude')}
             type="number"
           />
@@ -75,7 +80,7 @@ class Filter extends React.PureComponent<{ filter: IFilter; changeFilter: typeof
             floatingLabelText="Astronomical twilight ( ° )"
             floatingLabelFixed
             fullWidth
-            value={twilight}
+            value={resolveValue(twilight)}
             onChange={this.handleChange('twilight')}
             type="number"
           />
@@ -83,7 +88,7 @@ class Filter extends React.PureComponent<{ filter: IFilter; changeFilter: typeof
             floatingLabelText="Altitude limit ( ° )"
             floatingLabelFixed
             fullWidth
-            value={altitude}
+            value={resolveValue(altitude)}
             onChange={this.handleChange('altitude')}
             type="number"
           />
