@@ -1,7 +1,7 @@
 import { NgcObject, NgcInfo, NightInfo, Loc, Timestamp, Deg } from './types';
 import { getHalfDayArcFactory } from './halfDaysArcs';
 import { getLocation, degToRad, hmsToRad, dmsToRad } from './units';
-import { toMidnight } from './time';
+import { toNoon } from './time';
 import { getIntersection } from './interval';
 import { getEqCoordsOnDate } from './corrections';
 
@@ -10,22 +10,23 @@ export default (
   date: Timestamp,
   latitude: Deg,
   longitude: Deg,
-  { moonlessNight }: NightInfo,
+  { astroNight }: NightInfo,
   altitideLimit: Deg,
   magnitudeLimit: number
 ): NgcInfo[] => {
   const location = getLocation(latitude, longitude);
-  const midnight = toMidnight(date);
-  const getHalfDayArc = getHalfDayArcFactory(midnight, location, degToRad(altitideLimit));
+  const noon = toNoon(date);
+  const getHalfDayArc = getHalfDayArcFactory(noon, location, degToRad(altitideLimit));
   return ngcObjects
+    .filter(object => Number.isFinite(object.magnitude) && object.magnitude < magnitudeLimit)
     .map(object => {
       const ra = hmsToRad(object.eqCoords.ra);
       const de = dmsToRad(object.eqCoords.de);
       const eqCoordsOnJ2000 = { ra, de };
-      const eqCoordsOnDate = getEqCoordsOnDate(eqCoordsOnJ2000, midnight);
-      const ngcHda = getHalfDayArcFactory(midnight, location, altitideLimit)(eqCoordsOnJ2000);
-      const intersection = getIntersection(ngcHda, moonlessNight);
+      const eqCoordsOnDate = getEqCoordsOnDate(eqCoordsOnJ2000, noon);
+      const ngcHda = getHalfDayArc(eqCoordsOnJ2000);
+      const intersection = getIntersection(ngcHda, astroNight);
       return { object, eqCoordsOnDate, intersection };
     })
-    .filter(ngcInfo => ngcInfo.object.magnitude < magnitudeLimit);
+    .filter(ngcInfo => ngcInfo.intersection);
 };
