@@ -1,4 +1,4 @@
-import { Timestamp, Loc, Eq, HalfDayArc, Rad } from './types';
+import { Timestamp, Loc, Eq, Interval, Rad } from './types';
 import { hmsToRad, dmsToRad, PI2 } from './units';
 import { timeToLst, lstToTime } from './lst';
 import { getEqCoordsOnDate } from './corrections';
@@ -16,7 +16,7 @@ export const isRising = (siderealTime: Rad, lat: Rad, ra: Rad, de: Rad): boolean
 
 export const getHalfDayArcFactory = (solarNoon: Timestamp, { lat, lon }: Loc, altitudeLimit: Rad = 0) => (
   eqCoordsOnJ2000: Eq
-): HalfDayArc => {
+): Interval => {
   const siderealSolarNoon = timeToLst(solarNoon, lon, false);
   const { ra, de } = getEqCoordsOnDate(eqCoordsOnJ2000, solarNoon);
   const ha = acos((sin(altitudeLimit) - sin(lat) * sin(de)) / (cos(lat) * cos(de)));

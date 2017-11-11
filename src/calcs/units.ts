@@ -1,4 +1,4 @@
-import { Deg, Rad, Hour, Hms, Dms, ArcMin, ArcSec, Timestamp, Day, Year, Century, HalfDayArc, Loc } from './types';
+import { Deg, Rad, Hour, Hms, Dms, ArcMin, ArcSec, Timestamp, Day, Year, Century, Interval, Loc } from './types';
 
 const { round, floor, ceil, abs, PI } = Math;
 
@@ -83,7 +83,7 @@ export const timeToEpochDayNumber = (time: Timestamp): Day => julianDateToEpochD
 export const epochDayNumberToTime = (epochDayNumber: Day): Timestamp =>
   epochDayNumberToJulanDate(julianDateToTime(epochDayNumber));
 
-export const halfDayArcToString = ({ start, end }: HalfDayArc) =>
+export const halfDayArcToString = ({ start, end }: Interval) =>
   `RISE: ${new Date(start).toLocaleString()} SET: ${new Date(end).toLocaleString()}`;
 
 export const getLocation = (latitude: Deg, longitude: Deg): Loc => ({

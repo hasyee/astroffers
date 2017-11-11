@@ -5,7 +5,7 @@
  */
 
 import moment = require('moment');
-import { Timestamp, HalfDayArc, Loc, Ecl, Rad, Transit, TransitType } from './types';
+import { Timestamp, Interval, Loc, Ecl, Rad, Transit, TransitType } from './types';
 import {
   PI2,
   timeToEpochDayNumber,
@@ -20,6 +20,8 @@ import {
 } from './units';
 import { lstToTime, timeToLst } from './lst';
 import { eclToEq } from './coords';
+import { toNoon, nextDay } from './time';
+import { flatten } from './utils';
 
 const { PI, sin, cos, asin, acos, tan, round } = Math;
 
@@ -50,7 +52,7 @@ export const getEclipticCoords = (time: Timestamp): Ecl => {
   };
 };
 
-export const getHalfDayArcOfSun = (time: Timestamp, { lat, lon }: Loc, altitudeLimit: Rad = 0): HalfDayArc => {
+export const getHalfDayArcOfSun = (time: Timestamp, { lat, lon }: Loc, altitudeLimit: Rad = 0): Interval => {
   const y = getFractionalYear(time);
   const eqTime = getEqTime(y);
   const de = getDeclination(y);
@@ -62,20 +64,21 @@ export const getHalfDayArcOfSun = (time: Timestamp, { lat, lon }: Loc, altitudeL
   return { start, end };
 };
 
-export const getTransits = (time: Timestamp, { lat, lon }: Loc, altitudeLimit: Rad = 0): Transit[] => {
-  const y = getFractionalYear(time);
-  const eqTime = getEqTime(y);
-  const de = getDeclination(y);
-  const ha = acos((sin(altitudeLimit) - sin(lat) * sin(de)) / (cos(lat) * cos(de)));
-  const riseMins = 720 + 4 * radToDeg(-lon - ha) - eqTime;
-  const setMins = 720 + 4 * radToDeg(-lon + ha) - eqTime;
-  const noonMins = 720 + 4 * radToDeg(-lon) - eqTime;
-  const rise = moment.utc(time).startOf('day').add(riseMins, 'minutes').valueOf();
-  const set = moment.utc(time).startOf('day').add(setMins, 'minutes').valueOf();
-  const noon = moment.utc(time).startOf('day').add(noonMins, 'minutes').valueOf();
-  return [
-    { type: TransitType.RISE, time: rise },
-    { type: TransitType.NOON, time: noon },
-    { type: TransitType.SET, time: set }
-  ];
+/* export const getTransitsOfSun = (times: Timestamp[], loc: Loc, altitudeLimit: Rad = 0): Transit[] => {
+  return flatten(
+    times
+      .map(time => getHalfDayArcOfSun(time, loc, altitudeLimit))
+      .map(({ start, end }) => [ { type: TransitType.RISE, time: start }, { type: TransitType.SET, time: end } ])
+  );
+};
+ */
+
+export const getNight = (time: Timestamp, loc: Loc, altitudeLimit: Rad = 0): Interval => {
+  const noon = toNoon(time);
+  const thatDayArc = getHalfDayArcOfSun(noon, loc, altitudeLimit);
+  const nextDayArc = getHalfDayArcOfSun(nextDay(noon), loc, altitudeLimit);
+  return {
+    start: thatDayArc.end,
+    end: nextDayArc.start
+  };
 };
