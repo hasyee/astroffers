@@ -17,9 +17,7 @@ class SunCard extends React.PureComponent<{ date: number; latitude: number; long
     return (
       <div className="dynamic row layout half-day-arc card center">
         <div className="center layout">
-          <FontIcon className="material-icons" style={iconStyle}>
-            wb_sunny
-          </FontIcon>
+          <FontIcon className="mdi mdi-white-balance-sunny" style={iconStyle} />
         </div>
         <div className="fitted column layout">
           <div className="center layout">Sunrise</div>
