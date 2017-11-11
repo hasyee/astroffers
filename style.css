@@ -31,7 +31,7 @@ body {
 }
 
 .center {
-  justify-content: center;
+  justify-result: center;
   align-items: center;
 }
 
@@ -73,16 +73,16 @@ body {
   padding: 15px;
 }
 
-.content {
+.result {
   background-color: #f8f8f8;
   padding: 15px;
 }
 
-.content > div {
+.result > div {
   margin-bottom: 15px;
 }
 
-.content > div:last-child {
+.result > div:last-child {
   margin-bottom: 0;
 }
 
@@ -121,14 +121,6 @@ body {
 
 .night.card > table td:nth-child(even) {
   text-align: right;
-}
-
-.night.card > table td:first-child {
-  
-}
-
-.night.card > table td:not(:first-child) {
-  
 }
 
 .night.card > table tr:nth-child(even) {

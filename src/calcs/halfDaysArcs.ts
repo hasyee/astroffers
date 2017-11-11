@@ -14,11 +14,11 @@ export const isRising = (siderealTime: Rad, lat: Rad, ra: Rad, de: Rad): boolean
   return derivate > 0;
 };
 
-export const getHalfDayArcFactory = (solarNoon: Timestamp, { lat, lon }: Loc, altitudeLimit: Rad = 0) => (
+export const getHalfDayArcFactory = (midnight: Timestamp, { lat, lon }: Loc, altitudeLimit: Rad = 0) => (
   eqCoordsOnJ2000: Eq
 ): Interval => {
-  const siderealSolarNoon = timeToLst(solarNoon, lon, false);
-  const { ra, de } = getEqCoordsOnDate(eqCoordsOnJ2000, solarNoon);
+  const siderealSolarNoon = timeToLst(midnight, lon, false);
+  const { ra, de } = getEqCoordsOnDate(eqCoordsOnJ2000, midnight);
   const ha = acos((sin(altitudeLimit) - sin(lat) * sin(de)) / (cos(lat) * cos(de)));
   if (!Number.isFinite(ha)) return {};
   const k1 = floor((ra + ha - siderealSolarNoon) / PI2);

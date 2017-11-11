@@ -1,4 +1,4 @@
-import { NGCObject } from './types';
+import { NgcObject } from './types';
 import {
   radToHms,
   radToDmsString,
@@ -13,7 +13,7 @@ import { eqToAz } from './coords';
 import { getEqCoordsOnDate } from './corrections';
 import { getHalfDayArcFactory } from './halfDaysArcs';
 import { getHalfDayArcOfSun } from './sun';
-const catalog: NGCObject[] = require('../../data/ngc.json');
+const catalog: NgcObject[] = require('../../data/ngc.json');
 
 /**
  * PHOTOS:

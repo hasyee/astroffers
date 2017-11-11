@@ -7,7 +7,7 @@ import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import Filter from './Filter';
 import About from './About';
-import NightCard from './NightCard';
+import Result from './Result';
 
 export default class extends React.PureComponent<{
   version: string;
@@ -56,8 +56,8 @@ export default class extends React.PureComponent<{
           <div className="dynamic column layout high panel">
             <Filter />
           </div>
-          <div className="fitted column layout overflow-y content">
-            <NightCard />
+          <div className="fitted column layout">
+            <Result />
           </div>
         </main>
         <About

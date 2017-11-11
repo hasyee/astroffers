@@ -1,18 +1,9 @@
 import React = require('react');
-import moment = require('moment');
-import { connect } from 'react-redux';
-import FontIcon from 'material-ui/FontIcon';
-import getNightInfo from '../calcs/getNightInfo';
+import { NightInfo } from '../calcs/types';
 
-const iconStyle = {
-  fontSize: '70px',
-  color: '#ddd'
-};
-
-class SunCard extends React.PureComponent<{ date: number; latitude: number; longitude: number; twilight: number }> {
+export default class extends React.PureComponent<{ nightInfo: NightInfo }> {
   render() {
-    const { date, latitude, longitude, twilight } = this.props;
-    const { night, astroNight, moonNight, moonlessNight } = getNightInfo(date, latitude, longitude, twilight);
+    const { night, astroNight, moonNight, moonlessNight } = this.props.nightInfo;
     return (
       <div className="dynamic night card center">
         <table>
@@ -51,10 +42,3 @@ class SunCard extends React.PureComponent<{ date: number; latitude: number; long
     );
   }
 }
-
-export default connect(({ filter: { date, latitude, longitude, twilight } }) => ({
-  date,
-  latitude,
-  longitude,
-  twilight
-}))(SunCard);

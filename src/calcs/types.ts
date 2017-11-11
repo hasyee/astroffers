@@ -67,7 +67,7 @@ export type Interval = {
   end?: Timestamp;
 };
 
-export type NGCObject = {
+export type NgcObject = {
   ngc: number;
   eqCoords: {
     ra: Hms;
@@ -78,4 +78,17 @@ export type NGCObject = {
   size: string;
   magnitude: number;
   surfaceBrightness: number;
+};
+
+export type NightInfo = {
+  night: Interval;
+  moonNight: Interval;
+  astroNight: Interval;
+  moonlessNight: Interval;
+};
+
+export type NgcInfo = {
+  object: NgcObject;
+  eqCoordsOnDate: Eq;
+  intersection: Interval;
 };
