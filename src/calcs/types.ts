@@ -62,7 +62,7 @@ export type Transit = {
   time: Timestamp;
 };
 
-export type HalfDayArc = {
+export type Interval = {
   start?: Timestamp;
   end?: Timestamp;
 };
