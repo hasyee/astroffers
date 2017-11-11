@@ -7,7 +7,6 @@ export const COMPLETE_ARC_SECS = 1296000;
 export const MILLISECONDS_OF_DAY = 86400000;
 export const JULIAND_DATE_OF_UTC_EPOCH = 2440587.5;
 export const JULIAN_DATE_OF_MILLENIUM = 2451545;
-export const JULIAN_DATE_CORRECTION = 0.0008; // the fractional Julian Day for leap seconds and terrestrial time.
 
 export const roundTo = (decimals: number) => {
   const precision = 10 ** decimals;

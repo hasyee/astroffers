@@ -1,7 +1,7 @@
 import SunCalc = require('suncalc');
 import { Timestamp, Loc, Interval } from './types';
 import { radToDeg } from './units';
-import { toNoon, nextDay } from './time';
+import { toNoon, toNextDay } from './time';
 import { getIntersection, isInInterval } from './interval';
 
 const getMoonRiseAndSet = (time: Timestamp, { lat, lon }: Loc): { rise: Timestamp; set: Timestamp } => {
