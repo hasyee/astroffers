@@ -31,7 +31,7 @@ body {
 }
 
 .center {
-  justify-result: center;
+  justify-content: center;
   align-items: center;
 }
 
