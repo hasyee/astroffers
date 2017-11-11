@@ -108,3 +108,29 @@ body {
   letter-spacing: 2px;
   padding-top: 3px;
 }
+
+.night.card > table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.night.card > table td {
+  padding: 10px;
+  vertical-align: middle;
+}
+
+.night.card > table td:nth-child(even) {
+  text-align: right;
+}
+
+.night.card > table td:first-child {
+  
+}
+
+.night.card > table td:not(:first-child) {
+  
+}
+
+.night.card > table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}

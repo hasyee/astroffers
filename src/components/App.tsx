@@ -6,8 +6,8 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import Filter from './Filter';
-import SunCard from './SunCard';
 import About from './About';
+import NightCard from './NightCard';
 
 export default class extends React.PureComponent<{
   version: string;
@@ -57,7 +57,7 @@ export default class extends React.PureComponent<{
             <Filter />
           </div>
           <div className="fitted column layout overflow-y content">
-            <SunCard />
+            <NightCard />
           </div>
         </main>
         <About
