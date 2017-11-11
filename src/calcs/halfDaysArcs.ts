@@ -14,15 +14,17 @@ export const isRising = (siderealTime: Rad, lat: Rad, ra: Rad, de: Rad): boolean
   return derivate > 0;
 };
 
-export const getHalfDayArcFactory = (solarNoon: Timestamp, { lat, lon }: Loc) => (eqCoordsOnJ2000: Eq): HalfDayArc => {
+export const getHalfDayArcFactory = (solarNoon: Timestamp, { lat, lon }: Loc, altitudeLimit: Rad = 0) => (
+  eqCoordsOnJ2000: Eq
+): HalfDayArc => {
   const siderealSolarNoon = timeToLst(solarNoon, lon, false);
   const { ra, de } = getEqCoordsOnDate(eqCoordsOnJ2000, solarNoon);
-  const psi = acos(-tan(lat) * tan(de));
-  if (!Number.isFinite(psi)) return {};
-  const k1 = floor((ra + psi - siderealSolarNoon) / PI2);
-  const k2 = floor((ra - psi - siderealSolarNoon) / PI2);
-  const nextCrossing1 = ra + psi - PI2 * k1;
-  const nextCrossing2 = ra - psi - PI2 * k2;
+  const ha = acos((sin(altitudeLimit) - sin(lat) * sin(de)) / (cos(lat) * cos(de)));
+  if (!Number.isFinite(ha)) return {};
+  const k1 = floor((ra + ha - siderealSolarNoon) / PI2);
+  const k2 = floor((ra - ha - siderealSolarNoon) / PI2);
+  const nextCrossing1 = ra + ha - PI2 * k1;
+  const nextCrossing2 = ra - ha - PI2 * k2;
   const startsWithRising = isRising(nextCrossing1, lat, ra, de);
   const rise = lstToTime(startsWithRising ? nextCrossing1 : nextCrossing2, lon);
   const set = lstToTime(startsWithRising ? nextCrossing2 : nextCrossing1, lon);
