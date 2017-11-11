@@ -92,5 +92,6 @@ export type NgcInfo = {
   eqCoordsOnDate: Eq;
   intersection: Interval;
   max: Timestamp;
+  altitudeAtMax: Rad;
   transit: Timestamp;
 };
