@@ -91,4 +91,5 @@ export type NgcInfo = {
   object: NgcObject;
   eqCoordsOnDate: Eq;
   intersection: Interval;
+  noon: Timestamp;
 };
