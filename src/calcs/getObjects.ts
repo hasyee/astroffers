@@ -4,6 +4,7 @@ import { getLocation, degToRad, hmsToRad, dmsToRad } from './units';
 import { toNoon } from './time';
 import { getIntersection, isInInterval } from './interval';
 import { getEqCoordsOnDate } from './corrections';
+import { eqToAz } from './coords';
 
 const getMax = (intersection: Interval, transit: Timestamp): Timestamp => {
   if (!intersection || !transit) return null;
@@ -36,7 +37,8 @@ export default (
       const transit = Math.round((hda.start + hda.end) / 2);
       const intersection = getIntersection(hda, astroNight);
       const max = getMax(intersection, transit);
-      return { object, eqCoordsOnDate, intersection, transit, max };
+      const { alt: altitudeAtMax } = eqToAz(max, location, eqCoordsOnDate);
+      return { object, eqCoordsOnDate, intersection, transit, max, altitudeAtMax };
     })
     .filter(ngcInfo => ngcInfo.intersection);
 };

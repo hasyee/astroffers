@@ -10,6 +10,7 @@ import {
   TableRowColumn
 } from 'material-ui/Table';
 import { NgcInfo } from '../calcs/types';
+import { radToDeg } from '../calcs/units';
 
 export enum PROP {
   NGC = 'ngc',
@@ -75,7 +76,7 @@ export default class extends React.PureComponent<{ objects: NgcInfo[] }> {
               </TableHeaderColumn>
               <TableHeaderColumn>
                 <span className="sorter" onClick={this.handleHeaderClick(PROP.MAX)}>
-                  Max
+                  Max / Alt
                 </span>
               </TableHeaderColumn>
               <TableHeaderColumn>
@@ -93,17 +94,26 @@ export default class extends React.PureComponent<{ objects: NgcInfo[] }> {
           <TableBody displayRowCheckbox={false}>
             {this.props.objects
               .sort(sorter(this.state.sortBy))
-              .map(({ object: { ngc, magnitude, surfaceBrightness, type }, intersection: { start, end }, max }) => (
-                <TableRow key={ngc} selectable={false}>
-                  <TableRowColumn>{ngc}</TableRowColumn>
-                  <TableRowColumn>{type}</TableRowColumn>
-                  <TableRowColumn>{moment(start).format('HH:mm')}</TableRowColumn>
-                  <TableRowColumn>{moment(end).format('HH:mm')}</TableRowColumn>
-                  <TableRowColumn>{moment(max).format('HH:mm')}</TableRowColumn>
-                  <TableRowColumn>{magnitude}</TableRowColumn>
-                  <TableRowColumn>{surfaceBrightness}</TableRowColumn>
-                </TableRow>
-              ))}
+              .map(
+                ({
+                  object: { ngc, magnitude, surfaceBrightness, type },
+                  intersection: { start, end },
+                  max,
+                  altitudeAtMax
+                }) => (
+                  <TableRow key={ngc} selectable={false}>
+                    <TableRowColumn>{ngc}</TableRowColumn>
+                    <TableRowColumn>{type}</TableRowColumn>
+                    <TableRowColumn>{moment(start).format('HH:mm')}</TableRowColumn>
+                    <TableRowColumn>{moment(end).format('HH:mm')}</TableRowColumn>
+                    <TableRowColumn>
+                      {moment(max).format('HH:mm')} / {Math.round(radToDeg(altitudeAtMax))}°
+                    </TableRowColumn>
+                    <TableRowColumn>{magnitude}</TableRowColumn>
+                    <TableRowColumn>{surfaceBrightness}</TableRowColumn>
+                  </TableRow>
+                )
+              )}
           </TableBody>
         </Table>
       </div>
