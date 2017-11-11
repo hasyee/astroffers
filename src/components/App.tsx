@@ -7,7 +7,6 @@ import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import Filter from './Filter';
 import SunCard from './SunCard';
-import MoonCard from './MoonCard';
 import About from './About';
 
 export default class extends React.PureComponent<{
@@ -46,7 +45,12 @@ export default class extends React.PureComponent<{
     return (
       <div className="absolute column layout">
         <header className="dynamic">
-          <AppBar title="Astroffers" showMenuIconButton={false} iconElementRight={this.renderMenu()} />
+          <AppBar
+            title="Astroffers"
+            showMenuIconButton={false}
+            iconElementRight={this.renderMenu()}
+            titleStyle={{ fontWeight: '100', userSelect: 'none', cursor: 'default' }}
+          />
         </header>
         <main className="fitted layout">
           <div className="dynamic column layout high panel">
@@ -54,7 +58,6 @@ export default class extends React.PureComponent<{
           </div>
           <div className="fitted column layout overflow-y content">
             <SunCard />
-            <MoonCard />
           </div>
         </main>
         <About
