@@ -38,6 +38,9 @@ export default (
       const intersection = getIntersection(hda, astroNight);
       const max = getMax(intersection, transit);
       const { alt: altitudeAtMax } = eqToAz(max, location, eqCoordsOnDate);
+      /* if (object.ngc === 7331) {
+        console.log(hda, intersection);
+      } */
       return { object, eqCoordsOnDate, intersection, transit, max, altitudeAtMax };
     })
     .filter(ngcInfo => ngcInfo.intersection);
