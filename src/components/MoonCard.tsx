@@ -17,9 +17,7 @@ class MoonCard extends React.PureComponent<{ date: number; latitude: number; lon
     return (
       <div className="dynamic row layout half-day-arc card center">
         <div className="center layout">
-          <FontIcon className="material-icons" style={iconStyle}>
-            brightness_2
-          </FontIcon>
+          <FontIcon className="mdi mdi-brightness-2" style={iconStyle} />
         </div>
         <div className="fitted column layout">
           <div className="center layout">Moonrise</div>
