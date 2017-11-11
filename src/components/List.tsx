@@ -17,13 +17,15 @@ export enum PROP {
   TO = 'to',
   MAGNITUDE = 'magnitude',
   SURFACE_BRIGHTNESS = 'surfaceBrightness',
-  TYPE = 'type'
+  TYPE = 'type',
+  MAX = 'max'
 }
 
 const propertySelectors = {
   [PROP.NGC]: (object: NgcInfo) => object.object.ngc,
   [PROP.FROM]: (object: NgcInfo) => object.intersection.start,
   [PROP.TO]: (object: NgcInfo) => object.intersection.end,
+  [PROP.MAX]: (object: NgcInfo) => object.max,
   [PROP.MAGNITUDE]: (object: NgcInfo) => object.object.magnitude,
   [PROP.SURFACE_BRIGHTNESS]: (object: NgcInfo) => object.object.surfaceBrightness,
   [PROP.TYPE]: (object: NgcInfo) => object.object.type
@@ -40,7 +42,7 @@ const sorter = (prop: PROP) => (a: NgcInfo, b: NgcInfo) => {
 
 export default class extends React.PureComponent<{ objects: NgcInfo[] }> {
   state = {
-    sortBy: PROP.FROM
+    sortBy: PROP.MAX
   };
 
   handleHeaderClick = (prop: PROP) => () => this.setState({ sortBy: prop });
@@ -72,6 +74,11 @@ export default class extends React.PureComponent<{ objects: NgcInfo[] }> {
                 </span>
               </TableHeaderColumn>
               <TableHeaderColumn>
+                <span className="sorter" onClick={this.handleHeaderClick(PROP.MAX)}>
+                  Max
+                </span>
+              </TableHeaderColumn>
+              <TableHeaderColumn>
                 <span className="sorter" onClick={this.handleHeaderClick(PROP.MAGNITUDE)}>
                   Magnitude
                 </span>
@@ -86,12 +93,13 @@ export default class extends React.PureComponent<{ objects: NgcInfo[] }> {
           <TableBody displayRowCheckbox={false}>
             {this.props.objects
               .sort(sorter(this.state.sortBy))
-              .map(({ object: { ngc, magnitude, surfaceBrightness, type }, intersection: { start, end }, transit }) => (
+              .map(({ object: { ngc, magnitude, surfaceBrightness, type }, intersection: { start, end }, max }) => (
                 <TableRow key={ngc} selectable={false}>
                   <TableRowColumn>{ngc}</TableRowColumn>
                   <TableRowColumn>{type}</TableRowColumn>
                   <TableRowColumn>{moment(start).format('HH:mm')}</TableRowColumn>
                   <TableRowColumn>{moment(end).format('HH:mm')}</TableRowColumn>
+                  <TableRowColumn>{moment(max).format('HH:mm')}</TableRowColumn>
                   <TableRowColumn>{magnitude}</TableRowColumn>
                   <TableRowColumn>{surfaceBrightness}</TableRowColumn>
                 </TableRow>

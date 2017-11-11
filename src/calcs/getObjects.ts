@@ -1,9 +1,17 @@
-import { NgcObject, NgcInfo, NightInfo, Loc, Timestamp, Deg } from './types';
+import { NgcObject, NgcInfo, NightInfo, Loc, Timestamp, Deg, Interval } from './types';
 import { getHalfDayArcFactory } from './halfDaysArcs';
 import { getLocation, degToRad, hmsToRad, dmsToRad } from './units';
 import { toNoon } from './time';
-import { getIntersection } from './interval';
+import { getIntersection, isInInterval } from './interval';
 import { getEqCoordsOnDate } from './corrections';
+
+const getMax = (intersection: Interval, transit: Timestamp): Timestamp => {
+  if (!intersection || !transit) return null;
+  if (isInInterval(intersection, transit)) return transit;
+  if (transit < intersection.start) return intersection.start;
+  if (transit > intersection.end) return intersection.end;
+  return null;
+};
 
 export default (
   ngcObjects: NgcObject[],
@@ -27,7 +35,8 @@ export default (
       const hda = getHalfDayArc(eqCoordsOnDate);
       const transit = Math.round((hda.start + hda.end) / 2);
       const intersection = getIntersection(hda, astroNight);
-      return { object, eqCoordsOnDate, intersection, transit };
+      const max = getMax(intersection, transit);
+      return { object, eqCoordsOnDate, intersection, transit, max };
     })
     .filter(ngcInfo => ngcInfo.intersection);
 };
