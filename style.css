@@ -122,6 +122,7 @@ body {
   padding: 10px;
   vertical-align: middle;
   font-size: 13px;
+  color: rgba(0, 0, 0, 0.87);
 }
 
 .night.card > table td:nth-child(even) {
