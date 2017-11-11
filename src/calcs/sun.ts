@@ -50,11 +50,11 @@ export const getEclipticCoords = (time: Timestamp): Ecl => {
   };
 };
 
-export const getHalfDayArcOfSun = (time: Timestamp, { lat, lon }: Loc): HalfDayArc => {
+export const getHalfDayArcOfSun = (time: Timestamp, { lat, lon }: Loc, altitudeLimit: Rad = 0): HalfDayArc => {
   const y = getFractionalYear(time);
   const eqTime = getEqTime(y);
   const de = getDeclination(y);
-  const ha = acos(cos(PI / 2) / (cos(lat) * cos(de)) - tan(lat) * tan(de));
+  const ha = acos((sin(altitudeLimit) - sin(lat) * sin(de)) / (cos(lat) * cos(de)));
   const riseMins = 720 + 4 * radToDeg(-lon - ha) - eqTime;
   const setMins = 720 + 4 * radToDeg(-lon + ha) - eqTime;
   const noonMins = 720 + 4 * radToDeg(-lon) - eqTime;

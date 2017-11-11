@@ -41,5 +41,5 @@ const eqCoordsOnDate = getEqCoordsOnDate(eqCoordsOnJ2000, timestamp);
 const ngcHda = getHalfDayArcFactory(timestamp, location, degToRad(20))(eqCoordsOnJ2000);
 console.log(halfDayArcToString(ngcHda));
 
-const sunHda = getHalfDayArcOfSun(timestamp, location);
+const sunHda = getHalfDayArcOfSun(timestamp, location, degToRad(-18));
 console.log(halfDayArcToString(sunHda));
