@@ -7,4 +7,6 @@ export type Filter = {
   magnitude: number;
   latitude: number;
   longitude: number;
+  twilight: number;
+  altitude: number;
 };

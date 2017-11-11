@@ -16,9 +16,7 @@ class Filter extends React.PureComponent<{ filter: IFilter; changeFilter: typeof
 
   handleDateChange = (_, dateObject) => this.props.changeFilter('date', dateObject.getTime());
   handleSetToday = () => this.props.changeFilter('date', Date.now());
-  handleMagnitudeChange = evt => this.props.changeFilter('magnitude', Number(evt.target.value));
-  handleLatitudeChange = evt => this.props.changeFilter('latitude', Number(evt.target.value));
-  handleLongitudeChange = evt => this.props.changeFilter('longitude', Number(evt.target.value));
+  handleChange = (prop: string) => evt => this.props.changeFilter(prop, Number(evt.target.value));
   handleDialogOpen = () => this.setState({ isOpenDialog: true });
   handleDialogCancel = () => this.setState({ isOpenDialog: false });
   handleDialogSubmit = ({ latitude, longitude }) => {
@@ -28,7 +26,7 @@ class Filter extends React.PureComponent<{ filter: IFilter; changeFilter: typeof
   };
 
   render() {
-    const { filter: { date, magnitude, latitude, longitude } } = this.props;
+    const { filter: { date, magnitude, latitude, longitude, twilight, altitude } } = this.props;
     return (
       <div className="fitted column layout filter">
         <div className="fitted overflow-y inputs">
@@ -42,19 +40,19 @@ class Filter extends React.PureComponent<{ filter: IFilter; changeFilter: typeof
           />
           <FlatButton label="Set today" style={{ cssFloat: 'right' }} onClick={this.handleSetToday} />
           <TextField
-            floatingLabelText="Latitude"
+            floatingLabelText="Latitude ( ° )"
             floatingLabelFixed
             fullWidth
             value={latitude}
-            onChange={this.handleLatitudeChange}
+            onChange={this.handleChange('latitude')}
             type="number"
           />
           <TextField
-            floatingLabelText="Longitude"
+            floatingLabelText="Longitude ( ° )"
             floatingLabelFixed
             fullWidth
             value={longitude}
-            onChange={this.handleLongitudeChange}
+            onChange={this.handleChange('longitude')}
             type="number"
           />
           <FlatButton label="Select location" style={{ cssFloat: 'right' }} onClick={this.handleDialogOpen} />
@@ -66,11 +64,27 @@ class Filter extends React.PureComponent<{ filter: IFilter; changeFilter: typeof
             onSubmit={this.handleDialogSubmit}
           />
           <TextField
-            floatingLabelText="Magnitude limit"
+            floatingLabelText="Magnitude limit ( ° )"
             floatingLabelFixed
             fullWidth
             value={magnitude}
-            onChange={this.handleMagnitudeChange}
+            onChange={this.handleChange('magnitude')}
+            type="number"
+          />
+          <TextField
+            floatingLabelText="Astronomical twilight ( ° )"
+            floatingLabelFixed
+            fullWidth
+            value={twilight}
+            onChange={this.handleChange('twilight')}
+            type="number"
+          />
+          <TextField
+            floatingLabelText="Altitude limit ( ° )"
+            floatingLabelFixed
+            fullWidth
+            value={altitude}
+            onChange={this.handleChange('altitude')}
             type="number"
           />
         </div>
