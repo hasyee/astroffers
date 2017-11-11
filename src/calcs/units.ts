@@ -83,10 +83,8 @@ export const timeToEpochDayNumber = (time: Timestamp): Day => julianDateToEpochD
 export const epochDayNumberToTime = (epochDayNumber: Day): Timestamp =>
   epochDayNumberToJulanDate(julianDateToTime(epochDayNumber));
 
-export const halfDayArcToString = ({ rise, noon, set }: HalfDayArc) =>
-  `RISE: ${new Date(rise).toLocaleString()}   NOON: ${new Date(noon).toLocaleString()}   SET: ${new Date(
-    set
-  ).toLocaleString()}`;
+export const halfDayArcToString = ({ start, end }: HalfDayArc) =>
+  `RISE: ${new Date(start).toLocaleString()} SET: ${new Date(end).toLocaleString()}`;
 
 export const getLocation = (latitude: Deg, longitude: Deg): Loc => ({
   lat: degToRad(latitude),

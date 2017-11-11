@@ -5,7 +5,7 @@
  */
 
 import moment = require('moment');
-import { Timestamp, HalfDayArc, Loc, Ecl, Rad } from './types';
+import { Timestamp, HalfDayArc, Loc, Ecl, Rad, Transit, TransitType } from './types';
 import {
   PI2,
   timeToEpochDayNumber,
@@ -57,9 +57,25 @@ export const getHalfDayArcOfSun = (time: Timestamp, { lat, lon }: Loc, altitudeL
   const ha = acos((sin(altitudeLimit) - sin(lat) * sin(de)) / (cos(lat) * cos(de)));
   const riseMins = 720 + 4 * radToDeg(-lon - ha) - eqTime;
   const setMins = 720 + 4 * radToDeg(-lon + ha) - eqTime;
+  const start = moment.utc(time).startOf('day').add(riseMins, 'minutes').valueOf();
+  const end = moment.utc(time).startOf('day').add(setMins, 'minutes').valueOf();
+  return { start, end };
+};
+
+export const getTransits = (time: Timestamp, { lat, lon }: Loc, altitudeLimit: Rad = 0): Transit[] => {
+  const y = getFractionalYear(time);
+  const eqTime = getEqTime(y);
+  const de = getDeclination(y);
+  const ha = acos((sin(altitudeLimit) - sin(lat) * sin(de)) / (cos(lat) * cos(de)));
+  const riseMins = 720 + 4 * radToDeg(-lon - ha) - eqTime;
+  const setMins = 720 + 4 * radToDeg(-lon + ha) - eqTime;
   const noonMins = 720 + 4 * radToDeg(-lon) - eqTime;
   const rise = moment.utc(time).startOf('day').add(riseMins, 'minutes').valueOf();
   const set = moment.utc(time).startOf('day').add(setMins, 'minutes').valueOf();
   const noon = moment.utc(time).startOf('day').add(noonMins, 'minutes').valueOf();
-  return { rise, noon, set };
+  return [
+    { type: TransitType.RISE, time: rise },
+    { type: TransitType.NOON, time: noon },
+    { type: TransitType.SET, time: set }
+  ];
 };

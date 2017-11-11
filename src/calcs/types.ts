@@ -50,10 +50,21 @@ export type Dms = {
   arcSec?: ArcSec;
 };
 
+export enum TransitType {
+  RISE = 'RISE',
+  NOON = 'NOON',
+  SET = 'SET',
+  MIDNIGHT = 'MIDNIGHT'
+}
+
+export type Transit = {
+  type: TransitType;
+  time: Timestamp;
+};
+
 export type HalfDayArc = {
-  rise?: Timestamp;
-  noon?: Timestamp;
-  set?: Timestamp;
+  start?: Timestamp;
+  end?: Timestamp;
 };
 
 export type NGCObject = {

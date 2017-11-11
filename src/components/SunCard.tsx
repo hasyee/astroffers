@@ -13,7 +13,7 @@ const iconStyle = {
 class SunCard extends React.PureComponent<{ date: number; latitude: number; longitude: number }> {
   render() {
     const { date, latitude, longitude } = this.props;
-    const { rise, noon, set } = getHalfDayArcOfSun(date, getLocation(latitude, longitude));
+    const { start, end } = getHalfDayArcOfSun(date, getLocation(latitude, longitude));
     return (
       <div className="dynamic row layout half-day-arc card center">
         <div className="center layout">
@@ -21,15 +21,11 @@ class SunCard extends React.PureComponent<{ date: number; latitude: number; long
         </div>
         <div className="fitted column layout">
           <div className="center layout">Sunrise</div>
-          <div className="center layout">{moment(rise).format('HH:mm')}</div>
-        </div>
-        <div className="fitted column layout">
-          <div className="center layout">Solar noon</div>
-          <div className="center layout">{moment(noon).format('HH:mm')}</div>
+          <div className="center layout">{moment(start).format('HH:mm')}</div>
         </div>
         <div className="fitted column layout">
           <div className="center layout">Sunset</div>
-          <div className="center layout">{moment(set).format('HH:mm')}</div>
+          <div className="center layout">{moment(end).format('HH:mm')}</div>
         </div>
       </div>
     );
