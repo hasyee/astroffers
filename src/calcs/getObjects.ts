@@ -24,10 +24,10 @@ export default (
       const de = dmsToRad(object.eqCoords.de);
       const eqCoordsOnJ2000 = { ra, de };
       const eqCoordsOnDate = getEqCoordsOnDate(eqCoordsOnJ2000, ngcNoon);
-      const hda = getHalfDayArc(eqCoordsOnJ2000);
-      const noon = Math.round((hda.start + hda.end) / 2);
+      const hda = getHalfDayArc(eqCoordsOnDate);
+      const transit = Math.round((hda.start + hda.end) / 2);
       const intersection = getIntersection(hda, astroNight);
-      return { object, eqCoordsOnDate, intersection, noon };
+      return { object, eqCoordsOnDate, intersection, transit };
     })
     .filter(ngcInfo => ngcInfo.intersection);
 };
