@@ -4,7 +4,7 @@ import { State } from './types';
 const initialState: State = {
   filter: {
     date: Date.now(),
-    magnitude: 11,
+    magnitude: 9,
     latitude: 47,
     longitude: 20,
     twilight: -18,

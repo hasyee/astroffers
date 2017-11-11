@@ -14,7 +14,7 @@ export default class extends React.PureComponent<{ objects: NgcInfo[] }> {
   render() {
     return (
       <div className="fitted layout card">
-        <Table selectable={false}>
+        <Table selectable={false} height={'calc(100% - 59px)'}>
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow>
               <TableHeaderColumn>NGC</TableHeaderColumn>
