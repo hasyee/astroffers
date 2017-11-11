@@ -21,7 +21,7 @@ const catalog: NGCObject[] = require('../../data/ngc.json');
  * http://stdatu.stsci.edu/cgi-bin/dss_form?target=ngc1976&resolver=SIMBAD
  */
 
-const time = '2017-11-09T12:00:00+01:00';
+const time = '2017-11-11T12:00:00+01:00';
 const lat = 47;
 const lon = 20;
 console.log('TIME:', time, 'LAT:', lat, 'LON:', lon);
@@ -38,7 +38,7 @@ const ra = hmsToRad(object.eqCoords.ra);
 const de = dmsToRad(object.eqCoords.de);
 const eqCoordsOnJ2000 = { ra, de };
 const eqCoordsOnDate = getEqCoordsOnDate(eqCoordsOnJ2000, timestamp);
-const ngcHda = getHalfDayArcFactory(timestamp, location)(eqCoordsOnJ2000);
+const ngcHda = getHalfDayArcFactory(timestamp, location, degToRad(20))(eqCoordsOnJ2000);
 console.log(halfDayArcToString(ngcHda));
 
 const sunHda = getHalfDayArcOfSun(timestamp, location);
