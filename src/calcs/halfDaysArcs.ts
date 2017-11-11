@@ -26,8 +26,7 @@ export const getHalfDayArcFactory = (solarNoon: Timestamp, { lat, lon }: Loc, al
   const nextCrossing1 = ra + ha - PI2 * k1;
   const nextCrossing2 = ra - ha - PI2 * k2;
   const startsWithRising = isRising(nextCrossing1, lat, ra, de);
-  const rise = lstToTime(startsWithRising ? nextCrossing1 : nextCrossing2, lon);
-  const set = lstToTime(startsWithRising ? nextCrossing2 : nextCrossing1, lon);
-  const noon = round((set + rise) / 2);
-  return { rise, noon, set };
+  const start = lstToTime(startsWithRising ? nextCrossing1 : nextCrossing2, lon);
+  const end = lstToTime(startsWithRising ? nextCrossing2 : nextCrossing1, lon);
+  return { start, end };
 };
