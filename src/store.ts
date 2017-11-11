@@ -6,7 +6,9 @@ const initialState: State = {
     date: Date.now(),
     magnitude: 11,
     latitude: 47,
-    longitude: 20
+    longitude: 20,
+    twilight: -18,
+    altitude: 20
   }
 };
 
