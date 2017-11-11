@@ -9,6 +9,6 @@ export const toMidnight = (time: Timestamp): Timestamp => {
   return moment(time).startOf('day').add(1, 'day').valueOf();
 };
 
-export const nextDay = (time: Timestamp): Timestamp => {
+export const toNextDay = (time: Timestamp): Timestamp => {
   return moment(time).add(1, 'day').valueOf();
 };

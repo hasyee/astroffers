@@ -20,7 +20,7 @@ import {
 } from './units';
 import { lstToTime, timeToLst } from './lst';
 import { eclToEq } from './coords';
-import { toNoon, nextDay } from './time';
+import { toNoon, toNextDay } from './time';
 import { flatten } from './utils';
 
 const { PI, sin, cos, asin, acos, tan, round } = Math;
@@ -64,19 +64,10 @@ export const getHalfDayArcOfSun = (time: Timestamp, { lat, lon }: Loc, altitudeL
   return { start, end };
 };
 
-/* export const getTransitsOfSun = (times: Timestamp[], loc: Loc, altitudeLimit: Rad = 0): Transit[] => {
-  return flatten(
-    times
-      .map(time => getHalfDayArcOfSun(time, loc, altitudeLimit))
-      .map(({ start, end }) => [ { type: TransitType.RISE, time: start }, { type: TransitType.SET, time: end } ])
-  );
-};
- */
-
 export const getNight = (time: Timestamp, loc: Loc, altitudeLimit: Rad = 0): Interval => {
   const noon = toNoon(time);
   const thatDayArc = getHalfDayArcOfSun(noon, loc, altitudeLimit);
-  const nextDayArc = getHalfDayArcOfSun(nextDay(noon), loc, altitudeLimit);
+  const nextDayArc = getHalfDayArcOfSun(toNextDay(noon), loc, altitudeLimit);
   return {
     start: thatDayArc.end,
     end: nextDayArc.start
