@@ -18,7 +18,7 @@ class Result extends React.PureComponent<{
   render() {
     const { date, latitude, longitude, twilight, altitude, magnitude } = this.props;
     const nightInfo = getNightInfo(date, latitude, longitude, twilight);
-    const objects = getObjects(catalog, date, latitude, longitude, nightInfo, altitude, magnitude);
+    const objects = getObjects(catalog, date, latitude, longitude, nightInfo.moonNight, altitude, magnitude);
     return (
       <div className="fitted column layout result">
         <NightCard nightInfo={nightInfo} />
