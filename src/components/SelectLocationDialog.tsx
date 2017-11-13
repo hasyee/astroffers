@@ -2,6 +2,7 @@ import React = require('react');
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import Map from './Map';
+import { fetchLocation } from '../api';
 
 export default class extends React.PureComponent<
   {
@@ -15,16 +16,30 @@ export default class extends React.PureComponent<
 > {
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = this.getInitialState();
+  }
+
+  getInitialState() {
+    return {
       latitude: this.props.latitude,
       longitude: this.props.longitude
     };
   }
 
+  handleFetchLocation = async () => {
+    const { latitude, longitude } = await fetchLocation();
+    if (Number.isFinite(latitude) && Number.isFinite(longitude)) this.setState({ latitude, longitude });
+  };
+
   handleChange = state => this.setState(state);
 
   handleSubmit = () => {
     this.props.onSubmit(this.state);
+  };
+
+  handleCancel = () => {
+    this.setState(this.getInitialState());
+    this.props.onCancel();
   };
 
   componentWillUpdate(nextProps) {
@@ -37,14 +52,15 @@ export default class extends React.PureComponent<
   }
 
   render() {
-    const { onCancel, onSubmit, isOpen } = this.props;
+    const { onSubmit, isOpen } = this.props;
     const { latitude, longitude } = this.state;
     const actions = [
-      <FlatButton label="Cancel" onClick={onCancel} />,
+      <FlatButton label="Use network location" onClick={this.handleFetchLocation} style={{ float: 'left' }} />,
+      <FlatButton label="Cancel" onClick={this.handleCancel} />,
       <FlatButton label="Submit" primary={true} onClick={this.handleSubmit} />
     ];
     return (
-      <Dialog title="Select your location" actions={actions} modal open={isOpen} onRequestClose={onCancel}>
+      <Dialog title="Select your location" actions={actions} modal open={isOpen} onRequestClose={this.handleCancel}>
         <Map
           containerElement={<div style={{ height: `400px` }} />}
           mapElement={<div style={{ height: `100%` }} />}
