@@ -19,12 +19,12 @@ export default (
   date: Timestamp,
   latitude: Deg,
   longitude: Deg,
-  { astroNight }: NightInfo,
+  night: Interval,
   altitideLimit: Deg,
   magnitudeLimit: number
 ): NgcInfo[] => {
   const location = getLocation(latitude, longitude);
-  const refTime = astroNight.start;
+  const refTime = night.start;
   const getHalfDayArc = getHalfDayArcFactory(refTime, location, degToRad(altitideLimit));
   return ngcObjects
     .filter(object => Number.isFinite(object.magnitude) && object.magnitude < magnitudeLimit)
@@ -35,7 +35,7 @@ export default (
       const eqCoordsOnDate = getEqCoordsOnDate(eqCoordsOnJ2000, refTime);
       const hda = getHalfDayArc(eqCoordsOnDate);
       const transit = Math.round((hda.start + hda.end) / 2);
-      const intersection = getIntersection(hda, astroNight);
+      const intersection = getIntersection(hda, night);
       const max = getMax(intersection, transit);
       const { alt: altitudeAtMax } = eqToAz(max, location, eqCoordsOnDate);
       return { object, eqCoordsOnDate, intersection, transit, max, altitudeAtMax };
