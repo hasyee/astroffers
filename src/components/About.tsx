@@ -1,6 +1,7 @@
 import React = require('react');
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import { shell } from 'electron';
 
 export default class extends React.PureComponent<{
   isOpen: boolean;
@@ -48,7 +49,7 @@ export default class extends React.PureComponent<{
               <b>Feedback</b>
             </td>
             <td>
-              <a href={feedback} target="_blank">
+              <a href={feedback} target="_blank" onClick={() => shell.openExternal(feedback)}>
                 {feedback}
               </a>
             </td>
@@ -58,7 +59,7 @@ export default class extends React.PureComponent<{
               <b>Homepage</b>
             </td>
             <td>
-              <a href={homepage} target="_blank">
+              <a href={homepage} target="_blank" onClick={() => shell.openExternal(homepage)}>
                 {homepage}
               </a>
             </td>
