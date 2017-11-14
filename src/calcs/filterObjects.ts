@@ -5,6 +5,7 @@ import { toNoon, toMidnight } from './time';
 import { getIntersection, isInInterval } from './interval';
 import { getEqCoordsOnDate } from './corrections';
 import { eqToAz } from './coords';
+import { Filter } from '../types';
 
 const getMax = (intersection: Interval, transit: Timestamp): Timestamp => {
   if (!intersection || !transit) return null;
@@ -16,18 +17,14 @@ const getMax = (intersection: Interval, transit: Timestamp): Timestamp => {
 
 export default (
   ngcObjects: NgcObject[],
-  date: Timestamp,
-  latitude: Deg,
-  longitude: Deg,
-  night: Interval,
-  altitideLimit: Deg,
-  magnitudeLimit: number
+  { latitude, longitude, altitude, magnitude }: Filter,
+  night: Interval
 ): NgcInfo[] => {
   const location = getLocation(latitude, longitude);
   const refTime = night.start;
-  const getHalfDayArc = getHalfDayArcFactory(refTime, location, degToRad(altitideLimit));
+  const getHalfDayArc = getHalfDayArcFactory(refTime, location, degToRad(altitude));
   return ngcObjects
-    .filter(object => Number.isFinite(object.magnitude) && object.magnitude < magnitudeLimit)
+    .filter(object => Number.isFinite(object.magnitude) && object.magnitude < magnitude)
     .map(object => {
       const ra = hmsToRad(object.eqCoords.ra);
       const de = dmsToRad(object.eqCoords.de);
