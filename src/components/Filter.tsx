@@ -64,19 +64,17 @@ class Filter extends React.PureComponent<{
         open={isOpenTypeFilterDialog}
         onRequestClose={this.handleTypeFilterDialogClose}
         autoScrollBodyContent
-        contentStyle={{ width: '400px' }}
+        contentStyle={{ width: '350px', maxWidth: 'none' }}
       >
-        <Menu>
+        <Menu autoWidth={false} desktop width={350}>
           {Object.keys(types).map(key => (
             <MenuItem
               key={key}
-              value={key}
               insetChildren={true}
+              primaryText={typeMap[key]}
               checked={types[key]}
               onClick={() => toggleTypeFilter(key)}
-            >
-              {typeMap[key]}
-            </MenuItem>
+            />
           ))}
         </Menu>
       </Dialog>
