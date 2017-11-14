@@ -6,6 +6,8 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
 import SelectLocationDialog from './SelectLocationDialog';
 import { State, Filter as IFilter } from '../types';
 import { changeFilter, resetFilter, filterObjects } from '../actions';
@@ -113,6 +115,30 @@ class Filter extends React.PureComponent<{
             checked={moonless}
             onCheck={this.handleMoonlessChange}
           />
+          <IconMenu
+            iconButtonElement={<FlatButton label="Filter by type" />}
+            style={{ cssFloat: 'right', marginTop: '10px' }}
+          >
+            <MenuItem insetChildren={true}>yee</MenuItem>
+            <MenuItem insetChildren={true}>yee</MenuItem>
+            <MenuItem insetChildren={true}>yee</MenuItem>
+            <MenuItem insetChildren={true}>yee</MenuItem>
+            <MenuItem insetChildren={true}>yee</MenuItem>
+            <MenuItem insetChildren={true}>yee</MenuItem>
+            <MenuItem insetChildren={true}>yee</MenuItem>
+            <MenuItem insetChildren={true}>yee</MenuItem>
+            <MenuItem insetChildren={true}>yee</MenuItem>
+            <MenuItem insetChildren={true}>yee</MenuItem>
+            <MenuItem insetChildren={true}>yee</MenuItem>
+            <MenuItem insetChildren={true}>yee</MenuItem>
+            <MenuItem insetChildren={true}>yee</MenuItem>
+            <MenuItem insetChildren={true}>yee</MenuItem>
+            <MenuItem insetChildren={true}>yee</MenuItem>
+            <MenuItem insetChildren={true}>yee</MenuItem>
+            <MenuItem insetChildren={true}>yee</MenuItem>
+            <MenuItem insetChildren={true}>yee</MenuItem>
+            <MenuItem insetChildren={true}>yee</MenuItem>
+          </IconMenu>
         </div>
         <div className="dynamic button-container">
           <FlatButton label="Reset" primary style={{ float: 'left' }} onClick={resetFilter} />
