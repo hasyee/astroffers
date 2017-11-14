@@ -7,11 +7,15 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import SelectLocationDialog from './SelectLocationDialog';
 import { State, Filter as IFilter } from '../types';
-import { changeFilter } from '../actions';
+import { changeFilter, resetFilter } from '../actions';
 
 const resolveValue = (value: number) => (Number.isFinite(value) ? value : '');
 
-class Filter extends React.PureComponent<{ filter: IFilter; changeFilter: typeof changeFilter }> {
+class Filter extends React.PureComponent<{
+  filter: IFilter;
+  changeFilter: typeof changeFilter;
+  resetFilter: typeof resetFilter;
+}> {
   state = {
     isOpenDialog: false
   };
@@ -31,7 +35,7 @@ class Filter extends React.PureComponent<{ filter: IFilter; changeFilter: typeof
   };
 
   render() {
-    const { filter: { date, magnitude, latitude, longitude, twilight, altitude } } = this.props;
+    const { filter: { date, magnitude, latitude, longitude, twilight, altitude }, resetFilter } = this.props;
     return (
       <div className="fitted column layout filter">
         <div className="fitted overflow-y inputs">
@@ -94,11 +98,12 @@ class Filter extends React.PureComponent<{ filter: IFilter; changeFilter: typeof
           />
         </div>
         <div className="dynamic button-container">
-          <RaisedButton label="Filter" primary style={{ cssFloat: 'right' }} />
+          <FlatButton label="Reset" primary style={{ float: 'left' }} onClick={resetFilter} />
+          <RaisedButton label="Filter" primary style={{ float: 'right' }} />
         </div>
       </div>
     );
   }
 }
 
-export default connect(({ filter }: State) => ({ filter }), { changeFilter })(Filter);
+export default connect(({ filter }: State) => ({ filter }), { changeFilter, resetFilter })(Filter);
