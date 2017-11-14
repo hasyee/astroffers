@@ -71,7 +71,7 @@ body a {
 
 .result {
   background-color: #f8f8f8;
-  padding: 15px;
+  padding: 0px 15px 15px 15px;
 }
 
 .result > div {
