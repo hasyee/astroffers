@@ -46,7 +46,7 @@ const sorter = (prop: PROP) => (a: NgcInfo, b: NgcInfo) => {
 
 const DISPLAYED_ITEMS = 100;
 
-class List extends React.PureComponent<{ objects: NgcInfo[] }> {
+class List extends React.PureComponent<{ objects: NgcInfo[]; isFiltering: boolean }> {
   private table;
 
   state = {
@@ -54,7 +54,8 @@ class List extends React.PureComponent<{ objects: NgcInfo[] }> {
     sortBy: PROP.MAX
   };
 
-  componentDidMount() {
+  initScroll() {
+    if (!this.refs.table) return;
     this.table = findDOMNode(this.refs.table).getElementsByTagName('div')[1];
     this.table.onscroll = () => {
       if (
@@ -66,9 +67,29 @@ class List extends React.PureComponent<{ objects: NgcInfo[] }> {
     };
   }
 
-  handleHeaderClick = (prop: PROP) => () => this.setState({ sortBy: prop });
+  componentDidMount() {
+    this.initScroll();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.objects !== this.props.objects) this.initScroll();
+  }
+
+  handleHeaderClick = (prop: PROP) => () => {
+    if (prop !== this.state.sortBy) {
+      this.setState({ sortBy: prop, displayedItems: DISPLAYED_ITEMS });
+      this.table.scrollTop = 0;
+    }
+  };
+
+  renderSortByIcon(prop: string) {
+    return prop === this.state.sortBy && <i className="mdi mdi-arrow-down" />;
+  }
 
   render() {
+    const { sortBy, displayedItems } = this.state;
+    const { isFiltering, objects } = this.props;
+    if (isFiltering || !objects) return null;
     return (
       <div className="fitted layout list card">
         <Table selectable={false} height={'calc(100% - 59px)'} ref="table">
@@ -76,45 +97,45 @@ class List extends React.PureComponent<{ objects: NgcInfo[] }> {
             <TableRow>
               <TableHeaderColumn>
                 <span className="sorter" onClick={this.handleHeaderClick(PROP.NGC)}>
-                  NGC
+                  NGC{this.renderSortByIcon(PROP.NGC)}
                 </span>
               </TableHeaderColumn>
               <TableHeaderColumn>
                 <span className="sorter" onClick={this.handleHeaderClick(PROP.TYPE)}>
-                  Type
+                  Type{this.renderSortByIcon(PROP.TYPE)}
                 </span>
               </TableHeaderColumn>
               <TableHeaderColumn>
                 <span className="sorter" onClick={this.handleHeaderClick(PROP.FROM)}>
-                  From
+                  From{this.renderSortByIcon(PROP.FROM)}
                 </span>
               </TableHeaderColumn>
               <TableHeaderColumn>
                 <span className="sorter" onClick={this.handleHeaderClick(PROP.TO)}>
-                  To
+                  To{this.renderSortByIcon(PROP.TO)}
                 </span>
               </TableHeaderColumn>
               <TableHeaderColumn>
                 <span className="sorter" onClick={this.handleHeaderClick(PROP.MAX)}>
-                  Max / Alt
+                  Max / Alt{this.renderSortByIcon(PROP.MAX)}
                 </span>
               </TableHeaderColumn>
               <TableHeaderColumn>
                 <span className="sorter" onClick={this.handleHeaderClick(PROP.MAGNITUDE)}>
-                  Magnitude
+                  Magnitude{this.renderSortByIcon(PROP.MAGNITUDE)}
                 </span>
               </TableHeaderColumn>
               <TableHeaderColumn>
                 <span className="sorter" onClick={this.handleHeaderClick(PROP.SURFACE_BRIGHTNESS)}>
-                  Surface brightness
+                  Surface brightness{this.renderSortByIcon(PROP.SURFACE_BRIGHTNESS)}
                 </span>
               </TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false} preScanRows={false}>
-            {this.props.objects
-              .sort(sorter(this.state.sortBy))
-              .slice(0, this.state.displayedItems)
+            {objects
+              .sort(sorter(sortBy))
+              .slice(0, displayedItems)
               .map(
                 ({
                   object: { ngc, magnitude, surfaceBrightness, type },
@@ -147,4 +168,4 @@ class List extends React.PureComponent<{ objects: NgcInfo[] }> {
   }
 }
 
-export default connect(({ result }) => ({ objects: result.list }))(List);
+export default connect(({ result, isFiltering }) => ({ objects: result ? result.list : null, isFiltering }))(List);
