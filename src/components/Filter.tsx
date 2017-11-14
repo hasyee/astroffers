@@ -6,8 +6,9 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
-import IconMenu from 'material-ui/IconMenu';
+import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
+import Dialog from 'material-ui/Dialog';
 import SelectLocationDialog from './SelectLocationDialog';
 import { State, Filter as IFilter } from '../types';
 import { changeFilter, resetFilter, filterObjects } from '../actions';
@@ -22,7 +23,8 @@ class Filter extends React.PureComponent<{
   filterObjects: typeof filterObjects;
 }> {
   state = {
-    isOpenDialog: false
+    isOpenLocationDialog: false,
+    isOpenTypeFilterDialog: false
   };
 
   handleDateChange = (_, dateObject) => this.props.changeFilter('date', dateObject.getTime());
@@ -32,16 +34,53 @@ class Filter extends React.PureComponent<{
     this.props.changeFilter(prop, Number.isFinite(value) ? value : null);
   };
   handleMoonlessChange = evt => this.props.changeFilter('moonless', evt.target.checked);
-  handleDialogOpen = () => this.setState({ isOpenDialog: true });
-  handleDialogCancel = () => this.setState({ isOpenDialog: false });
-  handleDialogSubmit = ({ latitude, longitude }) => {
-    this.setState({ isOpenDialog: false });
+  handleLocationDialogOpen = () => this.setState({ isOpenLocationDialog: true });
+  handleLocationDialogCancel = () => this.setState({ isOpenLocationDialog: false });
+  handleLocationDialogSubmit = ({ latitude, longitude }) => {
+    this.setState({ isOpenLocationDialog: false });
     this.props.changeFilter('latitude', latitude);
     this.props.changeFilter('longitude', longitude);
   };
+  handleTypeFilterDialogOpen = () => this.setState({ isOpenTypeFilterDialog: true });
+  handleTypeFilterDialogClose = () => this.setState({ isOpenTypeFilterDialog: false });
 
   componentDidMount() {
     this.props.filterObjects();
+  }
+
+  renderTypeFilterDialog() {
+    const { types } = this.props.filter;
+    const { isOpenTypeFilterDialog } = this.state;
+    const actions = [
+      <FlatButton label="Close" primary={true} onClick={this.handleTypeFilterDialogClose} />,
+      <FlatButton label="Select all" style={{ float: 'left' }} />,
+      <FlatButton label="Select none" style={{ float: 'left' }} />
+    ];
+    return (
+      <Dialog
+        title="Filter types"
+        actions={actions}
+        modal={false}
+        open={isOpenTypeFilterDialog}
+        onRequestClose={this.handleTypeFilterDialogClose}
+        autoScrollBodyContent
+        contentStyle={{ width: '400px' }}
+      >
+        <Menu>
+          {Object.keys(types).map(key => (
+            <MenuItem
+              key={key}
+              value={key}
+              insetChildren={true}
+              checked={types[key]}
+              onClick={(...a) => console.log(...a)}
+            >
+              {typeMap[key]}
+            </MenuItem>
+          ))}
+        </Menu>
+      </Dialog>
+    );
   }
 
   render() {
@@ -78,13 +117,13 @@ class Filter extends React.PureComponent<{
             onChange={this.handleChange('longitude')}
             type="number"
           />
-          <FlatButton label="Select location" style={{ cssFloat: 'right' }} onClick={this.handleDialogOpen} />
+          <FlatButton label="Select location" style={{ cssFloat: 'right' }} onClick={this.handleLocationDialogOpen} />
           <SelectLocationDialog
-            isOpen={this.state.isOpenDialog}
+            isOpen={this.state.isOpenLocationDialog}
             latitude={latitude}
             longitude={longitude}
-            onCancel={this.handleDialogCancel}
-            onSubmit={this.handleDialogSubmit}
+            onCancel={this.handleLocationDialogCancel}
+            onSubmit={this.handleLocationDialogSubmit}
           />
           <TextField
             floatingLabelText="Magnitude limit ( ° )"
@@ -111,21 +150,13 @@ class Filter extends React.PureComponent<{
             type="number"
           />
           <Checkbox
-            style={{ marginTop: '10px' }}
+            style={{ margin: '0px 10px' }}
             label="Moonless night only"
             checked={moonless}
             onCheck={this.handleMoonlessChange}
           />
-          <IconMenu
-            iconButtonElement={<FlatButton label="Filter by type" />}
-            style={{ cssFloat: 'right', marginTop: '10px' }}
-          >
-            {Object.keys(typeMap).map(key => (
-              <MenuItem key={key} value={key} insetChildren={true} checked={true}>
-                {typeMap[key]}
-              </MenuItem>
-            ))}
-          </IconMenu>
+          <FlatButton label="Filter types" style={{ cssFloat: 'right' }} onClick={this.handleTypeFilterDialogOpen} />
+          {this.renderTypeFilterDialog()}
         </div>
         <div className="dynamic button-container">
           <FlatButton label="Reset" primary style={{ float: 'left' }} onClick={resetFilter} />
