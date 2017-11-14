@@ -1,4 +1,5 @@
 import React = require('react');
+import { findDOMNode } from 'react-dom';
 import moment = require('moment');
 import { connect } from 'react-redux';
 import {
@@ -42,17 +43,31 @@ const sorter = (prop: PROP) => (a: NgcInfo, b: NgcInfo) => {
   else return 0;
 };
 
+const DISPLAYED_ITEMS = 100;
+
 class List extends React.PureComponent<{ objects: NgcInfo[] }> {
+  private table;
+
   state = {
+    displayedItems: DISPLAYED_ITEMS,
     sortBy: PROP.MAX
   };
+
+  componentDidMount() {
+    this.table = findDOMNode(this.refs.table).getElementsByTagName('div')[1];
+    this.table.onscroll = () => {
+      if (this.table.scrollTop >= 0.8 * this.table.scrollHeight) {
+        this.setState({ displayedItems: this.state.displayedItems + DISPLAYED_ITEMS });
+      }
+    };
+  }
 
   handleHeaderClick = (prop: PROP) => () => this.setState({ sortBy: prop });
 
   render() {
     return (
       <div className="fitted layout list card">
-        <Table selectable={false} height={'calc(100% - 59px)'}>
+        <Table selectable={false} height={'calc(100% - 59px)'} ref="table">
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow>
               <TableHeaderColumn>
@@ -95,6 +110,7 @@ class List extends React.PureComponent<{ objects: NgcInfo[] }> {
           <TableBody displayRowCheckbox={false} preScanRows={false}>
             {this.props.objects
               .sort(sorter(this.state.sortBy))
+              .slice(0, this.state.displayedItems)
               .map(
                 ({
                   object: { ngc, magnitude, surfaceBrightness, type },
