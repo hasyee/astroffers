@@ -13,6 +13,7 @@ import {
 } from 'material-ui/Table';
 import { NgcInfo } from '../calcs/types';
 import { radToDeg } from '../calcs/units';
+const typeMap = require('../../data/types.json');
 
 export enum PROP {
   NGC = 'ngc',
@@ -42,6 +43,8 @@ const sorter = (prop: PROP) => (a: NgcInfo, b: NgcInfo) => {
   else if (aProp > bProp) return 1;
   else return 0;
 };
+
+const resolveType = (type: string): string => type.split('+').map(t => typeMap[t]).join(', ');
 
 const DISPLAYED_ITEMS = 100;
 
@@ -117,19 +120,24 @@ class List extends React.PureComponent<{ objects: NgcInfo[] }> {
                   intersection: { start, end },
                   max,
                   altitudeAtMax
-                }) => (
-                  <TableRow key={ngc} selectable={false}>
-                    <TableRowColumn>{ngc}</TableRowColumn>
-                    <TableRowColumn>{type}</TableRowColumn>
-                    <TableRowColumn>{moment(start).format('HH:mm')}</TableRowColumn>
-                    <TableRowColumn>{moment(end).format('HH:mm')}</TableRowColumn>
-                    <TableRowColumn>
-                      {moment(max).format('HH:mm')} / {Math.round(radToDeg(altitudeAtMax))}°
-                    </TableRowColumn>
-                    <TableRowColumn>{magnitude}</TableRowColumn>
-                    <TableRowColumn>{surfaceBrightness}</TableRowColumn>
-                  </TableRow>
-                )
+                }) => {
+                  const resolvedType = resolveType(type);
+                  return (
+                    <TableRow key={ngc} selectable={false}>
+                      <TableRowColumn>
+                        <b>{ngc}</b>
+                      </TableRowColumn>
+                      <TableRowColumn title={resolvedType}>{resolvedType}</TableRowColumn>
+                      <TableRowColumn>{moment(start).format('HH:mm')}</TableRowColumn>
+                      <TableRowColumn>{moment(end).format('HH:mm')}</TableRowColumn>
+                      <TableRowColumn>
+                        {moment(max).format('HH:mm')} / {Math.round(radToDeg(altitudeAtMax))}°
+                      </TableRowColumn>
+                      <TableRowColumn>{magnitude}</TableRowColumn>
+                      <TableRowColumn>{surfaceBrightness}</TableRowColumn>
+                    </TableRow>
+                  );
+                }
               )}
           </TableBody>
         </Table>
