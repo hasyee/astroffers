@@ -1,6 +1,13 @@
 {
   "appBar": {
-      "color": "#ffeb3b",
-      "textColor": "#000000"
+    "color": "#5c6bc0",
+    "textColor": "#fff"
+  },
+  "palette": {
+    "primary1Color": "#5c6bc0",
+    "primary2Color": "#5c6bc0"
+  },
+  "datePicker": {
+    "headerColor": "#5c6bc0"
   }
 }
