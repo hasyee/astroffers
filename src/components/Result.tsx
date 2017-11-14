@@ -10,8 +10,8 @@ class Result extends React.PureComponent<{ hasResult: boolean; isFiltering: bool
     return (
       <div className="fitted column layout result center">
         {isFiltering && <CircularProgress />}
-        {!isFiltering && hasResult && <NightCard />}
-        {!isFiltering && hasResult && <List />}
+        <NightCard />
+        <List />
       </div>
     );
   }

@@ -3,9 +3,9 @@ import moment = require('moment');
 import { connect } from 'react-redux';
 import { NightInfo } from '../calcs/types';
 
-class NightCard extends React.PureComponent<{ nightInfo: NightInfo }> {
+class NightCard extends React.PureComponent<{ nightInfo: NightInfo; isFiltering: boolean }> {
   render() {
-    if (!this.props.nightInfo) return null;
+    if (!this.props.nightInfo || this.props.isFiltering) return null;
     const { night, astroNight, moonNight, moonlessNight } = this.props.nightInfo;
     return (
       <div className="dynamic night card center">
@@ -46,4 +46,6 @@ class NightCard extends React.PureComponent<{ nightInfo: NightInfo }> {
   }
 }
 
-export default connect(({ result }) => ({ nightInfo: result.nightInfo }))(NightCard);
+export default connect(({ result, isFiltering }) => ({ isFiltering, nightInfo: result ? result.nightInfo : null }))(
+  NightCard
+);
