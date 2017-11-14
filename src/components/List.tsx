@@ -92,7 +92,7 @@ class List extends React.PureComponent<{ objects: NgcInfo[] }> {
               </TableHeaderColumn>
             </TableRow>
           </TableHeader>
-          <TableBody displayRowCheckbox={false} preScanRows={}>
+          <TableBody displayRowCheckbox={false} preScanRows={false}>
             {this.props.objects
               .sort(sorter(this.state.sortBy))
               .map(
