@@ -8,7 +8,7 @@ const storedFilter = storedFilterStr ? JSON.parse(storedFilterStr) : {};
 
 const initialState: State = {
   filter: { ...defaultState.filter, ...storedFilter, date: Date.now() },
-  result: []
+  result: null
 };
 
 const store = new Store<State>(initialState).addMiddleware(thunk.withExtraArgument({ fetchLocation, filterObjects }));
