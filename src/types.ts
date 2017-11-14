@@ -13,6 +13,7 @@ export type Filter = {
   longitude: number;
   twilight: number;
   altitude: number;
+  moonless: boolean;
 };
 
 export type Result = {
