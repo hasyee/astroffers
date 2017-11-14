@@ -11,7 +11,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Dialog from 'material-ui/Dialog';
 import SelectLocationDialog from './SelectLocationDialog';
 import { State, Filter as IFilter } from '../types';
-import { changeFilter, resetFilter, filterObjects } from '../actions';
+import { changeFilter, resetFilter, filterObjects, toggleTypeFilter, changeAllTypeFilter } from '../actions';
 const typeMap = require('../../data/types.json');
 
 const resolveValue = (value: number) => (Number.isFinite(value) ? value : '');
@@ -21,6 +21,8 @@ class Filter extends React.PureComponent<{
   changeFilter: typeof changeFilter;
   resetFilter: typeof resetFilter;
   filterObjects: typeof filterObjects;
+  toggleTypeFilter: typeof toggleTypeFilter;
+  changeAllTypeFilter: typeof changeAllTypeFilter;
 }> {
   state = {
     isOpenLocationDialog: false,
@@ -49,16 +51,14 @@ class Filter extends React.PureComponent<{
   }
 
   renderTypeFilterDialog() {
-    const { types } = this.props.filter;
+    const { filter: { types }, toggleTypeFilter, changeAllTypeFilter } = this.props;
     const { isOpenTypeFilterDialog } = this.state;
     const actions = [
-      <FlatButton label="Close" primary={true} onClick={this.handleTypeFilterDialogClose} />,
-      <FlatButton label="Select all" style={{ float: 'left' }} />,
-      <FlatButton label="Select none" style={{ float: 'left' }} />
+      <FlatButton label="Select all" onClick={() => changeAllTypeFilter(true)} />,
+      <FlatButton label="Select none" onClick={() => changeAllTypeFilter(false)} />
     ];
     return (
       <Dialog
-        title="Filter types"
         actions={actions}
         modal={false}
         open={isOpenTypeFilterDialog}
@@ -73,7 +73,7 @@ class Filter extends React.PureComponent<{
               value={key}
               insetChildren={true}
               checked={types[key]}
-              onClick={(...a) => console.log(...a)}
+              onClick={() => toggleTypeFilter(key)}
             >
               {typeMap[key]}
             </MenuItem>
@@ -150,12 +150,16 @@ class Filter extends React.PureComponent<{
             type="number"
           />
           <Checkbox
-            style={{ margin: '0px 10px' }}
+            style={{ marginTop: '10px' }}
             label="Moonless night only"
             checked={moonless}
             onCheck={this.handleMoonlessChange}
           />
-          <FlatButton label="Filter types" style={{ cssFloat: 'right' }} onClick={this.handleTypeFilterDialogOpen} />
+          <FlatButton
+            label="Filter types"
+            style={{ cssFloat: 'right', marginTop: '5px' }}
+            onClick={this.handleTypeFilterDialogOpen}
+          />
           {this.renderTypeFilterDialog()}
         </div>
         <div className="dynamic button-container">
@@ -167,4 +171,10 @@ class Filter extends React.PureComponent<{
   }
 }
 
-export default connect(({ filter }: State) => ({ filter }), { changeFilter, resetFilter, filterObjects })(Filter);
+export default connect(({ filter }: State) => ({ filter }), {
+  changeFilter,
+  resetFilter,
+  filterObjects,
+  toggleTypeFilter,
+  changeAllTypeFilter
+})(Filter);

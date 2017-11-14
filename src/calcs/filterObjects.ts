@@ -17,14 +17,17 @@ const getMax = (intersection: Interval, transit: Timestamp): Timestamp => {
 
 export default (
   ngcObjects: NgcObject[],
-  { latitude, longitude, altitude, magnitude }: Filter,
+  { latitude, longitude, altitude, magnitude, types: typeFilter }: Filter,
   night: Interval
 ): NgcInfo[] => {
   const location = getLocation(latitude, longitude);
   const refTime = night.start;
   const getHalfDayArc = getHalfDayArcFactory(refTime, location, degToRad(altitude));
   return ngcObjects
-    .filter(object => Number.isFinite(object.magnitude) && object.magnitude < magnitude)
+    .filter(object => {
+      const types = object.type.split('+');
+      return Number.isFinite(object.magnitude) && object.magnitude < magnitude && types.some(t => typeFilter[t]);
+    })
     .map(object => {
       const ra = hmsToRad(object.eqCoords.ra);
       const de = dmsToRad(object.eqCoords.de);
