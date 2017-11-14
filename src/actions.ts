@@ -1,5 +1,8 @@
 import { State, Filter } from './types';
 import { getLocation } from './calcs/units';
+import defaultState from './defaultState';
+
+export const resetFilter = () => state => ({ ...state, filter: defaultState.filter });
 
 export const changeFilter = (prop: string, value: number) => state => ({
   ...state,
