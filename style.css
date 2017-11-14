@@ -2,6 +2,11 @@ body {
   font-family: Roboto;
 }
 
+body a {
+  cursor: pointer;
+  color: #5c6bc0;
+}
+
 .absolute {
   position: absolute;
   top: 0px;
