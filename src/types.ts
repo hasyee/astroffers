@@ -3,6 +3,7 @@ import { NgcInfo, NightInfo } from './calcs/types';
 export type State = {
   filter: Filter;
   result: Result;
+  isFiltering: boolean;
 };
 
 export type Filter = {

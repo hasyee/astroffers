@@ -16,6 +16,7 @@ export const fetchLocation = () => state => async (dispatch, getState, { fetchLo
 };
 
 export const filterObjects = () => state => async (dispatch, getState, { filterObjects }) => {
+  dispatch(state => ({ ...state, isFiltering: true }));
   const result = await filterObjects(getState().filter);
-  dispatch(state => ({ ...state, result }));
+  dispatch(state => ({ ...state, result, isFiltering: false }));
 };
