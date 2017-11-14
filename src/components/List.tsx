@@ -13,7 +13,7 @@ import {
 } from 'material-ui/Table';
 import { NgcInfo } from '../calcs/types';
 import { radToDeg } from '../calcs/units';
-const typeMap = require('../../data/types.json');
+import resolveTypes from '../calcs/resolveTypes';
 
 export enum PROP {
   NGC = 'ngc',
@@ -44,8 +44,6 @@ const sorter = (prop: PROP) => (a: NgcInfo, b: NgcInfo) => {
   else return 0;
 };
 
-const resolveType = (type: string): string => type.split('+').map(t => typeMap[t]).join(', ');
-
 const DISPLAYED_ITEMS = 100;
 
 class List extends React.PureComponent<{ objects: NgcInfo[] }> {
@@ -59,7 +57,10 @@ class List extends React.PureComponent<{ objects: NgcInfo[] }> {
   componentDidMount() {
     this.table = findDOMNode(this.refs.table).getElementsByTagName('div')[1];
     this.table.onscroll = () => {
-      if (this.table.scrollTop >= 0.8 * this.table.scrollHeight) {
+      if (
+        this.table.scrollTop >= 0.8 * this.table.scrollHeight &&
+        this.state.displayedItems < this.props.objects.length
+      ) {
         this.setState({ displayedItems: this.state.displayedItems + DISPLAYED_ITEMS });
       }
     };
@@ -121,7 +122,7 @@ class List extends React.PureComponent<{ objects: NgcInfo[] }> {
                   max,
                   altitudeAtMax
                 }) => {
-                  const resolvedType = resolveType(type);
+                  const resolvedType = resolveTypes(type).join(', ');
                   return (
                     <TableRow key={ngc} selectable={false}>
                       <TableRowColumn>
