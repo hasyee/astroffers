@@ -35,6 +35,7 @@ export default class extends React.PureComponent<{
         targetOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
       >
+        <MenuItem primaryText="Help" />
         <MenuItem primaryText="About" onClick={this.handleAboutOpen} />
       </IconMenu>
     );
