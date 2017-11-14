@@ -1,5 +1,8 @@
+import { NgcInfo } from './calcs/types';
+
 export type State = {
   filter: Filter;
+  result: NgcInfo[];
 };
 
 export type Filter = {

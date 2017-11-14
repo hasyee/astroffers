@@ -1,5 +1,6 @@
 import React = require('react');
 import moment = require('moment');
+import { connect } from 'react-redux';
 import {
   Table,
   TableBody,
@@ -41,7 +42,7 @@ const sorter = (prop: PROP) => (a: NgcInfo, b: NgcInfo) => {
   else return 0;
 };
 
-export default class extends React.PureComponent<{ objects: NgcInfo[] }> {
+class List extends React.PureComponent<{ objects: NgcInfo[] }> {
   state = {
     sortBy: PROP.MAX
   };
@@ -120,3 +121,5 @@ export default class extends React.PureComponent<{ objects: NgcInfo[] }> {
     );
   }
 }
+
+export default connect(({ result }) => ({ objects: result }))(List);

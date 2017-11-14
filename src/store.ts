@@ -1,16 +1,17 @@
 import Store, { thunk } from 'repatch';
 import { State } from './types';
-import { fetchLocation } from './api';
+import { fetchLocation, filterObjects } from './api';
 import defaultState from './defaultState';
 
 const storedFilterStr = window.localStorage.getItem('filter');
 const storedFilter = storedFilterStr ? JSON.parse(storedFilterStr) : {};
 
 const initialState: State = {
-  filter: { ...defaultState.filter, ...storedFilter, date: Date.now() }
+  filter: { ...defaultState.filter, ...storedFilter, date: Date.now() },
+  result: []
 };
 
-const store = new Store<State>(initialState).addMiddleware(thunk.withExtraArgument({ fetchLocation }));
+const store = new Store<State>(initialState).addMiddleware(thunk.withExtraArgument({ fetchLocation, filterObjects }));
 
 export default store;
 
