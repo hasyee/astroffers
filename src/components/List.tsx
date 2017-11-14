@@ -122,4 +122,4 @@ class List extends React.PureComponent<{ objects: NgcInfo[] }> {
   }
 }
 
-export default connect(({ result }) => ({ objects: result }))(List);
+export default connect(({ result }) => ({ objects: result.list }))(List);

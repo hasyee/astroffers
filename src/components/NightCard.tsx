@@ -1,11 +1,11 @@
 import React = require('react');
 import moment = require('moment');
 import { connect } from 'react-redux';
-import { getNightInfo } from '../selectors';
 import { NightInfo } from '../calcs/types';
 
 class NightCard extends React.PureComponent<{ nightInfo: NightInfo }> {
   render() {
+    if (!this.props.nightInfo) return null;
     const { night, astroNight, moonNight, moonlessNight } = this.props.nightInfo;
     return (
       <div className="dynamic night card center">
@@ -46,4 +46,4 @@ class NightCard extends React.PureComponent<{ nightInfo: NightInfo }> {
   }
 }
 
-export default connect(state => ({ nightInfo: getNightInfo(state) }))(NightCard);
+export default connect(({ result }) => ({ nightInfo: result.nightInfo }))(NightCard);

@@ -1,5 +1,4 @@
-import { Filter } from './types';
-import { NgcInfo, Interval } from './calcs/types';
+import { Filter, Result } from './types';
 
 const worker = new Worker('worker.js');
 let isWorkerBusy = false;
@@ -9,13 +8,14 @@ export const fetchLocation = (): Promise<{ latitude; longitude }> =>
     .then(response => response.json())
     .then(({ latitude, longitude }) => ({ latitude, longitude }));
 
-export const filterObjects = (filter: Filter, night: Interval): Promise<NgcInfo[]> =>
+export const filterObjects = (filter: Filter): Promise<Result> =>
   new Promise((resolve, reject) => {
-    //if (isWorkerBusy) return reject(new Error('Worker is busy'));
-    //isWorkerBusy = true;
+    if (isWorkerBusy) return reject(new Error('Worker is busy'));
+    isWorkerBusy = true;
     worker.onmessage = ({ data }) => {
-      //isWorkerBusy = false;
+      if (!isWorkerBusy) return reject(new Error('Worker is already done'));
+      isWorkerBusy = false;
       resolve(data);
     };
-    worker.postMessage({ filter, night });
+    worker.postMessage(filter);
   });

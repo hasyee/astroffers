@@ -1,8 +1,8 @@
-import { NgcInfo } from './calcs/types';
+import { NgcInfo, NightInfo } from './calcs/types';
 
 export type State = {
   filter: Filter;
-  result: NgcInfo[];
+  result: Result;
 };
 
 export type Filter = {
@@ -12,4 +12,9 @@ export type Filter = {
   longitude: number;
   twilight: number;
   altitude: number;
+};
+
+export type Result = {
+  nightInfo: NightInfo;
+  list: NgcInfo[];
 };

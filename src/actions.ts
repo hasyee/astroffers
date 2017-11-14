@@ -1,7 +1,6 @@
 import { State, Filter } from './types';
 import { getLocation } from './calcs/units';
 import defaultState from './defaultState';
-import { getNightInfo } from './selectors';
 
 export const resetFilter = () => state => ({ ...state, filter: defaultState.filter });
 
@@ -17,7 +16,6 @@ export const fetchLocation = () => state => async (dispatch, getState, { fetchLo
 };
 
 export const filterObjects = () => state => async (dispatch, getState, { filterObjects }) => {
-  const nightInfo = getNightInfo(getState());
-  const result = await filterObjects(getState().filter, nightInfo.moonNight);
+  const result = await filterObjects(getState().filter);
   dispatch(state => ({ ...state, result }));
 };

@@ -1,10 +1,11 @@
-import { Timestamp, Loc, Deg, Interval, NightInfo } from './calcs/types';
-import { getNight } from './calcs/sun';
-import { getMoonNight } from './calcs/moon';
-import { getLocation, degToRad } from './calcs/units';
-import { getIntersection } from './calcs/interval';
+import { Filter } from '../types';
+import { Timestamp, Loc, Deg, Interval, NightInfo } from './types';
+import { getNight } from './sun';
+import { getMoonNight } from './moon';
+import { getLocation, degToRad } from './units';
+import { getIntersection } from './interval';
 
-export const getNightInfo = ({ filter: { date, latitude, longitude, twilight } }) => {
+export default ({ date, latitude, longitude, twilight }: Filter) => {
   const location = getLocation(latitude, longitude);
   const night = getNight(date, location);
   const astroNight = getNight(date, location, degToRad(twilight));
