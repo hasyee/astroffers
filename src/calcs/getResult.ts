@@ -5,6 +5,6 @@ const catalog = require('../../data/ngc.json');
 
 export default (filter: Filter): Result => {
   const nightInfo = getNightInfo(filter);
-  const list = filterObjects(catalog, filter, nightInfo.moonlessNight);
+  const list = filterObjects(catalog, filter, filter.moonless ? nightInfo.moonlessNight : nightInfo.astroNight);
   return { nightInfo, list };
 };

@@ -5,6 +5,7 @@ import DatePicker from 'material-ui/DatePicker';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import Checkbox from 'material-ui/Checkbox';
 import SelectLocationDialog from './SelectLocationDialog';
 import { State, Filter as IFilter } from '../types';
 import { changeFilter, resetFilter, filterObjects } from '../actions';
@@ -27,6 +28,7 @@ class Filter extends React.PureComponent<{
     const value = parseFloat(evt.target.value);
     this.props.changeFilter(prop, Number.isFinite(value) ? value : null);
   };
+  handleMoonlessChange = evt => this.props.changeFilter('moonless', evt.target.checked);
   handleDialogOpen = () => this.setState({ isOpenDialog: true });
   handleDialogCancel = () => this.setState({ isOpenDialog: false });
   handleDialogSubmit = ({ latitude, longitude }) => {
@@ -41,7 +43,7 @@ class Filter extends React.PureComponent<{
 
   render() {
     const {
-      filter: { date, magnitude, latitude, longitude, twilight, altitude },
+      filter: { date, magnitude, latitude, longitude, twilight, altitude, moonless },
       resetFilter,
       filterObjects
     } = this.props;
@@ -104,6 +106,12 @@ class Filter extends React.PureComponent<{
             value={resolveValue(altitude)}
             onChange={this.handleChange('altitude')}
             type="number"
+          />
+          <Checkbox
+            style={{ marginTop: '10px' }}
+            label="Moonless night only"
+            checked={moonless}
+            onCheck={this.handleMoonlessChange}
           />
         </div>
         <div className="dynamic button-container">

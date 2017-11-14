@@ -7,6 +7,7 @@ export default {
     latitude: 47,
     longitude: 19,
     twilight: -18,
-    altitude: 20
+    altitude: 20,
+    moonless: true
   }
 } as State;
