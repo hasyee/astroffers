@@ -71,8 +71,14 @@ class List extends React.PureComponent<{ objects: NgcInfo[]; isFiltering: boolea
     this.initScroll();
   }
 
+  componentWillUpdate(nextProps) {
+    if (this.props.objects !== nextProps.objects) this.setState({ displayedItems: DISPLAYED_ITEMS });
+  }
+
   componentDidUpdate(prevProps) {
-    if (prevProps.objects !== this.props.objects) this.initScroll();
+    if (prevProps.objects !== this.props.objects) {
+      this.initScroll();
+    }
   }
 
   handleHeaderClick = (prop: PROP) => () => {
