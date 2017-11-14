@@ -11,6 +11,7 @@ import MenuItem from 'material-ui/MenuItem';
 import SelectLocationDialog from './SelectLocationDialog';
 import { State, Filter as IFilter } from '../types';
 import { changeFilter, resetFilter, filterObjects } from '../actions';
+const typeMap = require('../../data/types.json');
 
 const resolveValue = (value: number) => (Number.isFinite(value) ? value : '');
 
@@ -119,25 +120,11 @@ class Filter extends React.PureComponent<{
             iconButtonElement={<FlatButton label="Filter by type" />}
             style={{ cssFloat: 'right', marginTop: '10px' }}
           >
-            <MenuItem insetChildren={true}>yee</MenuItem>
-            <MenuItem insetChildren={true}>yee</MenuItem>
-            <MenuItem insetChildren={true}>yee</MenuItem>
-            <MenuItem insetChildren={true}>yee</MenuItem>
-            <MenuItem insetChildren={true}>yee</MenuItem>
-            <MenuItem insetChildren={true}>yee</MenuItem>
-            <MenuItem insetChildren={true}>yee</MenuItem>
-            <MenuItem insetChildren={true}>yee</MenuItem>
-            <MenuItem insetChildren={true}>yee</MenuItem>
-            <MenuItem insetChildren={true}>yee</MenuItem>
-            <MenuItem insetChildren={true}>yee</MenuItem>
-            <MenuItem insetChildren={true}>yee</MenuItem>
-            <MenuItem insetChildren={true}>yee</MenuItem>
-            <MenuItem insetChildren={true}>yee</MenuItem>
-            <MenuItem insetChildren={true}>yee</MenuItem>
-            <MenuItem insetChildren={true}>yee</MenuItem>
-            <MenuItem insetChildren={true}>yee</MenuItem>
-            <MenuItem insetChildren={true}>yee</MenuItem>
-            <MenuItem insetChildren={true}>yee</MenuItem>
+            {Object.keys(typeMap).map(key => (
+              <MenuItem key={key} value={key} insetChildren={true} checked={true}>
+                {typeMap[key]}
+              </MenuItem>
+            ))}
           </IconMenu>
         </div>
         <div className="dynamic button-container">

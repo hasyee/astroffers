@@ -1,0 +1,17 @@
+{
+  "Gxy": "Galaxy",
+  "**": "Double Star",
+  "*": "Single Star",
+  "PN": "Planetary Nebula",
+  "NF": "Not Found",
+  "OC": "Open Cluster",
+  "GC": "Globular Cluster",
+  "GxyCld": "Bright Cloud",
+  "Neb": "Nebula",
+  "Ast": "Asterism",
+  "***": "Triple Star",
+  "SNR": "Supernova Remnant",
+  "Neb?": "Maybe Nebula",
+  "HIIRgn": "HII Region",
+  "MWSC": "Milky Way Star Cloud"
+}
