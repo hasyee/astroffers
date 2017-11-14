@@ -1,4 +1,5 @@
-import { State } from './types';
+import { State, TypeFilter } from './types';
+const typeMap = require('../data/types.json');
 
 export default {
   filter: {
@@ -8,6 +9,7 @@ export default {
     longitude: 19,
     twilight: -18,
     altitude: 20,
-    moonless: true
+    moonless: true,
+    types: Object.keys(typeMap).reduce((acc, type) => ({ ...acc, [type]: true }), {})
   }
 } as State;
