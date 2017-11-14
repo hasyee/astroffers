@@ -7,6 +7,10 @@ body a {
   color: #5c6bc0;
 }
 
+body a:hover {
+  text-decoration: underline;
+}
+
 .absolute {
   position: absolute;
   top: 0px;
