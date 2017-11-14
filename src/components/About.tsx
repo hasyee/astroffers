@@ -49,7 +49,7 @@ export default class extends React.PureComponent<{
               <b>Feedback</b>
             </td>
             <td>
-              <a href={feedback} target="_blank" onClick={() => shell.openExternal(feedback)}>
+              <a onClick={() => shell.openExternal(feedback)}>
                 {feedback}
               </a>
             </td>
@@ -59,7 +59,7 @@ export default class extends React.PureComponent<{
               <b>Homepage</b>
             </td>
             <td>
-              <a href={homepage} target="_blank" onClick={() => shell.openExternal(homepage)}>
+              <a onClick={() => shell.openExternal(homepage)}>
                 {homepage}
               </a>
             </td>
