@@ -54,8 +54,9 @@ class Filter extends React.PureComponent<{
     const { filter: { types }, toggleTypeFilter, changeAllTypeFilter } = this.props;
     const { isOpenTypeFilterDialog } = this.state;
     const actions = [
-      <FlatButton label="Select all" onClick={() => changeAllTypeFilter(true)} />,
-      <FlatButton label="Select none" onClick={() => changeAllTypeFilter(false)} />
+      <FlatButton label="Close" onClick={this.handleTypeFilterDialogClose} primary />,
+      <FlatButton label="Select all" onClick={() => changeAllTypeFilter(true)} style={{ float: 'left' }} />,
+      <FlatButton label="Select none" onClick={() => changeAllTypeFilter(false)} style={{ float: 'left' }} />
     ];
     return (
       <Dialog
@@ -67,7 +68,7 @@ class Filter extends React.PureComponent<{
         contentStyle={{ width: '350px', maxWidth: 'none' }}
       >
         <Menu autoWidth={false} desktop width={350}>
-          {Object.keys(types).map(key => (
+          {Object.keys(typeMap).map(key => (
             <MenuItem
               key={key}
               insetChildren={true}
