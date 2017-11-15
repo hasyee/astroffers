@@ -24,6 +24,7 @@ export default (
   const refTime = night.start;
   const getHalfDayArc = getHalfDayArcFactory(refTime, location, degToRad(altitude));
   return ngcObjects
+    //.filter(({ ngc }) => ngc === 5055)
     .filter(object => {
       const types = object.type.split('+');
       return Number.isFinite(object.magnitude) && object.magnitude < magnitude && types.some(t => typeFilter[t]);
@@ -34,6 +35,7 @@ export default (
       const eqCoordsOnJ2000 = { ra, de };
       const eqCoordsOnDate = getEqCoordsOnDate(eqCoordsOnJ2000, refTime);
       const hda = getHalfDayArc(eqCoordsOnDate);
+      //console.log(hda);
       const transit = Math.round((hda.start + hda.end) / 2);
       const intersection = getIntersection(hda, night);
       const max = getMax(intersection, transit);
