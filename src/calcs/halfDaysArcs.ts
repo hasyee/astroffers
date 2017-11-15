@@ -21,11 +21,18 @@ export const getHalfDayArcFactory = (time: Timestamp, { lat, lon }: Loc, altitud
   const { ra, de } = getEqCoordsOnDate(eqCoordsOnJ2000, time);
   const ha = acos((sin(altitudeLimit) - sin(lat) * sin(de)) / (cos(lat) * cos(de)));
   if (!Number.isFinite(ha)) return {};
-  const k = ceil((siderealTime - ra - ha) / PI2);
-  const nextCrossing = ra + ha + k * PI2;
-  const nextCrossingIsRising = isRising(nextCrossing, lat, ra, de);
-  const otherCrossing = nextCrossing + (nextCrossingIsRising ? +PI : -PI);
-  const start = lstToTime(nextCrossingIsRising ? nextCrossing : otherCrossing, lon);
-  const end = lstToTime(nextCrossingIsRising ? otherCrossing : nextCrossing, lon);
-  return { start, end };
+  const k1 = ceil((siderealTime - ha - ra) / PI2);
+  const k2 = ceil((siderealTime + ha - ra) / PI2);
+  const t1 = ra + ha + PI2 * k1;
+  const t2 = ra - ha + PI2 * k2;
+  const [ next, other ] = t1 < t2 ? [ t1, t2 ] : [ t2, t1 ];
+  return isRising(next, lat, ra, de)
+    ? {
+        start: lstToTime(next, lon),
+        end: lstToTime(other, lon)
+      }
+    : {
+        start: lstToTime(other - PI2, lon),
+        end: lstToTime(next, lon)
+      };
 };
