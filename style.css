@@ -93,7 +93,7 @@ body a:hover {
 }
 
 .summary.card .count {
-  padding: 30px;
+  padding: 0px 20px;
 }
 
 .summary.card .count > div:first-child {
@@ -101,11 +101,11 @@ body a:hover {
 }
 
 .summary.card .moon {
-  padding-right: 30px;
+  padding-right: 20px;
 }
 
 .summary.card .moon > div:nth-child(1) {
-  padding: 24px;
+  padding: 15px;
 }
 
 .summary.card .moonlight {
