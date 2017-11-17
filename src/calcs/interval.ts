@@ -11,6 +11,7 @@ const unprepareInterval = ({ start, end }: Interval): Interval => ({
 });
 
 export const getIntersection = (interval1: Interval, interval2: Interval): Interval => {
+  if (!interval1 || !interval2) return null;
   const { start: start1, end: end1 } = prepareInterval(interval1);
   const { start: start2, end: end2 } = prepareInterval(interval2);
   if (start1 > end2 || start2 > end1) return null;
