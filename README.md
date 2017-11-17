@@ -1,4 +1,4 @@
-# astroffers
+# Astroffers
 Take offers to watch at given nights by the NGC2000 catalog
 
 ## Build
@@ -19,7 +19,7 @@ npm run build:w
 npm start
 ```
 
-## Run in production mode
+Start in production mode:
 
 ```
 npm run start-prod
