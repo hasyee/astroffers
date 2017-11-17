@@ -22,28 +22,36 @@ class Summary extends React.PureComponent<{ nightInfo: NightInfo; count: number;
           <table>
             <tbody>
               <tr>
-                <td>Night</td>
+                <td>
+                  <i className="mdi mdi-brightness-1" style={{ color: '#5c6bc0' }} /> Night
+                </td>
                 <td>Sunset</td>
                 <td>{moment(night.start).format('HH:mm')}</td>
                 <td>Sunrise</td>
                 <td>{moment(night.end).format('HH:mm')}</td>
               </tr>
               <tr>
-                <td>Astro night</td>
+                <td>
+                  <i className="mdi mdi-brightness-1" style={{ color: 'grey' }} /> Astro night
+                </td>
                 <td>From</td>
                 <td>{moment(astroNight.start).format('HH:mm')}</td>
                 <td>To</td>
                 <td>{moment(astroNight.end).format('HH:mm')}</td>
               </tr>
               <tr>
-                <td>Moon</td>
+                <td>
+                  <i className="mdi mdi-brightness-1" style={{ color: 'transparent' }} /> Moon
+                </td>
                 <td>Moonset</td>
                 <td>{moonNight ? moment(moonNight.start).format('HH:mm') : '-'}</td>
                 <td>Moonrise</td>
                 <td>{moonNight ? moment(moonNight.end).format('HH:mm') : '-'}</td>
               </tr>
               <tr>
-                <td>Moonless night</td>
+                <td>
+                  <i className="mdi mdi-brightness-1" style={{ color: 'black' }} /> Moonless night
+                </td>
                 <td>From</td>
                 <td>{moonlessNight ? moment(moonlessNight.start).format('HH:mm') : '-'}</td>
                 <td>To</td>
