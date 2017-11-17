@@ -75,7 +75,7 @@ export type NgcObject = {
   };
   type: string;
   constellation: string;
-  size: string;
+  size: [Dms, Dms];
   magnitude: number;
   surfaceBrightness: number;
 };
