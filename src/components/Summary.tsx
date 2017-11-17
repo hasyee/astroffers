@@ -37,16 +37,16 @@ class Summary extends React.PureComponent<{ nightInfo: NightInfo; count: number;
               <tr>
                 <td>Moon</td>
                 <td>Moonset</td>
-                <td>{moment(moonNight.start).format('HH:mm')}</td>
+                <td>{moonNight ? moment(moonNight.start).format('HH:mm') : '-'}</td>
                 <td>Moonrise</td>
-                <td>{moment(moonNight.end).format('HH:mm')}</td>
+                <td>{moonNight ? moment(moonNight.end).format('HH:mm') : '-'}</td>
               </tr>
               <tr>
                 <td>Moonless night</td>
                 <td>From</td>
-                <td>{moment(moonlessNight.start).format('HH:mm')}</td>
+                <td>{moonlessNight ? moment(moonlessNight.start).format('HH:mm') : '-'}</td>
                 <td>To</td>
-                <td>{moment(moonlessNight.end).format('HH:mm')}</td>
+                <td>{moonlessNight ? moment(moonlessNight.end).format('HH:mm') : '-'}</td>
               </tr>
             </tbody>
           </table>

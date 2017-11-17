@@ -20,6 +20,7 @@ export default (
   { latitude, longitude, altitude, brightnessFilter, magnitude, surfaceBrightness, types: typeFilter }: Filter,
   night: Interval
 ): NgcInfo[] => {
+  if (!night) return [];
   const location = getLocation(latitude, longitude);
   const refTime = night.start;
   const getHalfDayArc = getHalfDayArcFactory(refTime, location, degToRad(altitude));
