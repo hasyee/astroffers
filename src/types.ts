@@ -8,12 +8,14 @@ export type State = {
 
 export type Filter = {
   date: number;
-  magnitude: number;
   latitude: number;
   longitude: number;
   twilight: number;
   altitude: number;
   moonless: boolean;
+  brightnessFilter: string;
+  magnitude: number;
+  surfaceBrightness: number;
   types: TypeFilter;
 };
 

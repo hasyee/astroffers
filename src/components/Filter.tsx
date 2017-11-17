@@ -7,6 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
 import Menu from 'material-ui/Menu';
+import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import Dialog from 'material-ui/Dialog';
 import SelectLocationDialog from './SelectLocationDialog';
@@ -36,6 +37,7 @@ class Filter extends React.PureComponent<{
     this.props.changeFilter(prop, Number.isFinite(value) ? value : null);
   };
   handleMoonlessChange = (_, checked) => this.props.changeFilter('moonless', checked);
+  handleBrightnessFilterChange = (_, __, value) => this.props.changeFilter('brightnessFilter', value);
   handleLocationDialogOpen = () => this.setState({ isOpenLocationDialog: true });
   handleLocationDialogCancel = () => this.setState({ isOpenLocationDialog: false });
   handleLocationDialogSubmit = ({ latitude, longitude }) => {
@@ -84,7 +86,17 @@ class Filter extends React.PureComponent<{
 
   render() {
     const {
-      filter: { date, magnitude, latitude, longitude, twilight, altitude, moonless },
+      filter: {
+        date,
+        latitude,
+        longitude,
+        twilight,
+        altitude,
+        moonless,
+        brightnessFilter,
+        magnitude,
+        surfaceBrightness
+      },
       resetFilter,
       filterObjects
     } = this.props;
@@ -125,15 +137,7 @@ class Filter extends React.PureComponent<{
             onSubmit={this.handleLocationDialogSubmit}
           />
           <TextField
-            floatingLabelText="Magnitude limit ( ° )"
-            floatingLabelFixed
-            fullWidth
-            value={resolveValue(magnitude)}
-            onChange={this.handleChange('magnitude')}
-            type="number"
-          />
-          <TextField
-            floatingLabelText="Astronomical twilight ( ° )"
+            floatingLabelText="Maximum altitude of Sun ( ° )"
             floatingLabelFixed
             fullWidth
             value={resolveValue(twilight)}
@@ -141,7 +145,7 @@ class Filter extends React.PureComponent<{
             type="number"
           />
           <TextField
-            floatingLabelText="Altitude limit ( ° )"
+            floatingLabelText="Minimum altitude ( ° )"
             floatingLabelFixed
             fullWidth
             value={resolveValue(altitude)}
@@ -153,6 +157,25 @@ class Filter extends React.PureComponent<{
             label="Moonless night only"
             toggled={moonless}
             onToggle={this.handleMoonlessChange}
+          />
+          <DropDownMenu
+            value={brightnessFilter}
+            onChange={this.handleBrightnessFilterChange}
+            style={{ width: '100%', marginTop: '10px' }}
+            underlineStyle={{ margin: '0' }}
+            labelStyle={{ paddingLeft: '0', userSelect: 'none' }}
+            iconStyle={{ right: '-15px' }}
+          >
+            <MenuItem value="magnitude" primaryText="Filter by magnitude" />
+            <MenuItem value="surfaceBrightness" primaryText="Filter by surface brightness" />
+          </DropDownMenu>
+          <TextField
+            floatingLabelText={`Maximum ${brightnessFilter === 'magnitude' ? 'magnitude' : 'surface brightness'} ( ° )`}
+            floatingLabelFixed
+            fullWidth
+            value={resolveValue(brightnessFilter === 'magnitude' ? magnitude : surfaceBrightness)}
+            onChange={this.handleChange(brightnessFilter)}
+            type="number"
           />
           <FlatButton
             label="Filter types"
