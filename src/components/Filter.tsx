@@ -5,7 +5,7 @@ import DatePicker from 'material-ui/DatePicker';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import Checkbox from 'material-ui/Checkbox';
+import Toggle from 'material-ui/Toggle';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Dialog from 'material-ui/Dialog';
@@ -35,7 +35,7 @@ class Filter extends React.PureComponent<{
     const value = parseFloat(evt.target.value);
     this.props.changeFilter(prop, Number.isFinite(value) ? value : null);
   };
-  handleMoonlessChange = evt => this.props.changeFilter('moonless', evt.target.checked);
+  handleMoonlessChange = (_, checked) => this.props.changeFilter('moonless', checked);
   handleLocationDialogOpen = () => this.setState({ isOpenLocationDialog: true });
   handleLocationDialogCancel = () => this.setState({ isOpenLocationDialog: false });
   handleLocationDialogSubmit = ({ latitude, longitude }) => {
@@ -148,11 +148,11 @@ class Filter extends React.PureComponent<{
             onChange={this.handleChange('altitude')}
             type="number"
           />
-          <Checkbox
+          <Toggle
             style={{ marginTop: '10px' }}
             label="Moonless night only"
-            checked={moonless}
-            onCheck={this.handleMoonlessChange}
+            toggled={moonless}
+            onToggle={this.handleMoonlessChange}
           />
           <FlatButton
             label="Filter types"
