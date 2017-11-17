@@ -20,3 +20,8 @@ export const getMoonNight = (night: Interval, loc: Loc): Interval => {
   if (isInInterval(night, set2)) return { start: set2, end: rise2 };
   return null;
 };
+
+export const getMoonPhase = (midnight: Timestamp): number => {
+  const { phase } = SunCalc.getMoonIllumination(new Date(midnight));
+  return phase;
+};
