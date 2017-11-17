@@ -2,16 +2,20 @@ import React = require('react');
 import moment = require('moment');
 import { connect } from 'react-redux';
 import { NightInfo } from '../calcs/types';
+import Moon from './Moon';
 
 class Summary extends React.PureComponent<{ nightInfo: NightInfo; count: number; isFiltering: boolean }> {
   render() {
     if (!this.props.nightInfo || this.props.isFiltering) return null;
-    const { night, astroNight, moonNight, moonlessNight } = this.props.nightInfo;
+    const { night, astroNight, moonNight, moonlessNight, moonPhase } = this.props.nightInfo;
     return (
       <div className="dynamic row layout summary card">
         <div className="dynamic column layout center count">
           <div>{this.props.count}</div>
           <div>total results</div>
+        </div>
+        <div className="dynamic layout center">
+          <Moon phase={moonPhase} />
         </div>
         <div className="fitted layout center">
           <table>

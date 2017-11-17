@@ -85,6 +85,7 @@ export type NightInfo = {
   moonNight: Interval;
   astroNight: Interval;
   moonlessNight: Interval;
+  moonPhase: number;
 };
 
 export type NgcInfo = {
