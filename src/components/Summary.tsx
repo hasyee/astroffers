@@ -3,6 +3,7 @@ import moment = require('moment');
 import { connect } from 'react-redux';
 import { NightInfo } from '../calcs/types';
 import Moon from './Moon';
+import NightChart from './NightChart';
 
 class Summary extends React.PureComponent<{ nightInfo: NightInfo; count: number; isFiltering: boolean }> {
   render() {
@@ -50,6 +51,9 @@ class Summary extends React.PureComponent<{ nightInfo: NightInfo; count: number;
               </tr>
             </tbody>
           </table>
+        </div>
+        <div className="dynamic layout center night">
+          <NightChart nightInfo={this.props.nightInfo} />
         </div>
       </div>
     );
