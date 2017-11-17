@@ -6,7 +6,7 @@ export default withGoogleMap(
     render() {
       const { latitude, longitude, onChange } = this.props;
       return (
-        <GoogleMap defaultZoom={8} defaultCenter={{ lat: latitude, lng: longitude }}>
+        <GoogleMap defaultZoom={8} center={{ lat: latitude, lng: longitude }}>
           <Marker
             position={{ lat: latitude, lng: longitude }}
             draggable
