@@ -1,5 +1,6 @@
 body {
   font-family: Roboto;
+  color: rgba(0, 0, 0, 0.87);
 }
 
 body a {
@@ -108,9 +109,15 @@ body a:hover {
   padding: 15px;
 }
 
+.summary.card .moonback {
+  fill: rgba(0, 0, 0, 0.87);
+  stroke: rgba(0, 0, 0, 0.87);
+  stroke-width: 2;
+}
+
 .summary.card .moonlight {
   fill: white;
-  stroke: black;
+  stroke: rgba(0, 0, 0, 0.87);
   stroke-width: 2;
 }
 

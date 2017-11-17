@@ -28,7 +28,7 @@ export default class extends React.PureComponent<{ phase: number }> {
       <div className="fitted column layout center moon">
         <div className="dynamic layout center">Moon phase</div>
         <div className="fitted">
-          <svg id="moon" viewBox="0 0 200 200" width="100px" height="100px" style={{ marginBottom: '-15px' }}>
+          <svg id="moon" viewBox="0 0 200 200" width="100px" height="102px" style={{ marginBottom: '-15px' }}>
             <path className="moonback" d="m100,0 a20,20 0 1,1 0,150 a20,20 0 1,1 0,-150" />
             <path className="moonlight" d={getD(this.props.phase)} />
           </svg>
