@@ -75,7 +75,7 @@ body a:hover {
 
 .result {
   background-color: #f8f8f8;
-  padding: 0px 15px 15px 15px;
+  padding: 15px;
 }
 
 .result > div {
@@ -92,30 +92,33 @@ body a:hover {
   padding: 15px;
 }
 
-.night.card i {
-  padding: 0px 40px;
-  font-size: 75px;
-  color: #666;
+.summary.card .count {
+  padding: 30px;
+  padding-right: 40px;
 }
 
-.night.card table {
+.summary.card .count > div:first-child {
+  font-size: 40px;
+}
+
+.summary.card table {
   width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
 }
 
-.night.card table tr:not(:last-child) {
+.summary.card table tr:not(:last-child) {
   border-bottom: 1px solid rgb(224, 224, 224);
 }
 
-.night.card table td {
+.summary.card table td {
   padding: 10px;
   vertical-align: middle;
   font-size: 13px;
   color: rgba(0, 0, 0, 0.87);
 }
 
-.night.card table td:nth-child(even) {
+.summary.card table td:nth-child(even) {
   text-align: right;
 }
 

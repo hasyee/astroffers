@@ -3,14 +3,15 @@ import moment = require('moment');
 import { connect } from 'react-redux';
 import { NightInfo } from '../calcs/types';
 
-class NightCard extends React.PureComponent<{ nightInfo: NightInfo; isFiltering: boolean }> {
+class Summary extends React.PureComponent<{ nightInfo: NightInfo; count: number; isFiltering: boolean }> {
   render() {
     if (!this.props.nightInfo || this.props.isFiltering) return null;
     const { night, astroNight, moonNight, moonlessNight } = this.props.nightInfo;
     return (
-      <div className="dynamic row layout night card">
-        <div className="dynamic layout center">
-          <i className="mdi mdi-weather-night" />
+      <div className="dynamic row layout summary card">
+        <div className="dynamic column layout center count">
+          <div>{this.props.count}</div>
+          <div>total results</div>
         </div>
         <div className="fitted layout center">
           <table>
@@ -51,6 +52,8 @@ class NightCard extends React.PureComponent<{ nightInfo: NightInfo; isFiltering:
   }
 }
 
-export default connect(({ result, isFiltering }) => ({ isFiltering, nightInfo: result ? result.nightInfo : null }))(
-  NightCard
-);
+export default connect(({ result, isFiltering }) => ({
+  isFiltering,
+  nightInfo: result ? result.nightInfo : null,
+  count: result ? result.list.length : 0
+}))(Summary);
