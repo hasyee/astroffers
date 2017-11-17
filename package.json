@@ -6,7 +6,7 @@
   "typings": "lib",
   "scripts": {
     "build": "rimraf lib && tsc",
-    "build:w": "tsc -w",
+    "build:w": "rimraf lib && tsc -w",
     "start": "electron lib/main",
     "start-prod": "NODE_ENV=production npm start"
   },
