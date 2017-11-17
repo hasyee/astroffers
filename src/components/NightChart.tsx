@@ -1,17 +1,32 @@
 import React = require('react');
 import ReactHighcharts = require('react-highcharts');
 import HighchartsMore = require('highcharts-more');
-HighchartsMore(ReactHighcharts.Highcharts);
-import { NightInfo } from '../calcs/types';
+import { NightInfo, Interval } from '../calcs/types';
 import { getCiphers } from 'crypto';
+
+HighchartsMore(ReactHighcharts.Highcharts);
 
 export default class extends React.PureComponent<{ nightInfo: NightInfo }> {
   render() {
-    return <ReactHighcharts config={getConfig()} />;
+    return <ReactHighcharts config={getConfig(this.props.nightInfo)} />;
   }
 }
 
-const getConfig = () => ({
+const getNightBands = (interval: Interval, color: string) => {
+  if (!interval) return [];
+  const { start, end } = interval;
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+  const overhanging = startDate.getDay() !== endDate.getDay();
+  const startHours = startDate.getHours() + startDate.getMinutes() / 60;
+  const endHours = endDate.getHours() + endDate.getMinutes() / 60;
+  const baseBands = overhanging
+    ? [ { from: startHours, to: 24 }, { from: 0, to: endHours } ]
+    : [ { from: startHours, to: endHours } ];
+  return baseBands.map(b => ({ ...b, thickness: 50, color }));
+};
+
+const getConfig = ({ night, moonlessNight, astroNight }: NightInfo) => ({
   chart: {
     polar: true,
     height: 150,
@@ -37,53 +52,19 @@ const getConfig = () => ({
   },
 
   xAxis: {
-    tickInterval: 1,
-    tickWidth: 0,
-    tickColor: 'transparent',
+    tickInterval: 6,
     min: 0,
     max: 24,
     labels: {
-      step: 6,
+      step: 1,
       padding: 1,
       distance: 8
     },
     plotBands: [
-      {
-        thickness: 50,
-        color: 'rgb(92, 107, 192)', // Color value
-        from: 7, // Start of the plot band
-        to: 12 // End of the plot band
-      },
-      {
-        thickness: 50,
-        color: 'rgb(92, 107, 192)', // Color value
-        from: 0, // Start of the plot band
-        to: 4 // End of the plot band
-      },
-      {
-        thickness: 50,
-        color: 'black', // Color value
-        from: 9, // Start of the plot band
-        to: 12 // End of the plot band,
-      },
-      {
-        thickness: 50,
-        color: 'black', // Color value
-        from: 0, // Start of the plot band
-        to: 3 // End of the plot band
-      },
-      {
-        thickness: 50,
-        color: 'grey', // Color value
-        from: 8, // Start of the plot band
-        to: 11.3 // End of the plot band
-      },
-      {
-        thickness: 50,
-        color: 'grey', // Color value
-        from: 0, // Start of the plot band
-        to: 0 // End of the plot band
-      }
+      { from: 0, to: 24, thickness: 50, color: 'lightblue' },
+      ...getNightBands(night, '#5c6bc0'),
+      ...getNightBands(astroNight, 'grey'),
+      ...getNightBands(moonlessNight, 'black')
     ]
   },
 
