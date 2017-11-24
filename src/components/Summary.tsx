@@ -26,18 +26,18 @@ class Summary extends React.PureComponent<{ nightInfo: NightInfo; count: number;
                   <i className="mdi mdi-brightness-1" style={{ color: '#5c6bc0' }} /> Night
                 </td>
                 <td>Sunset</td>
-                <td>{moment(night.start).format('HH:mm')}</td>
+                <td>{night ? moment(night.start).format('HH:mm') : '-'}</td>
                 <td>Sunrise</td>
-                <td>{moment(night.end).format('HH:mm')}</td>
+                <td>{night ? moment(night.end).format('HH:mm') : '-'}</td>
               </tr>
               <tr>
                 <td>
                   <i className="mdi mdi-brightness-1" style={{ color: 'transparent' }} /> Astro night
                 </td>
                 <td>From</td>
-                <td>{moment(astroNight.start).format('HH:mm')}</td>
+                <td>{astroNight ? moment(astroNight.start).format('HH:mm') : '-'}</td>
                 <td>To</td>
-                <td>{moment(astroNight.end).format('HH:mm')}</td>
+                <td>{astroNight ? moment(astroNight.end).format('HH:mm') : '-'}</td>
               </tr>
               <tr>
                 <td>
