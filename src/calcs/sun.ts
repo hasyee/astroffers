@@ -57,6 +57,7 @@ export const getHalfDayArcOfSun = (time: Timestamp, { lat, lon }: Loc, minAltitu
   const eqTime = getEqTime(y);
   const de = getDeclination(y);
   const ha = acos((sin(minAltitude) - sin(lat) * sin(de)) / (cos(lat) * cos(de)));
+  if (!Number.isFinite(ha)) return null;
   const riseMins = 720 + 4 * radToDeg(-lon - ha) - eqTime;
   const setMins = 720 + 4 * radToDeg(-lon + ha) - eqTime;
   const start = moment.utc(time).startOf('day').add(riseMins, 'minutes').valueOf();
@@ -68,6 +69,7 @@ export const getNight = (time: Timestamp, loc: Loc, minAltitude: Rad = 0): Inter
   const noon = toNoon(time);
   const thatDayArc = getHalfDayArcOfSun(noon, loc, minAltitude);
   const nextDayArc = getHalfDayArcOfSun(toNextDay(noon), loc, minAltitude);
+  if (!thatDayArc || !nextDayArc) return null;
   return {
     start: thatDayArc.end,
     end: nextDayArc.start
