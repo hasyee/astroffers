@@ -88,6 +88,10 @@ class List extends React.PureComponent<{ objects: NgcInfo[]; isFiltering: boolea
     }
   };
 
+  handleRowClick = (ngc: number) => () => {
+    console.log(ngc);
+  };
+
   renderSortByIcon(prop: string) {
     return prop === this.state.sortBy && <i className="mdi mdi-arrow-down" />;
   }
@@ -151,7 +155,7 @@ class List extends React.PureComponent<{ objects: NgcInfo[]; isFiltering: boolea
                 }) => {
                   const resolvedType = resolveTypes(type).join(', ');
                   return (
-                    <TableRow key={ngc} selectable={false}>
+                    <TableRow key={ngc} selectable={false} className="list row" onClick={this.handleRowClick(ngc)}>
                       <TableRowColumn>
                         <b>{ngc}</b>
                       </TableRowColumn>
