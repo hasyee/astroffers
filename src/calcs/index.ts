@@ -11,7 +11,7 @@ import {
 } from './units';
 import { eqToAz } from './coords';
 import { getEqCoordsOnDate } from './corrections';
-import { getHalfDayArcFactory } from './halfDaysArcs';
+import getHalfDayArc from './halfDaysArcs';
 import { getHalfDayArcOfSun } from './sun';
 const catalog: NgcObject[] = require('../../data/ngc.json');
 
@@ -38,7 +38,7 @@ const ra = hmsToRad(object.eqCoords.ra);
 const de = dmsToRad(object.eqCoords.de);
 const eqCoordsOnJ2000 = { ra, de };
 const eqCoordsOnDate = getEqCoordsOnDate(eqCoordsOnJ2000, timestamp);
-const ngcHda = getHalfDayArcFactory(timestamp, location, degToRad(20))(eqCoordsOnJ2000);
+const ngcHda = getHalfDayArc(timestamp, location, degToRad(20), eqCoordsOnDate);
 console.log(halfDayArcToString(ngcHda));
 
 const sunHda = getHalfDayArcOfSun(timestamp, location, degToRad(-18));
