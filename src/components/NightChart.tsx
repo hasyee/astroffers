@@ -62,7 +62,7 @@ const getConfig = ({ night, moonlessNight, astroNight }: NightInfo) => ({
     },
     plotBands: [
       { from: 0, to: 24, thickness: 50, color: 'lightblue' },
-      ...getNightBands(night, '#5c6bc0'),
+      ...getNightBands(night, '#01579B'),
       ...getNightBands(astroNight, 'grey'),
       ...getNightBands(moonlessNight, 'black')
     ]

@@ -23,7 +23,7 @@ class Summary extends React.PureComponent<{ nightInfo: NightInfo; count: number;
             <tbody>
               <tr>
                 <td>
-                  <i className="mdi mdi-brightness-1" style={{ color: '#5c6bc0' }} /> Night
+                  <i className="mdi mdi-brightness-1" style={{ color: '#01579B' }} /> Night
                 </td>
                 <td>Sunset</td>
                 <td>{night ? moment(night.start).format('HH:mm') : '-'}</td>
