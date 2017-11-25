@@ -13,5 +13,8 @@ export default {
     magnitude: 10,
     surfaceBrightness: 14,
     types: Object.keys(typeMap).reduce((acc, type) => ({ ...acc, [type]: true }), {})
-  }
+  },
+  result: null,
+  isFiltering: false,
+  openedDetails: null
 } as State;

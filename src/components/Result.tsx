@@ -4,6 +4,7 @@ import classnames = require('classnames');
 import CircularProgress from 'material-ui/CircularProgress';
 import Summary from './Summary';
 import List from './List';
+import Details from './Details';
 
 class Result extends React.PureComponent<{ hasResult: boolean; isFiltering: boolean }> {
   render() {
@@ -13,6 +14,7 @@ class Result extends React.PureComponent<{ hasResult: boolean; isFiltering: bool
         {isFiltering && <CircularProgress />}
         <Summary />
         <List />
+        <Details />
       </div>
     );
   }

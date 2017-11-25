@@ -7,9 +7,8 @@ const storedFilterStr = window.localStorage.getItem('filter');
 const storedFilter = storedFilterStr ? JSON.parse(storedFilterStr) : {};
 
 const initialState: State = {
-  filter: { ...defaultState.filter, ...storedFilter, date: Date.now() },
-  result: null,
-  isFiltering: false
+  ...defaultState,
+  filter: { ...defaultState.filter, ...storedFilter, date: Date.now() }
 };
 
 const store = new Store<State>(initialState).addMiddleware(thunk.withExtraArgument({ fetchLocation, filterObjects }));

@@ -94,6 +94,8 @@ export type NgcInfo = {
   intersection: Interval;
   max: Timestamp;
   sum: Timestamp;
+  hda: Interval;
+  hda0: Interval;
   altitudeAtMax: Rad;
   transit: Timestamp;
 };

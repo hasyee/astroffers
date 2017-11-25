@@ -40,3 +40,7 @@ export const filterObjects = () => state => async (dispatch, getState, { filterO
   const result = await filterObjects(getState().filter);
   dispatch(state => ({ ...state, result, isFiltering: false }));
 };
+
+export const openDetails = (openedDetails: number) => state => ({ ...state, openedDetails });
+
+export const closeDetails = () => state => ({ ...state, openedDetails: null });

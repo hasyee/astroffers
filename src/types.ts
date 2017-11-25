@@ -4,6 +4,7 @@ export type State = {
   filter: Filter;
   result: Result;
   isFiltering: boolean;
+  openedDetails: number;
 };
 
 export type Filter = {
