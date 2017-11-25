@@ -95,22 +95,27 @@ const getConfig = (
           to: data[data.length - 1].x,
           color: 'lightblue'
         },
-        {
-          from: night.start,
-          to: night.end,
-          color: '#5c6bc0'
-        },
-        {
-          from: astroNight.start,
-          to: astroNight.end,
-          color: 'grey'
-        },
-        ,
-        {
-          from: moonlessNight.start,
-          to: moonlessNight.end,
-          color: 'black'
-        }
+        night
+          ? {
+              from: night.start,
+              to: night.end,
+              color: '#5c6bc0'
+            }
+          : {},
+        astroNight
+          ? {
+              from: astroNight.start,
+              to: astroNight.end,
+              color: 'grey'
+            }
+          : {},
+        moonlessNight
+          ? {
+              from: moonlessNight.start,
+              to: moonlessNight.end,
+              color: 'black'
+            }
+          : {}
       ],
 
       plotLines: [
