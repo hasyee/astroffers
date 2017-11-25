@@ -41,7 +41,7 @@ class Details extends React.PureComponent<{
         modal={true}
         open={isOpen}
         autoScrollBodyContent
-        contentStyle={{ width: '80%', maxWidth: 'none' }}
+        contentStyle={{ maxWidth: '850px' }}
       >
         <div className="details">
           <div className="dynamic row layout">
