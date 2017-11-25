@@ -1,3 +1,9 @@
+/**
+ * PHOTOS:
+ * http://www.ngcicproject.org/dss/n/7/n7662.jpg
+ * http://stdatu.stsci.edu/cgi-bin/dss_form?target=ngc1976&resolver=SIMBAD
+ */
+
 import React = require('react');
 import { connect } from 'react-redux';
 import moment = require('moment');
