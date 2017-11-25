@@ -1,12 +1,16 @@
 import React = require('react');
 import { connect } from 'react-redux';
 import moment = require('moment');
+import leftpad = require('left-pad');
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { NgcInfo } from '../calcs/types';
 import resolveTypes from '../calcs/resolveTypes';
 import { dmsToString, hmsToString, radToDmsString, radToHmsString, radToDeg } from '../calcs/units';
 import { closeDetails } from '../actions';
+
+const getImgSrc = (ngc: number): string =>
+  `http://www.ngcicproject.org/dss/n/${Math.floor(ngc / 1000)}/n${leftpad(ngc, 4, 0)}.jpg`;
 
 class Details extends React.PureComponent<{
   isOpen: boolean;
@@ -152,7 +156,7 @@ class Details extends React.PureComponent<{
               </table>
             </div>
             <div className="dynamic layout">
-              <img src="http://www.ngcicproject.org/dss/n/7/n7662.jpg" width="300px" height="300px" />
+              <img alt={`preview of ${ngc}`} src={getImgSrc(ngc)} width="300px" height="300px" />
             </div>
           </div>
         </div>
