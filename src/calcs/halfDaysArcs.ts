@@ -14,11 +14,8 @@ export const isRising = (siderealTime: Rad, lat: Rad, ra: Rad, de: Rad): boolean
   return derivate > 0;
 };
 
-export const getHalfDayArcFactory = (time: Timestamp, { lat, lon }: Loc, minAltitude: Rad = 0) => (
-  eqCoordsOnJ2000: Eq
-): Interval => {
+export default (time: Timestamp, { lat, lon }: Loc, minAltitude: Rad = 0, { ra, de }: Eq): Interval => {
   const siderealTime = timeToLst(time, lon, false);
-  const { ra, de } = getEqCoordsOnDate(eqCoordsOnJ2000, time);
   const ha = acos((sin(minAltitude) - sin(lat) * sin(de)) / (cos(lat) * cos(de)));
   if (!Number.isFinite(ha)) return {};
   const k1 = ceil((siderealTime - ha - ra) / PI2);
