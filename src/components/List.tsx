@@ -14,6 +14,7 @@ import {
 import { NgcInfo } from '../calcs/types';
 import { radToDeg } from '../calcs/units';
 import resolveTypes from '../calcs/resolveTypes';
+import { stringifyTimeDiff } from '../calcs/utils';
 
 export enum PROP {
   NGC = 'ngc',
@@ -22,7 +23,8 @@ export enum PROP {
   MAGNITUDE = 'magnitude',
   SURFACE_BRIGHTNESS = 'surfaceBrightness',
   TYPE = 'type',
-  MAX = 'max'
+  MAX = 'max',
+  SUM = 'sum'
 }
 
 const propertySelectors = {
@@ -30,6 +32,7 @@ const propertySelectors = {
   [PROP.FROM]: (object: NgcInfo) => object.intersection.start,
   [PROP.TO]: (object: NgcInfo) => object.intersection.end,
   [PROP.MAX]: (object: NgcInfo) => object.max,
+  [PROP.SUM]: (object: NgcInfo) => object.sum,
   [PROP.MAGNITUDE]: (object: NgcInfo) => object.object.magnitude,
   [PROP.SURFACE_BRIGHTNESS]: (object: NgcInfo) => object.object.surfaceBrightness,
   [PROP.TYPE]: (object: NgcInfo) => object.object.type
@@ -131,11 +134,16 @@ class List extends React.PureComponent<{ objects: NgcInfo[]; isFiltering: boolea
                 </span>
               </TableHeaderColumn>
               <TableHeaderColumn>
+                <span className="sorter" onClick={this.handleHeaderClick(PROP.SUM)}>
+                  Sum{this.renderSortByIcon(PROP.SUM)}
+                </span>
+              </TableHeaderColumn>
+              <TableHeaderColumn>
                 <span className="sorter" onClick={this.handleHeaderClick(PROP.MAGNITUDE)}>
                   Magnitude{this.renderSortByIcon(PROP.MAGNITUDE)}
                 </span>
               </TableHeaderColumn>
-              <TableHeaderColumn>
+              <TableHeaderColumn style={{ width: '80px' }}>
                 <span className="sorter" onClick={this.handleHeaderClick(PROP.SURFACE_BRIGHTNESS)}>
                   Surface brightness{this.renderSortByIcon(PROP.SURFACE_BRIGHTNESS)}
                 </span>
@@ -151,6 +159,7 @@ class List extends React.PureComponent<{ objects: NgcInfo[]; isFiltering: boolea
                   object: { ngc, magnitude, surfaceBrightness, type },
                   intersection: { start, end },
                   max,
+                  sum,
                   altitudeAtMax
                 }) => {
                   const resolvedType = resolveTypes(type).join(', ');
@@ -165,8 +174,9 @@ class List extends React.PureComponent<{ objects: NgcInfo[]; isFiltering: boolea
                       <TableRowColumn>
                         {moment(max).format('HH:mm')} / {Math.round(radToDeg(altitudeAtMax))}°
                       </TableRowColumn>
+                      <TableRowColumn>{stringifyTimeDiff(sum)}</TableRowColumn>
                       <TableRowColumn>{magnitude}</TableRowColumn>
-                      <TableRowColumn>{surfaceBrightness}</TableRowColumn>
+                      <TableRowColumn style={{ width: '80px' }}>{surfaceBrightness}</TableRowColumn>
                     </TableRow>
                   );
                 }

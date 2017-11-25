@@ -46,8 +46,9 @@ export default (
         const transit = Math.round((hda.start + hda.end) / 2);
         const intersection = getIntersection(hda, night);
         const max = getMax(intersection, transit);
+        const sum = intersection ? intersection.end - intersection.start : 0;
         const { alt: altitudeAtMax } = eqToAz(max, location, eqCoordsOnDate);
-        return { object, eqCoordsOnDate, intersection, transit, max, altitudeAtMax };
+        return { object, eqCoordsOnDate, intersection, transit, max, sum, altitudeAtMax };
       })
       .filter(ngcInfo => ngcInfo.intersection)
   );
