@@ -41,11 +41,12 @@ export default (
       const hda = getHalfDayArc(refTime, location, degToRad(altitude), eqCoordsOnDate);
       const hda0 = getHalfDayArc(refTime, location, 0, eqCoordsOnDate);
       const transit = Math.round((hda.start + hda.end) / 2);
+      const { alt: altitudeAtTransit } = eqToAz(transit, location, eqCoordsOnDate);
       const intersection = getIntersection(hda, night);
       const max = getMax(intersection, transit);
       const sum = intersection ? intersection.end - intersection.start : 0;
       const { alt: altitudeAtMax } = eqToAz(max, location, eqCoordsOnDate);
-      return { object, eqCoordsOnDate, intersection, transit, max, sum, altitudeAtMax, hda, hda0 };
+      return { object, eqCoordsOnDate, intersection, transit, max, sum, altitudeAtMax, altitudeAtTransit, hda, hda0 };
     })
     .filter(ngcInfo => ngcInfo.intersection);
 };

@@ -97,5 +97,6 @@ export type NgcInfo = {
   hda: Interval;
   hda0: Interval;
   altitudeAtMax: Rad;
+  altitudeAtTransit: Rad;
   transit: Timestamp;
 };

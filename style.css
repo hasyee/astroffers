@@ -165,5 +165,13 @@ body a:hover {
 
 .list.row:active {
   background-color: #efefef;
-  
+}
+
+.details {
+  width: 100%;
+}
+
+.details table td {
+  padding: 0px 8px 8px 0px;
+  font-size: 13px;
 }
