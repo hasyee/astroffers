@@ -153,3 +153,17 @@ body a:hover {
 .list.card .sorter:hover {
   text-decoration: underline;
 }
+
+.list.row {
+  cursor: pointer;
+  user-select: none;
+}
+
+.list.row:hover {
+  background-color: #f8f8f8;
+}
+
+.list.row:active {
+  background-color: #efefef;
+  
+}
