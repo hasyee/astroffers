@@ -67,6 +67,11 @@ export type Interval = {
   end?: Timestamp;
 };
 
+export type CoordSeries<Coord> = {
+  time: Timestamp;
+  coord: Coord;
+}[];
+
 export type NgcObject = {
   ngc: number;
   eqCoords: {

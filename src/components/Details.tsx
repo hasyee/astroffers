@@ -4,10 +4,12 @@ import moment = require('moment');
 import leftpad = require('left-pad');
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import { NgcInfo } from '../calcs/types';
+import { NgcInfo, NightInfo, Az, CoordSeries } from '../calcs/types';
 import resolveTypes from '../calcs/resolveTypes';
+import getHorizontalCoords from '../calcs/getHorizontalCoords';
 import { dmsToString, hmsToString, radToDmsString, radToHmsString, radToDeg } from '../calcs/units';
 import { closeDetails } from '../actions';
+import AzimuthChart from './AzimuthChart';
 
 const getImgSrc = (ngc: number): string =>
   `http://www.ngcicproject.org/dss/n/${Math.floor(ngc / 1000)}/n${leftpad(ngc, 4, 0)}.jpg`;
@@ -15,14 +17,18 @@ const getImgSrc = (ngc: number): string =>
 class Details extends React.PureComponent<{
   isOpen: boolean;
   ngcInfo: NgcInfo;
-  closeDetails: typeof closeDetails;
+  nightInfo: NightInfo;
   minAltitude: number;
+  horizontalCoords: CoordSeries<Az>;
+  closeDetails: typeof closeDetails;
 }> {
   render() {
     if (!this.props.ngcInfo) return null;
     const {
       closeDetails,
       isOpen,
+      horizontalCoords,
+      nightInfo,
       ngcInfo: {
         object: { ngc, type, constellation, size, magnitude, surfaceBrightness, eqCoords },
         eqCoordsOnDate,
@@ -139,7 +145,7 @@ class Details extends React.PureComponent<{
                   </td>
                   <td>{moment(max).format('HH:mm')}</td>
                   <td>
-                    <b>Altitude then</b>
+                    <b>Altitude</b>
                   </td>
                   <td>{Math.round(radToDeg(altitudeAtMax))}°</td>
                 </tr>
@@ -149,7 +155,7 @@ class Details extends React.PureComponent<{
                   </td>
                   <td>{moment(transit).format('HH:mm')}</td>
                   <td>
-                    <b>Altitude then</b>
+                    <b>Altitude</b>
                   </td>
                   <td>{Math.round(radToDeg(altitudeAtTransit))}°</td>
                 </tr>
@@ -159,6 +165,9 @@ class Details extends React.PureComponent<{
               <img alt={`preview of ${ngc}`} src={getImgSrc(ngc)} width="300px" height="300px" />
             </div>
           </div>
+          <div>
+            <AzimuthChart minAltitude={minAltitude} ngcInfo={this.props.ngcInfo} horizontalCoords={horizontalCoords} nightInfo={nightInfo} />
+          </div>
         </div>
       </Dialog>
     );
@@ -166,10 +175,15 @@ class Details extends React.PureComponent<{
 }
 
 export default connect(
-  ({ openedDetails, result, filter: { altitude } }) => ({
-    isOpen: openedDetails !== null,
-    ngcInfo: result ? result.list.find(info => info.object.ngc === openedDetails) : null,
-    minAltitude: altitude
-  }),
+  ({ openedDetails, result, filter: { date, latitude, longitude, altitude } }) => {
+    const ngcInfo = result ? result.list.find(info => info.object.ngc === openedDetails) : null;
+    return {
+      isOpen: openedDetails !== null,
+      nightInfo: result ? result.nightInfo : null,
+      ngcInfo,
+      horizontalCoords: ngcInfo ? getHorizontalCoords(date, latitude, longitude, ngcInfo.eqCoordsOnDate) : null,
+      minAltitude: altitude
+    };
+  },
   { closeDetails }
 )(Details);
