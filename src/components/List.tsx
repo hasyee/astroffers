@@ -27,19 +27,7 @@ export enum PROP {
   SUM = 'sum'
 }
 
-const propertySelectors = {
-  [PROP.NGC]: (object: NgcInfo) => object.object.ngc,
-  [PROP.FROM]: (object: NgcInfo) => object.intersection.start,
-  [PROP.TO]: (object: NgcInfo) => object.intersection.end,
-  [PROP.MAX]: (object: NgcInfo) => object.max,
-  [PROP.SUM]: (object: NgcInfo) => object.sum,
-  [PROP.MAGNITUDE]: (object: NgcInfo) => object.object.magnitude,
-  [PROP.SURFACE_BRIGHTNESS]: (object: NgcInfo) => object.object.surfaceBrightness,
-  [PROP.TYPE]: (object: NgcInfo) => object.object.type
-};
-
-const sorter = (prop: PROP) => (a: NgcInfo, b: NgcInfo) => {
-  const propertySelector = propertySelectors[prop];
+const defaultSorter = (propertySelector: Function) => (a: NgcInfo, b: NgcInfo) => {
   const aProp = propertySelector(a);
   const bProp = propertySelector(b);
   if (aProp < bProp) return -1;
@@ -47,13 +35,27 @@ const sorter = (prop: PROP) => (a: NgcInfo, b: NgcInfo) => {
   else return 0;
 };
 
-const DISPLAYED_ITEMS = 100;
+const sorters = {
+  [PROP.NGC]: defaultSorter((object: NgcInfo) => object.object.ngc),
+  [PROP.FROM]: defaultSorter((object: NgcInfo) => object.intersection.start),
+  [PROP.TO]: defaultSorter((object: NgcInfo) => object.intersection.end),
+  [PROP.MAX]: (a: NgcInfo, b: NgcInfo) => {
+    const maxDiff = a.max - b.max;
+    return maxDiff === 0 ? a.sum - b.sum : maxDiff;
+  },
+  [PROP.SUM]: defaultSorter((object: NgcInfo) => object.sum),
+  [PROP.MAGNITUDE]: defaultSorter((object: NgcInfo) => object.object.magnitude),
+  [PROP.SURFACE_BRIGHTNESS]: defaultSorter((object: NgcInfo) => object.object.surfaceBrightness),
+  [PROP.TYPE]: defaultSorter((object: NgcInfo) => object.object.type)
+};
+
+const DEFAULT_DISPLAYED_ITEMS = 100;
 
 class List extends React.PureComponent<{ objects: NgcInfo[]; isFiltering: boolean }> {
   private table;
 
   state = {
-    displayedItems: DISPLAYED_ITEMS,
+    displayedItems: DEFAULT_DISPLAYED_ITEMS,
     sortBy: PROP.MAX
   };
 
@@ -65,7 +67,7 @@ class List extends React.PureComponent<{ objects: NgcInfo[]; isFiltering: boolea
         this.table.scrollTop >= 0.8 * this.table.scrollHeight &&
         this.state.displayedItems < this.props.objects.length
       ) {
-        this.setState({ displayedItems: this.state.displayedItems + DISPLAYED_ITEMS });
+        this.setState({ displayedItems: this.state.displayedItems + DEFAULT_DISPLAYED_ITEMS });
       }
     };
   }
@@ -75,7 +77,7 @@ class List extends React.PureComponent<{ objects: NgcInfo[]; isFiltering: boolea
   }
 
   componentWillUpdate(nextProps) {
-    if (this.props.objects !== nextProps.objects) this.setState({ displayedItems: DISPLAYED_ITEMS });
+    if (this.props.objects !== nextProps.objects) this.setState({ displayedItems: DEFAULT_DISPLAYED_ITEMS });
   }
 
   componentDidUpdate(prevProps) {
@@ -86,7 +88,7 @@ class List extends React.PureComponent<{ objects: NgcInfo[]; isFiltering: boolea
 
   handleHeaderClick = (prop: PROP) => () => {
     if (prop !== this.state.sortBy) {
-      this.setState({ sortBy: prop, displayedItems: DISPLAYED_ITEMS });
+      this.setState({ sortBy: prop, displayedItems: DEFAULT_DISPLAYED_ITEMS });
       this.table.scrollTop = 0;
     }
   };
@@ -152,7 +154,7 @@ class List extends React.PureComponent<{ objects: NgcInfo[]; isFiltering: boolea
           </TableHeader>
           <TableBody displayRowCheckbox={false} preScanRows={false}>
             {objects
-              .sort(sorter(sortBy))
+              .sort(sorters[sortBy])
               .slice(0, displayedItems)
               .map(
                 ({
