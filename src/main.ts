@@ -65,7 +65,7 @@ function createWindow() {
     app.quit();
   });
 
-  autoUpdater.checkForUpdates().then((...args) => console.log(...args));
+  autoUpdater.checkForUpdatesAndNotify();
 }
 
 // This method will be called when Electron has finished
