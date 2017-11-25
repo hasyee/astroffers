@@ -9,9 +9,8 @@
     "build:w": "rimraf lib && tsc -w",
     "start": "electron lib/main",
     "start-prod": "NODE_ENV=production npm start",
-    "publish": "electron-builder --publish onTag",
-    "mac-test": "npm run build && electron-builder --mac --dir",
-    "mac": "npm run build && electron-builder --mac"
+    "publish": "electron-builder --publish always",
+    "mac-test": "npm run build && electron-builder --mac --dir"
   },
   "files": [
     "lib"
@@ -29,6 +28,7 @@
   "homepage": "https://github.com/jayhasyee/astroffers",
   "dependencies": {
     "classnames": "^2.2.5",
+    "electron-updater": "^2.16.1",
     "font-roboto-local": "^1.0.1",
     "highcharts": "^6.0.3",
     "highcharts-more": "^0.1.2",
@@ -59,7 +59,9 @@
     "productName": "Astroffers",
     "appId": "org.electron.astroffers",
     "publish": {
-      "provider": "github"
+      "provider": "github",
+      "owner": "jayhasyee",
+      "repo": "astroffers"
     },
     "mac": {
       "category": "public.app-category.astronomy"
