@@ -15,6 +15,7 @@ import { NgcInfo } from '../calcs/types';
 import { radToDeg } from '../calcs/units';
 import resolveTypes from '../calcs/resolveTypes';
 import { stringifyTimeDiff } from '../calcs/utils';
+import { openDetails } from '../actions';
 
 export enum PROP {
   NGC = 'ngc',
@@ -51,7 +52,7 @@ const sorters = {
 
 const DEFAULT_DISPLAYED_ITEMS = 100;
 
-class List extends React.PureComponent<{ objects: NgcInfo[]; isFiltering: boolean }> {
+class List extends React.PureComponent<{ objects: NgcInfo[]; isFiltering: boolean; openDetails: typeof openDetails }> {
   private table;
 
   state = {
@@ -93,9 +94,7 @@ class List extends React.PureComponent<{ objects: NgcInfo[]; isFiltering: boolea
     }
   };
 
-  handleRowClick = (ngc: number) => () => {
-    console.log(ngc);
-  };
+  handleRowClick = (ngc: number) => () => this.props.openDetails(ngc);
 
   renderSortByIcon(prop: string) {
     return prop === this.state.sortBy && <i className="mdi mdi-arrow-down" />;
@@ -190,4 +189,6 @@ class List extends React.PureComponent<{ objects: NgcInfo[]; isFiltering: boolea
   }
 }
 
-export default connect(({ result, isFiltering }) => ({ objects: result ? result.list : null, isFiltering }))(List);
+export default connect(({ result, isFiltering }) => ({ objects: result ? result.list : null, isFiltering }), {
+  openDetails
+})(List);
