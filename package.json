@@ -7,7 +7,7 @@
   "scripts": {
     "build": "rimraf lib && tsc",
     "build:w": "rimraf lib && tsc -w",
-    "start": "electron lib/main",
+    "start": "electron .",
     "start-prod": "NODE_ENV=production npm start",
     "publish": "electron-builder --win --mac --linux --publish always",
     "mac-test": "npm run build && electron-builder --mac --dir"
@@ -67,6 +67,9 @@
     },
     "mac": {
       "category": "public.app-category.astronomy"
+    },
+    "win": {
+      "target": "msi"
     },
     "dmg": {
       "contents": [
