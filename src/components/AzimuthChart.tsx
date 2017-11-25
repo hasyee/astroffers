@@ -99,7 +99,7 @@ const getConfig = (
           ? {
               from: night.start,
               to: night.end,
-              color: '#5c6bc0'
+              color: '#01579B'
             }
           : {},
         astroNight
