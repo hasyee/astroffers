@@ -29,6 +29,7 @@
     "electron": "^1.7.9",
     "highcharts": "^6.0.3",
     "highcharts-more": "^0.1.2",
+    "left-pad": "^1.2.0",
     "material-ui": "^0.19.4",
     "moment": "^2.19.1",
     "react": "^16.0.0",
