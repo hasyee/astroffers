@@ -119,18 +119,20 @@ const getConfig = (
       ],
 
       plotLines: [
-        {
-          value: transit < data[0].x ? toNextDay(transit) : transit,
-          zIndex: 5,
-          width: 1,
-          color: 'white',
-          label: {
-            text: 'Transit',
-            style: {
-              color: 'white'
+        Math.abs(transit - max) > 3600 * 1000
+          ? {
+              value: transit < data[0].x ? toNextDay(transit) : transit,
+              zIndex: 5,
+              width: 1,
+              color: 'white',
+              label: {
+                text: 'Transit',
+                style: {
+                  color: 'white'
+                }
+              }
             }
-          }
-        },
+          : {},
         {
           value: max,
           zIndex: 5,

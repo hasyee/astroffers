@@ -15,7 +15,7 @@ import resolveTypes from '../calcs/resolveTypes';
 import getHorizontalCoords from '../calcs/getHorizontalCoords';
 import { dmsToString, hmsToString, radToDmsString, radToHmsString, radToDeg } from '../calcs/units';
 import { closeDetails } from '../actions';
-import AzimuthChart from './AzimuthChart';
+import AltitudeChart from './AltitudeChart';
 
 const getImgSrc = (ngc: number): string =>
   `http://www.ngcicproject.org/dss/n/${Math.floor(ngc / 1000)}/n${leftpad(ngc, 4, 0)}.jpg`;
@@ -175,7 +175,7 @@ class Details extends React.PureComponent<{
             </div>
           </div>
           <div>
-            <AzimuthChart
+            <AltitudeChart
               minAltitude={minAltitude}
               ngcInfo={this.props.ngcInfo}
               horizontalCoords={horizontalCoords}
