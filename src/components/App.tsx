@@ -7,6 +7,7 @@ import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import Filter from './Filter';
 import About from './About';
+import Help from './Help';
 import Result from './Result';
 
 export default class extends React.PureComponent<{
@@ -18,11 +19,14 @@ export default class extends React.PureComponent<{
   homepage: string;
 }> {
   state = {
-    isAboutOpen: false
+    isAboutOpen: false,
+    isHelpOpen: false
   };
 
   handleAboutOpen = () => this.setState({ isAboutOpen: true });
   handleAboutClose = () => this.setState({ isAboutOpen: false });
+  handleHelpOpen = () => this.setState({ isHelpOpen: true });
+  handleHelpClose = () => this.setState({ isHelpOpen: false });
 
   renderMenu() {
     return (
@@ -35,7 +39,7 @@ export default class extends React.PureComponent<{
         targetOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
       >
-        <MenuItem primaryText="Help" />
+        <MenuItem primaryText="Help" onClick={this.handleHelpOpen} />
         <MenuItem primaryText="About" onClick={this.handleAboutOpen} />
       </IconMenu>
     );
@@ -71,6 +75,7 @@ export default class extends React.PureComponent<{
           feedback={feedback}
           homepage={homepage}
         />
+        <Help isOpen={this.state.isHelpOpen} onClose={this.handleHelpClose} />
       </div>
     );
   }
