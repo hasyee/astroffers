@@ -54,10 +54,11 @@ class Details extends React.PureComponent<{
       <Dialog
         title={`NGC ${ngc}`}
         actions={actions}
-        modal={true}
+        modal={false}
         open={isOpen}
         autoScrollBodyContent
         contentStyle={{ maxWidth: '850px' }}
+        onRequestClose={closeDetails}
       >
         <div className="details">
           <div className="dynamic row layout">
@@ -170,7 +171,7 @@ class Details extends React.PureComponent<{
               </table>
             </div>
             <div className="dynamic layout">
-              <img alt={`preview of ${ngc}`} src={getImgSrc(ngc)} width="250px" height="250px" />
+              <img alt={`preview of ${ngc}`} src={getImgSrc(ngc)} />
             </div>
           </div>
           <div>
