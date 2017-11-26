@@ -1,7 +1,7 @@
 import React = require('react');
 import { findDOMNode } from 'react-dom';
 import moment = require('moment');
-import { connect } from 'react-redux';
+const { connect } = require('react-redux');
 import {
   Table,
   TableBody,

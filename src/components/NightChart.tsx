@@ -1,10 +1,6 @@
 import React = require('react');
 import ReactHighcharts = require('react-highcharts');
-import HighchartsMore = require('highcharts-more');
 import { NightInfo, Interval } from '../calcs/types';
-import { getCiphers } from 'crypto';
-
-HighchartsMore(ReactHighcharts.Highcharts);
 
 export default class extends React.PureComponent<{ nightInfo: NightInfo }> {
   render() {

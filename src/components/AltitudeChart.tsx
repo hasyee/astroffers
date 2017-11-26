@@ -1,6 +1,6 @@
 import React = require('react');
 import ReactHighcharts = require('react-highcharts');
-import HighchartsMore = require('highcharts-more');
+import HighchartsMore = require('highcharts/highcharts-more');
 import moment = require('moment');
 import { NgcInfo, NightInfo, Interval, Az, CoordSeries, Timestamp, Rad } from '../calcs/types';
 import { radToDeg, PI2 } from '../calcs/units';
