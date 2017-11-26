@@ -26,44 +26,42 @@ export default class extends React.PureComponent<{
         autoScrollBodyContent
       >
         <table className="about-table">
-          <tr>
-            <td>
-              <b>Version</b>
-            </td>
-            <td>{version}</td>
-          </tr>
-          <tr>
-            <td>
-              <b>Author</b>
-            </td>
-            <td>{author}</td>
-          </tr>
-          <tr>
-            <td>
-              <b>License</b>
-            </td>
-            <td>{license}</td>
-          </tr>
-          <tr>
-            <td>
-              <b>Feedback</b>
-            </td>
-            <td>
-              <a onClick={() => shell.openExternal(feedback)}>
-                {feedback}
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <b>Homepage</b>
-            </td>
-            <td>
-              <a onClick={() => shell.openExternal(homepage)}>
-                {homepage}
-              </a>
-            </td>
-          </tr>
+          <tbody>
+            <tr>
+              <td>
+                <b>Version</b>
+              </td>
+              <td>{version}</td>
+            </tr>
+            <tr>
+              <td>
+                <b>Author</b>
+              </td>
+              <td>{author}</td>
+            </tr>
+            <tr>
+              <td>
+                <b>License</b>
+              </td>
+              <td>{license}</td>
+            </tr>
+            <tr>
+              <td>
+                <b>Feedback</b>
+              </td>
+              <td>
+                <a onClick={() => shell.openExternal(feedback)}>{feedback}</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Homepage</b>
+              </td>
+              <td>
+                <a onClick={() => shell.openExternal(homepage)}>{homepage}</a>
+              </td>
+            </tr>
+          </tbody>
         </table>
       </Dialog>
     );

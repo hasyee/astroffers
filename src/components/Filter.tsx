@@ -145,7 +145,7 @@ class Filter extends React.PureComponent<{
             type="number"
           />
           <TextField
-            floatingLabelText="Minimum altitude ( ° )"
+            floatingLabelText="Minimum altitude of objects ( ° )"
             floatingLabelFixed
             fullWidth
             value={resolveValue(altitude)}
