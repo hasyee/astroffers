@@ -1,6 +1,6 @@
 {
   "name": "astroffers",
-  "version": "0.0.11",
+  "version": "0.0.14",
   "description": "Take offers to watch at given nights by the NGC2000 catalog",
   "main": "lib/main.js",
   "typings": "lib",
@@ -9,18 +9,19 @@
     "build:w": "rimraf lib && tsc -w",
     "start": "electron .",
     "start-prod": "NODE_ENV=production npm start",
-    "publish": "npm run build && electron-builder --win --mac --publish always",
+    "publish": "npm run build && electron-builder -mwl --publish always",
     "mac-test": "npm run build && electron-builder --mac --dir"
   },
-  "files": [
-    "lib"
-  ],
+  "files": [ "lib" ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jayhasyee/astroffers.git"
   },
   "keywords": [],
-  "author": "Péter Hauszknecht",
+  "author": {
+    "name": "Péter Hauszknecht",
+    "email": "hasyee@gmail.com"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jayhasyee/astroffers/issues"
@@ -85,10 +86,7 @@
     },
     "linux": {
       "category": "Astronomy",
-      "target": [
-        "AppImage",
-        "deb"
-      ]
+      "target": [ "deb", "pacman" ]
     }
   }
 }
