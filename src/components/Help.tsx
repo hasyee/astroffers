@@ -9,7 +9,7 @@ export default class extends React.PureComponent<{
   onClose: Function;
 }> {
   render() {
-    const md = readFileSync('help.md').toString();
+    const md = readFileSync('static/help.md').toString();
     const { isOpen, onClose } = this.props;
     const actions = [ <FlatButton label="Close" primary={true} onClick={onClose} /> ];
     return (

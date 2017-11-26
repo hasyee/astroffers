@@ -1,6 +1,6 @@
 import { Filter, Result } from './types';
 
-const worker = new Worker('worker.js');
+const worker = new Worker('static/worker.js');
 let isWorkerBusy = false;
 
 export const fetchLocation = (): Promise<{ latitude; longitude }> =>
