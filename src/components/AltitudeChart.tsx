@@ -7,8 +7,6 @@ import { radToDeg, PI2 } from '../calcs/units';
 import { toNextDay } from '../calcs/time';
 import getCompassPoints from '../calcs/getCompassPoints';
 
-HighchartsMore(ReactHighcharts.Highcharts);
-
 export default class extends React.PureComponent<{
   minAltitude: number;
   ngcInfo: NgcInfo;
@@ -159,7 +157,7 @@ const getConfig = (
             style: {
               color: 'white',
               fontWeight: 'bold',
-              transform: 'translate(0,-13px)'
+              transform: 'translate(-8px,-13px)'
             }
           }
         }))
@@ -185,7 +183,6 @@ const getConfig = (
     series: [
       {
         name: 'Altitude',
-        color: '#2196F3',
         lineWidth: 3,
         data
       }

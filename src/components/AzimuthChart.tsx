@@ -1,10 +1,9 @@
 import React = require('react');
+import { findDOMNode } from 'react-dom';
+import moment = require('moment');
 import ReactHighcharts = require('react-highcharts');
-import HighchartsMore = require('highcharts/highcharts-more');
 import { NightInfo, Interval, CoordSeries, Az } from '../calcs/types';
 import { normalizeRad, radToDeg } from '../calcs/units';
-
-HighchartsMore(ReactHighcharts.Highcharts);
 
 const labelPlaceholders = Array.from({ length: 89 }).map(() => '');
 
@@ -29,40 +28,18 @@ const getNightBands = (interval: Interval, color: string) => {
 };
 
 const getConfig = (horizontalCoords: CoordSeries<Az>) => {
-  /* const data = horizontalCoords
-    .map(({ coord: { az, alt } }) => ({
+  const data = horizontalCoords
+    .map(({ time, coord: { az, alt } }) => ({
       x: radToDeg(normalizeRad(az)),
-      y: radToDeg(alt)
+      y: alt > 0 ? 90 - radToDeg(alt) : null,
+      time
     }))
-    .sort((a, b) => a.x - b.x); */
-  const data = [
-    { x: 0, y: 90 },
-    { x: 90.1, y: 30 },
-    { x: 91, y: 40 },
-    { x: 92, y: 50 },
-    { x: 180, y: 60 },
-    { x: 270, y: 10 },
-    { x: 359, y: 40 }
-  ];
-  console.log(data);
+    .sort((a, b) => a.time - b.time);
+
   return {
     plotOptions: {
       series: {
         turboThreshold: 1500
-      },
-      area: {
-        lineWidth: 0,
-        borderWidth: 0,
-        states: {
-          hover: {
-            lineWidth: 0,
-            borderWidth: 0
-          }
-        },
-        marker: {
-          enabled: false
-        },
-        threshold: null
       }
     },
 
@@ -89,6 +66,15 @@ const getConfig = (horizontalCoords: CoordSeries<Az>) => {
       enabled: false
     },
 
+    tooltip: {
+      borderWidth: 0,
+      formatter: function() {
+        return `${moment(this.point.time).format('HH:mm')} - Az: ${Math.round(this.x)}° Alt: ${Math.round(
+          90 - this.y
+        )}°`;
+      }
+    },
+
     xAxis: {
       tickInterval: 90,
       min: 0,
@@ -111,7 +97,7 @@ const getConfig = (horizontalCoords: CoordSeries<Az>) => {
 
     series: [
       {
-        type: 'area',
+        type: 'line',
         data,
         marker: { enabled: false }
       }
