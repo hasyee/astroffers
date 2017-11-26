@@ -1,5 +1,5 @@
 import React = require('react');
-import { connect } from 'react-redux';
+const { connect } = require('react-redux');
 import classnames = require('classnames');
 import CircularProgress from 'material-ui/CircularProgress';
 import Summary from './Summary';

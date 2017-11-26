@@ -5,7 +5,7 @@
  */
 
 import React = require('react');
-import { connect } from 'react-redux';
+const { connect } = require('react-redux');
 import moment = require('moment');
 import leftpad = require('left-pad');
 import Dialog from 'material-ui/Dialog';
@@ -16,6 +16,7 @@ import getHorizontalCoords from '../calcs/getHorizontalCoords';
 import { dmsToString, hmsToString, radToDmsString, radToHmsString, radToDeg } from '../calcs/units';
 import { closeDetails } from '../actions';
 import AltitudeChart from './AltitudeChart';
+import AzimuthChart from './AzimuthChart';
 
 const getImgSrc = (ngc: number): string =>
   `http://www.ngcicproject.org/dss/n/${Math.floor(ngc / 1000)}/n${leftpad(ngc, 4, 0)}.jpg`;
@@ -174,13 +175,18 @@ class Details extends React.PureComponent<{
               <img alt={`preview of ${ngc}`} src={getImgSrc(ngc)} />
             </div>
           </div>
-          <div>
-            <AltitudeChart
-              minAltitude={minAltitude}
-              ngcInfo={this.props.ngcInfo}
-              horizontalCoords={horizontalCoords}
-              nightInfo={nightInfo}
-            />
+          <div className="dynamic row layout">
+            <div className="fitted layout">
+              <AltitudeChart
+                minAltitude={minAltitude}
+                ngcInfo={this.props.ngcInfo}
+                horizontalCoords={horizontalCoords}
+                nightInfo={nightInfo}
+              />
+            </div>
+            <div className="dynamic layout">
+              <AzimuthChart horizontalCoords={horizontalCoords} />
+            </div>
           </div>
         </div>
       </Dialog>

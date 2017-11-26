@@ -1,6 +1,6 @@
 import React = require('react');
 import moment = require('moment');
-import { connect } from 'react-redux';
+const { connect } = require('react-redux');
 import { NightInfo } from '../calcs/types';
 import Moon from './Moon';
 import NightChart from './NightChart';
