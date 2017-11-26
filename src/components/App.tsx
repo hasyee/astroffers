@@ -4,8 +4,6 @@ import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import HelpIcon from 'material-ui/svg-icons/action/help';
-import AboutIcon from 'material-ui/svg-icons/action/info';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import Filter from './Filter';
 import About from './About';
@@ -41,8 +39,8 @@ export default class extends React.PureComponent<{
         targetOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
       >
-        <MenuItem primaryText="Help" leftIcon={<HelpIcon />} onClick={this.handleHelpOpen} />
-        <MenuItem primaryText="About" leftIcon={<AboutIcon />} onClick={this.handleAboutOpen} />
+        <MenuItem primaryText="Help" onClick={this.handleHelpOpen} />
+        <MenuItem primaryText="About" onClick={this.handleAboutOpen} />
       </IconMenu>
     );
   }

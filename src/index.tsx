@@ -8,23 +8,34 @@ import App from './components/App';
 import ReactHighcharts = require('react-highcharts');
 import HighchartsMore = require('highcharts/highcharts-more');
 
-HighchartsMore(ReactHighcharts.Highcharts);
+try {
+  HighchartsMore(ReactHighcharts.Highcharts);
 
-const theme = require('../static/theme.json');
-const { version, description, author, license, bugs: { url: feedback }, homepage } = require('../package.json');
+  const theme = require('../static/theme.json');
+  const {
+    version,
+    description,
+    author: { name: author },
+    license,
+    bugs: { url: feedback },
+    homepage
+  } = require('../package.json');
 
-ReactDOM.render(
-  <Provider store={store as any}>
-    <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
-      <App
-        version={version}
-        description={description}
-        author={author}
-        license={license}
-        feedback={feedback}
-        homepage={homepage}
-      />
-    </MuiThemeProvider>
-  </Provider>,
-  document.getElementById('app')
-);
+  ReactDOM.render(
+    <Provider store={store as any}>
+      <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
+        <App
+          version={version}
+          description={description}
+          author={author}
+          license={license}
+          feedback={feedback}
+          homepage={homepage}
+        />
+      </MuiThemeProvider>
+    </Provider>,
+    document.getElementById('app')
+  );
+} catch (err) {
+  alert(err.message);
+}
