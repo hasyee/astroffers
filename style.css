@@ -173,6 +173,10 @@ body a:hover {
 }
 
 .details table td {
-  padding: 0px 8px 8px 0px;
+  padding: 0px 5px 5px 0px;
   font-size: 13px;
+}
+
+.details img {
+  margin: 18px;
 }
