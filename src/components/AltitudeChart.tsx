@@ -5,7 +5,6 @@ import moment = require('moment');
 import { NgcInfo, NightInfo, Interval, Az, CoordSeries, Timestamp, Rad } from '../calcs/types';
 import { radToDeg, PI2 } from '../calcs/units';
 import { toNextDay } from '../calcs/time';
-import getCompassPoints from '../calcs/getCompassPoints';
 
 export default class extends React.PureComponent<{
   minAltitude: number;
@@ -48,7 +47,6 @@ const getConfig = (
   minAltitude: number
 ) => {
   const data = horizontalCoords.map(({ time, coord: { alt } }) => ({ x: time, y: radToDeg(alt) }));
-  const compassPoints = getCompassPoints(horizontalCoords);
   return {
     plotOptions: {
       series: {
@@ -144,23 +142,7 @@ const getConfig = (
               fontWeight: 'bold'
             }
           }
-        },
-        ...Object.keys(compassPoints).map(key => ({
-          value: compassPoints[key].time,
-          zIndex: 5,
-          width: 0,
-          color: 'transparent',
-          label: {
-            text: key.toUpperCase()[0],
-            verticalAlign: 'bottom',
-            rotation: 0,
-            style: {
-              color: 'white',
-              fontWeight: 'bold',
-              transform: 'translate(-8px,-13px)'
-            }
-          }
-        }))
+        }
       ]
     },
 
