@@ -1,4 +1,5 @@
 import { Deg, Rad, Hour, Hms, Dms, ArcMin, ArcSec, Timestamp, Day, Year, Century, Interval, Loc } from './types';
+import leftpad = require('left-pad');
 
 const { round, floor, ceil, abs, PI } = Math;
 
@@ -14,6 +15,8 @@ export const roundTo = (decimals: number) => {
 };
 
 export const roundTo2 = roundTo(2);
+
+export const fix = (value: number) => leftpad(round(abs(value)), 2, 0);
 
 export const getSign = (value: number) => (value < 0 ? -1 : +1);
 
@@ -57,11 +60,11 @@ export const radToDms = (rad: Rad): Dms => {
   return { deg, arcMin, arcSec };
 };
 
-export const hmsToString = ({ hour, min, sec }: Hms): string => `${hour}h ${min}m ${sec}s`;
+export const hmsToString = ({ hour, min, sec }: Hms): string => `${fix(hour)}h ${fix(min)}m ${fix(sec)}s`;
 
 export const dmsToString = ({ deg, arcMin, arcSec }: Dms): string => {
   const isNegative = [ deg, arcMin, arcSec ].some(value => value < 0);
-  return `${isNegative ? '-' : ''}${abs(deg)}° ${abs(arcMin)}' ${abs(arcSec)}"`;
+  return `${isNegative ? '-' : ''}${fix(deg)}° ${fix(arcMin)}' ${fix(arcSec)}"`;
 };
 
 export const radToHmsString = (rad: Rad): string => hmsToString(radToHms(rad));
