@@ -1,5 +1,5 @@
 import React = require('react');
-import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
+const { withGoogleMap, GoogleMap, Marker } = require('react-google-maps');
 
 export default withGoogleMap(
   class extends React.PureComponent<{ latitude: number; longitude: number; onChange: Function }> {
