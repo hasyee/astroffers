@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as url from 'url';
 import log = require('electron-log');
 import { autoUpdater } from 'electron-updater';
+import { dialog } from 'electron';
 
 log.transports.file.level = 'info';
 autoUpdater.logger = log;
@@ -11,6 +12,22 @@ log.info('App starting...');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
+
+autoUpdater.on('update-downloaded', () => {
+  dialog.showMessageBox(
+    {
+      title: 'Install Updates',
+      message: 'Updates downloaded, application will be quit for update...'
+    },
+    () => {
+      setImmediate(() => autoUpdater.quitAndInstall());
+    }
+  );
+});
+
+autoUpdater.on('error', (event, error) => {
+  dialog.showErrorBox('Error: ', error == null ? 'unknown' : (error.stack || error).toString());
+});
 
 function createWindow() {
   // Create the browser window.

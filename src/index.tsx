@@ -38,4 +38,5 @@ try {
   );
 } catch (err) {
   alert(err.message);
+  throw err;
 }
