@@ -1,6 +1,6 @@
 {
   "name": "astroffers",
-  "version": "0.0.16",
+  "version": "0.0.20",
   "description": "Take offers to watch at given nights by the NGC2000 catalog",
   "main": "lib/main.js",
   "typings": "lib",
@@ -9,8 +9,9 @@
     "build:w": "rimraf lib && tsc -w",
     "start": "electron .",
     "start-prod": "NODE_ENV=production npm start",
-    "publish": "npm run build && electron-builder -mwl --publish always",
-    "mac-test": "npm run build && electron-builder --mac --dir"
+    "dist": "npm run build && electron-builder -mwl --publish always",
+    "mac-test": "npm run build && electron-builder --mac --dir",
+    "linux-test": "npm run build && electron-builder --linux"
   },
   "files": [
     "lib"
@@ -89,6 +90,7 @@
     "linux": {
       "category": "Astronomy",
       "target": [
+        "AppImage",
         "deb",
         "pacman"
       ]
