@@ -12,6 +12,7 @@ const getMoonRiseAndSet = (time: Timestamp, { lat, lon }: Loc): { rise: Timestam
 };
 
 export const getMoonNight = (night: Interval, loc: Loc): Interval => {
+  if (!night) return null;
   const { rise: rise1, set: set1 } = getMoonRiseAndSet(night.start, loc);
   const { rise: rise2, set: set2 } = getMoonRiseAndSet(night.end, loc);
   if (isInInterval(night, rise1)) return { start: set1, end: rise1 };

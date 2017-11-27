@@ -1,6 +1,6 @@
 {
   "name": "astroffers",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Take offers to watch at given nights by the NGC2000 catalog",
   "main": "lib/main.js",
   "typings": "lib",
