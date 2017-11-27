@@ -23,6 +23,7 @@
   /* This is more usable for users trying to click it. */
   background-color: rgba(0,0,0,0);
   border-radius: 100px;
+  height: 8px;
 }
 /* hover effect for both scrollbar area, and scrollbar 'thumb' */
 ::-webkit-scrollbar:hover {
@@ -30,13 +31,13 @@
 }
 
 /* The scrollbar 'thumb' ...that marque oval shape in a scrollbar */
-::-webkit-scrollbar-thumb:vertical {
+::-webkit-scrollbar-thumb {
   /* This is the EXACT color of Mac OS scrollbars. 
      Yes, I pulled out digital color meter */
   background: rgba(0,0,0,0.5);
   border-radius: 100px;
 }
-::-webkit-scrollbar-thumb:vertical:active {
+::-webkit-scrollbar-thumb:active {
   background: rgba(0,0,0,0.61); /* Some darker color when you click it */
   border-radius: 100px;
 }

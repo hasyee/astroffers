@@ -61,7 +61,7 @@ export default class extends React.PureComponent<{
           <div className="dynamic column layout high panel">
             <Filter />
           </div>
-          <div className="fitted column layout">
+          <div className="fitted column layout overflow-x">
             <Result />
           </div>
         </main>
