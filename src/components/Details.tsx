@@ -29,11 +29,9 @@ class Details extends React.PureComponent<{
   horizontalCoords: CoordSeries<Az>;
   closeDetails: typeof closeDetails;
 }> {
-  render() {
+  renderContent() {
     if (!this.props.ngcInfo) return null;
     const {
-      closeDetails,
-      isOpen,
       horizontalCoords,
       nightInfo,
       ngcInfo: {
@@ -50,10 +48,144 @@ class Details extends React.PureComponent<{
       },
       minAltitude
     } = this.props;
+    return (
+      <div className="details">
+        <div className="dynamic row layout">
+          <div className="fitted layout">
+            <table>
+              <tbody>
+                <tr>
+                  <td>
+                    <b>Type</b>
+                  </td>
+                  <td>{resolveTypes(type).join(', ')}</td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>Constellation</b>
+                  </td>
+                  <td>{constellation}</td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>Size</b>
+                  </td>
+                  <td>{size ? `${dmsToString(size[0])} × ${dmsToString(size[1])}` : 'Unknown'}</td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>Magnitude</b>
+                  </td>
+                  <td>{magnitude}</td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>Surface brightness</b>
+                  </td>
+                  <td>{surfaceBrightness}</td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>RA (J2000)</b>
+                  </td>
+                  <td>{hmsToString(eqCoords.ra)}</td>
+                  <td>
+                    <b>Dec (J2000)</b>
+                  </td>
+                  <td>{dmsToString(eqCoords.de)}</td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>RA (on date)</b>
+                  </td>
+                  <td>{radToHmsString(eqCoordsOnDate.ra)}</td>
+                  <td>
+                    <b>Dec (on date)</b>
+                  </td>
+                  <td>{radToDmsString(eqCoordsOnDate.de)}</td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>Rising</b>
+                  </td>
+                  <td>{moment(hda0.start).format('HH:mm')}</td>
+                  <td>
+                    <b>Setting</b>
+                  </td>
+                  <td>{moment(hda0.end).format('HH:mm')}</td>
+                </tr>
+                {minAltitude !== 0 && (
+                  <tr>
+                    <td>
+                      <b>Rising above {minAltitude}°</b>
+                    </td>
+                    <td>{moment(hda.start).format('HH:mm')}</td>
+                    <td>
+                      <b>Setting below {minAltitude}°</b>
+                    </td>
+                    <td>{moment(hda.end).format('HH:mm')}</td>
+                  </tr>
+                )}
+                <tr>
+                  <td>
+                    <b>Visibility from</b>
+                  </td>
+                  <td>{moment(intersection.start).format('HH:mm')}</td>
+                  <td>
+                    <b>Visibility to</b>
+                  </td>
+                  <td>{moment(intersection.end).format('HH:mm')}</td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>Best visibility</b>
+                  </td>
+                  <td>{moment(max).format('HH:mm')}</td>
+                  <td>
+                    <b>Altitude</b>
+                  </td>
+                  <td>{Math.round(radToDeg(altitudeAtMax))}°</td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>Transit</b>
+                  </td>
+                  <td>{moment(transit).format('HH:mm')}</td>
+                  <td>
+                    <b>Altitude</b>
+                  </td>
+                  <td>{Math.round(radToDeg(altitudeAtTransit))}°</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="dynamic layout">
+            <img alt={`preview of ${ngc}`} src={getImgSrc(ngc)} />
+          </div>
+        </div>
+        <div className="dynamic row layout">
+          <div className="fitted layout">
+            <AltitudeChart
+              minAltitude={minAltitude}
+              ngcInfo={this.props.ngcInfo}
+              horizontalCoords={horizontalCoords}
+              nightInfo={nightInfo}
+            />
+          </div>
+          <div className="dynamic layout">
+            <AzimuthChart horizontalCoords={horizontalCoords} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  render() {
+    const { closeDetails, isOpen } = this.props;
     const actions = [ <FlatButton label="Close" primary={true} onClick={closeDetails} /> ];
     return (
       <Dialog
-        title={`NGC ${ngc}`}
+        title={`NGC ${this.props.ngcInfo && this.props.ngcInfo.object ? this.props.ngcInfo.object.ngc : 'Unknown'}`}
         actions={actions}
         modal={false}
         open={isOpen}
@@ -61,134 +193,7 @@ class Details extends React.PureComponent<{
         contentStyle={{ maxWidth: '850px' }}
         onRequestClose={closeDetails}
       >
-        <div className="details">
-          <div className="dynamic row layout">
-            <div className="fitted layout">
-              <table>
-                <tbody>
-                  <tr>
-                    <td>
-                      <b>Type</b>
-                    </td>
-                    <td>{resolveTypes(type).join(', ')}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>Constellation</b>
-                    </td>
-                    <td>{constellation}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>Size</b>
-                    </td>
-                    <td>{size ? `${dmsToString(size[0])} × ${dmsToString(size[1])}` : 'Unknown'}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>Magnitude</b>
-                    </td>
-                    <td>{magnitude}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>Surface brightness</b>
-                    </td>
-                    <td>{surfaceBrightness}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>RA (J2000)</b>
-                    </td>
-                    <td>{hmsToString(eqCoords.ra)}</td>
-                    <td>
-                      <b>Dec (J2000)</b>
-                    </td>
-                    <td>{dmsToString(eqCoords.de)}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>RA (on date)</b>
-                    </td>
-                    <td>{radToHmsString(eqCoordsOnDate.ra)}</td>
-                    <td>
-                      <b>Dec (on date)</b>
-                    </td>
-                    <td>{radToDmsString(eqCoordsOnDate.de)}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>Rising</b>
-                    </td>
-                    <td>{moment(hda0.start).format('HH:mm')}</td>
-                    <td>
-                      <b>Setting</b>
-                    </td>
-                    <td>{moment(hda0.end).format('HH:mm')}</td>
-                  </tr>
-                  {minAltitude !== 0 && (
-                    <tr>
-                      <td>
-                        <b>Rising above {minAltitude}°</b>
-                      </td>
-                      <td>{moment(hda.start).format('HH:mm')}</td>
-                      <td>
-                        <b>Setting below {minAltitude}°</b>
-                      </td>
-                      <td>{moment(hda.end).format('HH:mm')}</td>
-                    </tr>
-                  )}
-                  <tr>
-                    <td>
-                      <b>Visibility from</b>
-                    </td>
-                    <td>{moment(intersection.start).format('HH:mm')}</td>
-                    <td>
-                      <b>Visibility to</b>
-                    </td>
-                    <td>{moment(intersection.end).format('HH:mm')}</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>Best visibility</b>
-                    </td>
-                    <td>{moment(max).format('HH:mm')}</td>
-                    <td>
-                      <b>Altitude</b>
-                    </td>
-                    <td>{Math.round(radToDeg(altitudeAtMax))}°</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <b>Transit</b>
-                    </td>
-                    <td>{moment(transit).format('HH:mm')}</td>
-                    <td>
-                      <b>Altitude</b>
-                    </td>
-                    <td>{Math.round(radToDeg(altitudeAtTransit))}°</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div className="dynamic layout">
-              <img alt={`preview of ${ngc}`} src={getImgSrc(ngc)} />
-            </div>
-          </div>
-          <div className="dynamic row layout">
-            <div className="fitted layout">
-              <AltitudeChart
-                minAltitude={minAltitude}
-                ngcInfo={this.props.ngcInfo}
-                horizontalCoords={horizontalCoords}
-                nightInfo={nightInfo}
-              />
-            </div>
-            <div className="dynamic layout">
-              <AzimuthChart horizontalCoords={horizontalCoords} />
-            </div>
-          </div>
-        </div>
+        {this.renderContent()}
       </Dialog>
     );
   }
