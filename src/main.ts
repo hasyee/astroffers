@@ -68,6 +68,7 @@ app.on('ready', createWindow);
 
 app.on('ready', () => {
   autoUpdater.checkForUpdatesAndNotify();
+  setInterval(() => autoUpdater.checkForUpdatesAndNotify(), 5 * 60 * 1000);
 });
 
 // Quit when all windows are closed.
