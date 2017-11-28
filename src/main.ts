@@ -16,7 +16,7 @@ let win;
 const notifyAboutUpdate = () => {
   dialog.showMessageBox(
     {
-      buttons: [ 'Install and relaunch', 'Later' ],
+      buttons: [ 'Ok', 'Later' ],
       defaultId: 0,
       title: 'Install Updates',
       message: 'Updates downloaded, application will be quit for update...'
