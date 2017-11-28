@@ -10,8 +10,9 @@
     "start": "electron .",
     "start-prod": "NODE_ENV=production npm start",
     "dist": "npm run build && electron-builder -mwl --publish always",
-    "mac-test": "npm run build && electron-builder --mac --dir",
-    "linux-test": "npm run build && electron-builder --linux"
+    "mac-test": "npm run build && electron-builder --mac",
+    "linux-test": "npm run build && electron-builder --linux",
+    "win-test": "npm run build && electron-builder --win"
   },
   "files": [
     "lib"
@@ -90,9 +91,7 @@
     "linux": {
       "category": "Astronomy",
       "target": [
-        "AppImage",
-        "deb",
-        "pacman"
+        "AppImage"
       ]
     }
   }
