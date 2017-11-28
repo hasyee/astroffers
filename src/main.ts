@@ -13,21 +13,29 @@ log.info('App starting...');
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
 
-autoUpdater.on('update-downloaded', () => {
+const notifyAboutUpdate = () => {
   dialog.showMessageBox(
     {
+      buttons: [ 'Install and relaunch', 'Later' ],
+      defaultId: 0,
       title: 'Install Updates',
       message: 'Updates downloaded, application will be quit for update...'
     },
-    () => {
-      setImmediate(() => autoUpdater.quitAndInstall());
+    index => {
+      if (index === 0) {
+        setImmediate(() => autoUpdater.quitAndInstall());
+      } else if (index === 1) {
+        setTimeout(() => notifyAboutUpdate(), 5 * 60 * 1000);
+      }
     }
   );
-});
+};
 
-autoUpdater.on('error', (event, error) => {
-  dialog.showErrorBox('Error: ', error == null ? 'unknown' : (error.stack || error).toString());
-});
+autoUpdater.on('update-downloaded', () => notifyAboutUpdate());
+
+autoUpdater.on('error', (event, error) =>
+  dialog.showErrorBox('Error: ', error == null ? 'unknown' : (error.stack || error).toString())
+);
 
 function createWindow() {
   // Create the browser window.
