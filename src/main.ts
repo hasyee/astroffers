@@ -12,26 +12,30 @@ log.info('App starting...');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
+let checkUpdateTimer;
 
-const notifyAboutUpdate = () => {
+const notifyAboutUpdate = version => {
   dialog.showMessageBox(
     {
-      buttons: [ 'Ok', 'Later' ],
+      buttons: [ 'Relaunch', 'Later' ],
       defaultId: 0,
-      title: 'Install Updates',
-      message: 'Updates downloaded, application will be quit for update...'
+      title: `New version: ${version}`,
+      message: `New version (${version}) downloaded. Relaunch to install...`
     },
     index => {
       if (index === 0) {
         setImmediate(() => autoUpdater.quitAndInstall());
       } else if (index === 1) {
-        setTimeout(() => notifyAboutUpdate(), 5 * 60 * 1000);
+        setTimeout(() => notifyAboutUpdate(version), 5 * 60 * 1000);
       }
     }
   );
 };
 
-autoUpdater.on('update-downloaded', () => notifyAboutUpdate());
+autoUpdater.on('update-downloaded', ({ version }) => {
+  clearInterval(checkUpdateTimer);
+  notifyAboutUpdate(version);
+});
 
 autoUpdater.on('error', (event, error) =>
   dialog.showErrorBox('Error: ', error == null ? 'unknown' : (error.stack || error).toString())
@@ -76,7 +80,7 @@ app.on('ready', createWindow);
 
 app.on('ready', () => {
   autoUpdater.checkForUpdatesAndNotify();
-  setInterval(() => autoUpdater.checkForUpdatesAndNotify(), 5 * 60 * 1000);
+  checkUpdateTimer = setInterval(() => autoUpdater.checkForUpdatesAndNotify(), 5 * 60 * 1000);
 });
 
 // Quit when all windows are closed.
