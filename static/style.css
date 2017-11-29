@@ -193,6 +193,10 @@ header img {
   text-decoration: underline;
 }
 
+.list > div > div {
+  overflow-y: scroll !important;
+}
+
 .list.row {
   cursor: pointer;
   user-select: none;
