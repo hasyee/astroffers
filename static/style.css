@@ -76,6 +76,16 @@ header img {
   margin-right: 16px;
 }
 
+.about {
+  justify-content: space-around;
+  align-items: center;
+}
+
+.about img {
+  width: 200px;
+  height: 200px;
+}
+
 .panel {
   width: 300px;
 }

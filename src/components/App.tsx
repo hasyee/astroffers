@@ -53,7 +53,7 @@ export default class extends React.PureComponent<{
           <AppBar
             title={
               <div>
-                <img src="static/icon_transparent_white.png" />
+                <img src="static/icons/icon_transparent_white.png" />
                 <span>Astroffers</span>
               </div>
             }
