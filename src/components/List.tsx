@@ -106,7 +106,7 @@ class List extends React.PureComponent<{ objects: NgcInfo[]; isFiltering: boolea
     if (isFiltering || !objects) return null;
     return (
       <div className="fitted layout list card">
-        <Table selectable={false} height={'calc(100% - 59px)'} ref="table">
+        <Table selectable={false} height={'calc(100% - 59px)'} ref="table" style={{ overflow: 'hidden' }}>
           <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
             <TableRow>
               <TableHeaderColumn>
@@ -144,7 +144,7 @@ class List extends React.PureComponent<{ objects: NgcInfo[]; isFiltering: boolea
                   Magnitude{this.renderSortByIcon(PROP.MAGNITUDE)}
                 </span>
               </TableHeaderColumn>
-              <TableHeaderColumn style={{ width: '80px' }}>
+              <TableHeaderColumn>
                 <span className="sorter" onClick={this.handleHeaderClick(PROP.SURFACE_BRIGHTNESS)}>
                   Surface brightness{this.renderSortByIcon(PROP.SURFACE_BRIGHTNESS)}
                 </span>
@@ -177,7 +177,7 @@ class List extends React.PureComponent<{ objects: NgcInfo[]; isFiltering: boolea
                       </TableRowColumn>
                       <TableRowColumn>{stringifyTimeDiff(sum)}</TableRowColumn>
                       <TableRowColumn>{magnitude}</TableRowColumn>
-                      <TableRowColumn style={{ width: '80px' }}>{surfaceBrightness}</TableRowColumn>
+                      <TableRowColumn>{surfaceBrightness}</TableRowColumn>
                     </TableRow>
                   );
                 }
