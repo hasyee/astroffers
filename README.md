@@ -24,3 +24,9 @@ Start in production mode:
 ```
 npm run start-prod
 ```
+
+## Metrics
+
+<img alt="nucleus-logo" src="https://nucleus.sh/favicon.png" height="50px"/>
+
+Metrics is powered by [Nucleus](https://nucleus.sh/): the analytics solution for Electron apps.
