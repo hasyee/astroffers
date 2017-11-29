@@ -26,7 +26,7 @@ export default class extends React.PureComponent<{
         autoScrollBodyContent
       >
         <div className="row layout about">
-          <img src="static/icons/icon.png" />
+          <img src="static/icons/icon.png" className="logo" />
           <table className="about-table">
             <tbody>
               <tr>
@@ -61,6 +61,17 @@ export default class extends React.PureComponent<{
                 </td>
                 <td>
                   <a onClick={() => shell.openExternal(homepage)}>{homepage}</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <b>Metrics</b>
+                </td>
+                <td>
+                  Powered by
+                  <a onClick={() => shell.openExternal('https://nucleus.sh/')}>
+                    <img alt="nucleus logo" src="https://nucleus.sh/favicon.png" className="nucleus" />Nucleus
+                  </a>
                 </td>
               </tr>
             </tbody>
