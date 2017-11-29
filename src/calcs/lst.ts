@@ -9,7 +9,7 @@ const EARTH_ANGLULAR_SPEED = 0.00007292115146706924; // radians per second
 const getElapsedSeconds = (localTime: Timestamp): number => (localTime - GST_REFERENCE_TIME) / 1000;
 
 /**
- * Get Greenwich Local Sidereal Time in degrees
+ * Get Greenwich Local Sidereal Time
  */
 const timeToGst = (localTime: Timestamp): Rad => {
   const elapsedSeconds = getElapsedSeconds(localTime);
