@@ -70,6 +70,12 @@ main {
   overflow: hidden;
 }
 
+header img {
+  width: 42px;
+  margin-bottom: -13px;
+  margin-right: 16px;
+}
+
 .panel {
   width: 300px;
 }
