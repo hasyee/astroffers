@@ -17,17 +17,13 @@ let checkUpdateTimer;
 const notifyAboutUpdate = version => {
   dialog.showMessageBox(
     {
-      buttons: [ 'Relaunch', 'Later' ],
+      buttons: [ 'Relaunch' ],
       defaultId: 0,
       title: `New version: ${version}`,
       message: `New version (${version}) downloaded. Relaunch to install...`
     },
     index => {
-      if (index === 0) {
-        setImmediate(() => autoUpdater.quitAndInstall());
-      } else if (index === 1) {
-        setTimeout(() => notifyAboutUpdate(version), 5 * 60 * 1000);
-      }
+      setImmediate(() => autoUpdater.quitAndInstall());
     }
   );
 };
