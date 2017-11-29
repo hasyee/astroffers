@@ -51,7 +51,12 @@ export default class extends React.PureComponent<{
       <div className="absolute column layout">
         <header className="dynamic">
           <AppBar
-            title="Astroffers"
+            title={
+              <div>
+                <img src="static/icon_transparent_white.png" />
+                <span>Astroffers</span>
+              </div>
+            }
             showMenuIconButton={false}
             iconElementRight={this.renderMenu()}
             titleStyle={{ fontWeight: '100', userSelect: 'none', cursor: 'default' }}

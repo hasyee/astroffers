@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 21.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1024 1024" style="enable-background:new 0 0 1024 1024;" xml:space="preserve">
+<style type="text/css">
+	.st0{display:none;}
+	.st1{display:inline;}
+	.st2{fill:url(#SVGID_1_);}
+	.st3{fill:#FFFFFF;}
+	.st4{display:none;fill:#FFFFFF;}
+</style>
+<g id="Folt" class="st0">
+	
+		<image style="display:inline;overflow:visible;opacity:0.39;enable-background:new    ;" width="4283" height="4283" xlink:href="3647817F.png"  transform="matrix(0.2397 0 0 0.2397 17.76 16.8)">
+	</image>
+	<g class="st1">
+		
+			<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="452.448" y1="714.1819" x2="555.0402" y2="371.6287" gradientTransform="matrix(1 0 0 -1 0 1024)">
+			<stop  offset="0" style="stop-color:#0079B4"/>
+			<stop  offset="1" style="stop-color:#00579B"/>
+		</linearGradient>
+		<circle class="st2" cx="513" cy="512" r="465.1"/>
+	</g>
+</g>
+<g id="Távcső">
+	<polygon id="_x32__láb" class="st3" points="527.9,569.4 291.5,977.1 527.9,713.1 764.2,977.1 	"/>
+	<polygon id="_x31__láb" class="st3" points="527.9,748.9 487.5,793.9 526.9,933.2 566.7,792.3 	"/>
+	
+		<rect id="tubus" x="248.5" y="432.1" transform="matrix(0.8831 -0.4692 0.4692 0.8831 -169.023 295.9501)" class="st4" width="521.7" height="110.2"/>
+	<polygon id="tubus_1_" class="st3" points="880.3,397.1 207.7,666.8 207.7,666.8 808.9,262.7 	"/>
+	<polygon id="tubus_2_" class="st4" points="806.9,405.1 237.4,633.5 237.4,633.5 746.4,291.3 	"/>
+</g>
+<path id="sáv" class="st3" d="M96.7,526.3c0-263.9,214-477.9,477.9-477.9c36.3,0,71.7,4.1,105.8,11.7C632.2,43.9,580.6,35,526.9,35
+	C263,35,49,249,49,512.9c0,227.5,159,417.9,372.1,466.1C232.3,915.1,96.7,736.6,96.7,526.3z"/>
+</svg>
