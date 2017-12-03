@@ -1,10 +1,15 @@
 import { NgcInfo, NightInfo } from './calcs/types';
 
 export type State = {
+  appInfo: AppInfo;
   filter: Filter;
   result: Result;
   isFiltering: boolean;
   openedDetails: number;
+};
+
+export type AppInfo = {
+  clientId: string;
 };
 
 export type Filter = {

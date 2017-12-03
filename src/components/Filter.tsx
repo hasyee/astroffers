@@ -12,7 +12,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Dialog from 'material-ui/Dialog';
 import SelectLocationDialog from './SelectLocationDialog';
 import { State, Filter as IFilter } from '../types';
-import { changeFilter, resetFilter, filterObjects, toggleTypeFilter, changeAllTypeFilter } from '../actions';
+import { changeFilter, resetFilter, filterObjects, toggleTypeFilter, changeAllTypeFilter, track } from '../actions';
 const typeMap = require('../../data/types.json');
 
 const resolveValue = (value: number) => (Number.isFinite(value) ? value : '');
@@ -24,6 +24,7 @@ class Filter extends React.PureComponent<{
   filterObjects: typeof filterObjects;
   toggleTypeFilter: typeof toggleTypeFilter;
   changeAllTypeFilter: typeof changeAllTypeFilter;
+  track: typeof track;
 }> {
   state = {
     isOpenLocationDialog: false,
@@ -36,17 +37,47 @@ class Filter extends React.PureComponent<{
     const value = parseFloat(evt.target.value);
     this.props.changeFilter(prop, Number.isFinite(value) ? value : null);
   };
-  handleMoonlessChange = (_, checked) => this.props.changeFilter('moonless', checked);
+  handleMoonlessChange = (_, checked) => {
+    this.props.changeFilter('moonless', checked);
+    this.props.track('Moonless', checked ? 'on' : 'off');
+  };
   handleBrightnessFilterChange = (_, __, value) => this.props.changeFilter('brightnessFilter', value);
-  handleLocationDialogOpen = () => this.setState({ isOpenLocationDialog: true });
-  handleLocationDialogCancel = () => this.setState({ isOpenLocationDialog: false });
+  handleLocationDialogOpen = () => {
+    this.setState({ isOpenLocationDialog: true });
+    this.props.track('Location Dialog', 'open');
+  };
+  handleLocationDialogCancel = () => {
+    this.setState({ isOpenLocationDialog: false });
+    this.props.track('Location Dialog', 'cancel');
+  };
   handleLocationDialogSubmit = ({ latitude, longitude }) => {
     this.setState({ isOpenLocationDialog: false });
     this.props.changeFilter('latitude', latitude);
     this.props.changeFilter('longitude', longitude);
+    this.props.track('Location Dialog', 'submit');
   };
-  handleTypeFilterDialogOpen = () => this.setState({ isOpenTypeFilterDialog: true });
-  handleTypeFilterDialogClose = () => this.setState({ isOpenTypeFilterDialog: false });
+  handleTypeFilterDialogOpen = () => {
+    this.setState({ isOpenTypeFilterDialog: true });
+    this.props.track('Type Filter Dialog', 'open');
+  };
+  handleTypeFilterDialogClose = () => {
+    this.setState({ isOpenTypeFilterDialog: false });
+    this.props.track('Type Filter Dialog', 'close');
+  };
+  handleResetFilter = () => {
+    this.props.resetFilter();
+    this.props.track('Filter', 'reset');
+  };
+  handleSubmitFilter = () => {
+    this.props.filterObjects();
+    this.props.track('Filter', 'submit', {
+      evLabel: this.props.filter.brightnessFilter,
+      evValue:
+        this.props.filter.brightnessFilter === 'magnitude'
+          ? this.props.filter.magnitude
+          : this.props.filter.surfaceBrightness
+    });
+  };
 
   componentDidMount() {
     this.props.filterObjects();
@@ -185,8 +216,8 @@ class Filter extends React.PureComponent<{
           {this.renderTypeFilterDialog()}
         </div>
         <div className="dynamic button-container">
-          <FlatButton label="Reset" primary style={{ float: 'left' }} onClick={resetFilter} />
-          <RaisedButton label="Filter" primary style={{ float: 'right' }} onClick={filterObjects} />
+          <FlatButton label="Reset" primary style={{ float: 'left' }} onClick={this.handleResetFilter} />
+          <RaisedButton label="Filter" primary style={{ float: 'right' }} onClick={this.handleSubmitFilter} />
         </div>
       </div>
     );
@@ -198,5 +229,6 @@ export default connect(({ filter }: State) => ({ filter }), {
   resetFilter,
   filterObjects,
   toggleTypeFilter,
-  changeAllTypeFilter
+  changeAllTypeFilter,
+  track
 })(Filter);
