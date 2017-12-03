@@ -47,15 +47,17 @@ export const closeDetails = () => state => ({ ...state, openedDetails: null });
 
 export const trackScreen = (screen: string) => () => async (dispatch, getState, { analytics }) => {
   const version = getState().appInfo.version;
-  console.log('trackScreen', screen, version);
-  analytics.screen('astroffers', version, 'org.electron.astroffers', 'org.electron.astroffers', screen);
+  const clientId = getState().appInfo.clientId;
+  console.log('trackScreen', screen, version, clientId);
+  analytics.screen('astroffers', version, 'org.electron.astroffers', 'org.electron.astroffers', screen, clientId);
 };
 
-export const track = (category: string, action: string, params?: any) => () => async (
+export const track = (category: string, action: string, params: any = {}) => () => async (
   dispatch,
   getState,
   { analytics }
 ) => {
-  //console.log('track', category, action, params);
-  //analytics.event(category, action, params);
+  const eventParams = { ...params, clientId: getState().appInfo.clientId };
+  console.log('track', category, action, eventParams);
+  //analytics.event(category, action, eventParams);
 };
