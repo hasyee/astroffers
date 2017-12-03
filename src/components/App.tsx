@@ -1,4 +1,5 @@
 import * as React from 'react';
+const { connect } = require('react-redux');
 import DatePicker from 'material-ui/DatePicker';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
@@ -9,24 +10,37 @@ import Filter from './Filter';
 import About from './About';
 import Help from './Help';
 import Result from './Result';
+import { track, trackScreen } from '../actions';
 
-export default class extends React.PureComponent<{
-  version: string;
-  description: string;
-  author: string;
-  license: string;
-  feedback: string;
-  homepage: string;
+class App extends React.PureComponent<{
+  track: typeof track;
+  trackScreen: typeof trackScreen;
 }> {
   state = {
     isAboutOpen: false,
     isHelpOpen: false
   };
 
-  handleAboutOpen = () => this.setState({ isAboutOpen: true });
-  handleAboutClose = () => this.setState({ isAboutOpen: false });
-  handleHelpOpen = () => this.setState({ isHelpOpen: true });
-  handleHelpClose = () => this.setState({ isHelpOpen: false });
+  handleAboutOpen = () => {
+    this.setState({ isAboutOpen: true });
+    this.props.track('About', 'open');
+  };
+  handleAboutClose = () => {
+    this.setState({ isAboutOpen: false });
+    this.props.track('About', 'close');
+  };
+  handleHelpOpen = () => {
+    this.setState({ isHelpOpen: true });
+    this.props.track('Help', 'open');
+  };
+  handleHelpClose = () => {
+    this.setState({ isHelpOpen: false });
+    this.props.track('Help', 'close');
+  };
+
+  componentDidMount() {
+    this.props.trackScreen('App');
+  }
 
   renderMenu() {
     return (
@@ -46,7 +60,6 @@ export default class extends React.PureComponent<{
   }
 
   render() {
-    const { version, description, author, license, feedback, homepage } = this.props;
     return (
       <div className="absolute column layout">
         <header className="dynamic">
@@ -70,18 +83,11 @@ export default class extends React.PureComponent<{
             <Result />
           </div>
         </main>
-        <About
-          isOpen={this.state.isAboutOpen}
-          onClose={this.handleAboutClose}
-          version={version}
-          description={description}
-          author={author}
-          license={license}
-          feedback={feedback}
-          homepage={homepage}
-        />
+        <About isOpen={this.state.isAboutOpen} onClose={this.handleAboutClose} />
         <Help isOpen={this.state.isHelpOpen} onClose={this.handleHelpClose} />
       </div>
     );
   }
 }
+
+export default connect(null, { track, trackScreen })(App);

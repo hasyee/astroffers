@@ -1,8 +1,17 @@
 import React = require('react');
+const { connect } = require('react-redux');
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { shell } from 'electron';
 
+@connect(({ appInfo: { version, description, author, license, feedback, homepage } }) => ({
+  version,
+  description,
+  author,
+  license,
+  feedback,
+  homepage
+}))
 export default class extends React.PureComponent<{
   isOpen: boolean;
   version: string;
