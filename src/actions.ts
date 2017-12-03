@@ -59,6 +59,6 @@ export const track = (category: string, action: string, params: any = {}) => () 
   { analytics }
 ) => {
   const eventParams = { ...params, clientId: getState().appInfo.clientId };
-  console.log('track', category, action, eventParams);
-  setImmediate(() => analytics.event(category, action, eventParams));
+  //console.log('track', category, action, eventParams);
+  //analytics.event(category, action, eventParams);
 };
