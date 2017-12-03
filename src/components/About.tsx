@@ -61,17 +61,6 @@ export default connect(({ appInfo }: any) => ({ appInfo }))(
                     <a onClick={() => shell.openExternal(homepage)}>{homepage}</a>
                   </td>
                 </tr>
-                <tr>
-                  <td>
-                    <b>Metrics</b>
-                  </td>
-                  <td>
-                    Powered by
-                    <a onClick={() => shell.openExternal('https://nucleus.sh/')}>
-                      <img alt="nucleus logo" src="https://nucleus.sh/favicon.png" className="nucleus" />Nucleus
-                    </a>
-                  </td>
-                </tr>
               </tbody>
             </table>
           </div>
