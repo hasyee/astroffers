@@ -8,15 +8,13 @@ import App from './components/App';
 import ReactHighcharts = require('react-highcharts');
 import HighchartsMore = require('highcharts/highcharts-more');
 import Nucleus = require('electron-nucleus');
-import Analytics from 'electron-google-analytics';
+import analytics from './analytics';
+const theme = require('../static/theme.json');
 
 Nucleus.init('5a1ee99ffd2a27796bfc934f');
-const analytics = new Analytics('UA-110578592-1');
+HighchartsMore(ReactHighcharts.Highcharts);
 
 try {
-  HighchartsMore(ReactHighcharts.Highcharts);
-
-  const theme = require('../static/theme.json');
   const {
     version,
     description,
@@ -41,16 +39,8 @@ try {
     </Provider>,
     document.getElementById('app')
   );
-
-  analytics
-    .screen('astroffers', version, 'org.electron.astroffers', 'org.electron.astroffers', 'Window')
-    .then(response => {
-      return response;
-    })
-    .catch(err => {
-      return err;
-    });
 } catch (err) {
   alert(err.message);
+  analytics.event('Error', 'catched', { evLabel: err.message });
   throw err;
 }

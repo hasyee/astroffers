@@ -14,6 +14,7 @@ import SelectLocationDialog from './SelectLocationDialog';
 import { State, Filter as IFilter } from '../types';
 import { changeFilter, resetFilter, filterObjects, toggleTypeFilter, changeAllTypeFilter } from '../actions';
 const typeMap = require('../../data/types.json');
+import analytics from '../analytics';
 
 const resolveValue = (value: number) => (Number.isFinite(value) ? value : '');
 
@@ -36,17 +37,47 @@ class Filter extends React.PureComponent<{
     const value = parseFloat(evt.target.value);
     this.props.changeFilter(prop, Number.isFinite(value) ? value : null);
   };
-  handleMoonlessChange = (_, checked) => this.props.changeFilter('moonless', checked);
+  handleMoonlessChange = (_, checked) => {
+    this.props.changeFilter('moonless', checked);
+    analytics.event('Moonless', checked ? 'on' : 'off');
+  };
   handleBrightnessFilterChange = (_, __, value) => this.props.changeFilter('brightnessFilter', value);
-  handleLocationDialogOpen = () => this.setState({ isOpenLocationDialog: true });
-  handleLocationDialogCancel = () => this.setState({ isOpenLocationDialog: false });
+  handleLocationDialogOpen = () => {
+    this.setState({ isOpenLocationDialog: true });
+    analytics.event('Location Dialog', 'open');
+  };
+  handleLocationDialogCancel = () => {
+    this.setState({ isOpenLocationDialog: false });
+    analytics.event('Location Dialog', 'cancel');
+  };
   handleLocationDialogSubmit = ({ latitude, longitude }) => {
     this.setState({ isOpenLocationDialog: false });
     this.props.changeFilter('latitude', latitude);
     this.props.changeFilter('longitude', longitude);
+    analytics.event('Location Dialog', 'submit');
   };
-  handleTypeFilterDialogOpen = () => this.setState({ isOpenTypeFilterDialog: true });
-  handleTypeFilterDialogClose = () => this.setState({ isOpenTypeFilterDialog: false });
+  handleTypeFilterDialogOpen = () => {
+    this.setState({ isOpenTypeFilterDialog: true });
+    analytics.event('Type Filter Dialog', 'open');
+  };
+  handleTypeFilterDialogClose = () => {
+    this.setState({ isOpenTypeFilterDialog: false });
+    analytics.event('Type Filter Dialog', 'close');
+  };
+  handleResetFilter = () => {
+    this.props.resetFilter();
+    analytics.event('Filter', 'reset');
+  };
+  handleSubmitFilter = () => {
+    this.props.filterObjects();
+    analytics.event('Filter', 'submit', {
+      evLabel: this.props.filter.brightnessFilter,
+      evValue:
+        this.props.filter.brightnessFilter === 'magnitude'
+          ? this.props.filter.magnitude
+          : this.props.filter.surfaceBrightness
+    });
+  };
 
   componentDidMount() {
     this.props.filterObjects();
@@ -185,8 +216,8 @@ class Filter extends React.PureComponent<{
           {this.renderTypeFilterDialog()}
         </div>
         <div className="dynamic button-container">
-          <FlatButton label="Reset" primary style={{ float: 'left' }} onClick={resetFilter} />
-          <RaisedButton label="Filter" primary style={{ float: 'right' }} onClick={filterObjects} />
+          <FlatButton label="Reset" primary style={{ float: 'left' }} onClick={this.handleResetFilter} />
+          <RaisedButton label="Filter" primary style={{ float: 'right' }} onClick={this.handleSubmitFilter} />
         </div>
       </div>
     );

@@ -9,6 +9,7 @@ import Filter from './Filter';
 import About from './About';
 import Help from './Help';
 import Result from './Result';
+import analytics from '../analytics';
 
 export default class extends React.PureComponent<{
   version: string;
@@ -23,10 +24,26 @@ export default class extends React.PureComponent<{
     isHelpOpen: false
   };
 
-  handleAboutOpen = () => this.setState({ isAboutOpen: true });
-  handleAboutClose = () => this.setState({ isAboutOpen: false });
-  handleHelpOpen = () => this.setState({ isHelpOpen: true });
-  handleHelpClose = () => this.setState({ isHelpOpen: false });
+  handleAboutOpen = () => {
+    this.setState({ isAboutOpen: true });
+    analytics.event('About', 'open');
+  };
+  handleAboutClose = () => {
+    this.setState({ isAboutOpen: false });
+    analytics.event('About', 'close');
+  };
+  handleHelpOpen = () => {
+    this.setState({ isHelpOpen: true });
+    analytics.event('Help', 'open');
+  };
+  handleHelpClose = () => {
+    this.setState({ isHelpOpen: false });
+    analytics.event('Help', 'close');
+  };
+
+  componentDidMount() {
+    analytics.screen('astroffers', this.props.version, 'org.electron.astroffers', 'org.electron.astroffers', 'App');
+  }
 
   renderMenu() {
     return (
