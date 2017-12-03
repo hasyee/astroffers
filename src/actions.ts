@@ -1,6 +1,7 @@
 import { State, Filter } from './types';
 import { getLocation } from './calcs/units';
 import defaultState from './defaultState';
+import { setImmediate } from 'timers';
 const typeMap = require('../data/types.json');
 
 export const resetFilter = () => state => ({ ...state, filter: defaultState.filter });
@@ -59,5 +60,5 @@ export const track = (category: string, action: string, params: any = {}) => () 
 ) => {
   const eventParams = { ...params, clientId: getState().appInfo.clientId };
   console.log('track', category, action, eventParams);
-  //analytics.event(category, action, eventParams);
+  setImmediate(() => analytics.event(category, action, eventParams));
 };

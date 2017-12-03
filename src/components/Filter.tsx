@@ -62,7 +62,7 @@ export default connect(({ filter }: State) => ({ filter }), {
       this.setState({ isOpenLocationDialog: false });
       this.props.changeFilter('latitude', latitude);
       this.props.changeFilter('longitude', longitude);
-      this.props.track('Location Dialog', 'submit');
+      this.props.track('Location Dialog', 'submit', { evLabel: 'coord', evValue: latitude + '_' + longitude });
     };
     handleTypeFilterDialogOpen = () => {
       this.setState({ isOpenTypeFilterDialog: true });
