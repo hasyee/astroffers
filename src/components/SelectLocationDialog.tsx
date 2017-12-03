@@ -3,6 +3,7 @@ import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import Map from './Map';
 import { fetchLocation } from '../api';
+import analytics from '../analytics';
 
 export default class extends React.PureComponent<
   {
@@ -29,6 +30,7 @@ export default class extends React.PureComponent<
   handleFetchLocation = async () => {
     const { latitude, longitude } = await fetchLocation();
     if (Number.isFinite(latitude) && Number.isFinite(longitude)) this.setState({ latitude, longitude });
+    analytics.event('Network Location', 'fetch', { evLabel: 'coord', evValue: latitude + '_' + longitude });
   };
 
   handleChange = state => this.setState(state);

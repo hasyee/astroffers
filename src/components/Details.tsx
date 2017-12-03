@@ -17,6 +17,7 @@ import { dmsToString, hmsToString, radToDmsString, radToHmsString, radToDeg } fr
 import { closeDetails } from '../actions';
 import AltitudeChart from './AltitudeChart';
 import AzimuthChart from './AzimuthChart';
+import analytics from '../analytics';
 
 const getImgSrc = (ngc: number): string =>
   `http://www.ngcicproject.org/dss/n/${Math.floor(ngc / 1000)}/n${leftpad(ngc, 4, 0)}.jpg`;
@@ -29,6 +30,14 @@ class Details extends React.PureComponent<{
   horizontalCoords: CoordSeries<Az>;
   closeDetails: typeof closeDetails;
 }> {
+  componentDidUpdate(prevProps) {
+    if (prevProps.isOpen === false && this.props.isOpen === true) {
+      analytics.event('Details', 'open');
+    } else if (prevProps.isOpen === true && this.props.isOpen === false) {
+      analytics.event('Details', 'close');
+    }
+  }
+
   renderContent() {
     if (!this.props.ngcInfo) return null;
     const {
