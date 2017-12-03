@@ -10,6 +10,13 @@ export type State = {
 
 export type AppInfo = {
   clientId: string;
+  name: string;
+  version: string;
+  description: string;
+  author: string;
+  license: string;
+  feedback: string;
+  homepage: string;
 };
 
 export type Filter = {
