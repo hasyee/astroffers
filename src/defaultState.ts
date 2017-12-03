@@ -1,7 +1,28 @@
 import { State, TypeFilter } from './types';
 const typeMap = require('../data/types.json');
+import { machineIdSync } from 'node-machine-id';
+
+const {
+  name,
+  version,
+  description,
+  author: { name: author },
+  license,
+  bugs: { url: feedback },
+  homepage
+} = require('../package.json');
 
 export default {
+  appInfo: {
+    clientId: machineIdSync(),
+    name,
+    version,
+    description,
+    author,
+    license,
+    feedback,
+    homepage
+  },
   filter: {
     date: Date.now(),
     latitude: 47,
