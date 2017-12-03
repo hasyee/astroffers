@@ -14,10 +14,9 @@ import { NgcInfo, NightInfo, Az, CoordSeries } from '../calcs/types';
 import resolveTypes from '../calcs/resolveTypes';
 import getHorizontalCoords from '../calcs/getHorizontalCoords';
 import { dmsToString, hmsToString, radToDmsString, radToHmsString, radToDeg } from '../calcs/units';
-import { closeDetails } from '../actions';
+import { closeDetails, track } from '../actions';
 import AltitudeChart from './AltitudeChart';
 import AzimuthChart from './AzimuthChart';
-import analytics from '../analytics';
 
 const getImgSrc = (ngc: number): string =>
   `http://www.ngcicproject.org/dss/n/${Math.floor(ngc / 1000)}/n${leftpad(ngc, 4, 0)}.jpg`;
@@ -29,12 +28,13 @@ class Details extends React.PureComponent<{
   minAltitude: number;
   horizontalCoords: CoordSeries<Az>;
   closeDetails: typeof closeDetails;
+  track: typeof track;
 }> {
   componentDidUpdate(prevProps) {
     if (prevProps.isOpen === false && this.props.isOpen === true) {
-      analytics.event('Details', 'open');
+      this.props.track('Details', 'open');
     } else if (prevProps.isOpen === true && this.props.isOpen === false) {
-      analytics.event('Details', 'close');
+      this.props.track('Details', 'close');
     }
   }
 
@@ -219,5 +219,5 @@ export default connect(
       minAltitude: altitude
     };
   },
-  { closeDetails }
+  { closeDetails, track }
 )(Details);

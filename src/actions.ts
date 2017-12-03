@@ -29,18 +29,33 @@ export const changeAllTypeFilter = (value: boolean) => state => ({
   }
 });
 
-export const fetchLocation = () => state => async (dispatch, getState, { fetchLocation }) => {
-  const { latitude, longitude } = await fetchLocation();
+export const fetchLocation = () => state => async (dispatch, getState, { api }) => {
+  const { latitude, longitude } = await api.fetchLocation();
   dispatch(changeFilter('latitude', latitude));
   dispatch(changeFilter('longitude', longitude));
 };
 
-export const filterObjects = () => state => async (dispatch, getState, { filterObjects }) => {
+export const filterObjects = () => state => async (dispatch, getState, { api }) => {
   dispatch(state => ({ ...state, isFiltering: true }));
-  const result = await filterObjects(getState().filter);
+  const result = await api.filterObjects(getState().filter);
   dispatch(state => ({ ...state, result, isFiltering: false }));
 };
 
 export const openDetails = (openedDetails: number) => state => ({ ...state, openedDetails });
 
 export const closeDetails = () => state => ({ ...state, openedDetails: null });
+
+export const trackScreen = (screen: string) => () => async (dispatch, getState, { analytics }) => {
+  const version = getState().appInfo.version;
+  console.log('trackScreen', screen, version);
+  analytics.screen('astroffers', version, 'org.electron.astroffers', 'org.electron.astroffers', screen);
+};
+
+export const track = (category: string, action: string, params?: any) => () => async (
+  dispatch,
+  getState,
+  { analytics }
+) => {
+  //console.log('track', category, action, params);
+  //analytics.event(category, action, params);
+};

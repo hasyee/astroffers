@@ -12,9 +12,8 @@ import MenuItem from 'material-ui/MenuItem';
 import Dialog from 'material-ui/Dialog';
 import SelectLocationDialog from './SelectLocationDialog';
 import { State, Filter as IFilter } from '../types';
-import { changeFilter, resetFilter, filterObjects, toggleTypeFilter, changeAllTypeFilter } from '../actions';
+import { changeFilter, resetFilter, filterObjects, toggleTypeFilter, changeAllTypeFilter, track } from '../actions';
 const typeMap = require('../../data/types.json');
-import analytics from '../analytics';
 
 const resolveValue = (value: number) => (Number.isFinite(value) ? value : '');
 
@@ -25,6 +24,7 @@ class Filter extends React.PureComponent<{
   filterObjects: typeof filterObjects;
   toggleTypeFilter: typeof toggleTypeFilter;
   changeAllTypeFilter: typeof changeAllTypeFilter;
+  track: typeof track;
 }> {
   state = {
     isOpenLocationDialog: false,
@@ -39,38 +39,38 @@ class Filter extends React.PureComponent<{
   };
   handleMoonlessChange = (_, checked) => {
     this.props.changeFilter('moonless', checked);
-    analytics.event('Moonless', checked ? 'on' : 'off');
+    this.props.track('Moonless', checked ? 'on' : 'off');
   };
   handleBrightnessFilterChange = (_, __, value) => this.props.changeFilter('brightnessFilter', value);
   handleLocationDialogOpen = () => {
     this.setState({ isOpenLocationDialog: true });
-    analytics.event('Location Dialog', 'open');
+    this.props.track('Location Dialog', 'open');
   };
   handleLocationDialogCancel = () => {
     this.setState({ isOpenLocationDialog: false });
-    analytics.event('Location Dialog', 'cancel');
+    this.props.track('Location Dialog', 'cancel');
   };
   handleLocationDialogSubmit = ({ latitude, longitude }) => {
     this.setState({ isOpenLocationDialog: false });
     this.props.changeFilter('latitude', latitude);
     this.props.changeFilter('longitude', longitude);
-    analytics.event('Location Dialog', 'submit');
+    this.props.track('Location Dialog', 'submit');
   };
   handleTypeFilterDialogOpen = () => {
     this.setState({ isOpenTypeFilterDialog: true });
-    analytics.event('Type Filter Dialog', 'open');
+    this.props.track('Type Filter Dialog', 'open');
   };
   handleTypeFilterDialogClose = () => {
     this.setState({ isOpenTypeFilterDialog: false });
-    analytics.event('Type Filter Dialog', 'close');
+    this.props.track('Type Filter Dialog', 'close');
   };
   handleResetFilter = () => {
     this.props.resetFilter();
-    analytics.event('Filter', 'reset');
+    this.props.track('Filter', 'reset');
   };
   handleSubmitFilter = () => {
     this.props.filterObjects();
-    analytics.event('Filter', 'submit', {
+    this.props.track('Filter', 'submit', {
       evLabel: this.props.filter.brightnessFilter,
       evValue:
         this.props.filter.brightnessFilter === 'magnitude'
@@ -229,5 +229,6 @@ export default connect(({ filter }: State) => ({ filter }), {
   resetFilter,
   filterObjects,
   toggleTypeFilter,
-  changeAllTypeFilter
+  changeAllTypeFilter,
+  track
 })(Filter);

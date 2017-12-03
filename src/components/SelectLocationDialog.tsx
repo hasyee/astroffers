@@ -1,17 +1,19 @@
 import React = require('react');
+const { connect } = require('react-redux');
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import Map from './Map';
 import { fetchLocation } from '../api';
-import analytics from '../analytics';
+import { track } from '../actions';
 
-export default class extends React.PureComponent<
+class SelectLocationDialog extends React.PureComponent<
   {
     isOpen: boolean;
     latitude: number;
     longitude: number;
     onSubmit: Function;
     onCancel: Function;
+    track: typeof track;
   },
   { latitude: number; longitude: number }
 > {
@@ -30,7 +32,7 @@ export default class extends React.PureComponent<
   handleFetchLocation = async () => {
     const { latitude, longitude } = await fetchLocation();
     if (Number.isFinite(latitude) && Number.isFinite(longitude)) this.setState({ latitude, longitude });
-    analytics.event('Network Location', 'fetch', { evLabel: 'coord', evValue: latitude + '_' + longitude });
+    this.props.track('Network Location', 'fetch', { evLabel: 'coord', evValue: latitude + '_' + longitude });
   };
 
   handleChange = state => this.setState(state);
@@ -74,3 +76,5 @@ export default class extends React.PureComponent<
     );
   }
 }
+
+export default connect(null, { track })(SelectLocationDialog);
