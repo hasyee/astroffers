@@ -15,6 +15,8 @@ const {
 export default {
   appInfo: {
     clientId: machineIdSync(),
+    platform: process.platform.replace('darwin', 'mac').replace('win32', 'win'),
+    language: navigator.language,
     name,
     version,
     description,
