@@ -10,6 +10,8 @@ export type State = {
 
 export type AppInfo = {
   clientId: string;
+  platform: string;
+  language: string;
   name: string;
   version: string;
   description: string;
