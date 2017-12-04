@@ -9,7 +9,7 @@ import { toMidnight } from './time';
 export default ({ date, latitude, longitude, twilight }: Filter): NightInfo => {
   const location = getLocation(latitude, longitude);
   const night = getNight(date, location);
-  const astroNight = night && twilight < 0 ? getNight(date, location, degToRad(twilight)) : null;
+  const astroNight = night ? getNight(date, location, degToRad(twilight)) : null;
   const moonNight = getMoonNight(night, location);
   const moonPhase = getMoonPhase(toMidnight(date));
   const moonlessNight = getIntersection(astroNight, moonNight);
