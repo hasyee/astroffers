@@ -14,6 +14,7 @@ const send = ({ name, version, clientId, platform, language }: AppInfo, hitType:
       an: name,
       av: version,
       ul: language,
+      ua: navigator.userAgent.replace(/astroffers\/\d+\.\d+\.\d+ /, '').replace(/Electron\/\d+\.\d+\.\d+ /, ''),
       aiid: `org.${platform}.astroffers`,
       ...params
     })}`
