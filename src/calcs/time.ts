@@ -12,3 +12,7 @@ export const toMidnight = (time: Timestamp): Timestamp => {
 export const toNextDay = (time: Timestamp): Timestamp => {
   return moment(time).add(1, 'day').valueOf();
 };
+
+export const toPrevDay = (time: Timestamp): Timestamp => {
+  return moment(time).subtract(1, 'day').valueOf();
+};
