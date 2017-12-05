@@ -12,7 +12,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { NgcInfo, NightInfo, Az, CoordSeries } from '../calcs/types';
 import resolveTypes from '../calcs/resolveTypes';
-import getHorizontalCoords from '../calcs/getHorizontalCoords';
+import getHorizontalCoordSeries from '../calcs/getHorizontalCoordSeries';
 import { dmsToString, hmsToString, radToDmsString, radToHmsString, radToDeg } from '../calcs/units';
 import { closeDetails, track } from '../actions';
 import AltitudeChart from './AltitudeChart';
@@ -28,7 +28,7 @@ export default connect(
       isOpen: openedDetails !== null,
       nightInfo: result ? result.nightInfo : null,
       ngcInfo,
-      horizontalCoords: ngcInfo ? getHorizontalCoords(date, latitude, longitude, ngcInfo.eqCoordsOnDate) : null,
+      horizontalCoords: ngcInfo ? getHorizontalCoordSeries(date, latitude, longitude, ngcInfo.eqCoordsOnDate) : null,
       minAltitude: altitude
     };
   },
