@@ -1,19 +1,8 @@
-import { NgcObject, NgcInfo, NightInfo, Loc, Timestamp, Deg, Interval } from './types';
-import getHalfDayArc from './halfDaysArcs';
-import { getLocation, degToRad, hmsToRad, dmsToRad } from './units';
-import { toNoon, toMidnight } from './time';
-import { getIntersection, isInInterval } from './interval';
-import { getEqCoordsOnDate } from './corrections';
-import { eqToAz } from './coords';
-import { Filter } from '../types';
+import { NgcObject, NgcInfo, Interval } from './types';
+import getNgcInfo from './getNgcInfo';
+import { getLocation } from './units';
 
-const getMax = (intersection: Interval, transit: Timestamp): Timestamp => {
-  if (!intersection || !transit) return null;
-  if (isInInterval(intersection, transit)) return transit;
-  if (transit < intersection.start) return intersection.start;
-  if (transit > intersection.end) return intersection.end;
-  return null;
-};
+import { Filter } from '../types';
 
 export default (
   ngcObjects: NgcObject[],
@@ -22,7 +11,6 @@ export default (
 ): NgcInfo[] => {
   if (!night) return [];
   const location = getLocation(latitude, longitude);
-  const refTime = night.start;
   return ngcObjects
     .filter(object => {
       const types = object.type.split('+');
@@ -33,20 +21,6 @@ export default (
         types.some(t => typeFilter[t])
       );
     })
-    .map(object => {
-      const ra = hmsToRad(object.eqCoords.ra);
-      const de = dmsToRad(object.eqCoords.de);
-      const eqCoordsOnJ2000 = { ra, de };
-      const eqCoordsOnDate = getEqCoordsOnDate(eqCoordsOnJ2000, refTime);
-      const hda = getHalfDayArc(refTime, location, degToRad(altitude), eqCoordsOnDate);
-      const hda0 = getHalfDayArc(refTime, location, 0, eqCoordsOnDate);
-      const transit = hda ? Math.round((hda.start + hda.end) / 2) : null;
-      const { alt: altitudeAtTransit } = transit ? eqToAz(transit, location, eqCoordsOnDate) : { alt: null };
-      const intersection = getIntersection(hda, night);
-      const max = transit ? getMax(intersection, transit) : null;
-      const sum = intersection ? intersection.end - intersection.start : 0;
-      const { alt: altitudeAtMax } = max ? eqToAz(max, location, eqCoordsOnDate) : { alt: null };
-      return { object, eqCoordsOnDate, intersection, transit, max, sum, altitudeAtMax, altitudeAtTransit, hda, hda0 };
-    })
+    .map(getNgcInfo(night, location, altitude))
     .filter(ngcInfo => ngcInfo.intersection);
 };
