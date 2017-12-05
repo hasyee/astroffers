@@ -7,7 +7,9 @@ const { abs, floor, ceil, PI, cos, sin, sqrt } = Math;
 const getRootsOfFirstDerivate = (ra: Rad, t1: Rad, t2: Rad): Rad[] => {
   const k1 = floor((ra - t1) / PI);
   const k2 = ceil((ra - t2) / PI);
-  return Array.from({ length: abs(k2 - k1) + 1 }).map((_, i) => ra - PI * (k1 + i));
+  const smallestK = Math.min(k1, k2);
+  //console.log(k1, k2);
+  return Array.from({ length: abs(k2 - k1) + 1 }).map((_, i) => ra - PI * (smallestK + i));
 };
 
 const getValueOfSecondDerivate = ({ de, ra }: Eq, lat: Rad) => (siderealTime: Rad): number => {
@@ -27,8 +29,12 @@ const getValueOfSecondDerivate = ({ de, ra }: Eq, lat: Rad) => (siderealTime: Ra
 export default ({ de, ra }: Eq, { lat, lon }: Loc, date: Timestamp): Timestamp => {
   const t1 = timeToLst(toNoon(date), lon, false);
   const t2 = timeToLst(toNoon(toNextDay(date)), lon, false);
+  //console.log(new Date(lstToTime(t1, lon)), new Date(lstToTime(t2, lon)));
   const roots = getRootsOfFirstDerivate(ra, t1, t2); // all transit
+  //console.log(roots.map(r => new Date(lstToTime(r, lon))));
   const secondDerivates = roots.map(getValueOfSecondDerivate({ de, ra }, lat));
+  //console.log(secondDerivates);
   const transitIndex = secondDerivates.findIndex(sd => sd < 0); // upper transit condition
+  //console.log(transitIndex);
   return transitIndex >= 0 ? lstToTime(roots[transitIndex], lon) : null;
 };
