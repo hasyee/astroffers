@@ -4,6 +4,7 @@ import getHalfDayArc from './getHalfDayArc';
 import { getEqCoordsOnDate } from './corrections';
 import { getIntersection, isInInterval } from './interval';
 import { eqToAz } from './coords';
+import getTransit from './getTransit';
 
 const getMax = (intersection: Interval, transit: Timestamp): Timestamp => {
   if (!intersection || !transit) return null;
@@ -13,14 +14,14 @@ const getMax = (intersection: Interval, transit: Timestamp): Timestamp => {
   return null;
 };
 
-export default (night: Interval, location: Loc, minAltitude: Deg) => (object: NgcObject): NgcInfo => {
+export default (date: Timestamp, night: Interval, location: Loc, minAltitude: Deg) => (object: NgcObject): NgcInfo => {
   const ra = hmsToRad(object.eqCoords.ra);
   const de = dmsToRad(object.eqCoords.de);
   const eqCoordsOnJ2000 = { ra, de };
   const eqCoordsOnDate = getEqCoordsOnDate(eqCoordsOnJ2000, night.start);
   const hda = getHalfDayArc(night.start, location, degToRad(minAltitude), eqCoordsOnDate);
   const hda0 = getHalfDayArc(night.start, location, 0, eqCoordsOnDate);
-  const transit = hda ? Math.round((hda.start + hda.end) / 2) : null;
+  const transit = getTransit(eqCoordsOnDate, location, date);
   const { alt: altitudeAtTransit } = transit ? eqToAz(transit, location, eqCoordsOnDate) : { alt: null };
   const intersection = getIntersection(hda, night);
   const max = transit ? getMax(intersection, transit) : null;
