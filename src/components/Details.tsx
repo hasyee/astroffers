@@ -130,22 +130,22 @@ export default connect(
                     <td>
                       <b>Rising</b>
                     </td>
-                    <td>{hda0 ? moment(hda0.start).format('HH:mm') : '-'}</td>
+                    <td>{Number.isFinite(hda0.start) ? moment(hda0.start).format('HH:mm') : '-'}</td>
                     <td>
                       <b>Setting</b>
                     </td>
-                    <td>{hda0 ? moment(hda0.end).format('HH:mm') : '-'}</td>
+                    <td>{Number.isFinite(hda0.end) ? moment(hda0.end).format('HH:mm') : '-'}</td>
                   </tr>
                   {minAltitude !== 0 && (
                     <tr>
                       <td>
                         <b>Rising above {minAltitude}°</b>
                       </td>
-                      <td>{hda ? moment(hda.start).format('HH:mm') : '-'}</td>
+                      <td>{Number.isFinite(hda.start) ? moment(hda.start).format('HH:mm') : '-'}</td>
                       <td>
                         <b>Setting below {minAltitude}°</b>
                       </td>
-                      <td>{hda ? moment(hda.end).format('HH:mm') : '-'}</td>
+                      <td>{Number.isFinite(hda.end) ? moment(hda.end).format('HH:mm') : '-'}</td>
                     </tr>
                   )}
                   <tr>
