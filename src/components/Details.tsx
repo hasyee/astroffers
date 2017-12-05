@@ -130,22 +130,22 @@ export default connect(
                     <td>
                       <b>Rising</b>
                     </td>
-                    <td>{moment(hda0.start).format('HH:mm')}</td>
+                    <td>{hda0 ? moment(hda0.start).format('HH:mm') : '-'}</td>
                     <td>
                       <b>Setting</b>
                     </td>
-                    <td>{moment(hda0.end).format('HH:mm')}</td>
+                    <td>{hda0 ? moment(hda0.end).format('HH:mm') : '-'}</td>
                   </tr>
                   {minAltitude !== 0 && (
                     <tr>
                       <td>
                         <b>Rising above {minAltitude}°</b>
                       </td>
-                      <td>{moment(hda.start).format('HH:mm')}</td>
+                      <td>{hda ? moment(hda.start).format('HH:mm') : '-'}</td>
                       <td>
                         <b>Setting below {minAltitude}°</b>
                       </td>
-                      <td>{moment(hda.end).format('HH:mm')}</td>
+                      <td>{hda ? moment(hda.end).format('HH:mm') : '-'}</td>
                     </tr>
                   )}
                   <tr>
@@ -162,21 +162,21 @@ export default connect(
                     <td>
                       <b>Best visibility</b>
                     </td>
-                    <td>{moment(max).format('HH:mm')}</td>
+                    <td>{max ? moment(max).format('HH:mm') : '-'}</td>
                     <td>
                       <b>Altitude</b>
                     </td>
-                    <td>{Math.round(radToDeg(altitudeAtMax))}°</td>
+                    <td>{altitudeAtMax ? Math.round(radToDeg(altitudeAtMax)) : '-'}°</td>
                   </tr>
                   <tr>
                     <td>
                       <b>Transit</b>
                     </td>
-                    <td>{moment(transit).format('HH:mm')}</td>
+                    <td>{transit ? moment(transit).format('HH:mm') : '-'}</td>
                     <td>
                       <b>Altitude</b>
                     </td>
-                    <td>{Math.round(radToDeg(altitudeAtTransit))}°</td>
+                    <td>{altitudeAtTransit ? Math.round(radToDeg(altitudeAtTransit)) : '-'}°</td>
                   </tr>
                 </tbody>
               </table>

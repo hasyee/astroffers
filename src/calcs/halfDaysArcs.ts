@@ -20,9 +20,7 @@ export default (time: Timestamp, { lat, lon }: Loc, minAltitude: Rad = 0, { ra, 
   const siderealTime = timeToLst(time, lon, false);
   const ha = acos((sin(minAltitude) - sin(lat) * sin(de)) / (cos(lat) * cos(de)));
   if (!Number.isFinite(ha)) {
-    return eqToAz(time, { lat, lon }, { ra, de }).alt > 0
-      ? { start: toMidnight(toPrevDay(time)), end: toMidnight(time) }
-      : {};
+    return eqToAz(time, { lat, lon }, { ra, de }).alt > minAltitude ? { start: -Infinity, end: Infinity } : null;
   }
   const k1 = ceil((siderealTime - ha - ra) / PI2);
   const k2 = ceil((siderealTime + ha - ra) / PI2);
