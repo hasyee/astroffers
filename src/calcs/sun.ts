@@ -42,6 +42,14 @@ const getDeclination = (y: number): Rad =>
   0.002697 * cos(3 * y) +
   0.00148 * sin(3 * y);
 
+const getAltitude = (de: Rad, { lat, lon }: Loc, eqTime: number, time: Timestamp): Rad => {
+  const date = new Date(time);
+  const timeOffset = eqTime - 4 * radToDeg(lon) + date.getTimezoneOffset();
+  const tst = date.getHours() * 60 + date.getMinutes() + timeOffset;
+  const ha = degToRad(tst / 4 - 180);
+  return asin(sin(lat) * sin(de) + cos(lat) * cos(de) * cos(ha));
+};
+
 export const getEclipticCoords = (time: Timestamp): Ecl => {
   const julianDayNumber = timeToEpochDayNumber(time);
   const meanLongitude = degToRad(280.46) + degToRad(0.985674) * julianDayNumber;
@@ -57,7 +65,9 @@ export const getHalfDayArcOfSun = (time: Timestamp, { lat, lon }: Loc, minAltitu
   const eqTime = getEqTime(y);
   const de = getDeclination(y);
   const ha = acos((sin(minAltitude) - sin(lat) * sin(de)) / (cos(lat) * cos(de)));
-  if (!Number.isFinite(ha)) return null;
+  if (!Number.isFinite(ha)) {
+    return getAltitude(de, { lat, lon }, eqTime, time) > 0 ? { start: -Infinity, end: Infinity } : null;
+  }
   const riseMins = 720 + 4 * radToDeg(-lon - ha) - eqTime;
   const setMins = 720 + 4 * radToDeg(-lon + ha) - eqTime;
   const start = moment.utc(time).startOf('day').add(riseMins, 'minutes').valueOf();
@@ -69,7 +79,8 @@ export const getNight = (time: Timestamp, loc: Loc, minAltitude: Rad = 0): Inter
   const noon = toNoon(time);
   const thatDayArc = getHalfDayArcOfSun(noon, loc, minAltitude);
   const nextDayArc = getHalfDayArcOfSun(toNextDay(noon), loc, minAltitude);
-  if (!thatDayArc || !nextDayArc) return null;
+  if (!thatDayArc || !nextDayArc) return { start: -Infinity, end: Infinity };
+  if (thatDayArc.end === Infinity && nextDayArc.start === -Infinity) return null;
   return {
     start: thatDayArc.end,
     end: nextDayArc.start

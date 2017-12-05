@@ -31,36 +31,54 @@ export default connect(({ result, isFiltering }) => ({
                     <i className="mdi mdi-brightness-1" style={{ color: '#01579B' }} /> Night
                   </td>
                   <td>Sunset</td>
-                  <td>{night ? moment(night.start).format('HH:mm') : '-'}</td>
+                  <td>{night && Number.isFinite(night.start) ? moment(night.start).format('HH:mm') : '-'}</td>
                   <td>Sunrise</td>
-                  <td>{night ? moment(night.end).format('HH:mm') : '-'}</td>
+                  <td>{night && Number.isFinite(night.end) ? moment(night.end).format('HH:mm') : '-'}</td>
                 </tr>
                 <tr>
                   <td>
                     <i className="mdi mdi-brightness-1" style={{ color: 'transparent' }} /> Astro night
                   </td>
                   <td>From</td>
-                  <td>{astroNight ? moment(astroNight.start).format('HH:mm') : '-'}</td>
+                  <td>
+                    {astroNight && Number.isFinite(astroNight.start) ? moment(astroNight.start).format('HH:mm') : '-'}
+                  </td>
                   <td>To</td>
-                  <td>{astroNight ? moment(astroNight.end).format('HH:mm') : '-'}</td>
+                  <td>
+                    {astroNight && Number.isFinite(astroNight.end) ? moment(astroNight.end).format('HH:mm') : '-'}
+                  </td>
                 </tr>
                 <tr>
                   <td>
                     <i className="mdi mdi-brightness-1" style={{ color: 'grey' }} /> Moon
                   </td>
                   <td>Moonset</td>
-                  <td>{moonNight ? moment(moonNight.start).format('HH:mm') : '-'}</td>
+                  <td>
+                    {moonNight && Number.isFinite(moonNight.start) ? moment(moonNight.start).format('HH:mm') : '-'}
+                  </td>
                   <td>Moonrise</td>
-                  <td>{moonNight ? moment(moonNight.end).format('HH:mm') : '-'}</td>
+                  <td>{moonNight && Number.isFinite(moonNight.end) ? moment(moonNight.end).format('HH:mm') : '-'}</td>
                 </tr>
                 <tr>
                   <td>
                     <i className="mdi mdi-brightness-1" style={{ color: 'black' }} /> Moonless night
                   </td>
                   <td>From</td>
-                  <td>{moonlessNight ? moment(moonlessNight.start).format('HH:mm') : '-'}</td>
+                  <td>
+                    {moonlessNight && Number.isFinite(moonlessNight.start) ? (
+                      moment(moonlessNight.start).format('HH:mm')
+                    ) : (
+                      '-'
+                    )}
+                  </td>
                   <td>To</td>
-                  <td>{moonlessNight ? moment(moonlessNight.end).format('HH:mm') : '-'}</td>
+                  <td>
+                    {moonlessNight && Number.isFinite(moonlessNight.end) ? (
+                      moment(moonlessNight.end).format('HH:mm')
+                    ) : (
+                      '-'
+                    )}
+                  </td>
                 </tr>
               </tbody>
             </table>

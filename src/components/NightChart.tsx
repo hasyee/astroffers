@@ -11,6 +11,7 @@ export default class extends React.PureComponent<{ nightInfo: NightInfo }> {
 const getNightBands = (interval: Interval, color: string) => {
   if (!interval) return [];
   const { start, end } = interval;
+  if (start === -Infinity && end === Infinity) return [ { from: 0, to: 24, thickness: 50, color } ];
   const startDate = new Date(start);
   const endDate = new Date(end);
   const overhanging = startDate.getDay() !== endDate.getDay();
