@@ -11,10 +11,10 @@ export default ({ date, latitude, longitude, twilight }: Filter): NightInfo => {
   const night = getNight(date, location);
   const astroNight = night ? getNight(date, location, degToRad(twilight)) : null;
   const moonNight = getMoonNight(date, night, location);
-  console.log('moonNight', moonNight);
+  //console.log('moonNight', moonNight);
   const moonPhase = getMoonPhase(toMidnight(date));
   const moonlessNight = getIntersection(astroNight, moonNight);
-  console.log('night', night);
+  //console.log('night', night);
   return {
     night,
     moonNight,
