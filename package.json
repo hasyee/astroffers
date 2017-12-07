@@ -33,6 +33,7 @@
   "homepage": "https://github.com/jayhasyee/astroffers",
   "dependencies": {
     "classnames": "^2.2.5",
+    "clone": "^2.1.1",
     "electron-google-analytics": "0.0.24",
     "electron-log": "^2.2.11",
     "electron-nucleus": "^0.2.0",

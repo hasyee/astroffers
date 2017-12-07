@@ -84,7 +84,7 @@ export default connect(({ result, isFiltering }) => ({
             </table>
           </div>
           <div className="dynamic layout center night">
-            <NightChart nightInfo={this.props.nightInfo} />
+            <NightChart />
           </div>
         </div>
       );

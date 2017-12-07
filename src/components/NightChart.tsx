@@ -1,14 +1,21 @@
 import React = require('react');
+const { connect } = require('react-redux');
 import ReactHighcharts = require('react-highcharts');
-import { NightInfo, Interval } from '../calcs/types';
+import { NightInfo, Interval, Timestamp } from '../calcs/types';
 
-export default class extends React.PureComponent<{ nightInfo: NightInfo }> {
-  render() {
-    return <ReactHighcharts config={getConfig(this.props.nightInfo)} />;
+export default connect(({ result }) => ({
+  nightInfo: result ? result.nightInfo : null,
+  date: result ? result.filter.date : null
+}))(
+  class extends React.PureComponent<{ date: Timestamp; nightInfo: NightInfo }> {
+    render() {
+      if (!this.props.nightInfo) return null;
+      return <ReactHighcharts config={getConfig(this.props.date, this.props.nightInfo)} />;
+    }
   }
-}
+);
 
-const getNightBands = (interval: Interval, color: string) => {
+const getNightBands = (date: Timestamp, interval: Interval, color: string) => {
   if (!interval) return [];
   const { start, end } = interval;
   if (start === -Infinity && end === Infinity) return [ { from: 0, to: 24, thickness: 50, color } ];
@@ -23,7 +30,7 @@ const getNightBands = (interval: Interval, color: string) => {
   return baseBands.map(b => ({ ...b, thickness: 50, color }));
 };
 
-const getConfig = ({ night, moonlessNight, astroNight }: NightInfo) => ({
+const getConfig = (date: Timestamp, { night, moonlessNight, astroNight }: NightInfo) => ({
   chart: {
     polar: true,
     height: 150,
@@ -59,9 +66,9 @@ const getConfig = ({ night, moonlessNight, astroNight }: NightInfo) => ({
     },
     plotBands: [
       { from: 0, to: 24, thickness: 50, color: 'lightblue' },
-      ...getNightBands(night, '#01579B'),
-      ...getNightBands(astroNight, 'grey'),
-      ...getNightBands(moonlessNight, 'black')
+      ...getNightBands(date, night, '#01579B'),
+      ...getNightBands(date, astroNight, 'grey'),
+      ...getNightBands(date, moonlessNight, 'black')
     ]
   },
 
