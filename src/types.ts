@@ -35,6 +35,7 @@ export type Filter = {
 };
 
 export type Result = {
+  filter: Filter;
   nightInfo: NightInfo;
   list: NgcInfo[];
 };
