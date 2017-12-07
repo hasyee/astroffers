@@ -75,11 +75,13 @@ export const getHalfDayArcOfSun = (time: Timestamp, { lat, lon }: Loc, minAltitu
   return { start, end };
 };
 
-export const getNight = (time: Timestamp, loc: Loc, minAltitude: Rad = 0): Interval => {
-  const noon = toNoon(time);
+export const getNight = (date: Timestamp, loc: Loc, minAltitude: Rad = 0, isNominalNight: boolean = false): Interval => {
+  const noon = toNoon(date);
+  const nextDayNoon = toNextDay(noon);
   const thatDayArc = getHalfDayArcOfSun(noon, loc, minAltitude);
-  const nextDayArc = getHalfDayArcOfSun(toNextDay(noon), loc, minAltitude);
-  if (!thatDayArc || !nextDayArc) return { start: -Infinity, end: Infinity };
+  const nextDayArc = getHalfDayArcOfSun(nextDayNoon, loc, minAltitude);
+  if (!thatDayArc || !nextDayArc)
+    return { start: isNominalNight ? noon : -Infinity, end: isNominalNight ? nextDayNoon : Infinity };
   if (thatDayArc.end === Infinity && nextDayArc.start === -Infinity) return null;
   return {
     start: thatDayArc.end,
