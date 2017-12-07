@@ -1,7 +1,11 @@
 import React = require('react');
 const { connect } = require('react-redux');
 import ReactHighcharts = require('react-highcharts');
-import { NightInfo, Interval, Timestamp } from '../calcs/types';
+import { NightInfo, Interval, Timestamp, Hour } from '../calcs/types';
+import { toNextDay, toMidnight, toNoon } from '../calcs/time';
+import { getIntersection } from '../calcs/interval';
+
+type Band = { from: Hour; to: Hour; thickness: number; color: string };
 
 export default connect(({ result }) => ({
   nightInfo: result ? result.nightInfo : null,
@@ -15,19 +19,30 @@ export default connect(({ result }) => ({
   }
 );
 
-const getNightBands = (date: Timestamp, interval: Interval, color: string) => {
+const getHalfDays = (date: Timestamp): [Interval, Interval] => [
+  { start: toNoon(date), end: toMidnight(date) },
+  { start: toMidnight(date), end: toNoon(toNextDay(date)) }
+];
+
+const getHoursOfTime = (time: Timestamp, toMidnight: boolean = false): Hour => {
+  const date = new Date(time);
+  const hours = date.getHours() + date.getMinutes() / 60;
+  return toMidnight && hours === 0 ? 24 : hours;
+};
+
+const toBand = (interval: Interval, color: string): Band =>
+  !interval
+    ? null
+    : {
+        from: getHoursOfTime(interval.start),
+        to: getHoursOfTime(interval.end, true),
+        thickness: 50,
+        color
+      };
+
+const getNightBands = (date: Timestamp, interval: Interval, color: string): Band[] => {
   if (!interval) return [];
-  const { start, end } = interval;
-  if (start === -Infinity && end === Infinity) return [ { from: 0, to: 24, thickness: 50, color } ];
-  const startDate = new Date(start);
-  const endDate = new Date(end);
-  const overhanging = startDate.getDay() !== endDate.getDay();
-  const startHours = startDate.getHours() + startDate.getMinutes() / 60;
-  const endHours = endDate.getHours() + endDate.getMinutes() / 60;
-  const baseBands = overhanging
-    ? [ { from: startHours, to: 24 }, { from: 0, to: endHours } ]
-    : [ { from: startHours, to: endHours } ];
-  return baseBands.map(b => ({ ...b, thickness: 50, color }));
+  return getHalfDays(date).map(halfDay => toBand(getIntersection(halfDay, interval), color)).filter(_ => _);
 };
 
 const getConfig = (date: Timestamp, { night, moonlessNight, astroNight }: NightInfo) => ({

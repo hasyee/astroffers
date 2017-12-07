@@ -1,20 +1,19 @@
 import SunCalc = require('suncalc');
 import { Timestamp, Loc, Interval } from './types';
 import { radToDeg } from './units';
-import { toNoon, toNextDay } from './time';
 import { getIntersection, isInInterval } from './interval';
 
-const getLowerHalfDayArcsOfMoon = (date: Timestamp, { lat, lon }: Loc): Interval[] => {
+const getLowerHalfDayArcsOfMoon = ({ start, end }: Interval, { lat, lon }: Loc): Interval[] => {
   const latDeg = radToDeg(lat);
   const lonDeg = radToDeg(lon);
   const { rise: riseDate1, set: setDate1, alwaysUp: alwaysUp1, alwaysDown: alwaysDown1 } = SunCalc.getMoonTimes(
-    toNoon(date),
+    start,
     latDeg,
     lonDeg,
     true
   );
   const { rise: riseDate2, set: setDate2, alwaysUp: alwaysUp2, alwaysDown: alwaysDown2 } = SunCalc.getMoonTimes(
-    toNoon(toNextDay(date)),
+    end,
     latDeg,
     lonDeg,
     true
@@ -41,9 +40,9 @@ const getLowerHalfDayArcsOfMoon = (date: Timestamp, { lat, lon }: Loc): Interval
   }, []);
 };
 
-export const getMoonNight = (date: Timestamp, night: Interval, loc: Loc): Interval => {
-  const lowerHalfDayArcsOfMoon = getLowerHalfDayArcsOfMoon(date, loc);
-  return lowerHalfDayArcsOfMoon.find(halfDayArc => !!getIntersection(night, halfDayArc)) || null;
+export const getMoonNight = (interval: Interval, loc: Loc): Interval => {
+  const lowerHalfDayArcsOfMoon = getLowerHalfDayArcsOfMoon(interval, loc);
+  return lowerHalfDayArcsOfMoon.find(halfDayArc => !!getIntersection(interval, halfDayArc)) || null;
 };
 
 export const getMoonPhase = (midnight: Timestamp): number => {
