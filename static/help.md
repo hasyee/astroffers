@@ -67,14 +67,14 @@ The Summary panel is on the top of the window. It shows the
 - some data about the night
 - and a pie-chart about the brightness of the night
 
-### Night table
+### THe night table
 
 In this table you can see some information about the night.
 
-1) **Sun:** The first row shows the sunset and sunrise. In this row the sunset denotes the time, when the Sun dives below the horizont. The sunrise denotes the time, when the Sun rises above the horizont.
-2) **Astro night:** The second row is consistent with the `Maximum altitude of Sun` value on the Filter panel. The astromical night starts when the Sun dives below this value, and ends when the Sun rises above this value.
-3) **Moon:** The third row shows the moonset and moonrise. The moonset denotes the time, when the Moon dives below the horizont, and the moonrise denotes the time, when the Moon rises above the horizont.
-4) **Moonless night:** In the fourth row the moonless night starts when the Sun is below the value of `Maximum altitude of Sun` and the Moon is below the horizont. The moonless night ands when the Sun is above the value of `Maximum altitude of Sun` or the Moon is above the horizont.
+- **Sun:** The first row shows the sunset and sunrise. In this row the sunset denotes the time, when the Sun dives below the horizont. The sunrise denotes the time, when the Sun rises above the horizont.
+- **Astro night:** The second row is consistent with the `Maximum altitude of Sun` value on the Filter panel. The astromical night starts when the Sun dives below this value, and ends when the Sun rises above this value.
+- **Moon:** The third row shows the moonset and moonrise. The moonset denotes the time, when the Moon dives below the horizont, and the moonrise denotes the time, when the Moon rises above the horizont.
+- **Moonless night:** In the fourth row the moonless night starts when the Sun is below the value of `Maximum altitude of Sun` and the Moon is below the horizont. The moonless night ands when the Sun is above the value of `Maximum altitude of Sun` or the Moon is above the horizont.
 
 ### The pie-chart of the night
 
