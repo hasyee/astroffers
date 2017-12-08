@@ -1,6 +1,7 @@
 import Store, { thunk } from 'repatch';
 import { State } from './types';
 import * as api from './api';
+import * as location from './location';
 import * as analytics from './analytics';
 import defaultState from './defaultState';
 
@@ -12,7 +13,7 @@ const initialState: State = {
   filter: { ...defaultState.filter, ...storedFilter, date: Date.now() }
 };
 
-const store = new Store<State>(initialState).addMiddleware(thunk.withExtraArgument({ api, analytics }));
+const store = new Store<State>(initialState).addMiddleware(thunk.withExtraArgument({ api, location, analytics }));
 
 export default store;
 
