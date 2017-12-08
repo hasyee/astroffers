@@ -81,7 +81,7 @@ In this table you can see some information about the night.
 This chart shows the brightness of the night. It displayes a whole day, that starts at noon (`12h`) of the selected date and ends at the next day noon (`12h`).
 
 - The light blue denotes the daytime.
-- The dark blue denotes the astronomical twilight before the astronomical night.
+- The dark blue denotes the astronomical twilight.
 - The grey denotes the astronomical night when the Moon is up.
 - The black denotes the moonless astronomical night.
 
