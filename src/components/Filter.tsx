@@ -15,7 +15,12 @@ import { State, Filter as IFilter } from '../types';
 import { changeFilter, resetFilter, filterObjects, toggleTypeFilter, changeAllTypeFilter, track } from '../actions';
 const typeMap = require('../../data/types.json');
 
-const resolveValue = (value: number) => (Number.isFinite(value) ? value : '');
+type Range = { min: number; max: number };
+
+const resolveValue = (value: number) => (Number.isFinite(value) ? value.toString() : '');
+const checkRange = (value: number, range?: Range) =>
+  !Number.isFinite(value) || !range || (value >= range.min && value <= range.max);
+const getErrorMessage = (value: number): string => !Number.isFinite(value) && 'This field is required';
 
 export default connect(({ filter }: State) => ({ filter }), {
   changeFilter,
@@ -41,8 +46,9 @@ export default connect(({ filter }: State) => ({ filter }), {
 
     handleDateChange = (_, dateObject) => this.props.changeFilter('date', dateObject.getTime());
     handleSetToday = () => this.props.changeFilter('date', Date.now());
-    handleChange = (prop: string) => evt => {
+    handleChange = (prop: string, range?: Range) => evt => {
       const value = parseFloat(evt.target.value);
+      if (!checkRange(value, range)) return;
       this.props.changeFilter(prop, Number.isFinite(value) ? value : null);
     };
     handleMoonlessChange = (_, checked) => {
@@ -89,6 +95,19 @@ export default connect(({ filter }: State) => ({ filter }), {
 
     componentDidMount() {
       this.props.filterObjects();
+    }
+
+    getFilterButtonDisabled() {
+      const {
+        filter: { latitude, longitude, twilight, altitude, brightnessFilter, magnitude, surfaceBrightness }
+      } = this.props;
+      return !(Number.isFinite(latitude) &&
+      Number.isFinite(longitude) &&
+      Number.isFinite(twilight) &&
+      Number.isFinite(altitude) &&
+      brightnessFilter === 'magnitude'
+        ? Number.isFinite(magnitude)
+        : Number.isFinite(surfaceBrightness));
     }
 
     renderTypeFilterDialog() {
@@ -156,16 +175,22 @@ export default connect(({ filter }: State) => ({ filter }), {
               floatingLabelFixed
               fullWidth
               value={resolveValue(latitude)}
-              onChange={this.handleChange('latitude')}
+              onChange={this.handleChange('latitude', { min: -90, max: 90 })}
+              errorText={getErrorMessage(latitude)}
               type="number"
+              min={-90}
+              max={90}
             />
             <TextField
               floatingLabelText="Longitude ( ° )"
               floatingLabelFixed
               fullWidth
               value={resolveValue(longitude)}
-              onChange={this.handleChange('longitude')}
+              onChange={this.handleChange('longitude', { min: -180, max: 180 })}
+              errorText={getErrorMessage(longitude)}
               type="number"
+              min={-180}
+              max={180}
             />
             <FlatButton label="Select location" style={{ cssFloat: 'right' }} onClick={this.handleLocationDialogOpen} />
             <SelectLocationDialog
@@ -180,16 +205,22 @@ export default connect(({ filter }: State) => ({ filter }), {
               floatingLabelFixed
               fullWidth
               value={resolveValue(twilight)}
-              onChange={this.handleChange('twilight')}
+              onChange={this.handleChange('twilight', { min: -90, max: 90 })}
+              errorText={getErrorMessage(twilight)}
               type="number"
+              min={-90}
+              max={90}
             />
             <TextField
               floatingLabelText="Minimum altitude of objects ( ° )"
               floatingLabelFixed
               fullWidth
               value={resolveValue(altitude)}
-              onChange={this.handleChange('altitude')}
+              onChange={this.handleChange('altitude', { min: -90, max: 90 })}
+              errorText={getErrorMessage(altitude)}
               type="number"
+              min={-90}
+              max={90}
             />
             <Toggle
               style={{ marginTop: '10px' }}
@@ -216,6 +247,7 @@ export default connect(({ filter }: State) => ({ filter }), {
               fullWidth
               value={resolveValue(brightnessFilter === 'magnitude' ? magnitude : surfaceBrightness)}
               onChange={this.handleChange(brightnessFilter)}
+              errorText={getErrorMessage(brightnessFilter === 'magnitude' ? magnitude : surfaceBrightness)}
               type="number"
             />
             <FlatButton
@@ -227,7 +259,13 @@ export default connect(({ filter }: State) => ({ filter }), {
           </div>
           <div className="dynamic button-container">
             <FlatButton label="Reset" primary style={{ float: 'left' }} onClick={this.handleResetFilter} />
-            <RaisedButton label="Filter" primary style={{ float: 'right' }} onClick={this.handleSubmitFilter} />
+            <RaisedButton
+              label="Filter"
+              primary
+              style={{ float: 'right' }}
+              disabled={this.getFilterButtonDisabled()}
+              onClick={this.handleSubmitFilter}
+            />
           </div>
         </div>
       );
