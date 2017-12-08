@@ -101,13 +101,13 @@ export default connect(({ filter }: State) => ({ filter }), {
       const {
         filter: { latitude, longitude, twilight, altitude, brightnessFilter, magnitude, surfaceBrightness }
       } = this.props;
-      return !(Number.isFinite(latitude) &&
-      Number.isFinite(longitude) &&
-      Number.isFinite(twilight) &&
-      Number.isFinite(altitude) &&
-      brightnessFilter === 'magnitude'
-        ? Number.isFinite(magnitude)
-        : Number.isFinite(surfaceBrightness));
+      return !(
+        Number.isFinite(latitude) &&
+        Number.isFinite(longitude) &&
+        Number.isFinite(twilight) &&
+        Number.isFinite(altitude) &&
+        (brightnessFilter === 'magnitude' ? Number.isFinite(magnitude) : Number.isFinite(surfaceBrightness))
+      );
     }
 
     renderTypeFilterDialog() {
