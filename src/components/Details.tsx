@@ -52,9 +52,8 @@ export default connect(
   }> {
     componentDidUpdate(prevProps) {
       if (prevProps.isOpen === false && this.props.isOpen === true) {
-        this.props.track('Details', 'open');
+        this.props.track('View', 'open-details');
       } else if (prevProps.isOpen === true && this.props.isOpen === false) {
-        this.props.track('Details', 'close');
       }
     }
 

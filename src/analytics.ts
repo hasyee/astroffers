@@ -20,7 +20,7 @@ const send = (hitType: string, params?: any) => {
       sr: `${screen.size.width}x${screen.size.height}`,
       ...params
     })}`
-  );
+  ).catch(error => console.error('Failed to reach analytics'));
 };
 
 export const event = (category: string, action: string, label?: string, value?: string | number) =>
