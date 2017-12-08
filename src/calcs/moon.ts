@@ -41,6 +41,7 @@ const getLowerHalfDayArcsOfMoon = ({ start, end }: Interval, { lat, lon }: Loc):
 };
 
 export const getMoonNight = (interval: Interval, loc: Loc): Interval => {
+  if (!interval) return null;
   const lowerHalfDayArcsOfMoon = getLowerHalfDayArcsOfMoon(interval, loc);
   return lowerHalfDayArcsOfMoon.find(halfDayArc => !!getIntersection(interval, halfDayArc)) || null;
 };

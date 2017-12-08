@@ -11,7 +11,7 @@ export default ({ date, latitude, longitude, twilight }: Filter): NightInfo => {
   const location = getLocation(latitude, longitude);
   const night = getNight(date, location);
   const astroNight = night ? getNight(date, location, degToRad(twilight), true) : null;
-  const moonNight = getMoonNight({ start: toNoon(date), end: toNoon(toNextDay(date)) }, location);
+  const moonNight = getMoonNight(astroNight, location);
   const moonPhase = getMoonPhase(toMidnight(date));
   const moonlessNight = getIntersection(astroNight, moonNight);
   return {
