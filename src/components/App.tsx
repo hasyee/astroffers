@@ -24,19 +24,17 @@ export default connect(null, { track, trackScreen })(
 
     handleAboutOpen = () => {
       this.setState({ isAboutOpen: true });
-      this.props.track('About', 'open');
+      this.props.track('View', 'open-about');
     };
     handleAboutClose = () => {
       this.setState({ isAboutOpen: false });
-      this.props.track('About', 'close');
     };
     handleHelpOpen = () => {
       this.setState({ isHelpOpen: true });
-      this.props.track('Help', 'open');
+      this.props.track('View', 'open-help');
     };
     handleHelpClose = () => {
       this.setState({ isHelpOpen: false });
-      this.props.track('Help', 'close');
     };
 
     componentDidMount() {

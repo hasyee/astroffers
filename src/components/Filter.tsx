@@ -51,46 +51,38 @@ export default connect(({ filter }: State) => ({ filter }), {
       if (!checkRange(value, range)) return;
       this.props.changeFilter(prop, Number.isFinite(value) ? value : null);
     };
-    handleMoonlessChange = (_, checked) => {
-      this.props.changeFilter('moonless', checked);
-      this.props.track('Moonless', checked ? 'on' : 'off');
-    };
+    handleMoonlessChange = (_, checked) => this.props.changeFilter('moonless', checked);
     handleBrightnessFilterChange = (_, __, value) => this.props.changeFilter('brightnessFilter', value);
     handleLocationDialogOpen = () => {
       this.setState({ isOpenLocationDialog: true });
-      this.props.track('Location Dialog', 'open');
+      this.props.track('View', 'open-location-dialog');
     };
-    handleLocationDialogCancel = () => {
-      this.setState({ isOpenLocationDialog: false });
-      this.props.track('Location Dialog', 'cancel');
-    };
+    handleLocationDialogCancel = () => this.setState({ isOpenLocationDialog: false });
     handleLocationDialogSubmit = ({ latitude, longitude }) => {
       this.setState({ isOpenLocationDialog: false });
       this.props.changeFilter('latitude', latitude);
       this.props.changeFilter('longitude', longitude);
-      this.props.track('Location Dialog', 'submit', { evLabel: 'coord', evValue: latitude + '_' + longitude });
     };
     handleTypeFilterDialogOpen = () => {
       this.setState({ isOpenTypeFilterDialog: true });
-      this.props.track('Type Filter Dialog', 'open');
+      this.props.track('View', 'open-type-filter-dialog');
     };
-    handleTypeFilterDialogClose = () => {
-      this.setState({ isOpenTypeFilterDialog: false });
-      this.props.track('Type Filter Dialog', 'close');
-    };
+    handleTypeFilterDialogClose = () => this.setState({ isOpenTypeFilterDialog: false });
+
     handleResetFilter = () => {
       this.props.resetFilter();
-      this.props.track('Filter', 'reset');
+      this.props.track('Filter', 'reset-filter');
     };
     handleSubmitFilter = () => {
       this.props.filterObjects();
-      this.props.track('Filter', 'submit', {
-        evLabel: this.props.filter.brightnessFilter,
-        evValue:
-          this.props.filter.brightnessFilter === 'magnitude'
-            ? this.props.filter.magnitude
-            : this.props.filter.surfaceBrightness
-      });
+      this.props.track(
+        'Filter',
+        'submit-filter',
+        this.props.filter.brightnessFilter,
+        this.props.filter.brightnessFilter === 'magnitude'
+          ? this.props.filter.magnitude
+          : this.props.filter.surfaceBrightness
+      );
     };
 
     componentDidMount() {

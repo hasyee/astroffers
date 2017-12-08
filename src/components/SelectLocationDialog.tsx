@@ -33,7 +33,7 @@ export default connect(null, { fetchLocation, track })(
     handleFetchLocation = async () => {
       const { latitude, longitude } = await this.props.fetchLocation();
       if (Number.isFinite(latitude) && Number.isFinite(longitude)) this.setState({ latitude, longitude });
-      this.props.track('Network Location', 'fetch', { evLabel: 'coord', evValue: latitude + '_' + longitude });
+      this.props.track('Location', 'location-fetch');
     };
 
     handleChange = state => this.setState(state);
