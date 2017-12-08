@@ -2,29 +2,8 @@ import { State, TypeFilter } from './types';
 const typeMap = require('../data/types.json');
 import { machineIdSync } from 'node-machine-id';
 
-const {
-  name,
-  version,
-  description,
-  author: { name: author },
-  license,
-  bugs: { url: feedback },
-  homepage
-} = require('../package.json');
-
 export default {
-  appInfo: {
-    clientId: machineIdSync(),
-    platform: process.platform.replace('darwin', 'mac').replace('win32', 'win'),
-    language: navigator.language,
-    name,
-    version,
-    description,
-    author,
-    license,
-    feedback,
-    homepage
-  },
+  packageJson: require('../package.json'),
   filter: {
     date: Date.now(),
     latitude: 47,

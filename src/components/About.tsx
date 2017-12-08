@@ -1,18 +1,29 @@
 import React = require('react');
-import { connect } from 'react-redux';
+const { connect } = require('react-redux');
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { shell } from 'electron';
-import { AppInfo } from '../types';
 
-export default connect(({ appInfo }: any) => ({ appInfo }))(
+export default connect(
+  ({ packageJson: { version, author: { name: author }, license, bugs: { url: feedback }, homepage } }) => ({
+    version,
+    author,
+    license,
+    feedback,
+    homepage
+  })
+)(
   class extends React.PureComponent<{
     isOpen: boolean;
     onClose: Function;
-    appInfo: AppInfo;
+    version: string;
+    author: string;
+    license: string;
+    feedback: string;
+    homepage: string;
   }> {
     render() {
-      const { isOpen, onClose, appInfo: { version, description, author, license, feedback, homepage } } = this.props;
+      const { isOpen, onClose, version, author, license, feedback, homepage } = this.props;
       const actions = [ <FlatButton label="Close" primary={true} onClick={onClose} /> ];
       return (
         <Dialog

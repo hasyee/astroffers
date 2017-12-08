@@ -1,31 +1,34 @@
 import { stringify } from 'qs';
-import { AppInfo } from './types';
-import { App } from 'electron';
+import { remote } from 'electron';
+import { machineIdSync } from 'node-machine-id';
 
-const trackId = 'UA-110578592-1';
+const TRACK_ID = 'UA-110578592-1';
 
-const send = ({ name, version, clientId, platform, language }: AppInfo, hitType: string, params?: any) =>
-  fetch(
+const send = (hitType: string, params?: any) => {
+  const screen = remote.screen.getPrimaryDisplay();
+  return fetch(
     `https://www.google-analytics.com/collect?${stringify({
       v: 1,
       t: hitType,
-      tid: trackId,
-      cid: clientId,
-      an: name,
-      av: version,
-      ul: language,
+      tid: TRACK_ID,
+      cid: machineIdSync(),
+      an: remote.app.getName(),
+      av: remote.app.getVersion(),
+      ul: navigator.language,
       ua: navigator.userAgent.replace(/astroffers\/\d+\.\d+\.\d+ /, '').replace(/Electron\/\d+\.\d+\.\d+ /, ''),
-      aiid: `org.${platform}.astroffers`,
+      vp: `${window.innerWidth}x${window.innerHeight}`,
+      sr: `${screen.size.width}x${screen.size.height}`,
       ...params
     })}`
   );
+};
 
-export const event = (appInfo: AppInfo, category: string, action: string, label?: string, value?: string | number) =>
-  send(appInfo, 'event', {
+export const event = (category: string, action: string, label?: string, value?: string | number) =>
+  send('event', {
     ec: category,
     ea: action,
     el: label,
     ev: value
   });
 
-export const screen = (appInfo: AppInfo, screenName: string) => send(appInfo, 'screenview', { cd: screenName });
+export const screen = (screenName: string) => send('screenview', { cd: screenName });

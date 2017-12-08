@@ -30,11 +30,7 @@ export const changeAllTypeFilter = (value: boolean) => state => ({
   }
 });
 
-export const fetchLocation = () => state => async (dispatch, getState, { api }) => {
-  const { latitude, longitude } = await api.fetchLocation();
-  dispatch(changeFilter('latitude', latitude));
-  dispatch(changeFilter('longitude', longitude));
-};
+export const fetchLocation = () => state => async (dispatch, getState, { location }) => location.fetchLocation();
 
 export const filterObjects = () => state => async (dispatch, getState, { api }) => {
   dispatch(state => ({ ...state, isFiltering: true }));
@@ -46,15 +42,11 @@ export const openDetails = (openedDetails: number) => state => ({ ...state, open
 
 export const closeDetails = () => state => ({ ...state, openedDetails: null });
 
-export const trackScreen = (screen: string) => () => async (dispatch, getState, { analytics }) => {
-  const appInfo = getState().appInfo;
-  analytics.screen(appInfo, screen);
-};
+export const trackScreen = (screen: string) => () => async (dispatch, getState, { analytics }) =>
+  analytics.screen(screen);
 
 export const track = (category: string, action: string, params: any = {}) => () => async (
   dispatch,
   getState,
   { analytics }
-) => {
-  analytics.event(getState().appInfo, category, action, params.evLabel, params.evValue);
-};
+) => analytics.event(category, action, params.evLabel, params.evValue);

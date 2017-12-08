@@ -3,10 +3,9 @@ const { connect } = require('react-redux');
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import Map from './Map';
-import { fetchLocation } from '../api';
-import { track } from '../actions';
+import { track, fetchLocation } from '../actions';
 
-export default connect(null, { track })(
+export default connect(null, { fetchLocation, track })(
   class extends React.PureComponent<
     {
       isOpen: boolean;
@@ -14,6 +13,7 @@ export default connect(null, { track })(
       longitude: number;
       onSubmit: Function;
       onCancel: Function;
+      fetchLocation: Function;
       track: typeof track;
     },
     { latitude: number; longitude: number }
@@ -31,7 +31,7 @@ export default connect(null, { track })(
     }
 
     handleFetchLocation = async () => {
-      const { latitude, longitude } = await fetchLocation();
+      const { latitude, longitude } = await this.props.fetchLocation();
       if (Number.isFinite(latitude) && Number.isFinite(longitude)) this.setState({ latitude, longitude });
       this.props.track('Network Location', 'fetch', { evLabel: 'coord', evValue: latitude + '_' + longitude });
     };
