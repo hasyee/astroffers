@@ -2,7 +2,7 @@ import { stringify } from 'qs';
 import { remote } from 'electron';
 import { machineIdSync } from 'node-machine-id';
 
-const TRACK_ID = 'UA-110578592-1';
+const TRACK_ID = 'UA-110942439-1';
 
 const send = (hitType: string, params?: any) => {
   const screen = remote.screen.getPrimaryDisplay();
