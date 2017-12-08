@@ -232,9 +232,7 @@ export default connect(({ filter }: State) => ({ filter }), {
               <MenuItem value="surfaceBrightness" primaryText="Filter by surface brightness" />
             </DropDownMenu>
             <TextField
-              floatingLabelText={`Maximum ${brightnessFilter === 'magnitude'
-                ? 'magnitude'
-                : 'surface brightness'} ( ° )`}
+              floatingLabelText={`Maximum ${brightnessFilter === 'magnitude' ? 'magnitude' : 'surface brightness'}`}
               floatingLabelFixed
               fullWidth
               value={resolveValue(brightnessFilter === 'magnitude' ? magnitude : surfaceBrightness)}
