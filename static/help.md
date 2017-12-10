@@ -87,6 +87,6 @@ This chart shows the brightness of the night. It displayes a whole day, that sta
 
 ## The result list
 
-
+You can find the result list in the right side of the application. The result list corresponds with the filter settings after you pressed the `FILTER` button.
 
 ## The detailed view
