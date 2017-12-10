@@ -37,7 +37,6 @@
     "electron-google-analytics": "0.0.24",
     "electron-log": "2.2.11",
     "electron-nucleus": "0.2.0",
-    "electron-updater": "2.17.2",
     "font-roboto-local": "1.0.1",
     "highcharts": "6.0.3",
     "left-pad": "1.2.0",
@@ -64,6 +63,7 @@
     "@types/react-redux": "5.0.14",
     "electron": "1.8.1",
     "electron-builder": "19.48.3",
+    "electron-updater": "2.17.3",
     "rimraf": "2.6.2",
     "typescript": "2.6.2"
   },
