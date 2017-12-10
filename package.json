@@ -96,7 +96,8 @@
       "category": "Astronomy",
       "target": [
         "AppImage"
-      ]
+      ],
+      "systemIntegration": "doNotAsk"
     }
   }
 }
