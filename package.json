@@ -96,10 +96,10 @@
       "category": "Astronomy",
       "target": [
         "AppImage"
-      ],
-      "appImage": {
-        "systemIntegration": "doNotAsk"
-      }
+      ]
+    },
+    "appImage": {
+      "systemIntegration": "doNotAsk"
     }
   }
 }
