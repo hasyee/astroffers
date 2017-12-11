@@ -29,7 +29,7 @@ const notifyAboutUpdate = version => {
 };
 
 autoUpdater.on('download-progress', progress => {
-  log.info(progress.percent, progress);
+  log.info('Download progress: ', Math.round(progress.percent));
 });
 
 autoUpdater.on('update-downloaded', ({ version }) => {
