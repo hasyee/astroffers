@@ -28,6 +28,10 @@ const notifyAboutUpdate = version => {
   );
 };
 
+autoUpdater.on('download-progress', progress => {
+  log.info(progress.percent, progress);
+});
+
 autoUpdater.on('update-downloaded', ({ version }) => {
   clearInterval(checkUpdateTimer);
   notifyAboutUpdate(version);
