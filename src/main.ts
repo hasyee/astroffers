@@ -16,6 +16,7 @@ let checkUpdateTimer;
 
 const notifyAboutUpdate = version => {
   dialog.showMessageBox(
+    win,
     {
       buttons: [ 'Relaunch' ],
       defaultId: 0,
