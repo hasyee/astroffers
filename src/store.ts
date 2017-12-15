@@ -2,7 +2,7 @@ import Store, { thunk } from 'repatch';
 import { State } from './types';
 import * as api from './api';
 import * as location from './location';
-import * as analytics from './analytics';
+import analytics from './analytics';
 import defaultState from './defaultState';
 
 const storedFilterStr = window.localStorage.getItem('filter');

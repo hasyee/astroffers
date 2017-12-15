@@ -42,11 +42,8 @@ export const openDetails = (openedDetails: number) => state => ({ ...state, open
 
 export const closeDetails = () => state => ({ ...state, openedDetails: null });
 
-export const trackScreen = (screen: string) => () => async (dispatch, getState, { analytics }) =>
-  analytics.screen(screen);
+export const trackScreen = (cd: string) => () => (dispatch, getState, { analytics }) =>
+  analytics.send('screenview', { cd });
 
-export const track = (category: string, action: string, label?: string, value?: number) => () => async (
-  dispatch,
-  getState,
-  { analytics }
-) => analytics.event(category, action, label, value);
+export const track = (ec: string, ea: string, el?: string, ev?: number) => () => (dispatch, getState, { analytics }) =>
+  analytics.send('event', { ec, ea, el, ev });
