@@ -125,7 +125,8 @@
     ],
     "magnitude": 15.9,
     "surfaceBrightness": 13.8,
-    "measuredSurfaceBrightness": 13.9
+    "measuredSurfaceBrightness": 13.9,
+    "name": "Brocchi's Cluster"
   },
   {
     "ngc": 5,
@@ -1222,7 +1223,8 @@
     ],
     "magnitude": 12.3,
     "surfaceBrightness": 11,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Bow Tie Nebula"
   },
   {
     "ngc": 41,
@@ -3215,7 +3217,8 @@
     ],
     "magnitude": 4,
     "surfaceBrightness": 12.2,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "47 Tucanae"
   },
   {
     "ngc": 105,
@@ -6370,7 +6373,8 @@
     ],
     "magnitude": 8.2,
     "surfaceBrightness": 13.9,
-    "measuredSurfaceBrightness": 14.1
+    "measuredSurfaceBrightness": 14.1,
+    "messier": "110"
   },
   {
     "ngc": 206,
@@ -6871,7 +6875,8 @@
     ],
     "magnitude": 8.3,
     "surfaceBrightness": 12.4,
-    "measuredSurfaceBrightness": 12.6
+    "measuredSurfaceBrightness": 12.6,
+    "messier": "32"
   },
   {
     "ngc": 222,
@@ -6967,7 +6972,9 @@
     ],
     "magnitude": 3.6,
     "surfaceBrightness": 13.5,
-    "measuredSurfaceBrightness": 13.6
+    "measuredSurfaceBrightness": 13.6,
+    "name": "Andromeda Galaxy",
+    "messier": "31"
   },
   {
     "ngc": 225,
@@ -6999,7 +7006,8 @@
     ],
     "magnitude": 7,
     "surfaceBrightness": 12.1,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Sailboat Cluster"
   },
   {
     "ngc": 226,
@@ -7649,7 +7657,8 @@
     ],
     "magnitude": 10.9,
     "surfaceBrightness": 13.8,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Skull Nebula"
   },
   {
     "ngc": 247,
@@ -7851,7 +7860,8 @@
     ],
     "magnitude": 7.8,
     "surfaceBrightness": 13.2,
-    "measuredSurfaceBrightness": 13.3
+    "measuredSurfaceBrightness": 13.3,
+    "name": "Sculptor Galaxy"
   },
   {
     "ngc": 254,
@@ -8681,7 +8691,8 @@
     ],
     "magnitude": null,
     "surfaceBrightness": null,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Pacman Nebula"
   },
   {
     "ngc": 282,
@@ -9022,7 +9033,8 @@
     ],
     "magnitude": 2.2,
     "surfaceBrightness": 14.4,
-    "measuredSurfaceBrightness": 14.1
+    "measuredSurfaceBrightness": 14.1,
+    "name": "Small Magellanic Cloud"
   },
   {
     "ngc": 293,
@@ -11696,7 +11708,8 @@
     ],
     "magnitude": 13,
     "surfaceBrightness": 12.9,
-    "measuredSurfaceBrightness": 12.9
+    "measuredSurfaceBrightness": 12.9,
+    "name": "Pisces Cloud"
   },
   {
     "ngc": 380,
@@ -11728,7 +11741,8 @@
     ],
     "magnitude": 12.7,
     "surfaceBrightness": 13,
-    "measuredSurfaceBrightness": 13.2
+    "measuredSurfaceBrightness": 13.2,
+    "name": "Pisces Cloud"
   },
   {
     "ngc": 381,
@@ -11792,7 +11806,8 @@
     ],
     "magnitude": 13.3,
     "surfaceBrightness": 12.3,
-    "measuredSurfaceBrightness": 12.4
+    "measuredSurfaceBrightness": 12.4,
+    "name": "Pisces Cloud"
   },
   {
     "ngc": 383,
@@ -11824,7 +11839,8 @@
     ],
     "magnitude": 12.5,
     "surfaceBrightness": 13.1,
-    "measuredSurfaceBrightness": 13.2
+    "measuredSurfaceBrightness": 13.2,
+    "name": "Pisces Cloud"
   },
   {
     "ngc": 384,
@@ -11856,7 +11872,8 @@
     ],
     "magnitude": 13.2,
     "surfaceBrightness": 12.9,
-    "measuredSurfaceBrightness": 13.1
+    "measuredSurfaceBrightness": 13.1,
+    "name": "Pisces Cloud"
   },
   {
     "ngc": 385,
@@ -11888,7 +11905,8 @@
     ],
     "magnitude": 13.2,
     "surfaceBrightness": 13,
-    "measuredSurfaceBrightness": 13.1
+    "measuredSurfaceBrightness": 13.1,
+    "name": "Pisces Cloud"
   },
   {
     "ngc": 386,
@@ -12441,7 +12459,8 @@
     ],
     "magnitude": 10.2,
     "surfaceBrightness": 12.7,
-    "measuredSurfaceBrightness": 12.8
+    "measuredSurfaceBrightness": 12.8,
+    "name": "Mirach's Ghost"
   },
   {
     "ngc": 405,
@@ -14060,7 +14079,8 @@
     ],
     "magnitude": 6.4,
     "surfaceBrightness": 11.7,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Owl Cluster"
   },
   {
     "ngc": 458,
@@ -17929,7 +17949,8 @@
     ],
     "magnitude": 7.4,
     "surfaceBrightness": 11,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "103"
   },
   {
     "ngc": 582,
@@ -18440,7 +18461,9 @@
     ],
     "magnitude": 5.8,
     "surfaceBrightness": 14.2,
-    "measuredSurfaceBrightness": 14.4
+    "measuredSurfaceBrightness": 14.4,
+    "name": "Triangulum Galaxy",
+    "messier": "33"
   },
   {
     "ngc": 599,
@@ -19334,7 +19357,8 @@
     ],
     "magnitude": 9.5,
     "surfaceBrightness": 14.2,
-    "measuredSurfaceBrightness": 14.3
+    "measuredSurfaceBrightness": 14.3,
+    "messier": "74"
   },
   {
     "ngc": 629,
@@ -20016,7 +20040,9 @@
     ],
     "magnitude": 10.1,
     "surfaceBrightness": 11.6,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Little Dumbbell Nebula",
+    "messier": "76"
   },
   {
     "ngc": 651,
@@ -20048,7 +20074,9 @@
     ],
     "magnitude": 10.1,
     "surfaceBrightness": 11.6,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Little Dumbbell Nebula",
+    "messier": "76"
   },
   {
     "ngc": 652,
@@ -26903,7 +26931,8 @@
     ],
     "magnitude": 5.3,
     "surfaceBrightness": 12.3,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Perseus Double Cluster"
   },
   {
     "ngc": 870,
@@ -27383,7 +27412,8 @@
     ],
     "magnitude": 6.1,
     "surfaceBrightness": 13.1,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Perseus Double Cluster"
   },
   {
     "ngc": 885,
@@ -27607,7 +27637,8 @@
     ],
     "magnitude": 10,
     "surfaceBrightness": 13.6,
-    "measuredSurfaceBrightness": 13.7
+    "measuredSurfaceBrightness": 13.7,
+    "name": "Silver Sliver Galaxy"
   },
   {
     "ngc": 892,
@@ -32233,7 +32264,9 @@
     ],
     "magnitude": 5.2,
     "surfaceBrightness": 12.7,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Spiral Cluster",
+    "messier": "34"
   },
   {
     "ngc": 1040,
@@ -33139,7 +33172,9 @@
     ],
     "magnitude": 9.1,
     "surfaceBrightness": 12.9,
-    "measuredSurfaceBrightness": 13
+    "measuredSurfaceBrightness": 13,
+    "name": "Cetus A",
+    "messier": "77"
   },
   {
     "ngc": 1069,
@@ -39609,7 +39644,8 @@
     ],
     "magnitude": 12,
     "surfaceBrightness": 13.2,
-    "measuredSurfaceBrightness": 13.2
+    "measuredSurfaceBrightness": 13.2,
+    "name": "Perseus A"
   },
   {
     "ngc": 1276,
@@ -39630,7 +39666,8 @@
     "size": null,
     "magnitude": null,
     "surfaceBrightness": null,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Perseus A"
   },
   {
     "ngc": 1277,
@@ -40899,7 +40936,8 @@
     ],
     "magnitude": 8.5,
     "surfaceBrightness": 13.3,
-    "measuredSurfaceBrightness": 13.4
+    "measuredSurfaceBrightness": 13.4,
+    "name": "Fornax A"
   },
   {
     "ngc": 1317,
@@ -41187,7 +41225,8 @@
     ],
     "magnitude": 11.7,
     "surfaceBrightness": 13.6,
-    "measuredSurfaceBrightness": 13.8
+    "measuredSurfaceBrightness": 13.8,
+    "name": "Holmberg VI"
   },
   {
     "ngc": 1326,
@@ -44534,7 +44573,8 @@
     ],
     "magnitude": null,
     "surfaceBrightness": null,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Maia Nebula"
   },
   {
     "ngc": 1433,
@@ -44630,7 +44670,8 @@
     ],
     "magnitude": null,
     "surfaceBrightness": null,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Merope Nebula"
   },
   {
     "ngc": 1436,
@@ -46590,7 +46631,8 @@
     ],
     "magnitude": 5,
     "surfaceBrightness": 14.3,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "California Nebula"
   },
   {
     "ngc": 1500,
@@ -46654,7 +46696,8 @@
     ],
     "magnitude": 11.5,
     "surfaceBrightness": 10.9,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Camel Eye Nebula"
   },
   {
     "ngc": 1502,
@@ -47070,7 +47113,8 @@
     ],
     "magnitude": 10.9,
     "surfaceBrightness": 12.3,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Crystal Ball Nebula"
   },
   {
     "ngc": 1515,
@@ -47742,7 +47786,8 @@
     ],
     "magnitude": 9.6,
     "surfaceBrightness": 8.7,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Cleopatra's Eye Nebula"
   },
   {
     "ngc": 1536,
@@ -48328,7 +48373,8 @@
     "size": null,
     "magnitude": null,
     "surfaceBrightness": null,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Hind's Variable Nebula"
   },
   {
     "ngc": 1555,
@@ -48360,7 +48406,8 @@
     ],
     "magnitude": null,
     "surfaceBrightness": null,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Hind's Variable Nebula"
   },
   {
     "ngc": 1556,
@@ -49640,7 +49687,8 @@
     ],
     "magnitude": 12.8,
     "surfaceBrightness": 12.7,
-    "measuredSurfaceBrightness": 13
+    "measuredSurfaceBrightness": 13,
+    "name": "Carafe Group"
   },
   {
     "ngc": 1596,
@@ -49736,7 +49784,8 @@
     ],
     "magnitude": 13.4,
     "surfaceBrightness": 13.3,
-    "measuredSurfaceBrightness": 13.4
+    "measuredSurfaceBrightness": 13.4,
+    "name": "Carafe Group"
   },
   {
     "ngc": 1599,
@@ -59198,7 +59247,8 @@
     ],
     "magnitude": 7.7,
     "surfaceBrightness": 12.1,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "79"
   },
   {
     "ngc": 1905,
@@ -59432,7 +59482,9 @@
     ],
     "magnitude": 6.4,
     "surfaceBrightness": 12.7,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Starfish Cluster",
+    "messier": "38"
   },
   {
     "ngc": 1913,
@@ -59730,7 +59782,8 @@
     ],
     "magnitude": 11.5,
     "surfaceBrightness": 9.7,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Starfish Cluster"
   },
   {
     "ngc": 1923,
@@ -60569,7 +60622,9 @@
     ],
     "magnitude": 8.4,
     "surfaceBrightness": 11.6,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Crab Nebula",
+    "messier": "1"
   },
   {
     "ngc": 1953,
@@ -60825,7 +60880,9 @@
     ],
     "magnitude": 6,
     "surfaceBrightness": 11.1,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Pinwheel Cluster",
+    "messier": "36"
   },
   {
     "ngc": 1961,
@@ -61315,7 +61372,9 @@
     ],
     "magnitude": 4,
     "surfaceBrightness": 13.1,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Orion Nebula",
+    "messier": "42"
   },
   {
     "ngc": 1977,
@@ -61507,7 +61566,9 @@
     ],
     "magnitude": 9,
     "surfaceBrightness": 14.9,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "De Mairan's Nebula",
+    "messier": "43"
   },
   {
     "ngc": 1983,
@@ -61752,7 +61813,8 @@
     ],
     "magnitude": null,
     "surfaceBrightness": null,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Epsilon Orionis Nebula"
   },
   {
     "ngc": 1991,
@@ -62807,7 +62869,8 @@
     ],
     "magnitude": null,
     "surfaceBrightness": null,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Flame Nebula"
   },
   {
     "ngc": 2025,
@@ -64127,7 +64190,8 @@
     ],
     "magnitude": 8,
     "surfaceBrightness": 11.9,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "78"
   },
   {
     "ngc": 2069,
@@ -64191,7 +64255,8 @@
     ],
     "magnitude": 5,
     "surfaceBrightness": 12.2,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Tarantula Nebula"
   },
   {
     "ngc": 2071,
@@ -64511,7 +64576,8 @@
     ],
     "magnitude": null,
     "surfaceBrightness": null,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Ghost Head Nebula"
   },
   {
     "ngc": 2081,
@@ -65064,7 +65130,9 @@
     ],
     "magnitude": 5.6,
     "surfaceBrightness": 12.1,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Auriga Salt-and-Pepper",
+    "messier": "37"
   },
   {
     "ngc": 2100,
@@ -67261,7 +67329,8 @@
     ],
     "magnitude": 5.1,
     "surfaceBrightness": 12.1,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "35"
   },
   {
     "ngc": 2169,
@@ -67293,7 +67362,8 @@
     ],
     "magnitude": 5.9,
     "surfaceBrightness": 9.5,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "\"37\" Cluster"
   },
   {
     "ngc": 2170,
@@ -69403,7 +69473,8 @@
     ],
     "magnitude": null,
     "surfaceBrightness": null,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Rosette Nebula"
   },
   {
     "ngc": 2238,
@@ -69467,7 +69538,8 @@
     ],
     "magnitude": 4.8,
     "surfaceBrightness": 11.4,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Rosette Nebula"
   },
   {
     "ngc": 2240,
@@ -69680,7 +69752,8 @@
     ],
     "magnitude": null,
     "surfaceBrightness": null,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Rosette Nebula"
   },
   {
     "ngc": 2247,
@@ -70138,7 +70211,8 @@
     ],
     "magnitude": null,
     "surfaceBrightness": null,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Hubble's Variable Nebula"
   },
   {
     "ngc": 2262,
@@ -70234,7 +70308,8 @@
     ],
     "magnitude": 4.1,
     "surfaceBrightness": 10.3,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Cone Nebula"
   },
   {
     "ngc": 2265,
@@ -70904,7 +70979,8 @@
     ],
     "magnitude": 4.5,
     "surfaceBrightness": 12.1,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "41"
   },
   {
     "ngc": 2288,
@@ -72012,7 +72088,9 @@
     ],
     "magnitude": 5.9,
     "surfaceBrightness": 11.7,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Heart-Shaped Cluster",
+    "messier": "50"
   },
   {
     "ngc": 2324,
@@ -72748,7 +72826,8 @@
     ],
     "magnitude": 11.6,
     "surfaceBrightness": 11.1,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Butterfly Nebula"
   },
   {
     "ngc": 2347,
@@ -73153,7 +73232,8 @@
     ],
     "magnitude": null,
     "surfaceBrightness": null,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Thor's Helmet"
   },
   {
     "ngc": 2360,
@@ -73238,7 +73318,8 @@
     ],
     "magnitude": 3.8,
     "surfaceBrightness": 8.1,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Tau Canis Majoris Cluster"
   },
   {
     "ngc": 2363,
@@ -74143,7 +74224,8 @@
     ],
     "magnitude": 9.1,
     "surfaceBrightness": 8.2,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Eskimo Nebula"
   },
   {
     "ngc": 2393,
@@ -74963,7 +75045,8 @@
     ],
     "magnitude": 10.3,
     "surfaceBrightness": 13.1,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Intergalactic Wanderer"
   },
   {
     "ngc": 2420,
@@ -75059,7 +75142,8 @@
     ],
     "magnitude": 4.4,
     "surfaceBrightness": 11.4,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "47"
   },
   {
     "ngc": 2423,
@@ -75506,7 +75590,8 @@
     ],
     "magnitude": 6.1,
     "surfaceBrightness": 13,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "46"
   },
   {
     "ngc": 2438,
@@ -75826,7 +75911,9 @@
     ],
     "magnitude": 6.2,
     "surfaceBrightness": 12.6,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Butterfly Cluster",
+    "messier": "93"
   },
   {
     "ngc": 2448,
@@ -78629,7 +78716,8 @@
     ],
     "magnitude": 11.7,
     "surfaceBrightness": 12.5,
-    "measuredSurfaceBrightness": 12.5
+    "measuredSurfaceBrightness": 12.5,
+    "name": "Bear Paw Galaxy"
   },
   {
     "ngc": 2538,
@@ -78970,7 +79058,8 @@
     ],
     "magnitude": 5.8,
     "surfaceBrightness": 14.2,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "48"
   },
   {
     "ngc": 2549,
@@ -79770,7 +79859,8 @@
     ],
     "magnitude": 13.6,
     "surfaceBrightness": 13.8,
-    "measuredSurfaceBrightness": 13.9
+    "measuredSurfaceBrightness": 13.9,
+    "name": "Polarissima Australis"
   },
   {
     "ngc": 2574,
@@ -81603,7 +81693,9 @@
     ],
     "magnitude": 3.1,
     "surfaceBrightness": 12.7,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Beehive Cluster",
+    "messier": "44"
   },
   {
     "ngc": 2633,
@@ -83170,7 +83262,8 @@
     ],
     "magnitude": 6.9,
     "surfaceBrightness": 13.9,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "67"
   },
   {
     "ngc": 2683,
@@ -83266,7 +83359,8 @@
     ],
     "magnitude": 10.9,
     "surfaceBrightness": 13.2,
-    "measuredSurfaceBrightness": 13.3
+    "measuredSurfaceBrightness": 13.3,
+    "name": "Helix Galaxy"
   },
   {
     "ngc": 2686,
@@ -83298,7 +83392,8 @@
     ],
     "magnitude": 15.2,
     "surfaceBrightness": 12.9,
-    "measuredSurfaceBrightness": 13
+    "measuredSurfaceBrightness": 13,
+    "name": "Spindle"
   },
   {
     "ngc": 2687,
@@ -84843,7 +84938,8 @@
     ],
     "magnitude": null,
     "surfaceBrightness": null,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Herschel's Ray"
   },
   {
     "ngc": 2737,
@@ -94063,7 +94159,9 @@
     ],
     "magnitude": 7.3,
     "surfaceBrightness": 13.5,
-    "measuredSurfaceBrightness": 13.6
+    "measuredSurfaceBrightness": 13.6,
+    "name": "Bode's Nebula",
+    "messier": "81"
   },
   {
     "ngc": 3032,
@@ -94159,7 +94257,9 @@
     ],
     "magnitude": 8.9,
     "surfaceBrightness": 12.9,
-    "measuredSurfaceBrightness": 12.9
+    "measuredSurfaceBrightness": 12.9,
+    "name": "Cigar Galaxy",
+    "messier": "82"
   },
   {
     "ngc": 3035,
@@ -96729,7 +96829,8 @@
     ],
     "magnitude": 8.6,
     "surfaceBrightness": 11.5,
-    "measuredSurfaceBrightness": 11.6
+    "measuredSurfaceBrightness": 11.6,
+    "name": "Spindle Galaxy"
   },
   {
     "ngc": 3116,
@@ -97251,7 +97352,8 @@
     ],
     "magnitude": 9.2,
     "surfaceBrightness": 9.2,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Eight Burst Nebula"
   },
   {
     "ngc": 3133,
@@ -98498,7 +98600,8 @@
     ],
     "magnitude": 14.4,
     "surfaceBrightness": 13.8,
-    "measuredSurfaceBrightness": 13.9
+    "measuredSurfaceBrightness": 13.9,
+    "name": "Polarissima Borealis"
   },
   {
     "ngc": 3173,
@@ -98892,7 +98995,8 @@
     ],
     "magnitude": 12,
     "surfaceBrightness": 13.2,
-    "measuredSurfaceBrightness": 13.2
+    "measuredSurfaceBrightness": 13.2,
+    "name": "Gamma Leonis Group"
   },
   {
     "ngc": 3186,
@@ -98956,7 +99060,8 @@
     ],
     "magnitude": 12.7,
     "surfaceBrightness": 13.9,
-    "measuredSurfaceBrightness": 13.9
+    "measuredSurfaceBrightness": 13.9,
+    "name": "Gamma Leonis Group"
   },
   {
     "ngc": 3188,
@@ -99041,7 +99146,8 @@
     ],
     "magnitude": 11.1,
     "surfaceBrightness": 12.9,
-    "measuredSurfaceBrightness": 13
+    "measuredSurfaceBrightness": 13,
+    "name": "Gamma Leonis Group"
   },
   {
     "ngc": 3191,
@@ -99201,7 +99307,8 @@
     ],
     "magnitude": 11.6,
     "surfaceBrightness": 10.1,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Gamma Leonis Group"
   },
   {
     "ngc": 3196,
@@ -100683,7 +100790,8 @@
     ],
     "magnitude": 7.7,
     "surfaceBrightness": 6.6,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Ghost of Jupiter"
   },
   {
     "ngc": 3243,
@@ -102293,7 +102401,8 @@
     ],
     "magnitude": 4.7,
     "surfaceBrightness": 7.9,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Gem Cluster"
   },
   {
     "ngc": 3294,
@@ -104105,7 +104214,8 @@
     ],
     "magnitude": 10,
     "surfaceBrightness": 13.7,
-    "measuredSurfaceBrightness": 13.8
+    "measuredSurfaceBrightness": 13.8,
+    "messier": "95"
   },
   {
     "ngc": 3352,
@@ -104649,7 +104759,8 @@
     ],
     "magnitude": 9.3,
     "surfaceBrightness": 13,
-    "measuredSurfaceBrightness": 13.1
+    "measuredSurfaceBrightness": 13.1,
+    "messier": "96"
   },
   {
     "ngc": 3369,
@@ -104777,7 +104888,8 @@
     ],
     "magnitude": 3,
     "surfaceBrightness": 13.1,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Eta Carinae Nebula"
   },
   {
     "ngc": 3373,
@@ -105001,7 +105113,8 @@
     ],
     "magnitude": 9.4,
     "surfaceBrightness": 12.7,
-    "measuredSurfaceBrightness": 12.9
+    "measuredSurfaceBrightness": 12.9,
+    "messier": "105"
   },
   {
     "ngc": 3380,
@@ -109831,7 +109944,8 @@
     ],
     "magnitude": 3,
     "surfaceBrightness": 11.3,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Wishing Well Cluster"
   },
   {
     "ngc": 3533,
@@ -110588,7 +110702,8 @@
     ],
     "magnitude": 10.2,
     "surfaceBrightness": 13.1,
-    "measuredSurfaceBrightness": 13.3
+    "measuredSurfaceBrightness": 13.3,
+    "messier": "108"
   },
   {
     "ngc": 3557,
@@ -110748,7 +110863,8 @@
     ],
     "magnitude": 13.8,
     "surfaceBrightness": 15.3,
-    "measuredSurfaceBrightness": 13.2
+    "measuredSurfaceBrightness": 13.2,
+    "name": "Ambartsumian's Knot"
   },
   {
     "ngc": 3562,
@@ -111514,7 +111630,9 @@
     ],
     "magnitude": 9.9,
     "surfaceBrightness": 12.3,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Owl Nebula",
+    "messier": "97"
   },
   {
     "ngc": 3588,
@@ -112655,7 +112773,9 @@
     ],
     "magnitude": 9.3,
     "surfaceBrightness": 12.7,
-    "measuredSurfaceBrightness": 12.7
+    "measuredSurfaceBrightness": 12.7,
+    "name": "Leo Triplet",
+    "messier": "65"
   },
   {
     "ngc": 3624,
@@ -112783,7 +112903,9 @@
     ],
     "magnitude": 9,
     "surfaceBrightness": 12.7,
-    "measuredSurfaceBrightness": 12.8
+    "measuredSurfaceBrightness": 12.8,
+    "name": "Leo Triplet",
+    "messier": "66"
   },
   {
     "ngc": 3628,
@@ -112815,7 +112937,8 @@
     ],
     "magnitude": 9.8,
     "surfaceBrightness": 13.7,
-    "measuredSurfaceBrightness": 13.7
+    "measuredSurfaceBrightness": 13.7,
+    "name": "Leo Triplet"
   },
   {
     "ngc": 3629,
@@ -116537,7 +116660,8 @@
     ],
     "magnitude": 15.2,
     "surfaceBrightness": 12.2,
-    "measuredSurfaceBrightness": 12.5
+    "measuredSurfaceBrightness": 12.5,
+    "name": "Copeland's Septet"
   },
   {
     "ngc": 3746,
@@ -116569,7 +116693,8 @@
     ],
     "magnitude": 14.4,
     "surfaceBrightness": 13.5,
-    "measuredSurfaceBrightness": 13.7
+    "measuredSurfaceBrightness": 13.7,
+    "name": "Copeland's Septet"
   },
   {
     "ngc": 3747,
@@ -116633,7 +116758,8 @@
     ],
     "magnitude": 14.6,
     "surfaceBrightness": 13,
-    "measuredSurfaceBrightness": 13.1
+    "measuredSurfaceBrightness": 13.1,
+    "name": "Copeland's Septet"
   },
   {
     "ngc": 3749,
@@ -116697,7 +116823,8 @@
     ],
     "magnitude": 14,
     "surfaceBrightness": 13.1,
-    "measuredSurfaceBrightness": 13.2
+    "measuredSurfaceBrightness": 13.2,
+    "name": "Copeland's Septet"
   },
   {
     "ngc": 3751,
@@ -116729,7 +116856,8 @@
     ],
     "magnitude": 14.3,
     "surfaceBrightness": 13,
-    "measuredSurfaceBrightness": 13.1
+    "measuredSurfaceBrightness": 13.1,
+    "name": "Copeland's Septet"
   },
   {
     "ngc": 3752,
@@ -116793,7 +116921,8 @@
     ],
     "magnitude": 13.7,
     "surfaceBrightness": 13.3,
-    "measuredSurfaceBrightness": 13.4
+    "measuredSurfaceBrightness": 13.4,
+    "name": "Copeland's Septet"
   },
   {
     "ngc": 3754,
@@ -116825,7 +116954,8 @@
     ],
     "magnitude": 14.3,
     "surfaceBrightness": 11.7,
-    "measuredSurfaceBrightness": 11.8
+    "measuredSurfaceBrightness": 11.8,
+    "name": "Copeland's Septet"
   },
   {
     "ngc": 3755,
@@ -117209,7 +117339,8 @@
     ],
     "magnitude": 5.3,
     "surfaceBrightness": 10.4,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Pearl Cluster"
   },
   {
     "ngc": 3767,
@@ -122007,7 +122138,8 @@
     ],
     "magnitude": 8.1,
     "surfaceBrightness": 4.5,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Blue Planetary"
   },
   {
     "ngc": 3919,
@@ -122316,7 +122448,8 @@
     ],
     "magnitude": 12.4,
     "surfaceBrightness": 13,
-    "measuredSurfaceBrightness": 13.1
+    "measuredSurfaceBrightness": 13.1,
+    "name": "Miniature Spiral"
   },
   {
     "ngc": 3929,
@@ -124342,7 +124475,8 @@
     ],
     "magnitude": 9.9,
     "surfaceBrightness": 13.5,
-    "measuredSurfaceBrightness": 13.7
+    "measuredSurfaceBrightness": 13.7,
+    "messier": "109"
   },
   {
     "ngc": 3993,
@@ -125803,7 +125937,8 @@
     ],
     "magnitude": 10.5,
     "surfaceBrightness": 13.3,
-    "measuredSurfaceBrightness": 13.3
+    "measuredSurfaceBrightness": 13.3,
+    "name": "Antennae Galaxies"
   },
   {
     "ngc": 4039,
@@ -125835,7 +125970,8 @@
     ],
     "magnitude": 10.7,
     "surfaceBrightness": 12.2,
-    "measuredSurfaceBrightness": 12.2
+    "measuredSurfaceBrightness": 12.2,
+    "name": "Antennae Galaxies"
   },
   {
     "ngc": 4040,
@@ -129962,7 +130098,8 @@
     ],
     "magnitude": 12.3,
     "surfaceBrightness": 12.6,
-    "measuredSurfaceBrightness": 12.8
+    "measuredSurfaceBrightness": 12.8,
+    "name": "Box"
   },
   {
     "ngc": 4170,
@@ -130068,7 +130205,8 @@
     ],
     "magnitude": 12.7,
     "surfaceBrightness": 13.8,
-    "measuredSurfaceBrightness": 14
+    "measuredSurfaceBrightness": 14,
+    "name": "Box"
   },
   {
     "ngc": 4174,
@@ -130100,7 +130238,8 @@
     ],
     "magnitude": 13.5,
     "surfaceBrightness": 11.7,
-    "measuredSurfaceBrightness": 11.8
+    "measuredSurfaceBrightness": 11.8,
+    "name": "Box"
   },
   {
     "ngc": 4175,
@@ -130132,7 +130271,8 @@
     ],
     "magnitude": 13.4,
     "surfaceBrightness": 12.8,
-    "measuredSurfaceBrightness": 12.9
+    "measuredSurfaceBrightness": 12.9,
+    "name": "Box"
   },
   {
     "ngc": 4176,
@@ -130676,7 +130816,8 @@
     ],
     "magnitude": 10,
     "surfaceBrightness": 13.3,
-    "measuredSurfaceBrightness": 13.4
+    "measuredSurfaceBrightness": 13.4,
+    "messier": "98"
   },
   {
     "ngc": 4193,
@@ -132660,7 +132801,9 @@
     ],
     "magnitude": 9.7,
     "surfaceBrightness": 12.9,
-    "measuredSurfaceBrightness": 13
+    "measuredSurfaceBrightness": 13,
+    "name": "Coma Pinwheel Galaxy",
+    "messier": "99"
   },
   {
     "ngc": 4255,
@@ -132788,7 +132931,8 @@
     ],
     "magnitude": 8.7,
     "surfaceBrightness": 13.8,
-    "measuredSurfaceBrightness": 13.9
+    "measuredSurfaceBrightness": 13.9,
+    "messier": "106"
   },
   {
     "ngc": 4259,
@@ -134217,7 +134361,8 @@
     ],
     "magnitude": 9.6,
     "surfaceBrightness": 13.3,
-    "measuredSurfaceBrightness": 13.4
+    "measuredSurfaceBrightness": 13.4,
+    "messier": "61"
   },
   {
     "ngc": 4304,
@@ -134760,7 +134905,8 @@
     ],
     "magnitude": 9.7,
     "surfaceBrightness": 13.6,
-    "measuredSurfaceBrightness": 13.8
+    "measuredSurfaceBrightness": 13.8,
+    "messier": "100"
   },
   {
     "ngc": 4322,
@@ -136412,7 +136558,9 @@
     ],
     "magnitude": 9.4,
     "surfaceBrightness": 13,
-    "measuredSurfaceBrightness": 13.3
+    "measuredSurfaceBrightness": 13.3,
+    "name": "Markarian's Chain",
+    "messier": "84"
   },
   {
     "ngc": 4375,
@@ -136668,7 +136816,8 @@
     ],
     "magnitude": 9.2,
     "surfaceBrightness": 12.9,
-    "measuredSurfaceBrightness": 13.1
+    "measuredSurfaceBrightness": 13.1,
+    "messier": "85"
   },
   {
     "ngc": 4383,
@@ -137381,7 +137530,9 @@
     ],
     "magnitude": 9,
     "surfaceBrightness": 13,
-    "measuredSurfaceBrightness": 13.2
+    "measuredSurfaceBrightness": 13.2,
+    "name": "Markarian's Chain",
+    "messier": "86"
   },
   {
     "ngc": 4407,
@@ -138276,7 +138427,8 @@
     ],
     "magnitude": 10.8,
     "surfaceBrightness": 12.4,
-    "measuredSurfaceBrightness": 12.5
+    "measuredSurfaceBrightness": 12.5,
+    "name": "Eyes"
   },
   {
     "ngc": 4436,
@@ -138372,7 +138524,8 @@
     ],
     "magnitude": 10,
     "surfaceBrightness": 13.3,
-    "measuredSurfaceBrightness": 13.4
+    "measuredSurfaceBrightness": 13.4,
+    "name": "Eyes"
   },
   {
     "ngc": 4439,
@@ -138724,7 +138877,8 @@
     ],
     "magnitude": 9.8,
     "surfaceBrightness": 13.1,
-    "measuredSurfaceBrightness": 13.2
+    "measuredSurfaceBrightness": 13.2,
+    "name": "Blue Snowball"
   },
   {
     "ngc": 4450,
@@ -139449,7 +139603,8 @@
     ],
     "magnitude": 8.4,
     "surfaceBrightness": 13,
-    "measuredSurfaceBrightness": 13.2
+    "measuredSurfaceBrightness": 13.2,
+    "messier": "49"
   },
   {
     "ngc": 4473,
@@ -139897,7 +140052,9 @@
     ],
     "magnitude": 8.8,
     "surfaceBrightness": 12.9,
-    "measuredSurfaceBrightness": 13.1
+    "measuredSurfaceBrightness": 13.1,
+    "name": "Virgo A",
+    "messier": "87"
   },
   {
     "ngc": 4487,
@@ -140025,7 +140182,8 @@
     ],
     "magnitude": 9.8,
     "surfaceBrightness": 12.8,
-    "measuredSurfaceBrightness": 12.9
+    "measuredSurfaceBrightness": 12.9,
+    "name": "Cocoon Galaxy"
   },
   {
     "ngc": 4491,
@@ -140377,7 +140535,9 @@
     ],
     "magnitude": 9.7,
     "surfaceBrightness": 13,
-    "measuredSurfaceBrightness": 13.1
+    "measuredSurfaceBrightness": 13.1,
+    "name": "Markarian's Chain",
+    "messier": "88"
   },
   {
     "ngc": 4502,
@@ -140569,7 +140729,8 @@
     ],
     "magnitude": 12.2,
     "surfaceBrightness": 12.8,
-    "measuredSurfaceBrightness": 12.9
+    "measuredSurfaceBrightness": 12.9,
+    "name": "Shapley-Ames 2"
   },
   {
     "ngc": 4508,
@@ -140878,7 +141039,8 @@
     ],
     "magnitude": 10.8,
     "surfaceBrightness": 13.5,
-    "measuredSurfaceBrightness": 13.7
+    "measuredSurfaceBrightness": 13.7,
+    "name": "Reinmuth 80"
   },
   {
     "ngc": 4518,
@@ -141166,7 +141328,8 @@
     ],
     "magnitude": 9.5,
     "surfaceBrightness": 12.3,
-    "measuredSurfaceBrightness": 12.5
+    "measuredSurfaceBrightness": 12.5,
+    "name": "Lost Galaxy"
   },
   {
     "ngc": 4527,
@@ -141443,7 +141606,8 @@
     ],
     "magnitude": 10,
     "surfaceBrightness": 13.6,
-    "measuredSurfaceBrightness": 13.7
+    "measuredSurfaceBrightness": 13.7,
+    "name": "McLeish's Object"
   },
   {
     "ngc": 4536,
@@ -141859,7 +142023,8 @@
     ],
     "magnitude": 10.4,
     "surfaceBrightness": 13.6,
-    "measuredSurfaceBrightness": 13.6
+    "measuredSurfaceBrightness": 13.6,
+    "messier": "91"
   },
   {
     "ngc": 4549,
@@ -141987,7 +142152,8 @@
     ],
     "magnitude": 9.8,
     "surfaceBrightness": 13,
-    "measuredSurfaceBrightness": 13.2
+    "measuredSurfaceBrightness": 13.2,
+    "messier": "89"
   },
   {
     "ngc": 4553,
@@ -142381,7 +142547,8 @@
     ],
     "magnitude": 9.5,
     "surfaceBrightness": 13,
-    "measuredSurfaceBrightness": 13.2
+    "measuredSurfaceBrightness": 13.2,
+    "name": "Needle Galaxy"
   },
   {
     "ngc": 4566,
@@ -142445,7 +142612,8 @@
     ],
     "magnitude": 11.5,
     "surfaceBrightness": 13.2,
-    "measuredSurfaceBrightness": 13.3
+    "measuredSurfaceBrightness": 13.3,
+    "name": "Siamese Twins"
   },
   {
     "ngc": 4568,
@@ -142477,7 +142645,8 @@
     ],
     "magnitude": 11.2,
     "surfaceBrightness": 13.3,
-    "measuredSurfaceBrightness": 13.5
+    "measuredSurfaceBrightness": 13.5,
+    "name": "Siamese Twins"
   },
   {
     "ngc": 4569,
@@ -142509,7 +142678,8 @@
     ],
     "magnitude": 9.6,
     "surfaceBrightness": 13.4,
-    "measuredSurfaceBrightness": 13.5
+    "measuredSurfaceBrightness": 13.5,
+    "messier": "90"
   },
   {
     "ngc": 4570,
@@ -142829,7 +142999,8 @@
     ],
     "magnitude": 10.1,
     "surfaceBrightness": 13.4,
-    "measuredSurfaceBrightness": 13.5
+    "measuredSurfaceBrightness": 13.5,
+    "messier": "58"
   },
   {
     "ngc": 4580,
@@ -143170,7 +143341,8 @@
     ],
     "magnitude": 7.3,
     "surfaceBrightness": 12.4,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "68"
   },
   {
     "ngc": 4591,
@@ -143298,7 +143470,9 @@
     ],
     "magnitude": 7.9,
     "surfaceBrightness": 11.3,
-    "measuredSurfaceBrightness": 11.4
+    "measuredSurfaceBrightness": 11.4,
+    "name": "Sombrero Galaxy",
+    "messier": "104"
   },
   {
     "ngc": 4595,
@@ -144002,7 +144176,8 @@
     ],
     "magnitude": 13.2,
     "surfaceBrightness": 12.6,
-    "measuredSurfaceBrightness": 12.9
+    "measuredSurfaceBrightness": 12.9,
+    "name": "Centaurus Chain"
   },
   {
     "ngc": 4617,
@@ -144162,7 +144337,8 @@
     ],
     "magnitude": 9.8,
     "surfaceBrightness": 12.8,
-    "measuredSurfaceBrightness": 13
+    "measuredSurfaceBrightness": 13,
+    "messier": "59"
   },
   {
     "ngc": 4622,
@@ -144194,7 +144370,8 @@
     ],
     "magnitude": 12.6,
     "surfaceBrightness": 13.4,
-    "measuredSurfaceBrightness": 13.5
+    "measuredSurfaceBrightness": 13.5,
+    "name": "Centaurus Chain"
   },
   {
     "ngc": 4623,
@@ -144482,7 +144659,8 @@
     ],
     "magnitude": 9.1,
     "surfaceBrightness": 12.9,
-    "measuredSurfaceBrightness": 13
+    "measuredSurfaceBrightness": 13,
+    "name": "Whale Galaxy"
   },
   {
     "ngc": 4632,
@@ -145058,7 +145236,8 @@
     ],
     "magnitude": 8.8,
     "surfaceBrightness": 12.7,
-    "measuredSurfaceBrightness": 12.9
+    "measuredSurfaceBrightness": 12.9,
+    "messier": "60"
   },
   {
     "ngc": 4650,
@@ -145090,7 +145269,8 @@
     ],
     "magnitude": 12,
     "surfaceBrightness": 13.4,
-    "measuredSurfaceBrightness": 14.2
+    "measuredSurfaceBrightness": 14.2,
+    "name": "Centaurus Chain"
   },
   {
     "ngc": 4651,
@@ -145282,7 +145462,8 @@
     ],
     "magnitude": 10.2,
     "surfaceBrightness": 14.1,
-    "measuredSurfaceBrightness": 14.1
+    "measuredSurfaceBrightness": 14.1,
+    "name": "Crowbar Galaxy"
   },
   {
     "ngc": 4657,
@@ -145442,7 +145623,8 @@
     ],
     "magnitude": 13.6,
     "surfaceBrightness": 12.4,
-    "measuredSurfaceBrightness": 12.8
+    "measuredSurfaceBrightness": 12.8,
+    "name": "Centaurus Chain"
   },
   {
     "ngc": 4662,
@@ -145602,7 +145784,8 @@
     ],
     "magnitude": 11.2,
     "surfaceBrightness": 12.9,
-    "measuredSurfaceBrightness": 12.9
+    "measuredSurfaceBrightness": 12.9,
+    "name": "Superwind Galaxy"
   },
   {
     "ngc": 4667,
@@ -145922,7 +146105,8 @@
     ],
     "magnitude": 13.5,
     "surfaceBrightness": 13.1,
-    "measuredSurfaceBrightness": 13.2
+    "measuredSurfaceBrightness": 13.2,
+    "name": "Mice"
   },
   {
     "ngc": 4677,
@@ -147170,7 +147354,8 @@
     ],
     "magnitude": 13.2,
     "surfaceBrightness": 13.7,
-    "measuredSurfaceBrightness": 14.3
+    "measuredSurfaceBrightness": 14.3,
+    "messier": "24"
   },
   {
     "ngc": 4716,
@@ -147490,7 +147675,8 @@
     ],
     "magnitude": 9.2,
     "surfaceBrightness": 13.7,
-    "measuredSurfaceBrightness": 13.8
+    "measuredSurfaceBrightness": 13.8,
+    "messier": "25"
   },
   {
     "ngc": 4726,
@@ -147842,7 +148028,8 @@
     ],
     "magnitude": 8,
     "surfaceBrightness": 12.8,
-    "measuredSurfaceBrightness": 12.9
+    "measuredSurfaceBrightness": 12.9,
+    "messier": "94"
   },
   {
     "ngc": 4737,
@@ -148450,7 +148637,8 @@
     ],
     "magnitude": 4.2,
     "surfaceBrightness": 8.9,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Jewel Box"
   },
   {
     "ngc": 4756,
@@ -149025,7 +149213,8 @@
     ],
     "magnitude": 14.3,
     "surfaceBrightness": 12.5,
-    "measuredSurfaceBrightness": 12.6
+    "measuredSurfaceBrightness": 12.6,
+    "name": "Kidney Bean Galaxy"
   },
   {
     "ngc": 4775,
@@ -150645,7 +150834,9 @@
     ],
     "magnitude": 8.4,
     "surfaceBrightness": 12.5,
-    "measuredSurfaceBrightness": 12.6
+    "measuredSurfaceBrightness": 12.6,
+    "name": "Black Eye Galaxy",
+    "messier": "64"
   },
   {
     "ngc": 4827,
@@ -156838,7 +157029,8 @@
     ],
     "magnitude": 7.7,
     "surfaceBrightness": 13,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "53"
   },
   {
     "ngc": 5025,
@@ -157819,7 +158011,9 @@
     ],
     "magnitude": 9,
     "surfaceBrightness": 13.6,
-    "measuredSurfaceBrightness": 13.8
+    "measuredSurfaceBrightness": 13.8,
+    "name": "Sunflower Galaxy",
+    "messier": "63"
   },
   {
     "ngc": 5056,
@@ -160133,7 +160327,8 @@
     ],
     "magnitude": 6.8,
     "surfaceBrightness": 13.3,
-    "measuredSurfaceBrightness": 13.5
+    "measuredSurfaceBrightness": 13.5,
+    "name": "Hamburger Galaxy"
   },
   {
     "ngc": 5129,
@@ -160485,7 +160680,8 @@
     ],
     "magnitude": 3.9,
     "surfaceBrightness": 11.4,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Omega Centauri"
   },
   {
     "ngc": 5140,
@@ -162052,7 +162248,8 @@
     ],
     "magnitude": 10.3,
     "surfaceBrightness": 11.9,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Spiral Planetary Nebula"
   },
   {
     "ngc": 5190,
@@ -162212,7 +162409,9 @@
     ],
     "magnitude": 8.5,
     "surfaceBrightness": 13.1,
-    "measuredSurfaceBrightness": 13.1
+    "measuredSurfaceBrightness": 13.1,
+    "name": "Whirlpool Galaxy",
+    "messier": "51"
   },
   {
     "ngc": 5195,
@@ -162244,7 +162443,9 @@
     ],
     "magnitude": 10.2,
     "surfaceBrightness": 13.5,
-    "measuredSurfaceBrightness": 13.6
+    "measuredSurfaceBrightness": 13.6,
+    "name": "Messier 51B",
+    "messier": "51"
   },
   {
     "ngc": 5196,
@@ -162905,7 +163106,8 @@
     ],
     "magnitude": 12.7,
     "surfaceBrightness": 13.9,
-    "measuredSurfaceBrightness": 14.1
+    "measuredSurfaceBrightness": 14.1,
+    "name": "Keenan's System"
   },
   {
     "ngc": 5217,
@@ -162969,7 +163171,8 @@
     ],
     "magnitude": 12.5,
     "surfaceBrightness": 13.2,
-    "measuredSurfaceBrightness": 13.2
+    "measuredSurfaceBrightness": 13.2,
+    "name": "Keenan's System"
   },
   {
     "ngc": 5219,
@@ -163545,7 +163748,9 @@
     ],
     "magnitude": 7.8,
     "surfaceBrightness": 13.3,
-    "measuredSurfaceBrightness": 13
+    "measuredSurfaceBrightness": 13,
+    "name": "Southern Pinwheel Galaxy",
+    "messier": "83"
   },
   {
     "ngc": 5237,
@@ -164675,7 +164880,8 @@
     ],
     "magnitude": 6.3,
     "surfaceBrightness": 12.3,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "3"
   },
   {
     "ngc": 5273,
@@ -170430,7 +170636,9 @@
     ],
     "magnitude": 7.5,
     "surfaceBrightness": 14.5,
-    "measuredSurfaceBrightness": 14.6
+    "measuredSurfaceBrightness": 14.6,
+    "name": "Pinwheel Galaxy",
+    "messier": "101"
   },
   {
     "ngc": 5458,
@@ -175610,7 +175818,8 @@
     ],
     "magnitude": 12.6,
     "surfaceBrightness": 13,
-    "measuredSurfaceBrightness": 13.2
+    "measuredSurfaceBrightness": 13.2,
+    "name": "Dragon Nebula"
   },
   {
     "ngc": 5624,
@@ -183331,7 +183540,9 @@
     ],
     "magnitude": 10.2,
     "surfaceBrightness": 12.3,
-    "measuredSurfaceBrightness": 12.5
+    "measuredSurfaceBrightness": 12.5,
+    "name": "Spindle Galaxy",
+    "messier": "102"
   },
   {
     "ngc": 5867,
@@ -184130,7 +184341,8 @@
     ],
     "magnitude": 11.8,
     "surfaceBrightness": 14,
-    "measuredSurfaceBrightness": 14.1
+    "measuredSurfaceBrightness": 14.1,
+    "name": "Fath 703"
   },
   {
     "ngc": 5893,
@@ -184503,7 +184715,8 @@
     ],
     "magnitude": 5.7,
     "surfaceBrightness": 12.2,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "5"
   },
   {
     "ngc": 5905,
@@ -184588,7 +184801,8 @@
     ],
     "magnitude": 10.7,
     "surfaceBrightness": 13.6,
-    "measuredSurfaceBrightness": 13.6
+    "measuredSurfaceBrightness": 13.6,
+    "name": "Splinter Galaxy"
   },
   {
     "ngc": 5908,
@@ -188395,7 +188609,8 @@
     ],
     "magnitude": 13.8,
     "surfaceBrightness": 10.8,
-    "measuredSurfaceBrightness": 12.5
+    "measuredSurfaceBrightness": 12.5,
+    "name": "Seyfert's Sextet"
   },
   {
     "ngc": 6028,
@@ -190293,7 +190508,8 @@
     ],
     "magnitude": 5.4,
     "surfaceBrightness": 10.5,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "S Norma Cluster"
   },
   {
     "ngc": 6088,
@@ -190474,7 +190690,8 @@
     ],
     "magnitude": 7.3,
     "surfaceBrightness": 11.8,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "80"
   },
   {
     "ngc": 6094,
@@ -191370,7 +191587,8 @@
     ],
     "magnitude": 5.4,
     "surfaceBrightness": 12.2,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "4"
   },
   {
     "ngc": 6122,
@@ -192873,7 +193091,8 @@
     ],
     "magnitude": 6.6,
     "surfaceBrightness": 10.2,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Mu Normae Cluster"
   },
   {
     "ngc": 6170,
@@ -192937,7 +193156,8 @@
     ],
     "magnitude": 7.8,
     "surfaceBrightness": 12.5,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "107"
   },
   {
     "ngc": 6172,
@@ -194014,7 +194234,9 @@
     ],
     "magnitude": 5.8,
     "surfaceBrightness": 11.7,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Great Globular Cluster in Hercules",
+    "messier": "13"
   },
   {
     "ngc": 6206,
@@ -194174,7 +194396,8 @@
     ],
     "magnitude": 8.8,
     "surfaceBrightness": 6.1,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Turtle"
   },
   {
     "ngc": 6211,
@@ -194430,7 +194653,8 @@
     ],
     "magnitude": 6.1,
     "surfaceBrightness": 11.7,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "12"
   },
   {
     "ngc": 6219,
@@ -194846,7 +195070,8 @@
     ],
     "magnitude": 2.6,
     "surfaceBrightness": 8.1,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Table of Scorpius"
   },
   {
     "ngc": 6232,
@@ -195560,7 +195785,8 @@
     ],
     "magnitude": 6.6,
     "surfaceBrightness": 12.2,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "10"
   },
   {
     "ngc": 6255,
@@ -195944,7 +196170,8 @@
     ],
     "magnitude": 6.4,
     "surfaceBrightness": 11.9,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "62"
   },
   {
     "ngc": 6267,
@@ -196168,7 +196395,8 @@
     ],
     "magnitude": 6.8,
     "surfaceBrightness": 12.3,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "19"
   },
   {
     "ngc": 6274,
@@ -197063,7 +197291,8 @@
     ],
     "magnitude": 9.6,
     "surfaceBrightness": 8.7,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Bug Nebula"
   },
   {
     "ngc": 6303,
@@ -197287,7 +197516,8 @@
     ],
     "magnitude": 11.5,
     "surfaceBrightness": 8.9,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Box Nebula"
   },
   {
     "ngc": 6310,
@@ -198055,7 +198285,8 @@
     ],
     "magnitude": 7.8,
     "surfaceBrightness": 12.4,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "9"
   },
   {
     "ngc": 6334,
@@ -198087,7 +198318,8 @@
     ],
     "magnitude": null,
     "surfaceBrightness": null,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Cat's Paw Nebula"
   },
   {
     "ngc": 6335,
@@ -198172,7 +198404,8 @@
     ],
     "magnitude": 12.3,
     "surfaceBrightness": 11.5,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Cheerio Nebula"
   },
   {
     "ngc": 6338,
@@ -198300,7 +198533,8 @@
     ],
     "magnitude": 6.5,
     "surfaceBrightness": 12,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "92"
   },
   {
     "ngc": 6342,
@@ -198779,7 +199013,8 @@
     ],
     "magnitude": null,
     "surfaceBrightness": null,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Lobster Nebula"
   },
   {
     "ngc": 6358,
@@ -199152,7 +199387,8 @@
     ],
     "magnitude": 11.4,
     "surfaceBrightness": 10.5,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Little Ghost Nebula"
   },
   {
     "ngc": 6370,
@@ -200208,7 +200444,8 @@
     ],
     "magnitude": 7.6,
     "surfaceBrightness": 12.7,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "14"
   },
   {
     "ngc": 6403,
@@ -200304,7 +200541,9 @@
     ],
     "magnitude": 4.2,
     "surfaceBrightness": 11.5,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Butterfly Cluster",
+    "messier": "6"
   },
   {
     "ngc": 6406,
@@ -201507,7 +201746,8 @@
     ],
     "magnitude": 11.2,
     "surfaceBrightness": 11.9,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Box Nebula"
   },
   {
     "ngc": 6446,
@@ -201677,7 +201917,8 @@
     ],
     "magnitude": 8.2,
     "surfaceBrightness": 12.2,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Tom Thumb Cluster"
   },
   {
     "ngc": 6452,
@@ -202412,7 +202653,9 @@
     ],
     "magnitude": 3.3,
     "surfaceBrightness": 12.6,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Ptolemy's Cluster",
+    "messier": "7"
   },
   {
     "ngc": 6476,
@@ -202987,7 +203230,8 @@
     ],
     "magnitude": 5.5,
     "surfaceBrightness": 12.6,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "23"
   },
   {
     "ngc": 6495,
@@ -203616,7 +203860,9 @@
     ],
     "magnitude": 6.3,
     "surfaceBrightness": 12.5,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Trifid Nebula",
+    "messier": "20"
   },
   {
     "ngc": 6515,
@@ -203893,7 +204139,9 @@
     ],
     "magnitude": 5,
     "surfaceBrightness": 12.6,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Lagoon Nebula",
+    "messier": "8"
   },
   {
     "ngc": 6524,
@@ -204138,7 +204386,8 @@
     ],
     "magnitude": 5.9,
     "surfaceBrightness": 11.5,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "21"
   },
   {
     "ngc": 6532,
@@ -204319,7 +204568,8 @@
     ],
     "magnitude": 11.6,
     "surfaceBrightness": 5.9,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Red Spider Nebula"
   },
   {
     "ngc": 6538,
@@ -204511,7 +204761,8 @@
     ],
     "magnitude": 8.1,
     "surfaceBrightness": 5.4,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Cat's Eye Nebula"
   },
   {
     "ngc": 6544,
@@ -205428,7 +205679,8 @@
     ],
     "magnitude": 8.1,
     "surfaceBrightness": 4.7,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Blue Racquetball"
   },
   {
     "ngc": 6573,
@@ -206409,7 +206661,8 @@
     ],
     "magnitude": 11.1,
     "surfaceBrightness": 14.3,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Sagittarius Star Cloud"
   },
   {
     "ngc": 6604,
@@ -206665,7 +206918,9 @@
     ],
     "magnitude": 6,
     "surfaceBrightness": 14.4,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Eagle Nebula",
+    "messier": "16"
   },
   {
     "ngc": 6612,
@@ -206729,7 +206984,8 @@
     ],
     "magnitude": 6.9,
     "surfaceBrightness": 11.4,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "18"
   },
   {
     "ngc": 6614,
@@ -206889,7 +207145,9 @@
     ],
     "magnitude": 6,
     "surfaceBrightness": 11.9,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Omega Nebula",
+    "messier": "17"
   },
   {
     "ngc": 6619,
@@ -207145,7 +207403,8 @@
     ],
     "magnitude": 6.9,
     "surfaceBrightness": 11.8,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "28"
   },
   {
     "ngc": 6627,
@@ -207497,7 +207756,8 @@
     ],
     "magnitude": 7.6,
     "surfaceBrightness": 11.6,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "69"
   },
   {
     "ngc": 6638,
@@ -208072,7 +208332,9 @@
     ],
     "magnitude": 5.2,
     "surfaceBrightness": 11.8,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Sagittarius Cluster",
+    "messier": "22"
   },
   {
     "ngc": 6657,
@@ -208839,7 +209101,8 @@
     ],
     "magnitude": 7.8,
     "surfaceBrightness": 12,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "70"
   },
   {
     "ngc": 6682,
@@ -209244,7 +209507,8 @@
     ],
     "magnitude": 8,
     "surfaceBrightness": 13.5,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "26"
   },
   {
     "ngc": 6695,
@@ -209585,7 +209849,9 @@
     ],
     "magnitude": 5.8,
     "surfaceBrightness": 11.1,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Wild Duck Cluster",
+    "messier": "11"
   },
   {
     "ngc": 6706,
@@ -209894,7 +210160,8 @@
     ],
     "magnitude": 7.7,
     "surfaceBrightness": 12.2,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "54"
   },
   {
     "ngc": 6716,
@@ -210054,7 +210321,9 @@
     ],
     "magnitude": 8.8,
     "surfaceBrightness": 9,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Ring Nebula",
+    "messier": "57"
   },
   {
     "ngc": 6721,
@@ -210320,7 +210589,8 @@
     "size": null,
     "magnitude": null,
     "surfaceBrightness": null,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "R Corona Australis Nebula"
   },
   {
     "ngc": 6730,
@@ -210682,7 +210952,8 @@
     ],
     "magnitude": 11.5,
     "surfaceBrightness": 6.8,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Phantom Streak Nebula"
   },
   {
     "ngc": 6742,
@@ -210980,7 +211251,8 @@
     ],
     "magnitude": 11.9,
     "surfaceBrightness": 9.4,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Dandelion Puffball Nebula"
   },
   {
     "ngc": 6752,
@@ -211012,7 +211284,8 @@
     ],
     "magnitude": 5.3,
     "surfaceBrightness": 11.6,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Pavo Globular Cluster"
   },
   {
     "ngc": 6753,
@@ -211854,7 +212127,8 @@
     ],
     "magnitude": 8.4,
     "surfaceBrightness": 12.4,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "56"
   },
   {
     "ngc": 6780,
@@ -211918,7 +212192,8 @@
     ],
     "magnitude": 11.4,
     "surfaceBrightness": 12.5,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Snowball Nebula"
   },
   {
     "ngc": 6782,
@@ -212792,7 +213067,8 @@
     ],
     "magnitude": 6.3,
     "surfaceBrightness": 12.4,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "55"
   },
   {
     "ngc": 6810,
@@ -212856,7 +213132,8 @@
     ],
     "magnitude": 6.8,
     "surfaceBrightness": 11.9,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Hole in a Cluster"
   },
   {
     "ngc": 6812,
@@ -213069,7 +213346,8 @@
     ],
     "magnitude": 9.3,
     "surfaceBrightness": 6.4,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Little Gem"
   },
   {
     "ngc": 6819,
@@ -213197,7 +213475,8 @@
     ],
     "magnitude": 9.9,
     "surfaceBrightness": 15.4,
-    "measuredSurfaceBrightness": 15.5
+    "measuredSurfaceBrightness": 15.5,
+    "name": "Barnard's Galaxy"
   },
   {
     "ngc": 6823,
@@ -213325,7 +213604,8 @@
     ],
     "magnitude": 8.8,
     "surfaceBrightness": 6.7,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Blinking Planetary"
   },
   {
     "ngc": 6827,
@@ -213709,7 +213989,8 @@
     ],
     "magnitude": 8.4,
     "surfaceBrightness": 12.4,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "71"
   },
   {
     "ngc": 6839,
@@ -214167,7 +214448,9 @@
     ],
     "magnitude": 7.4,
     "surfaceBrightness": 11.3,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Dumbbell Nebula",
+    "messier": "27"
   },
   {
     "ngc": 6854,
@@ -214497,7 +214780,8 @@
     ],
     "magnitude": 8.6,
     "surfaceBrightness": 12.2,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "75"
   },
   {
     "ngc": 6865,
@@ -215158,7 +215442,8 @@
     ],
     "magnitude": 8.1,
     "surfaceBrightness": 14.3,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "20 Vulpeculae Cluster"
   },
   {
     "ngc": 6886,
@@ -215254,7 +215539,8 @@
     ],
     "magnitude": 10,
     "surfaceBrightness": 15.5,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Crescent Nebula"
   },
   {
     "ngc": 6889,
@@ -215435,7 +215721,8 @@
     ],
     "magnitude": 12.3,
     "surfaceBrightness": 11.2,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Little Ring Nebula"
   },
   {
     "ngc": 6895,
@@ -215776,7 +216063,8 @@
     ],
     "magnitude": 11.1,
     "surfaceBrightness": 9.9,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Blue Flash Nebula"
   },
   {
     "ngc": 6906,
@@ -216032,7 +216320,9 @@
     ],
     "magnitude": 6.6,
     "surfaceBrightness": 11.3,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Cooling Tower",
+    "messier": "29"
   },
   {
     "ngc": 6914,
@@ -217077,7 +217367,8 @@
     ],
     "magnitude": 9.1,
     "surfaceBrightness": 14,
-    "measuredSurfaceBrightness": 14.1
+    "measuredSurfaceBrightness": 14.1,
+    "name": "Fireworks Galaxy"
   },
   {
     "ngc": 6947,
@@ -217525,7 +217816,8 @@
     ],
     "magnitude": 7,
     "surfaceBrightness": 13.3,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Western Veil Nebula"
   },
   {
     "ngc": 6961,
@@ -218078,7 +218370,8 @@
     "size": null,
     "magnitude": null,
     "surfaceBrightness": null,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Pickering's Triangular Nebula"
   },
   {
     "ngc": 6980,
@@ -218131,7 +218424,8 @@
     ],
     "magnitude": 9.2,
     "surfaceBrightness": 12.8,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "72"
   },
   {
     "ngc": 6982,
@@ -218483,7 +218777,8 @@
     ],
     "magnitude": 7,
     "surfaceBrightness": 13.4,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Eastern Veil Nebula"
   },
   {
     "ngc": 6993,
@@ -218547,7 +218842,8 @@
     ],
     "magnitude": 8.9,
     "surfaceBrightness": 10.9,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "73"
   },
   {
     "ngc": 6995,
@@ -218579,7 +218875,8 @@
     ],
     "magnitude": 7,
     "surfaceBrightness": 12.1,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Veil Nebula"
   },
   {
     "ngc": 6996,
@@ -218739,7 +219036,8 @@
     ],
     "magnitude": 4,
     "surfaceBrightness": 13.2,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "North America Nebula"
   },
   {
     "ngc": 7001,
@@ -218984,7 +219282,8 @@
     ],
     "magnitude": 10.7,
     "surfaceBrightness": 11.2,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Fetus Nebula"
   },
   {
     "ngc": 7009,
@@ -219016,7 +219315,8 @@
     ],
     "magnitude": 8,
     "surfaceBrightness": 6.4,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Saturn Nebula"
   },
   {
     "ngc": 7010,
@@ -219453,7 +219753,8 @@
     ],
     "magnitude": 7.1,
     "surfaceBrightness": 10.3,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Iris Nebula"
   },
   {
     "ngc": 7024,
@@ -221202,7 +221503,8 @@
     ],
     "magnitude": 6.3,
     "surfaceBrightness": 11.4,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "15"
   },
   {
     "ngc": 7079,
@@ -221543,7 +221845,8 @@
     ],
     "magnitude": 6.6,
     "surfaceBrightness": 11.9,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "2"
   },
   {
     "ngc": 7090,
@@ -221639,7 +221942,8 @@
     ],
     "magnitude": 4.6,
     "surfaceBrightness": 11.8,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "39"
   },
   {
     "ngc": 7093,
@@ -221852,7 +222156,8 @@
     ],
     "magnitude": 6.9,
     "surfaceBrightness": 11.8,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "messier": "30"
   },
   {
     "ngc": 7100,
@@ -222779,7 +223084,8 @@
     ],
     "magnitude": 11.5,
     "surfaceBrightness": 13.4,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Small Cluster Nebula"
   },
   {
     "ngc": 7130,
@@ -226572,7 +226878,8 @@
     ],
     "magnitude": 11.7,
     "surfaceBrightness": 12.6,
-    "measuredSurfaceBrightness": 12.8
+    "measuredSurfaceBrightness": 12.8,
+    "name": "Atoms For Peace Galaxy"
   },
   {
     "ngc": 7253,
@@ -227873,7 +228180,8 @@
     ],
     "magnitude": 7.3,
     "surfaceBrightness": 13.3,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Helix Nebula"
   },
   {
     "ngc": 7294,
@@ -228630,7 +228938,8 @@
     ],
     "magnitude": 13.9,
     "surfaceBrightness": 13.8,
-    "measuredSurfaceBrightness": 14.1
+    "measuredSurfaceBrightness": 14.1,
+    "name": "Stephan's Quintet"
   },
   {
     "ngc": 7318,
@@ -228726,7 +229035,8 @@
     ],
     "magnitude": 13.1,
     "surfaceBrightness": 13.8,
-    "measuredSurfaceBrightness": 14
+    "measuredSurfaceBrightness": 14,
+    "name": "Stephan's Quintet"
   },
   {
     "ngc": 7321,
@@ -235919,7 +236229,8 @@
     ],
     "magnitude": 10.7,
     "surfaceBrightness": 12.8,
-    "measuredSurfaceBrightness": 12.9
+    "measuredSurfaceBrightness": 12.9,
+    "name": "Grus Quartet"
   },
   {
     "ngc": 7553,
@@ -236824,7 +237135,8 @@
     ],
     "magnitude": 10.6,
     "surfaceBrightness": 12.9,
-    "measuredSurfaceBrightness": 13
+    "measuredSurfaceBrightness": 13,
+    "name": "Grus Quartet"
   },
   {
     "ngc": 7583,
@@ -237080,7 +237392,8 @@
     ],
     "magnitude": 11.6,
     "surfaceBrightness": 12.4,
-    "measuredSurfaceBrightness": 12.6
+    "measuredSurfaceBrightness": 12.6,
+    "name": "Grus Quartet"
   },
   {
     "ngc": 7591,
@@ -237368,7 +237681,8 @@
     ],
     "magnitude": 11.4,
     "surfaceBrightness": 13,
-    "measuredSurfaceBrightness": 13.1
+    "measuredSurfaceBrightness": 13.1,
+    "name": "Grus Quartet"
   },
   {
     "ngc": 7600,
@@ -238487,7 +238801,8 @@
     ],
     "magnitude": 11,
     "surfaceBrightness": 15.9,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Bubble Nebula"
   },
   {
     "ngc": 7636,
@@ -239095,7 +239410,9 @@
     ],
     "magnitude": 6.9,
     "surfaceBrightness": 12.7,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Cassiopeia Salt-and-Pepper",
+    "messier": "52"
   },
   {
     "ngc": 7655,
@@ -239351,7 +239668,8 @@
     ],
     "magnitude": 8.3,
     "surfaceBrightness": 6.5,
-    "measuredSurfaceBrightness": null
+    "measuredSurfaceBrightness": null,
+    "name": "Blue Snowball"
   },
   {
     "ngc": 7663,
