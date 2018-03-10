@@ -21,6 +21,10 @@ body a:hover {
   right: 0px;
 }
 
+.hidden {
+  display: none;
+}
+
 .layout {
   display: flex;
 }
@@ -220,8 +224,13 @@ header img {
   font-size: 13px;
 }
 
-.details img {
+.details .image-container {
   margin: 0px 18px 10px 0px;
+  width: 280px;
+  height: 280px;
+}
+
+.details img {
   width: 280px;
   height: 280px;
 }

@@ -10,6 +10,7 @@ import moment = require('moment');
 import leftpad = require('left-pad');
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import CircularProgress from 'material-ui/CircularProgress';
 import { NgcInfo, NightInfo, Az, CoordSeries } from '../calcs/types';
 import resolveTypes from '../calcs/resolveTypes';
 
@@ -43,18 +44,23 @@ export default connect(
   }),
   { openDetails, closeDetails, track }
 )(
-  class extends React.PureComponent<{
-    isOpen: boolean;
-    ngcInfo: NgcInfo;
-    nightInfo: NightInfo;
-    minAltitude: number;
-    prevDetails: number;
-    nextDetails: number;
-    horizontalCoords: CoordSeries<Az>;
-    openDetails: typeof openDetails;
-    closeDetails: typeof closeDetails;
-    track: typeof track;
-  }> {
+  class extends React.PureComponent<
+    {
+      isOpen: boolean;
+      ngcInfo: NgcInfo;
+      nightInfo: NightInfo;
+      minAltitude: number;
+      prevDetails: number;
+      nextDetails: number;
+      horizontalCoords: CoordSeries<Az>;
+      openDetails: typeof openDetails;
+      closeDetails: typeof closeDetails;
+      track: typeof track;
+    },
+    { imageIsLoading: boolean }
+  > {
+    state = { imageIsLoading: true };
+
     componentDidUpdate(prevProps) {
       if (prevProps.isOpen === false && this.props.isOpen === true) {
         this.props.track('View', 'open-details');
@@ -62,8 +68,13 @@ export default connect(
       }
     }
 
+    componentWillReceiveProps(nextProps) {
+      if (this.props.ngcInfo !== nextProps.ngcInfo) this.setState({ imageIsLoading: true });
+    }
+
     handleClickPrevDetails = () => this.props.openDetails(this.props.prevDetails);
     handleClickNextDetails = () => this.props.openDetails(this.props.nextDetails);
+    handleImageLoaded = () => this.setState({ imageIsLoading: false });
 
     renderContent() {
       if (!this.props.ngcInfo) return null;
@@ -84,6 +95,7 @@ export default connect(
         },
         minAltitude
       } = this.props;
+      const { imageIsLoading } = this.state;
       return (
         <div className="details">
           <div className="dynamic row layout">
@@ -195,8 +207,14 @@ export default connect(
                 </tbody>
               </table>
             </div>
-            <div className="dynamic layout">
-              <img alt={`preview of ${ngc}`} src={getImgSrc(ngc)} />
+            <div className="dynamic layout center image-container">
+              {imageIsLoading ? <CircularProgress /> : null}
+              <img
+                alt={`preview of ${ngc}`}
+                src={getImgSrc(ngc)}
+                className={imageIsLoading ? 'hidden' : null}
+                onLoad={this.handleImageLoaded}
+              />
             </div>
           </div>
           <div className="dynamic row layout">
