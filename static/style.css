@@ -214,8 +214,7 @@ header img {
   border-bottom: 1px solid rgb(158, 158, 158);
 }
 
-.list th input[value=""],
-.list th input {
+.list th input[value=""] {
   visibility: hidden;
 }
 
