@@ -214,6 +214,44 @@ header img {
   background-color: #efefef;
 }
 
+.list th,
+.list td {
+  padding: 5px 10px !important;
+  height: auto !important;
+}
+
+.list .ngc {
+  width: 30px !important;
+}
+
+.list .messier {
+  width: 25px !important;
+}
+
+.list .from {
+  width: 40px !important;
+}
+
+.list .to {
+  width: 40px !important;
+}
+
+.list .max {
+  width: 80px !important;
+}
+
+.list .sum {
+  width: 40px !important;
+}
+
+.list .magnitude {
+  width: 60px !important;
+}
+
+.list .surface-brightness {
+  width: 100px !important;
+}
+
 .details {
   width: 100%;
   padding-top: 5px;

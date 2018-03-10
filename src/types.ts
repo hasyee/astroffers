@@ -38,6 +38,8 @@ export type TypeFilter = {
 
 export enum ListItemProp {
   NGC = 'ngc',
+  MESSIER = 'messier',
+  NAME = 'name',
   FROM = 'from',
   TO = 'to',
   MAGNITUDE = 'magnitude',
