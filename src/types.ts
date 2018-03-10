@@ -1,7 +1,7 @@
 import { NgcInfo, NightInfo } from './calcs/types';
 
 export type State = {
-  packageJson: object;
+  packageJson: any;
   filter: Filter;
   settings: Settings;
   result: Result;

@@ -12,10 +12,17 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { NgcInfo, NightInfo, Az, CoordSeries } from '../calcs/types';
 import resolveTypes from '../calcs/resolveTypes';
-import getHorizontalCoordSeries from '../calcs/getHorizontalCoordSeries';
+
 import { dmsToString, hmsToString, radToDmsString, radToHmsString, radToDeg } from '../calcs/units';
 import { openDetails, closeDetails, track } from '../actions';
-import { getAdjacentDetails } from '../selectors';
+import {
+  isOpenDetails,
+  getNightInfo,
+  getAdjacentDetails,
+  getOpenedNgcInfo,
+  getHorizontalCoords,
+  getMinAltitde
+} from '../selectors';
 import AltitudeChart from './AltitudeChart';
 import AzimuthChart from './AzimuthChart';
 
@@ -25,26 +32,15 @@ const getImgSrc = (ngc: number): string =>
 const leftButtonStyle = { float: 'left' };
 
 export default connect(
-  state => {
-    const { openedDetails, result } = state;
-    const ngcInfo = result ? result.list.find(info => info.object.ngc === openedDetails) : null;
-    return {
-      isOpen: openedDetails !== null,
-      nightInfo: result ? result.nightInfo : null,
-      ngcInfo,
-      horizontalCoords: ngcInfo
-        ? getHorizontalCoordSeries(
-            result.filter.date,
-            result.filter.latitude,
-            result.filter.longitude,
-            ngcInfo.eqCoordsOnDate
-          )
-        : null,
-      minAltitude: result ? result.filter.altitude : null,
-      prevDetails: getAdjacentDetails(-1)(state),
-      nextDetails: getAdjacentDetails(+1)(state)
-    };
-  },
+  state => ({
+    isOpen: isOpenDetails(state),
+    nightInfo: getNightInfo(state),
+    ngcInfo: getOpenedNgcInfo(state),
+    horizontalCoords: getHorizontalCoords(state),
+    minAltitude: getMinAltitde(state),
+    prevDetails: getAdjacentDetails(-1)(state),
+    nextDetails: getAdjacentDetails(+1)(state)
+  }),
   { openDetails, closeDetails, track }
 )(
   class extends React.PureComponent<{

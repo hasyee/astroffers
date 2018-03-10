@@ -2,11 +2,12 @@ import React = require('react');
 const { connect } = require('react-redux');
 import classnames = require('classnames');
 import CircularProgress from 'material-ui/CircularProgress';
+import { hasResult, isFiltering } from '../selectors';
 import Summary from './Summary';
 import List from './List';
 import Details from './Details';
 
-export default connect(({ result, isFiltering }) => ({ hasResult: !!result, isFiltering }))(
+export default connect(state => ({ hasResult: hasResult(state), isFiltering: isFiltering(state) }))(
   class extends React.PureComponent<{ hasResult: boolean; isFiltering: boolean }> {
     render() {
       const { hasResult, isFiltering } = this.props;

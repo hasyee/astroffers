@@ -5,10 +5,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { join } from 'path';
 
-export default class extends React.PureComponent<{
-  isOpen: boolean;
-  onClose: Function;
-}> {
+export default class extends React.PureComponent<{ isOpen: boolean; onClose: Function }> {
   render() {
     const md = readFileSync(join(__dirname, '../../static/help.md')).toString();
     const { isOpen, onClose } = this.props;

@@ -4,13 +4,11 @@ import ReactHighcharts = require('react-highcharts');
 import { NightInfo, Interval, Timestamp, Hour } from '../calcs/types';
 import { toNextDay, toMidnight, toNoon } from '../calcs/time';
 import { getIntersection } from '../calcs/interval';
+import { getNightInfo, getDate } from '../selectors';
 
 type Band = { from: Hour; to: Hour; thickness: number; color: string };
 
-export default connect(({ result }) => ({
-  nightInfo: result ? result.nightInfo : null,
-  date: result ? result.filter.date : null
-}))(
+export default connect(state => ({ nightInfo: getNightInfo(state), date: getDate(state) }))(
   class extends React.PureComponent<{ date: Timestamp; nightInfo: NightInfo }> {
     render() {
       if (!this.props.nightInfo) return null;

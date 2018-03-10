@@ -3,16 +3,15 @@ const { connect } = require('react-redux');
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { shell } from 'electron';
+import { getVersion, getAuthorName, getLicense, getFeedbackUrl, getHomepage, getList } from '../selectors';
 
-export default connect(
-  ({ packageJson: { version, author: { name: author }, license, bugs: { url: feedback }, homepage } }) => ({
-    version,
-    author,
-    license,
-    feedback,
-    homepage
-  })
-)(
+export default connect(state => ({
+  version: getVersion(state),
+  author: getAuthorName(state),
+  license: getLicense(state),
+  feedback: getFeedbackUrl(state),
+  homepage: getHomepage(state)
+}))(
   class extends React.PureComponent<{
     isOpen: boolean;
     onClose: Function;

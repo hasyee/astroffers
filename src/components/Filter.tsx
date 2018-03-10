@@ -1,5 +1,5 @@
 import React = require('react');
-import { connect } from 'react-redux';
+const { connect } = require('react-redux');
 import AppBar from 'material-ui/AppBar';
 import DatePicker from 'material-ui/DatePicker';
 import FlatButton from 'material-ui/FlatButton';
@@ -13,6 +13,7 @@ import Dialog from 'material-ui/Dialog';
 import SelectLocationDialog from './SelectLocationDialog';
 import { State, Filter as IFilter } from '../types';
 import { changeFilter, resetFilter, filterObjects, toggleTypeFilter, changeAllTypeFilter, track } from '../actions';
+import { getFilter } from '../selectors';
 const typeMap = require('../../data/types.json');
 
 type Range = { min: number; max: number };
@@ -22,7 +23,7 @@ const checkRange = (value: number, range?: Range) =>
   !Number.isFinite(value) || !range || (value >= range.min && value <= range.max);
 const getErrorMessage = (value: number): string => !Number.isFinite(value) && 'This field is required';
 
-export default connect(({ filter }: State) => ({ filter }), {
+export default connect(state => ({ filter: getFilter(state) }), {
   changeFilter,
   resetFilter,
   filterObjects,

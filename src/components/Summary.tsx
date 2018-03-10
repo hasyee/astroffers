@@ -2,13 +2,14 @@ import React = require('react');
 import moment = require('moment');
 const { connect } = require('react-redux');
 import { NightInfo } from '../calcs/types';
+import { isFiltering, getNightInfo, getCount } from '../selectors';
 import Moon from './Moon';
 import NightChart from './NightChart';
 
-export default connect(({ result, isFiltering }) => ({
-  isFiltering,
-  nightInfo: result ? result.nightInfo : null,
-  count: result ? result.list.length : 0
+export default connect(state => ({
+  isFiltering: isFiltering(state),
+  nightInfo: getNightInfo(state),
+  count: getCount(state)
 }))(
   class extends React.PureComponent<{ nightInfo: NightInfo; count: number; isFiltering: boolean }> {
     render() {
