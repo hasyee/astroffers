@@ -9,7 +9,7 @@
     "build:w": "rimraf lib && tsc -w",
     "start": "electron .",
     "start-prod": "NODE_ENV=production npm start",
-    "dist": "rimraf dist && npm run build && electron-builder -mw --publish always",
+    "dist": "rimraf dist && npm run build && electron-builder -mwl --publish always",
     "mac-test": "npm run build && electron-builder --mac",
     "linux-test": "npm run build && electron-builder --linux",
     "win-test": "npm run build && electron-builder --win"
@@ -38,7 +38,7 @@
     "electron-google-analytics": "0.0.24",
     "electron-log": "2.2.11",
     "electron-nucleus": "0.2.0",
-    "electron-updater": "2.16.3",
+    "electron-updater": "2.21.0",
     "font-roboto-local": "1.0.1",
     "highcharts": "6.0.3",
     "left-pad": "1.2.0",
@@ -62,8 +62,8 @@
     "@types/react": "16.0.25",
     "@types/react-dom": "16.0.3",
     "@types/react-redux": "5.0.14",
-    "electron": "1.7.9",
-    "electron-builder": "19.48.3",
+    "electron": "1.8.3",
+    "electron-builder": "20.4.1",
     "rimraf": "2.6.2",
     "typescript": "2.6.2"
   },
@@ -89,6 +89,17 @@
           "y": 150,
           "type": "link",
           "path": "/Applications"
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
         }
       ]
     },
