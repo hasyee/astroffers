@@ -93,42 +93,52 @@ export default connect(
           <Table selectable={false} height={'calc(100% - 59px)'} ref="table" style={{ overflow: 'hidden' }}>
             <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
               <TableRow>
-                <TableHeaderColumn>
+                <TableHeaderColumn className="ngc">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.NGC)}>
                     NGC{this.renderSortByIcon(ListItemProp.NGC)}
                   </span>
                 </TableHeaderColumn>
-                <TableHeaderColumn>
+                <TableHeaderColumn className="messier">
+                  <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.MESSIER)}>
+                    M{this.renderSortByIcon(ListItemProp.MESSIER)}
+                  </span>
+                </TableHeaderColumn>
+                <TableHeaderColumn className="name">
+                  <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.NAME)}>
+                    Name{this.renderSortByIcon(ListItemProp.NAME)}
+                  </span>
+                </TableHeaderColumn>
+                <TableHeaderColumn className="type">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.TYPE)}>
                     Type{this.renderSortByIcon(ListItemProp.TYPE)}
                   </span>
                 </TableHeaderColumn>
-                <TableHeaderColumn>
+                <TableHeaderColumn className="from">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.FROM)}>
                     From{this.renderSortByIcon(ListItemProp.FROM)}
                   </span>
                 </TableHeaderColumn>
-                <TableHeaderColumn>
+                <TableHeaderColumn className="to">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.TO)}>
                     To{this.renderSortByIcon(ListItemProp.TO)}
                   </span>
                 </TableHeaderColumn>
-                <TableHeaderColumn>
+                <TableHeaderColumn className="max">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.MAX)}>
                     Max / Alt{this.renderSortByIcon(ListItemProp.MAX)}
                   </span>
                 </TableHeaderColumn>
-                <TableHeaderColumn>
+                <TableHeaderColumn className="sum">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.SUM)}>
                     Sum{this.renderSortByIcon(ListItemProp.SUM)}
                   </span>
                 </TableHeaderColumn>
-                <TableHeaderColumn>
+                <TableHeaderColumn className="magnitude">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.MAGNITUDE)}>
                     Magnitude{this.renderSortByIcon(ListItemProp.MAGNITUDE)}
                   </span>
                 </TableHeaderColumn>
-                <TableHeaderColumn>
+                <TableHeaderColumn className="surface-brightness">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.SURFACE_BRIGHTNESS)}>
                     Surface brightness{this.renderSortByIcon(ListItemProp.SURFACE_BRIGHTNESS)}
                   </span>
@@ -140,7 +150,7 @@ export default connect(
                 .slice(0, displayedItems)
                 .map(
                   ({
-                    object: { ngc, magnitude, surfaceBrightness, type },
+                    object: { ngc, messier, name, magnitude, surfaceBrightness, type },
                     intersection: { start, end },
                     max,
                     sum,
@@ -149,18 +159,24 @@ export default connect(
                     const resolvedType = resolveTypes(type).join(', ');
                     return (
                       <TableRow key={ngc} selectable={false} className="list row" onClick={this.handleRowClick(ngc)}>
-                        <TableRowColumn>
+                        <TableRowColumn className="ngc">
                           <b>{ngc}</b>
                         </TableRowColumn>
-                        <TableRowColumn title={resolvedType}>{resolvedType}</TableRowColumn>
-                        <TableRowColumn>{moment(start).format('HH:mm')}</TableRowColumn>
-                        <TableRowColumn>{moment(end).format('HH:mm')}</TableRowColumn>
-                        <TableRowColumn>
+                        <TableRowColumn className="messier">{messier}</TableRowColumn>
+                        <TableRowColumn className="name" title={name}>
+                          {name}
+                        </TableRowColumn>
+                        <TableRowColumn className="type" title={resolvedType}>
+                          {resolvedType}
+                        </TableRowColumn>
+                        <TableRowColumn className="from">{moment(start).format('HH:mm')}</TableRowColumn>
+                        <TableRowColumn className="to">{moment(end).format('HH:mm')}</TableRowColumn>
+                        <TableRowColumn className="max">
                           {moment(max).format('HH:mm')} / {Math.round(radToDeg(altitudeAtMax))}°
                         </TableRowColumn>
-                        <TableRowColumn>{stringifyTimeDiff(sum)}</TableRowColumn>
-                        <TableRowColumn>{magnitude}</TableRowColumn>
-                        <TableRowColumn>{surfaceBrightness}</TableRowColumn>
+                        <TableRowColumn className="sum">{stringifyTimeDiff(sum)}</TableRowColumn>
+                        <TableRowColumn className="magnitude">{magnitude}</TableRowColumn>
+                        <TableRowColumn className="surface-brightness">{surfaceBrightness}</TableRowColumn>
                       </TableRow>
                     );
                   }

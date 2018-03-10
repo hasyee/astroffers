@@ -4,13 +4,18 @@ import { NgcInfo } from '../calcs/types';
 const defaultSorter = (propertySelector: Function) => (a: NgcInfo, b: NgcInfo) => {
   const aProp = propertySelector(a);
   const bProp = propertySelector(b);
+  if (aProp === undefined && bProp === undefined) return a.object.ngc - b.object.ngc;
+  if (aProp === undefined) return +1;
+  if (bProp === undefined) return -1;
   if (aProp < bProp) return -1;
-  else if (aProp > bProp) return 1;
+  else if (aProp > bProp) return +1;
   else return 0;
 };
 
 export default {
   [ListItemProp.NGC]: defaultSorter((object: NgcInfo) => object.object.ngc),
+  [ListItemProp.MESSIER]: defaultSorter((object: NgcInfo) => object.object.messier),
+  [ListItemProp.NAME]: defaultSorter((object: NgcInfo) => object.object.name),
   [ListItemProp.FROM]: defaultSorter((object: NgcInfo) => object.intersection.start),
   [ListItemProp.TO]: defaultSorter((object: NgcInfo) => object.intersection.end),
   [ListItemProp.MAX]: (a: NgcInfo, b: NgcInfo) => {
