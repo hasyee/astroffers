@@ -27,6 +27,14 @@ import {
 import AltitudeChart from './AltitudeChart';
 import AzimuthChart from './AzimuthChart';
 
+const getTitle = (ngcInfo: NgcInfo): string => {
+  const object = ngcInfo ? ngcInfo.object : null;
+  if (!object) return 'Unknown';
+  return [ `NGC ${object.ngc}`, object.messier ? `M ${object.messier}` : null, object.name || null ]
+    .filter(_ => _)
+    .join(' | ');
+};
+
 const getImgSrc = (ngc: number): string =>
   `http://www.ngcicproject.org/dss/n/${Math.floor(ngc / 1000)}/n${leftpad(ngc, 4, 0)}.jpg`;
 
@@ -82,7 +90,7 @@ export default connect(
         horizontalCoords,
         nightInfo,
         ngcInfo: {
-          object: { ngc, type, constellation, size, magnitude, surfaceBrightness, eqCoords },
+          object: { ngc, messier, name, type, constellation, size, magnitude, surfaceBrightness, eqCoords },
           eqCoordsOnDate,
           max,
           sum,
@@ -253,7 +261,7 @@ export default connect(
       ];
       return (
         <Dialog
-          title={`NGC ${this.props.ngcInfo && this.props.ngcInfo.object ? this.props.ngcInfo.object.ngc : 'Unknown'}`}
+          title={getTitle(this.props.ngcInfo)}
           actions={actions}
           modal={false}
           open={isOpen}
