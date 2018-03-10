@@ -17,15 +17,13 @@ import { radToDeg } from '../calcs/units';
 import resolveTypes from '../calcs/resolveTypes';
 import { stringifyTimeDiff } from '../calcs/utils';
 import { openDetails, sort } from '../actions';
+import { getList, isFiltering, getSortBy } from '../selectors';
 
 const DEFAULT_DISPLAYED_ITEMS = 100;
 
 export default connect(
-  ({ result, isFiltering, settings: { sortBy } }) => ({ objects: result ? result.list : null, isFiltering, sortBy }),
-  {
-    openDetails,
-    sort
-  }
+  state => ({ objects: getList(state), isFiltering: isFiltering(state), sortBy: getSortBy(state) }),
+  { openDetails, sort }
 )(
   class extends React.PureComponent<
     {
