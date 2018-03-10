@@ -34,17 +34,16 @@ export default connect(
       openDetails: typeof openDetails;
       sort: typeof sort;
     },
-    { displayedItems: number; search: { [key in ListItemProp]?: string } }
+    { displayedItems: number; filter: { [key in ListItemProp]?: string } }
   > {
     private table;
 
     state = {
       displayedItems: DEFAULT_DISPLAYED_ITEMS,
-      search: {
+      filter: {
         [ListItemProp.NGC]: '',
         [ListItemProp.MESSIER]: '',
-        [ListItemProp.NAME]: '',
-        [ListItemProp.TYPE]: ''
+        [ListItemProp.NAME]: ''
       }
     };
 
@@ -85,8 +84,8 @@ export default connect(
       }
     };
 
-    handleSearchChange = (prop: ListItemProp) => evt => {
-      this.setState({ search: { ...this.state.search, [prop]: evt.target.value } });
+    handleFilterChange = (prop: ListItemProp) => value => {
+      this.setState({ filter: { ...this.state.filter, [prop]: value } });
     };
 
     handleRowClick = (ngc: number) => () => this.props.openDetails(ngc);
@@ -96,7 +95,7 @@ export default connect(
     }
 
     render() {
-      const { displayedItems, search } = this.state;
+      const { displayedItems, filter } = this.state;
       const { sortBy, isFiltering, objects } = this.props;
       if (isFiltering || !objects) return null;
       return (
@@ -109,7 +108,7 @@ export default connect(
                     NGC{this.renderSortByIcon(ListItemProp.NGC)}
                   </span>
                   <br />
-                  <LazyInput value={search[ListItemProp.NGC]} onTypeEnd={this.handleSearchChange(ListItemProp.NGC)} />
+                  <LazyInput value={filter[ListItemProp.NGC]} onTypeEnd={this.handleFilterChange(ListItemProp.NGC)} />
                 </TableHeaderColumn>
                 <TableHeaderColumn className="messier">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.MESSIER)}>
@@ -117,8 +116,8 @@ export default connect(
                   </span>
                   <br />
                   <LazyInput
-                    value={search[ListItemProp.MESSIER]}
-                    onTypeEnd={this.handleSearchChange(ListItemProp.MESSIER)}
+                    value={filter[ListItemProp.MESSIER]}
+                    onTypeEnd={this.handleFilterChange(ListItemProp.MESSIER)}
                   />
                 </TableHeaderColumn>
                 <TableHeaderColumn className="name">
@@ -126,14 +125,12 @@ export default connect(
                     Name{this.renderSortByIcon(ListItemProp.NAME)}
                   </span>
                   <br />
-                  <LazyInput value={search[ListItemProp.NAME]} onTypeEnd={this.handleSearchChange(ListItemProp.NAME)} />
+                  <LazyInput value={filter[ListItemProp.NAME]} onTypeEnd={this.handleFilterChange(ListItemProp.NAME)} />
                 </TableHeaderColumn>
                 <TableHeaderColumn className="type">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.TYPE)}>
                     Type{this.renderSortByIcon(ListItemProp.TYPE)}
                   </span>
-                  <br />
-                  <LazyInput value={search[ListItemProp.TYPE]} onTypeEnd={this.handleSearchChange(ListItemProp.TYPE)} />
                 </TableHeaderColumn>
                 <TableHeaderColumn className="from">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.FROM)}>
@@ -170,6 +167,7 @@ export default connect(
             <TableBody displayRowCheckbox={false} preScanRows={false}>
               {objects
                 .slice(0, displayedItems)
+                .filter(search(this.state.filter))
                 .map(
                   ({
                     object: { ngc, messier, name, magnitude, surfaceBrightness, type },
@@ -210,3 +208,23 @@ export default connect(
     }
   }
 );
+
+const search = (filter: { [key in ListItemProp]?: string }) => (ngcInfo: NgcInfo): boolean => {
+  if (filter[ListItemProp.NGC] && filter[ListItemProp.NGC] !== ngcInfo.object.ngc.toString()) return false;
+  if (filter[ListItemProp.MESSIER] && !ngcInfo.object.messier) return false;
+  if (
+    filter[ListItemProp.MESSIER] &&
+    ngcInfo.object.messier &&
+    filter[ListItemProp.MESSIER] !== ngcInfo.object.messier.toString()
+  )
+    return false;
+  if (filter[ListItemProp.NAME] && !ngcInfo.object.name) return false;
+  if (
+    filter[ListItemProp.NAME] &&
+    ngcInfo.object.name &&
+    ngcInfo.object.name.toLowerCase().search(filter[ListItemProp.NAME].toLowerCase()) === -1
+  )
+    return false;
+
+  return true;
+};
