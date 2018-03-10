@@ -14,15 +14,19 @@ import { NgcInfo, NightInfo, Az, CoordSeries } from '../calcs/types';
 import resolveTypes from '../calcs/resolveTypes';
 import getHorizontalCoordSeries from '../calcs/getHorizontalCoordSeries';
 import { dmsToString, hmsToString, radToDmsString, radToHmsString, radToDeg } from '../calcs/units';
-import { closeDetails, track } from '../actions';
+import { openDetails, closeDetails, track } from '../actions';
+import { getAdjacentDetails } from '../selectors';
 import AltitudeChart from './AltitudeChart';
 import AzimuthChart from './AzimuthChart';
 
 const getImgSrc = (ngc: number): string =>
   `http://www.ngcicproject.org/dss/n/${Math.floor(ngc / 1000)}/n${leftpad(ngc, 4, 0)}.jpg`;
 
+const leftButtonStyle = { float: 'left' };
+
 export default connect(
-  ({ openedDetails, result }) => {
+  state => {
+    const { openedDetails, result } = state;
     const ngcInfo = result ? result.list.find(info => info.object.ngc === openedDetails) : null;
     return {
       isOpen: openedDetails !== null,
@@ -36,17 +40,22 @@ export default connect(
             ngcInfo.eqCoordsOnDate
           )
         : null,
-      minAltitude: result ? result.filter.altitude : null
+      minAltitude: result ? result.filter.altitude : null,
+      prevDetails: getAdjacentDetails(-1)(state),
+      nextDetails: getAdjacentDetails(+1)(state)
     };
   },
-  { closeDetails, track }
+  { openDetails, closeDetails, track }
 )(
   class extends React.PureComponent<{
     isOpen: boolean;
     ngcInfo: NgcInfo;
     nightInfo: NightInfo;
     minAltitude: number;
+    prevDetails: number;
+    nextDetails: number;
     horizontalCoords: CoordSeries<Az>;
+    openDetails: typeof openDetails;
     closeDetails: typeof closeDetails;
     track: typeof track;
   }> {
@@ -56,6 +65,9 @@ export default connect(
       } else if (prevProps.isOpen === true && this.props.isOpen === false) {
       }
     }
+
+    handleClickPrevDetails = () => this.props.openDetails(this.props.prevDetails);
+    handleClickNextDetails = () => this.props.openDetails(this.props.nextDetails);
 
     renderContent() {
       if (!this.props.ngcInfo) return null;
@@ -209,8 +221,22 @@ export default connect(
     }
 
     render() {
-      const { closeDetails, isOpen } = this.props;
-      const actions = [ <FlatButton label="Close" primary={true} onClick={closeDetails} /> ];
+      const { closeDetails, isOpen, prevDetails, nextDetails } = this.props;
+      const actions = [
+        <FlatButton
+          label="Previous"
+          disabled={!prevDetails}
+          onClick={this.handleClickPrevDetails}
+          style={leftButtonStyle}
+        />,
+        <FlatButton
+          label="Next"
+          disabled={!nextDetails}
+          onClick={this.handleClickNextDetails}
+          style={leftButtonStyle}
+        />,
+        <FlatButton label="Close" primary onClick={closeDetails} />
+      ];
       return (
         <Dialog
           title={`NGC ${this.props.ngcInfo && this.props.ngcInfo.object ? this.props.ngcInfo.object.ngc : 'Unknown'}`}
