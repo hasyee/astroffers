@@ -74,6 +74,8 @@ export type CoordSeries<Coord> = {
 
 export type NgcObject = {
   ngc: number;
+  messier: number;
+  name: string;
   eqCoords: {
     ra: Hms;
     de: Dms;
