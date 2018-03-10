@@ -201,6 +201,29 @@ header img {
   overflow-y: scroll !important;
 }
 
+.list th {
+  padding: 10px 15px 5px 15px !important;
+  height: auto !important;
+  vertical-align: top;
+}
+
+.list th input {
+  outline: none;
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid rgb(158, 158, 158);
+}
+
+.list th input[value=""],
+.list th input {
+  visibility: hidden;
+}
+
+.list th:hover input,
+.list th input:focus {
+  visibility: visible;
+}
+
 .list.row {
   cursor: pointer;
   user-select: none;
@@ -214,14 +237,13 @@ header img {
   background-color: #efefef;
 }
 
-.list th,
 .list td {
-  padding: 5px 10px !important;
+  padding: 5px 15px !important;
   height: auto !important;
 }
 
 .list .ngc {
-  width: 30px !important;
+  width: 40px !important;
 }
 
 .list .messier {

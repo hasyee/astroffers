@@ -97,21 +97,29 @@ export default connect(
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.NGC)}>
                     NGC{this.renderSortByIcon(ListItemProp.NGC)}
                   </span>
+                  <br />
+                  <input value="" />
                 </TableHeaderColumn>
                 <TableHeaderColumn className="messier">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.MESSIER)}>
                     M{this.renderSortByIcon(ListItemProp.MESSIER)}
                   </span>
+                  <br />
+                  <input value="" />
                 </TableHeaderColumn>
                 <TableHeaderColumn className="name">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.NAME)}>
                     Name{this.renderSortByIcon(ListItemProp.NAME)}
                   </span>
+                  <br />
+                  <input value="" />
                 </TableHeaderColumn>
                 <TableHeaderColumn className="type">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.TYPE)}>
                     Type{this.renderSortByIcon(ListItemProp.TYPE)}
                   </span>
+                  <br />
+                  <input value="" />
                 </TableHeaderColumn>
                 <TableHeaderColumn className="from">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.FROM)}>
