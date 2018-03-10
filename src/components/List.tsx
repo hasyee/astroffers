@@ -18,6 +18,7 @@ import resolveTypes from '../calcs/resolveTypes';
 import { stringifyTimeDiff } from '../calcs/utils';
 import { openDetails, sort } from '../actions';
 import { getList, isFiltering, getSortBy } from '../selectors';
+import LazyInput from './LazyInput';
 
 const DEFAULT_DISPLAYED_ITEMS = 100;
 
@@ -33,12 +34,18 @@ export default connect(
       openDetails: typeof openDetails;
       sort: typeof sort;
     },
-    { displayedItems: number }
+    { displayedItems: number; search: { [key in ListItemProp]?: string } }
   > {
     private table;
 
     state = {
-      displayedItems: DEFAULT_DISPLAYED_ITEMS
+      displayedItems: DEFAULT_DISPLAYED_ITEMS,
+      search: {
+        [ListItemProp.NGC]: '',
+        [ListItemProp.MESSIER]: '',
+        [ListItemProp.NAME]: '',
+        [ListItemProp.TYPE]: ''
+      }
     };
 
     initScroll() {
@@ -78,6 +85,10 @@ export default connect(
       }
     };
 
+    handleSearchChange = (prop: ListItemProp) => evt => {
+      this.setState({ search: { ...this.state.search, [prop]: evt.target.value } });
+    };
+
     handleRowClick = (ngc: number) => () => this.props.openDetails(ngc);
 
     renderSortByIcon(prop: string) {
@@ -85,7 +96,7 @@ export default connect(
     }
 
     render() {
-      const { displayedItems } = this.state;
+      const { displayedItems, search } = this.state;
       const { sortBy, isFiltering, objects } = this.props;
       if (isFiltering || !objects) return null;
       return (
@@ -98,28 +109,31 @@ export default connect(
                     NGC{this.renderSortByIcon(ListItemProp.NGC)}
                   </span>
                   <br />
-                  <input value="" />
+                  <LazyInput value={search[ListItemProp.NGC]} onTypeEnd={this.handleSearchChange(ListItemProp.NGC)} />
                 </TableHeaderColumn>
                 <TableHeaderColumn className="messier">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.MESSIER)}>
                     M{this.renderSortByIcon(ListItemProp.MESSIER)}
                   </span>
                   <br />
-                  <input value="" />
+                  <LazyInput
+                    value={search[ListItemProp.MESSIER]}
+                    onTypeEnd={this.handleSearchChange(ListItemProp.MESSIER)}
+                  />
                 </TableHeaderColumn>
                 <TableHeaderColumn className="name">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.NAME)}>
                     Name{this.renderSortByIcon(ListItemProp.NAME)}
                   </span>
                   <br />
-                  <input value="" />
+                  <LazyInput value={search[ListItemProp.NAME]} onTypeEnd={this.handleSearchChange(ListItemProp.NAME)} />
                 </TableHeaderColumn>
                 <TableHeaderColumn className="type">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.TYPE)}>
                     Type{this.renderSortByIcon(ListItemProp.TYPE)}
                   </span>
                   <br />
-                  <input value="" />
+                  <LazyInput value={search[ListItemProp.TYPE]} onTypeEnd={this.handleSearchChange(ListItemProp.TYPE)} />
                 </TableHeaderColumn>
                 <TableHeaderColumn className="from">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.FROM)}>
