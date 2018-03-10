@@ -17,7 +17,6 @@ import { radToDeg } from '../calcs/units';
 import resolveTypes from '../calcs/resolveTypes';
 import { stringifyTimeDiff } from '../calcs/utils';
 import { openDetails, sort } from '../actions';
-import sorters from '../utils/sorters';
 
 const DEFAULT_DISPLAYED_ITEMS = 100;
 
@@ -140,7 +139,6 @@ export default connect(
             </TableHeader>
             <TableBody displayRowCheckbox={false} preScanRows={false}>
               {objects
-                .sort(sorters[sortBy])
                 .slice(0, displayedItems)
                 .map(
                   ({

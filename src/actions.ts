@@ -1,12 +1,12 @@
-import { State, Filter, ListItemProp } from './types';
-import { getLocation } from './calcs/units';
+import { ListItemProp } from './types';
 import defaultState from './defaultState';
-import { setImmediate } from 'timers';
+import sorters from './utils/sorters';
 const typeMap = require('../data/types.json');
 
 export const sort = (listItemProp: ListItemProp) => state => ({
   ...state,
-  settings: { ...state.settings, sortBy: listItemProp }
+  settings: { ...state.settings, sortBy: listItemProp },
+  result: state.result ? { ...state.result, list: state.result.list.sort(sorters[listItemProp]) } : null
 });
 
 export const resetFilter = () => state => ({ ...state, filter: defaultState.filter });
@@ -40,7 +40,8 @@ export const fetchLocation = () => state => async (dispatch, getState, { locatio
 export const filterObjects = () => state => async (dispatch, getState, { api }) => {
   dispatch(state => ({ ...state, isFiltering: true }));
   const result = await api.filterObjects(getState().filter);
-  dispatch(state => ({ ...state, result, isFiltering: false }));
+  const sortBy = getState().settings.sortBy;
+  dispatch(state => ({ ...state, result: { ...result, list: result.list.sort(sorters[sortBy]) }, isFiltering: false }));
 };
 
 export const openDetails = (openedDetails: number) => state => ({ ...state, openedDetails });
