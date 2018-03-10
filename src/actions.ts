@@ -1,8 +1,13 @@
-import { State, Filter } from './types';
+import { State, Filter, ListItemProp } from './types';
 import { getLocation } from './calcs/units';
 import defaultState from './defaultState';
 import { setImmediate } from 'timers';
 const typeMap = require('../data/types.json');
+
+export const sort = (listItemProp: ListItemProp) => state => ({
+  ...state,
+  settings: { ...state.settings, sortBy: listItemProp }
+});
 
 export const resetFilter = () => state => ({ ...state, filter: defaultState.filter });
 
