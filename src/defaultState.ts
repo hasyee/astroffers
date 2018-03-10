@@ -1,4 +1,4 @@
-import { State, TypeFilter } from './types';
+import { State, TypeFilter, ListItemProp } from './types';
 const typeMap = require('../data/types.json');
 import { machineIdSync } from 'node-machine-id';
 
@@ -15,6 +15,9 @@ export default {
     magnitude: 10,
     surfaceBrightness: 14,
     types: Object.keys(typeMap).reduce((acc, type) => ({ ...acc, [type]: true }), {})
+  },
+  settings: {
+    sortBy: ListItemProp.MAX
   },
   result: null,
   isFiltering: false,
