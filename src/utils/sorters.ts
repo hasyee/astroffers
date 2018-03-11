@@ -16,6 +16,8 @@ export default {
   [ListItemProp.NGC]: defaultSorter((object: NgcInfo) => object.object.ngc),
   [ListItemProp.MESSIER]: defaultSorter((object: NgcInfo) => object.object.messier),
   [ListItemProp.NAME]: defaultSorter((object: NgcInfo) => object.object.name),
+  [ListItemProp.TYPE]: defaultSorter((object: NgcInfo) => object.object.types[0]),
+  [ListItemProp.CONSTELLATION]: defaultSorter((object: NgcInfo) => object.object.constellation),
   [ListItemProp.FROM]: defaultSorter((object: NgcInfo) => object.intersection.start),
   [ListItemProp.TO]: defaultSorter((object: NgcInfo) => object.intersection.end),
   [ListItemProp.MAX]: (a: NgcInfo, b: NgcInfo) => {
@@ -24,6 +26,5 @@ export default {
   },
   [ListItemProp.SUM]: defaultSorter((object: NgcInfo) => object.sum),
   [ListItemProp.MAGNITUDE]: defaultSorter((object: NgcInfo) => object.object.magnitude),
-  [ListItemProp.SURFACE_BRIGHTNESS]: defaultSorter((object: NgcInfo) => object.object.surfaceBrightness),
-  [ListItemProp.TYPE]: defaultSorter((object: NgcInfo) => object.object.types[0])
+  [ListItemProp.SURFACE_BRIGHTNESS]: defaultSorter((object: NgcInfo) => object.object.surfaceBrightness)
 };

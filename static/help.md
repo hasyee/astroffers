@@ -1,6 +1,6 @@
 # How to use Astroffers
 
-Astroffers helps you to discover NGC objects. Accordingly to your filter options it shows those objects, which are visible on your choosen night and location.
+Astroffers helps you to discover NGC objects. Along with your filter options it shows those objects, which are visible on your choosen night and location.
 
 ## Filtering
 
@@ -24,9 +24,13 @@ By pressing `SELECT LOCATION` button you can choose your location manually on a 
 
 Also in this dialog by pressing the `USE NETWORK LOCATION` button you will get a suggested position.
 
+### Minimum observation time
+
+This value defines that how long at least should an object be visible during the night.
+
 ### Maximum altitude of Sun
 
-This value defines the length of the twilight. It denotes the angle to how deep should the Sun dive below the horizont to start the astronomical night. The `0°` means, that the astronomical night starts immediately after sunset and ends immediately after sunrise. The default value is `-18°`.
+This value defines the length of the twilight. It denotes the angle of how deep should the Sun dive below the horizont to start the astronomical night. The `0°` means, that the astronomical night starts immediately after sunset and ends immediately after sunrise. The default value is `-18°`.
 
 ### Minimum altitude of objects
 
@@ -34,7 +38,7 @@ This angle denotes the minimum altitude of NGC objects to filtering the results.
 
 ### Moonless night only
 
-By default Astroffers excludes that interval of the night, when the Moon is above the horizont. By switching off this toggle button, Astroffers will not care about the Moon's illumination, and shows the all of the results, which are observable during the night accordingly to the filter settings.
+By default Astroffers excludes that interval of the night, when the Moon is above the horizont. By switching off this toggle button, Astroffers will not care about the Moon's illumination, and shows all of the results, which are observable during the night along with the filter settings.
 
 ### Filtering brightness
 
@@ -52,7 +56,11 @@ Notice that the surface brightness values of objects are calculated by their mag
 
 ### Filtering types
 
-By pressing the `FILTER TYPES` button, you can select to which type of objects are you interested for.
+By pressing the `FILTER TYPES` button you can select that which type of objects are you interested for.
+
+### Filter constellations
+
+By pressing the `FILTER CONS` button you can filter objects by their containing constellation.
 
 ### Reseting
 
@@ -99,6 +107,7 @@ The result list contains the following columns:
 - **Messier number**
 - **Name**
 - **Object type**
+- **Constellation**
 - **From and To:** The observation interval. If you turned on the `Moonless night only` switch, that is limited to the section of astronomical night, when the Moon is down. Otherwise it is limited only to the astronomical night independently from the Moon.
 - **Max / Alt:** The time, when the object has the best visibility with the related altitude value.
 - **Sum:** The length of the observation interval.
