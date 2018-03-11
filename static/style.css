@@ -266,11 +266,11 @@ header img {
 }
 
 .list .magnitude {
-  width: 60px !important;
+  width: 40px !important;
 }
 
 .list .surface-brightness {
-  width: 100px !important;
+  width: 40px !important;
 }
 
 .details {
