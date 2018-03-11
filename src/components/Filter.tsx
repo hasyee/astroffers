@@ -232,26 +232,36 @@ export default connect(state => ({ filter: getFilter(state) }), {
               toggled={moonless}
               onToggle={this.handleMoonlessChange}
             />
-            <DropDownMenu
-              value={brightnessFilter}
-              onChange={this.handleBrightnessFilterChange}
-              style={{ width: '100%', marginTop: '10px' }}
-              underlineStyle={{ margin: '0' }}
-              labelStyle={{ paddingLeft: '0', userSelect: 'none' }}
-              iconStyle={{ right: '-15px' }}
-            >
-              <MenuItem value="magnitude" primaryText="Filter by magnitude" />
-              <MenuItem value="surfaceBrightness" primaryText="Filter by surface brightness" />
-            </DropDownMenu>
-            <TextField
-              floatingLabelText={`Maximum ${brightnessFilter === 'magnitude' ? 'magnitude' : 'surface brightness'}`}
-              floatingLabelFixed
-              fullWidth
-              value={resolveValue(brightnessFilter === 'magnitude' ? magnitude : surfaceBrightness)}
-              onChange={this.handleChange(brightnessFilter)}
-              errorText={getErrorMessage(brightnessFilter === 'magnitude' ? magnitude : surfaceBrightness)}
-              type="number"
-            />
+            <table style={{ width: '100%' }}>
+              <tbody>
+                <tr>
+                  <td>
+                    <TextField
+                      floatingLabelText="Max"
+                      floatingLabelFixed
+                      fullWidth
+                      value={resolveValue(brightnessFilter === 'magnitude' ? magnitude : surfaceBrightness)}
+                      onChange={this.handleChange(brightnessFilter)}
+                      errorText={getErrorMessage(brightnessFilter === 'magnitude' ? magnitude : surfaceBrightness)}
+                      type="number"
+                    />
+                  </td>
+                  <td>
+                    <DropDownMenu
+                      value={brightnessFilter}
+                      onChange={this.handleBrightnessFilterChange}
+                      style={{ width: '185px', marginTop: '21px' }}
+                      underlineStyle={{ margin: '0' }}
+                      labelStyle={{ paddingLeft: '0', userSelect: 'none' }}
+                      iconStyle={{ right: '-15px' }}
+                    >
+                      <MenuItem value="magnitude" primaryText="Magnitude" />
+                      <MenuItem value="surfaceBrightness" primaryText="Surface brightness" />
+                    </DropDownMenu>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
             <FlatButton
               label="Filter types"
               style={{ cssFloat: 'right', marginTop: '5px' }}
