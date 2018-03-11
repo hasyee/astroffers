@@ -80,7 +80,7 @@ export type NgcObject = {
     ra: Hms;
     de: Dms;
   };
-  type: string;
+  types: string[];
   constellation: string;
   size: [Dms, Dms];
   magnitude: number;
