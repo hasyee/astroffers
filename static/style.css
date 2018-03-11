@@ -249,6 +249,10 @@ header img {
   width: 25px !important;
 }
 
+.list .constellation {
+  width: 40px !important;
+}
+
 .list .from {
   width: 40px !important;
 }
