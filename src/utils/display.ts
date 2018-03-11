@@ -5,7 +5,7 @@ import { radToDeg } from '../calcs/units';
 import { stringifyTimeDiff } from '../calcs/utils';
 
 export default ({
-  object: { ngc, messier, name, magnitude, surfaceBrightness, type },
+  object: { ngc, messier, name, constellation, magnitude, surfaceBrightness, type },
   intersection: { start, end },
   max,
   sum,
@@ -15,6 +15,7 @@ export default ({
   messier,
   name,
   type: resolveTypes(type).join(', '),
+  constellation,
   from: moment(start).format('HH:mm'),
   to: moment(end).format('HH:mm'),
   max: `${moment(max).format('HH:mm')} / ${Math.round(radToDeg(altitudeAtMax))}°`,

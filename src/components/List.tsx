@@ -129,6 +129,11 @@ export default connect(
                     Type{this.renderSortByIcon(ListItemProp.TYPE)}
                   </span>
                 </TableHeaderColumn>
+                <TableHeaderColumn className="constellation">
+                  <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.CONSTELLATION)}>
+                    Cons.{this.renderSortByIcon(ListItemProp.CONSTELLATION)}
+                  </span>
+                </TableHeaderColumn>
                 <TableHeaderColumn className="from">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.FROM)}>
                     From{this.renderSortByIcon(ListItemProp.FROM)}
@@ -163,7 +168,19 @@ export default connect(
             </TableHeader>
             <TableBody displayRowCheckbox={false} preScanRows={false}>
               {objects.slice(0, displayedItems).filter(search(this.state.filter)).map(ngcInfo => {
-                const { ngc, messier, name, type, from, to, max, sum, magnitude, surfaceBrightness } = display(ngcInfo);
+                const {
+                  ngc,
+                  messier,
+                  name,
+                  type,
+                  constellation,
+                  from,
+                  to,
+                  max,
+                  sum,
+                  magnitude,
+                  surfaceBrightness
+                } = display(ngcInfo);
 
                 return (
                   <TableRow key={ngc} selectable={false} className="list row" onClick={this.handleRowClick(ngc)}>
@@ -176,6 +193,9 @@ export default connect(
                     </TableRowColumn>
                     <TableRowColumn className="type" title={type}>
                       {type}
+                    </TableRowColumn>
+                    <TableRowColumn className="constellation" title={constellation}>
+                      {constellation}
                     </TableRowColumn>
                     <TableRowColumn className="from">{from}</TableRowColumn>
                     <TableRowColumn className="to">{to}</TableRowColumn>

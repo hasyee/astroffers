@@ -40,11 +40,12 @@ export enum ListItemProp {
   NGC = 'ngc',
   MESSIER = 'messier',
   NAME = 'name',
+  TYPE = 'type',
+  CONSTELLATION = 'constellation',
   FROM = 'from',
   TO = 'to',
-  MAGNITUDE = 'magnitude',
-  SURFACE_BRIGHTNESS = 'surfaceBrightness',
-  TYPE = 'type',
   MAX = 'max',
-  SUM = 'sum'
+  SUM = 'sum',
+  MAGNITUDE = 'magnitude',
+  SURFACE_BRIGHTNESS = 'surfaceBrightness'
 }
