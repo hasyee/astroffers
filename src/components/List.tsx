@@ -1,6 +1,5 @@
 import React = require('react');
 import { findDOMNode } from 'react-dom';
-import moment = require('moment');
 const { connect } = require('react-redux');
 import {
   Table,
@@ -13,9 +12,7 @@ import {
 } from 'material-ui/Table';
 import { ListItemProp } from '../types';
 import { NgcInfo } from '../calcs/types';
-import { radToDeg } from '../calcs/units';
-import resolveTypes from '../calcs/resolveTypes';
-import { stringifyTimeDiff } from '../calcs/utils';
+import display from '../utils/display';
 import { openDetails, sort } from '../actions';
 import { getList, isFiltering, getSortBy } from '../selectors';
 import LazyInput from './LazyInput';
@@ -165,42 +162,30 @@ export default connect(
               </TableRow>
             </TableHeader>
             <TableBody displayRowCheckbox={false} preScanRows={false}>
-              {objects
-                .slice(0, displayedItems)
-                .filter(search(this.state.filter))
-                .map(
-                  ({
-                    object: { ngc, messier, name, magnitude, surfaceBrightness, type },
-                    intersection: { start, end },
-                    max,
-                    sum,
-                    altitudeAtMax
-                  }) => {
-                    const resolvedType = resolveTypes(type).join(', ');
-                    return (
-                      <TableRow key={ngc} selectable={false} className="list row" onClick={this.handleRowClick(ngc)}>
-                        <TableRowColumn className="ngc">
-                          <b>{ngc}</b>
-                        </TableRowColumn>
-                        <TableRowColumn className="messier">{messier}</TableRowColumn>
-                        <TableRowColumn className="name" title={name}>
-                          {name}
-                        </TableRowColumn>
-                        <TableRowColumn className="type" title={resolvedType}>
-                          {resolvedType}
-                        </TableRowColumn>
-                        <TableRowColumn className="from">{moment(start).format('HH:mm')}</TableRowColumn>
-                        <TableRowColumn className="to">{moment(end).format('HH:mm')}</TableRowColumn>
-                        <TableRowColumn className="max">
-                          {moment(max).format('HH:mm')} / {Math.round(radToDeg(altitudeAtMax))}°
-                        </TableRowColumn>
-                        <TableRowColumn className="sum">{stringifyTimeDiff(sum)}</TableRowColumn>
-                        <TableRowColumn className="magnitude">{magnitude}</TableRowColumn>
-                        <TableRowColumn className="surface-brightness">{surfaceBrightness}</TableRowColumn>
-                      </TableRow>
-                    );
-                  }
-                )}
+              {objects.slice(0, displayedItems).filter(search(this.state.filter)).map(ngcInfo => {
+                const { ngc, messier, name, type, from, to, max, sum, magnitude, surfaceBrightness } = display(ngcInfo);
+
+                return (
+                  <TableRow key={ngc} selectable={false} className="list row" onClick={this.handleRowClick(ngc)}>
+                    <TableRowColumn className="ngc">
+                      <b>{ngc}</b>
+                    </TableRowColumn>
+                    <TableRowColumn className="messier">{messier}</TableRowColumn>
+                    <TableRowColumn className="name" title={name}>
+                      {name}
+                    </TableRowColumn>
+                    <TableRowColumn className="type" title={type}>
+                      {type}
+                    </TableRowColumn>
+                    <TableRowColumn className="from">{from}</TableRowColumn>
+                    <TableRowColumn className="to">{to}</TableRowColumn>
+                    <TableRowColumn className="max">{max}</TableRowColumn>
+                    <TableRowColumn className="sum">{sum}</TableRowColumn>
+                    <TableRowColumn className="magnitude">{magnitude}</TableRowColumn>
+                    <TableRowColumn className="surface-brightness">{surfaceBrightness}</TableRowColumn>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </div>

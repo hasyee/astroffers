@@ -1,7 +1,9 @@
 import { State, ListItemProp } from './types';
 import { Thunk } from 'repatch';
 import defaultState from './defaultState';
+import { getList } from './selectors';
 import sorters from './utils/sorters';
+import display from './utils/display';
 const typeMap = require('../data/types.json');
 
 export const sort = (listItemProp: ListItemProp) => (state: State): State => ({
@@ -53,6 +55,12 @@ export const filterObjects = () => (state: State) => async (dispatch, getState, 
 export const openDetails = (openedDetails: number) => (state: State): State => ({ ...state, openedDetails });
 
 export const closeDetails = () => (state: State): State => ({ ...state, openedDetails: null });
+
+export const exportToCsv = () => (state: State) => async (dispatch, getState, { toCsv }) => {
+  const list = getList(getState());
+  if (!list || list.length === 0) return;
+  await toCsv(list.map(display));
+};
 
 export const trackScreen = (cd: string) => () => (dispatch, getState, { analytics }) =>
   analytics.send('screenview', { cd });

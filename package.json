@@ -41,6 +41,7 @@
     "electron-updater": "2.21.0",
     "font-roboto-local": "1.0.1",
     "highcharts": "6.0.3",
+    "json-2-csv": "^2.2.0",
     "left-pad": "1.2.0",
     "material-ui": "0.19.4",
     "mdi": "2.0.46",
