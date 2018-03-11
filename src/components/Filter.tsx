@@ -6,15 +6,25 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
-import Menu from 'material-ui/Menu';
 import DropDownMenu from 'material-ui/DropDownMenu';
+import FontIcon from 'material-ui/FontIcon';
 import MenuItem from 'material-ui/MenuItem';
+import { List, ListItem } from 'material-ui/List';
 import Dialog from 'material-ui/Dialog';
 import SelectLocationDialog from './SelectLocationDialog';
 import { State, Filter as IFilter } from '../types';
-import { changeFilter, resetFilter, filterObjects, toggleTypeFilter, changeAllTypeFilter, track } from '../actions';
+import {
+  changeFilter,
+  resetFilter,
+  filterObjects,
+  toggleSetFilter,
+  changeAllTypeFilter,
+  changeAllConstellationFilter,
+  track
+} from '../actions';
 import { getFilter } from '../selectors';
 const typeMap = require('../../data/types.json');
+const constellationMap = require('../../data/constellations.json');
 
 type Range = { min: number; max: number };
 
@@ -27,22 +37,32 @@ export default connect(state => ({ filter: getFilter(state) }), {
   changeFilter,
   resetFilter,
   filterObjects,
-  toggleTypeFilter,
+  toggleSetFilter,
   changeAllTypeFilter,
+  changeAllConstellationFilter,
   track
 })(
-  class extends React.PureComponent<{
-    filter: IFilter;
-    changeFilter: typeof changeFilter;
-    resetFilter: typeof resetFilter;
-    filterObjects: typeof filterObjects;
-    toggleTypeFilter: typeof toggleTypeFilter;
-    changeAllTypeFilter: typeof changeAllTypeFilter;
-    track: typeof track;
-  }> {
+  class extends React.PureComponent<
+    {
+      filter: IFilter;
+      changeFilter: typeof changeFilter;
+      resetFilter: typeof resetFilter;
+      filterObjects: typeof filterObjects;
+      toggleSetFilter: typeof toggleSetFilter;
+      changeAllTypeFilter: typeof changeAllTypeFilter;
+      changeAllConstellationFilter: typeof changeAllConstellationFilter;
+      track: typeof track;
+    },
+    {
+      isOpenLocationDialog: boolean;
+      isOpenTypeFilterDialog: boolean;
+      isOpenConstellationFilterDialog: boolean;
+    }
+  > {
     state = {
       isOpenLocationDialog: false,
-      isOpenTypeFilterDialog: false
+      isOpenTypeFilterDialog: false,
+      isOpenConstellationFilterDialog: false
     };
 
     handleDateChange = (_, dateObject) => this.props.changeFilter('date', dateObject.getTime());
@@ -69,6 +89,11 @@ export default connect(state => ({ filter: getFilter(state) }), {
       this.props.track('View', 'open-type-filter-dialog');
     };
     handleTypeFilterDialogClose = () => this.setState({ isOpenTypeFilterDialog: false });
+    handleConstellationFilterDialogOpen = () => {
+      this.setState({ isOpenConstellationFilterDialog: true });
+      this.props.track('View', 'open-constellation-filter-dialog');
+    };
+    handleConstellationFilterDialogClose = () => this.setState({ isOpenConstellationFilterDialog: false });
 
     handleResetFilter = () => {
       this.props.resetFilter();
@@ -104,7 +129,7 @@ export default connect(state => ({ filter: getFilter(state) }), {
     }
 
     renderTypeFilterDialog() {
-      const { filter: { types }, toggleTypeFilter, changeAllTypeFilter } = this.props;
+      const { filter: { types }, toggleSetFilter, changeAllTypeFilter } = this.props;
       const { isOpenTypeFilterDialog } = this.state;
       const actions = [
         <FlatButton label="Close" onClick={this.handleTypeFilterDialogClose} primary />,
@@ -120,17 +145,56 @@ export default connect(state => ({ filter: getFilter(state) }), {
           autoScrollBodyContent
           contentStyle={{ width: '350px', maxWidth: 'none' }}
         >
-          <Menu autoWidth={false} desktop width={350}>
+          <List>
             {Object.keys(typeMap).map(key => (
-              <MenuItem
+              <ListItem
                 key={key}
-                insetChildren={true}
+                style={{ userSelect: 'none' }}
+                leftIcon={
+                  <FontIcon className="mdi mdi-check" style={{ margin: '15px', opacity: types[key] ? 1 : 0 }} />
+                }
                 primaryText={typeMap[key]}
-                checked={types[key]}
-                onClick={() => toggleTypeFilter(key)}
+                onClick={() => toggleSetFilter('types', key)}
               />
             ))}
-          </Menu>
+          </List>
+        </Dialog>
+      );
+    }
+
+    renderConstellationFilterDialog() {
+      const { filter: { constellations }, toggleSetFilter, changeAllConstellationFilter } = this.props;
+      const { isOpenConstellationFilterDialog } = this.state;
+      const actions = [
+        <FlatButton label="Close" onClick={this.handleConstellationFilterDialogClose} primary />,
+        <FlatButton label="Select all" onClick={() => changeAllConstellationFilter(true)} style={{ float: 'left' }} />,
+        <FlatButton label="Select none" onClick={() => changeAllConstellationFilter(false)} style={{ float: 'left' }} />
+      ];
+      return (
+        <Dialog
+          actions={actions}
+          modal={false}
+          open={isOpenConstellationFilterDialog}
+          onRequestClose={this.handleConstellationFilterDialogClose}
+          autoScrollBodyContent
+          contentStyle={{ width: '350px', maxWidth: 'none' }}
+        >
+          <List>
+            {Object.keys(constellationMap).map(key => (
+              <ListItem
+                key={key}
+                style={{ userSelect: 'none' }}
+                leftIcon={
+                  <FontIcon
+                    className="mdi mdi-check"
+                    style={{ margin: '15px', opacity: constellations[key] ? 1 : 0 }}
+                  />
+                }
+                primaryText={constellationMap[key]}
+                onClick={() => toggleSetFilter('constellations', key)}
+              />
+            ))}
+          </List>
         </Dialog>
       );
     }
@@ -152,6 +216,7 @@ export default connect(state => ({ filter: getFilter(state) }), {
         resetFilter,
         filterObjects
       } = this.props;
+
       return (
         <div className="fitted column layout filter">
           <div className="fitted overflow-y inputs">
@@ -275,11 +340,17 @@ export default connect(state => ({ filter: getFilter(state) }), {
               </tbody>
             </table>
             <FlatButton
+              label="Filter cons"
+              style={{ cssFloat: 'left', marginTop: '5px' }}
+              onClick={this.handleConstellationFilterDialogOpen}
+            />
+            <FlatButton
               label="Filter types"
               style={{ cssFloat: 'right', marginTop: '5px' }}
               onClick={this.handleTypeFilterDialogOpen}
             />
             {this.renderTypeFilterDialog()}
+            {this.renderConstellationFilterDialog()}
           </div>
           <div className="dynamic button-container">
             <FlatButton label="Reset" primary style={{ float: 'left' }} onClick={this.handleResetFilter} />

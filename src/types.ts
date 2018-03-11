@@ -20,7 +20,8 @@ export type Filter = {
   brightnessFilter: string;
   magnitude: number;
   surfaceBrightness: number;
-  types: TypeFilter;
+  types: SetFilter;
+  constellations: SetFilter;
 };
 
 export type Settings = {
@@ -33,7 +34,7 @@ export type Result = {
   list: NgcInfo[];
 };
 
-export type TypeFilter = {
+export type SetFilter = {
   [typeKey: string]: boolean;
 };
 
