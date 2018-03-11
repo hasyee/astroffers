@@ -24,7 +24,3 @@ Start in production mode:
 ```
 npm run start-prod
 ```
-
-## Metrics
-
-[![Nucleus](https://nucleus.sh/banner_small.png)](https://nucleus.sh/)
