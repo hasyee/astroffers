@@ -151,12 +151,12 @@ export default connect(
                 </TableHeaderColumn>
                 <TableHeaderColumn className="magnitude">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.MAGNITUDE)}>
-                    Magnitude{this.renderSortByIcon(ListItemProp.MAGNITUDE)}
+                    Mag.{this.renderSortByIcon(ListItemProp.MAGNITUDE)}
                   </span>
                 </TableHeaderColumn>
                 <TableHeaderColumn className="surface-brightness">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.SURFACE_BRIGHTNESS)}>
-                    Surface brightness{this.renderSortByIcon(ListItemProp.SURFACE_BRIGHTNESS)}
+                    Sur.br.{this.renderSortByIcon(ListItemProp.SURFACE_BRIGHTNESS)}
                   </span>
                 </TableHeaderColumn>
               </TableRow>
