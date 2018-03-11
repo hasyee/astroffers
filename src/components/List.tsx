@@ -14,6 +14,7 @@ import { ListItemProp } from '../types';
 import { NgcInfo } from '../calcs/types';
 import display from '../utils/display';
 import resolveTypes from '../utils/resolveTypes';
+import resolveConstellation from '../utils/resolveConstellation';
 import { openDetails, sort } from '../actions';
 import { getList, isFiltering, getSortBy } from '../selectors';
 import LazyInput from './LazyInput';
@@ -196,7 +197,7 @@ export default connect(
                     <TableRowColumn className="type" title={resolvedTypeStr}>
                       {typeStr}
                     </TableRowColumn>
-                    <TableRowColumn className="constellation" title={constellation}>
+                    <TableRowColumn className="constellation" title={resolveConstellation(constellation)}>
                       {constellation}
                     </TableRowColumn>
                     <TableRowColumn className="from">{from}</TableRowColumn>
