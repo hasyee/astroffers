@@ -7,10 +7,8 @@ import store from './store';
 import App from './components/App';
 import ReactHighcharts = require('react-highcharts');
 import HighchartsMore = require('highcharts/highcharts-more');
-import Nucleus = require('electron-nucleus');
 const theme = require('../static/theme.json');
 
-Nucleus.init('5a1ee99ffd2a27796bfc934f');
 HighchartsMore(ReactHighcharts.Highcharts);
 
 try {
