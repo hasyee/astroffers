@@ -141,6 +141,7 @@ export default connect(state => ({ filter: getFilter(state) }), {
           date,
           latitude,
           longitude,
+          observationTime,
           twilight,
           altitude,
           moonless,
@@ -203,6 +204,17 @@ export default connect(state => ({ filter: getFilter(state) }), {
               longitude={longitude}
               onCancel={this.handleLocationDialogCancel}
               onSubmit={this.handleLocationDialogSubmit}
+            />
+            <TextField
+              floatingLabelText="Minimum observation time ( min )"
+              floatingLabelFixed
+              fullWidth
+              value={resolveValue(observationTime)}
+              onChange={this.handleChange('observationTime', { min: 0, max: 1440 })}
+              errorText={getErrorMessage(observationTime)}
+              type="number"
+              min={0}
+              max={1440}
             />
             <TextField
               floatingLabelText="Maximum altitude of Sun ( ° )"

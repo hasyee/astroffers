@@ -8,6 +8,7 @@ export default {
     date: Date.now(),
     latitude: 47,
     longitude: 19,
+    observationTime: 60,
     twilight: -18,
     altitude: 20,
     moonless: true,
