@@ -13,6 +13,7 @@ import {
 import { ListItemProp } from '../types';
 import { NgcInfo } from '../calcs/types';
 import display from '../utils/display';
+import resolveTypes from '../utils/resolveTypes';
 import { openDetails, sort } from '../actions';
 import { getList, isFiltering, getSortBy } from '../selectors';
 import LazyInput from './LazyInput';
@@ -172,7 +173,7 @@ export default connect(
                   ngc,
                   messier,
                   name,
-                  type,
+                  types,
                   constellation,
                   from,
                   to,
@@ -181,7 +182,8 @@ export default connect(
                   magnitude,
                   surfaceBrightness
                 } = display(ngcInfo);
-
+                const typeStr = types.join(', ');
+                const resolvedTypeStr = resolveTypes(types);
                 return (
                   <TableRow key={ngc} selectable={false} className="list row" onClick={this.handleRowClick(ngc)}>
                     <TableRowColumn className="ngc">
@@ -191,8 +193,8 @@ export default connect(
                     <TableRowColumn className="name" title={name}>
                       {name}
                     </TableRowColumn>
-                    <TableRowColumn className="type" title={type}>
-                      {type}
+                    <TableRowColumn className="type" title={resolvedTypeStr}>
+                      {typeStr}
                     </TableRowColumn>
                     <TableRowColumn className="constellation" title={constellation}>
                       {constellation}

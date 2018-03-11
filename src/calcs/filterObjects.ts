@@ -23,12 +23,11 @@ export default (
   const location = getLocation(latitude, longitude);
   return ngcObjects
     .filter(object => {
-      const types = object.type.split('+');
       return (
         (brightnessFilter === 'magnitude'
           ? Number.isFinite(object.magnitude) && object.magnitude < magnitude
           : Number.isFinite(object.surfaceBrightness) && object.surfaceBrightness < surfaceBrightness) &&
-        types.some(t => typeFilter[t])
+        object.types.some(t => typeFilter[t])
       );
     })
     .map(getNgcInfo(date, night, location, altitude))

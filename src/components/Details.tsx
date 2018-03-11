@@ -12,7 +12,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import { NgcInfo, NightInfo, Az, CoordSeries } from '../calcs/types';
-import resolveTypes from '../calcs/resolveTypes';
+import resolveTypes from '../utils/resolveTypes';
 
 import { dmsToString, hmsToString, radToDmsString, radToHmsString, radToDeg } from '../calcs/units';
 import { openDetails, closeDetails, track } from '../actions';
@@ -90,7 +90,7 @@ export default connect(
         horizontalCoords,
         nightInfo,
         ngcInfo: {
-          object: { ngc, messier, name, type, constellation, size, magnitude, surfaceBrightness, eqCoords },
+          object: { ngc, messier, name, types, constellation, size, magnitude, surfaceBrightness, eqCoords },
           eqCoordsOnDate,
           max,
           sum,
@@ -114,7 +114,7 @@ export default connect(
                     <td>
                       <b>Type</b>
                     </td>
-                    <td>{resolveTypes(type).join(', ')}</td>
+                    <td>{resolveTypes(types).join(', ')}</td>
                   </tr>
                   <tr>
                     <td>

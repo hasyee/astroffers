@@ -25,5 +25,5 @@ export default {
   [ListItemProp.SUM]: defaultSorter((object: NgcInfo) => object.sum),
   [ListItemProp.MAGNITUDE]: defaultSorter((object: NgcInfo) => object.object.magnitude),
   [ListItemProp.SURFACE_BRIGHTNESS]: defaultSorter((object: NgcInfo) => object.object.surfaceBrightness),
-  [ListItemProp.TYPE]: defaultSorter((object: NgcInfo) => object.object.type)
+  [ListItemProp.TYPE]: defaultSorter((object: NgcInfo) => object.object.types[0])
 };
