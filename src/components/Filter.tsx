@@ -162,30 +162,41 @@ export default connect(state => ({ filter: getFilter(state) }), {
               value={new Date(date)}
               onChange={this.handleDateChange}
             />
-            <FlatButton label="Set today" style={{ cssFloat: 'right' }} onClick={this.handleSetToday} />
-            <TextField
-              floatingLabelText="Latitude ( ° )"
-              floatingLabelFixed
-              fullWidth
-              value={resolveValue(latitude)}
-              onChange={this.handleChange('latitude', { min: -90, max: 90 })}
-              errorText={getErrorMessage(latitude)}
-              type="number"
-              min={-90}
-              max={90}
-            />
-            <TextField
-              floatingLabelText="Longitude ( ° )"
-              floatingLabelFixed
-              fullWidth
-              value={resolveValue(longitude)}
-              onChange={this.handleChange('longitude', { min: -180, max: 180 })}
-              errorText={getErrorMessage(longitude)}
-              type="number"
-              min={-180}
-              max={180}
-            />
-            <FlatButton label="Select location" style={{ cssFloat: 'right' }} onClick={this.handleLocationDialogOpen} />
+            <FlatButton label="Set today" style={{ float: 'left' }} onClick={this.handleSetToday} />
+            <FlatButton label="Select location" style={{ float: 'right' }} onClick={this.handleLocationDialogOpen} />
+            <table style={{ width: '100%' }}>
+              <tbody>
+                <tr>
+                  <td>
+                    <TextField
+                      floatingLabelText="Latitude ( ° )"
+                      floatingLabelFixed
+                      fullWidth
+                      value={resolveValue(latitude)}
+                      onChange={this.handleChange('latitude', { min: -90, max: 90 })}
+                      errorText={getErrorMessage(latitude)}
+                      type="number"
+                      min={-90}
+                      max={90}
+                    />
+                  </td>
+                  <td>
+                    <TextField
+                      floatingLabelText="Longitude ( ° )"
+                      floatingLabelFixed
+                      fullWidth
+                      value={resolveValue(longitude)}
+                      onChange={this.handleChange('longitude', { min: -180, max: 180 })}
+                      errorText={getErrorMessage(longitude)}
+                      type="number"
+                      min={-180}
+                      max={180}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
             <SelectLocationDialog
               isOpen={this.state.isOpenLocationDialog}
               latitude={latitude}
