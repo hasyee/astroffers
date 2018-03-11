@@ -1,6 +1,6 @@
 # How to use Astroffers
 
-Astroffers helps you to discovering NGC objects. Accordingly to your filter options it shows those objects, which are visible on your choosen night and location.
+Astroffers helps you to discover NGC objects. Accordingly to your filter options it shows those objects, which are visible on your choosen night and location.
 
 ## Filtering
 
@@ -67,6 +67,10 @@ The Summary panel is on the top of the window. It shows the
 - Some data about the night
 - A pie-chart about the brightness of the night
 
+### Export to `.csv` file
+
+You can export the result list to `.csv` file by clicking the `EXPORT` button in the **Summary** panel.
+
 ### The night table
 
 In this table you can see some information about the night.
@@ -92,12 +96,27 @@ You can find the result list in the right side of the application. The result li
 The result list contains the following columns:
 
 - **NGC number**
+- **Messier number**
+- **Name**
 - **Object type**
 - **From and To:** The observation interval. If you turned on the `Moonless night only` switch, that is limited to the section of astronomical night, when the Moon is down. Otherwise it is limited only to the astronomical night independently from the Moon.
 - **Max / Alt:** The time, when the object has the best visibility with the related altitude value.
 - **Sum:** The length of the observation interval.
 - **Magnitude**
 - **Surface brightness:** This value is computed from the magnitude value and size data.
+
+### Sorting the list
+
+The list is sorted by **Max / Alt** by default. But you can change sorting by clicking on any header title, such as: **NGC** or **Name**.
+
+### Filtering the result list
+
+You can filter the result list by
+- NGC number
+- Messier number
+- and name
+
+You find the filter inputs below the header titles: **NGC**, **M** or **Name**.
 
 ## The detailed view
 
