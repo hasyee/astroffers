@@ -15,7 +15,8 @@ export default (
     brightnessFilter,
     magnitude,
     surfaceBrightness,
-    types: typeFilter
+    types: typeFilter,
+    constellations: constellationFilter
   }: Filter,
   night: Interval
 ): NgcInfo[] => {
@@ -27,7 +28,8 @@ export default (
         (brightnessFilter === 'magnitude'
           ? Number.isFinite(object.magnitude) && object.magnitude < magnitude
           : Number.isFinite(object.surfaceBrightness) && object.surfaceBrightness < surfaceBrightness) &&
-        object.types.some(t => typeFilter[t])
+        object.types.some(t => typeFilter[t]) &&
+        constellationFilter[object.constellation]
       );
     })
     .map(getNgcInfo(date, night, location, altitude))
