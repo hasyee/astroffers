@@ -13,6 +13,7 @@ export type Filter = {
   date: number;
   latitude: number;
   longitude: number;
+  observationTime: number;
   twilight: number;
   altitude: number;
   moonless: boolean;
