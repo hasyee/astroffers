@@ -1,8 +1,9 @@
 import Store, { thunk } from 'repatch';
 import { State } from './types';
 import * as api from './api';
-import * as location from './location';
-import analytics from './analytics';
+import * as location from './utils/location';
+import analytics from './utils/analytics';
+import toCsv from './utils/csv';
 import defaultState from './defaultState';
 
 const storedFilterStr = window.localStorage.getItem('filter');
@@ -17,7 +18,9 @@ const initialState: State = {
   settings: { ...defaultState.settings, ...storedSettings }
 };
 
-const store = new Store<State>(initialState).addMiddleware(thunk.withExtraArgument({ api, location, analytics }));
+const store = new Store<State>(initialState).addMiddleware(
+  thunk.withExtraArgument({ api, location, analytics, toCsv })
+);
 
 export default store;
 

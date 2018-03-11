@@ -1,17 +1,30 @@
 import React = require('react');
 import moment = require('moment');
 const { connect } = require('react-redux');
-import { NightInfo } from '../calcs/types';
-import { isFiltering, getNightInfo, getCount } from '../selectors';
+import FlatButton from 'material-ui/FlatButton';
+import FontIcon from 'material-ui/FontIcon';
+import { NightInfo, NgcInfo } from '../calcs/types';
+import { exportToCsv } from '../actions';
+import { isFiltering, getNightInfo, getCount, getList } from '../selectors';
 import Moon from './Moon';
 import NightChart from './NightChart';
 
-export default connect(state => ({
-  isFiltering: isFiltering(state),
-  nightInfo: getNightInfo(state),
-  count: getCount(state)
-}))(
-  class extends React.PureComponent<{ nightInfo: NightInfo; count: number; isFiltering: boolean }> {
+export default connect(
+  state => ({
+    list: getList(state),
+    isFiltering: isFiltering(state),
+    nightInfo: getNightInfo(state),
+    count: getCount(state)
+  }),
+  { exportToCsv }
+)(
+  class extends React.PureComponent<{
+    list: NgcInfo[];
+    nightInfo: NightInfo;
+    count: number;
+    isFiltering: boolean;
+    exportToCsv: typeof exportToCsv;
+  }> {
     render() {
       if (!this.props.nightInfo || this.props.isFiltering) return null;
       const { night, astroNight, moonNight, moonlessNight, moonPhase } = this.props.nightInfo;
@@ -20,6 +33,15 @@ export default connect(state => ({
           <div className="dynamic column layout center count">
             <div>{this.props.count}</div>
             <div>total results</div>
+            <div style={{ marginTop: '10px' }}>
+              <FlatButton
+                primary
+                icon={<FontIcon className="mdi mdi-file-export" />}
+                label="EXPORT"
+                onClick={this.props.exportToCsv}
+                disabled={!this.props.list || this.props.list.length === 0}
+              />
+            </div>
           </div>
           <div className="dynamic layout center">
             <Moon phase={moonPhase} />
