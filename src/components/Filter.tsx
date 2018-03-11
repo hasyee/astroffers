@@ -329,8 +329,8 @@ export default connect(state => ({ filter: getFilter(state) }), {
                       onChange={this.handleBrightnessFilterChange}
                       style={{ width: '185px', marginTop: '21px' }}
                       underlineStyle={{ margin: '0' }}
-                      labelStyle={{ paddingLeft: '0', userSelect: 'none' }}
-                      iconStyle={{ right: '-15px' }}
+                      labelStyle={{ paddingLeft: '0', userSelect: 'none', lineHeight: '68px' }}
+                      iconStyle={{ right: '-15px', top: '9px' }}
                     >
                       <MenuItem value="magnitude" primaryText="Magnitude" />
                       <MenuItem value="surfaceBrightness" primaryText="Surface brightness" />
