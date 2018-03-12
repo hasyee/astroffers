@@ -46,22 +46,14 @@ main #button-container {
 #button-container a {
   background-color: white;
   color: #01579b;
-  font-size: 2em;
-  padding: 1em;
+  padding: 1.5em;
+  margin: 1.5em;
+  font-size: 1.5em;
   outline: none;
   border: 0;
   cursor: pointer;
-  margin: 1em;
   text-align: center;
   text-decoration: none;
-}
-
-@media only screen and (max-width: 1300px) and (min-width: 1150px) {
-  #button-container a {
-    padding: 1.5em;
-    margin: 1.5em;
-    font-size: 1.5em;
-  }
 }
 
 @media only screen and (max-width: 1150px) {
