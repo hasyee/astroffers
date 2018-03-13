@@ -6,12 +6,12 @@ body {
 
 body * {
   font-family: 'Roboto', sans-serif;
-  color: white;
   box-sizing: border-box;
 }
 
 header {
   background-color: #01579b;
+  color: white;
   padding: 3em 1em;
   margin-left: auto;
   margin-right: auto;
@@ -35,13 +35,7 @@ header h2 {
   letter-spacing: 8px;
 }
 
-main {
-  background-color: #01579b;
-  text-align: center;
-  overflow: auto;
-}
-
-#button-container {
+header #button-container {
   display: inline-block;
   margin-top: 2em;
   margin-left: auto;
@@ -49,7 +43,7 @@ main {
   overflow: auto;
 }
 
-#button-container a {
+header #button-container a {
   display: inline-block;
   background-color: white;
   color: #01579b;
@@ -63,21 +57,44 @@ main {
   text-align: center;
   text-decoration: none;
   opacity: 0.9;
+  max-width: 300px;
 }
 
-#button-container i {
+header #button-container i {
   color: #01579b;
   margin-right: .5em;
 }
 
-@media only screen and (max-width: 1300px) {
-  #button-container a {
+main {
+  margin-left: auto;
+  margin-right: auto;
+  overflow: auto;
+  max-width: 900px;
+  padding: 2em;
+  margin-left: auto;
+}
+
+main h3 {
+  font-size: 1.5em;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0px;
+  color: #01579b;
+}
+
+main p {
+  font-weight: 300;
+  line-height: 25px;
+}
+
+@media only screen and (max-width: 1000px) {
+  header #button-container a {
     display: block;
     width: 100%;
     margin: 0 0 1em 0;
   }
 
-  #button-container i {
+  header #button-container i {
     float: left;
   }
 }
