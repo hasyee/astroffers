@@ -10,6 +10,7 @@ body * {
 }
 
 header {
+  position: relative;
   background-color: #01579b;
   color: white;
   padding: 3em 1em;
@@ -18,17 +19,33 @@ header {
   text-align: center;
 }
 
+header #cover {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-image: url('cover.jpg');
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: left top;
+  opacity: 0.3;
+}
+
 header img {
+  position: relative;
   height: 6em;
 }
 
 header h1 {
+  position: relative;
   font-weight: 100;
   font-size: 4em;
   margin: 0;
 }
 
 header h2 {
+  position: relative;
   font-size: 1em;
   font-weight: 100;
   text-transform: uppercase;
