@@ -49,6 +49,10 @@ const getConfig = (horizontalCoords: CoordSeries<Az>) => {
       width: 200
     },
 
+    credits: {
+      enabled: false
+    },
+
     title: {
       text: ''
     },

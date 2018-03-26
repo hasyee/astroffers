@@ -49,6 +49,10 @@ const getConfig = (date: Timestamp, { night, moonlessNight, astroNight }: NightI
     height: 150,
     width: 150
   },
+  
+  credits: {
+    enabled: false
+  },
 
   title: {
     text: ''
