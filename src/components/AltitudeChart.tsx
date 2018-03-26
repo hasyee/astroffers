@@ -54,6 +54,10 @@ const getConfig = (
       }
     },
 
+    credits: {
+      enabled: false
+    },
+
     chart: {
       height: '200px'
     },
