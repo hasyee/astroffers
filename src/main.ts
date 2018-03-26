@@ -4,6 +4,7 @@ import * as url from 'url';
 import log = require('electron-log');
 import { autoUpdater } from 'electron-updater';
 import { dialog } from 'electron';
+const isDev = require('electron-is-dev');
 
 log.transports.file.level = 'info';
 autoUpdater.logger = log;
@@ -104,15 +105,8 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-// Callback for the ready event
 app.on('ready', () => {
-  /*
-   This is where your other code would go
-  */
-
-  // Check if we are on a MAC
   if (process.platform === 'darwin') {
-    // Create our menu entries so that we can use MAC shortcuts
     Menu.setApplicationMenu(
       Menu.buildFromTemplate([
         {
@@ -128,7 +122,23 @@ app.on('ready', () => {
             { role: 'delete' },
             { role: 'selectall' }
           ]
-        }
+        },
+        isDev
+          ? {
+              label: 'View',
+              submenu: [
+                { role: 'reload' },
+                { role: 'forcereload' },
+                { role: 'toggledevtools' },
+                { type: 'separator' },
+                { role: 'resetzoom' },
+                { role: 'zoomin' },
+                { role: 'zoomout' },
+                { type: 'separator' },
+                { role: 'togglefullscreen' }
+              ]
+            }
+          : {}
       ])
     );
   }
