@@ -1,6 +1,6 @@
 import clone = require('clone');
 import { Filter, Result } from '../types';
-import { getNightInfo, filterObjects } from 'astroffers-core';
+import { getNightInfo, getObjects } from 'astroffers-core';
 
 export default (filter: Filter): Result => {
   const {
@@ -17,7 +17,7 @@ export default (filter: Filter): Result => {
     constellations
   } = filter;
   const nightInfo = getNightInfo(date, latitude, longitude, twilight);
-  const list = filterObjects({
+  const list = getObjects({
     date,
     latitude,
     longitude,
