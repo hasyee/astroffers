@@ -6,6 +6,8 @@ export type Century = number;
 
 export type Day = number;
 
+export type Min = number;
+
 export type Hour = number;
 
 export type ArcMin = number;
@@ -56,6 +58,15 @@ export enum TransitType {
   SET = 'SET',
   MIDNIGHT = 'MIDNIGHT'
 }
+
+export enum BirghtnessType {
+  magnitude = 'magnitude',
+  surfaceBrightness = 'surfaceBrightness'
+}
+
+export type SetFilter = {
+  [typeKey: string]: boolean;
+};
 
 export type Transit = {
   type: TransitType;
