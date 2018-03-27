@@ -32,7 +32,7 @@
   },
   "homepage": "http://astroffers.org",
   "dependencies": {
-    "astroffers-core": "^1.0.1",
+    "astroffers-core": "1.0.2",
     "classnames": "2.2.5",
     "clone": "2.1.1",
     "electron-ga": "1.0.4",
