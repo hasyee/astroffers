@@ -1,6 +1,6 @@
 import clone = require('clone');
 import { Filter, Result } from '../types';
-import { getNightInfo, filterObjects } from '../calcs';
+import { getNightInfo, filterObjects } from 'astroffers-core';
 
 export default (filter: Filter): Result => {
   const {

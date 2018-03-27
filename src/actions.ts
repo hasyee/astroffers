@@ -4,7 +4,7 @@ import defaultState from './defaultState';
 import { getList } from './selectors';
 import sorters from './utils/sorters';
 import display from './utils/display';
-import { objectTypes, constellations } from './calcs';
+import { objectTypes, constellations } from 'astroffers-core';
 
 export const sort = (listItemProp: ListItemProp) => (state: State): State => ({
   ...state,

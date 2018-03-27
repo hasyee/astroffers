@@ -1,5 +1,5 @@
 import { ListItemProp } from '../types';
-import { NgcInfo } from '../calcs';
+import { NgcInfo } from 'astroffers-core';
 
 const defaultSorter = (propertySelector: Function) => (a: NgcInfo, b: NgcInfo) => {
   const aProp = propertySelector(a);

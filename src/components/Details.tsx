@@ -23,7 +23,7 @@ import {
   radToDmsString,
   radToHmsString,
   radToDeg
-} from '../calcs';
+} from 'astroffers-core';
 
 import { openDetails, closeDetails, track } from '../actions';
 import {

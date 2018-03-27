@@ -1,4 +1,4 @@
-import { NgcInfo, NightInfo, SetFilter, BirghtnessType } from './calcs';
+import { NgcInfo, NightInfo, SetFilter, BirghtnessType } from 'astroffers-core';
 
 export type State = {
   packageJson: any;

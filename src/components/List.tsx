@@ -12,7 +12,7 @@ import {
 } from 'material-ui/Table';
 import { ListItemProp } from '../types';
 import display from '../utils/display';
-import { NgcInfo, resolveTypes, resolveConstellation } from '../calcs';
+import { NgcInfo, resolveTypes, resolveConstellation } from 'astroffers-core';
 import { openDetails, sort } from '../actions';
 import { getList, isFiltering, getSortBy } from '../selectors';
 import LazyInput from './LazyInput';

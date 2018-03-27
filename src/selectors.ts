@@ -1,5 +1,5 @@
 import { State, Filter, ListItemProp } from './types';
-import { NightInfo, NgcInfo, CoordSeries, Az, getHorizontalCoordSeries } from './calcs';
+import { NightInfo, NgcInfo, CoordSeries, Az, getHorizontalCoordSeries } from 'astroffers-core';
 
 export const getVersion = ({ packageJson: { version } }: State): string => version;
 export const getAuthorName = ({ packageJson: { author: { name } } }: State): string => name;
