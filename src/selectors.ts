@@ -1,6 +1,5 @@
 import { State, Filter, ListItemProp } from './types';
-import { NightInfo, NgcInfo, CoordSeries, Az } from './calcs/types';
-import getHorizontalCoordSeries from './calcs/getHorizontalCoordSeries';
+import { NightInfo, NgcInfo, CoordSeries, Az, getHorizontalCoordSeries } from './calcs';
 
 export const getVersion = ({ packageJson: { version } }: State): string => version;
 export const getAuthorName = ({ packageJson: { author: { name } } }: State): string => name;

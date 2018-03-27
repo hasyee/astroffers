@@ -6,7 +6,7 @@ import { toNoon, toNextDay } from './time';
 import { getIntersection } from './interval';
 import { toMidnight } from './time';
 
-export default (date: Timestamp, latitude: Deg, longitude: Deg, twilight: Deg): NightInfo => {
+export const getNightInfo = (date: Timestamp, latitude: Deg, longitude: Deg, twilight: Deg): NightInfo => {
   const location = getLocation(latitude, longitude);
   const night = getNight(date, location);
   const astroNight = night ? getNight(date, location, degToRad(twilight), true) : null;

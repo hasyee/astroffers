@@ -1,7 +1,5 @@
 import moment = require('moment');
-import { NgcInfo } from '../calcs/types';
-import { radToDeg } from '../calcs/units';
-import { stringifyTimeDiff } from '../calcs/utils';
+import { NgcInfo, radToDeg, stringifyTimeDiff } from '../calcs';
 
 export default ({
   object: { ngc, messier, name, constellation, magnitude, surfaceBrightness, types },

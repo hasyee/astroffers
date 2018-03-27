@@ -1,7 +1,6 @@
 import clone = require('clone');
 import { Filter, Result } from '../types';
-import getNightInfo from '../calcs/getNightInfo';
-import filterObjects from '../calcs/filterObjects';
+import { getNightInfo, filterObjects } from '../calcs';
 
 export default (filter: Filter): Result => {
   const {

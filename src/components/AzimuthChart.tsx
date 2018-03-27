@@ -2,8 +2,7 @@ import React = require('react');
 import { findDOMNode } from 'react-dom';
 import moment = require('moment');
 import ReactHighcharts = require('react-highcharts');
-import { NightInfo, Interval, CoordSeries, Az } from '../calcs/types';
-import { normalizeRad, radToDeg } from '../calcs/units';
+import { NightInfo, Interval, CoordSeries, Az, normalizeRad, radToDeg } from '../calcs';
 
 const labelPlaceholders = Array.from({ length: 89 }).map(() => '');
 

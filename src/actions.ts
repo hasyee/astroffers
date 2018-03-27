@@ -4,8 +4,7 @@ import defaultState from './defaultState';
 import { getList } from './selectors';
 import sorters from './utils/sorters';
 import display from './utils/display';
-const typeMap = require('../data/types.json');
-const constellationMap = require('../data/constellations.json');
+import { objectTypes, constellations } from './calcs';
 
 export const sort = (listItemProp: ListItemProp) => (state: State): State => ({
   ...state,
@@ -35,7 +34,7 @@ export const changeAllTypeFilter = (value: boolean) => (state: State): State => 
   ...state,
   filter: {
     ...state.filter,
-    types: Object.keys(typeMap).reduce((acc, type) => ({ ...acc, [type]: value }), {})
+    types: Object.keys(objectTypes).reduce((acc, type) => ({ ...acc, [type]: value }), {})
   }
 });
 
@@ -43,7 +42,7 @@ export const changeAllConstellationFilter = (value: boolean) => (state: State): 
   ...state,
   filter: {
     ...state.filter,
-    constellations: Object.keys(constellationMap).reduce((acc, cons) => ({ ...acc, [cons]: value }), {})
+    constellations: Object.keys(constellations).reduce((acc, cons) => ({ ...acc, [cons]: value }), {})
   }
 });
 

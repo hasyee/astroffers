@@ -11,10 +11,8 @@ import {
   TableRowColumn
 } from 'material-ui/Table';
 import { ListItemProp } from '../types';
-import { NgcInfo } from '../calcs/types';
 import display from '../utils/display';
-import resolveTypes from '../calcs/resolveTypes';
-import resolveConstellation from '../calcs/resolveConstellation';
+import { NgcInfo, resolveTypes, resolveConstellation } from '../calcs';
 import { openDetails, sort } from '../actions';
 import { getList, isFiltering, getSortBy } from '../selectors';
 import LazyInput from './LazyInput';

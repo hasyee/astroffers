@@ -1,5 +1,5 @@
 import { ListItemProp } from '../types';
-import { NgcInfo } from '../calcs/types';
+import { NgcInfo } from '../calcs';
 
 const defaultSorter = (propertySelector: Function) => (a: NgcInfo, b: NgcInfo) => {
   const aProp = propertySelector(a);

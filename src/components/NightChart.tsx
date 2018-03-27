@@ -1,9 +1,7 @@
 import React = require('react');
 const { connect } = require('react-redux');
 import ReactHighcharts = require('react-highcharts');
-import { NightInfo, Interval, Timestamp, Hour } from '../calcs/types';
-import { toNextDay, toMidnight, toNoon } from '../calcs/time';
-import { getIntersection } from '../calcs/interval';
+import { NightInfo, Interval, Timestamp, Hour, toNextDay, toMidnight, toNoon, getIntersection } from '../calcs';
 import { getNightInfo, getDate } from '../selectors';
 
 type Band = { from: Hour; to: Hour; thickness: number; color: string };
@@ -49,7 +47,7 @@ const getConfig = (date: Timestamp, { night, moonlessNight, astroNight }: NightI
     height: 150,
     width: 150
   },
-  
+
   credits: {
     enabled: false
   },
