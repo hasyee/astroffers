@@ -1,13 +1,6 @@
-/**
- * PHOTOS:
- * http://www.ngcicproject.org/dss/n/7/n7662.jpg
- * http://stdatu.stsci.edu/cgi-bin/dss_form?target=ngc1976&resolver=SIMBAD
- */
-
 import React = require('react');
 const { connect } = require('react-redux');
 import moment = require('moment');
-import leftpad = require('left-pad');
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import CircularProgress from 'material-ui/CircularProgress';
@@ -22,7 +15,8 @@ import {
   hmsToString,
   radToDmsString,
   radToHmsString,
-  radToDeg
+  radToDeg,
+  getObjectImgSrc
 } from 'astroffers-core';
 
 import { openDetails, closeDetails, track } from '../actions';
@@ -36,19 +30,6 @@ import {
 } from '../selectors';
 import AltitudeChart from './AltitudeChart';
 import AzimuthChart from './AzimuthChart';
-
-const getTitle = (ngcInfo: NgcInfo): string => {
-  const object = ngcInfo ? ngcInfo.object : null;
-  if (!object) return 'Unknown';
-  return [ `NGC ${object.ngc}`, object.messier ? `M ${object.messier}` : null, object.name || null ]
-    .filter(_ => _)
-    .join(' | ');
-};
-
-const getImgSrc = (ngc: number): string =>
-  `http://www.ngcicproject.org/dss/n/${Math.floor(ngc / 1000)}/n${leftpad(ngc, 4, 0)}.jpg`;
-
-const leftButtonStyle = { float: 'left' };
 
 export default connect(
   state => ({
@@ -93,6 +74,14 @@ export default connect(
     handleClickPrevDetails = () => this.props.openDetails(this.props.prevDetails);
     handleClickNextDetails = () => this.props.openDetails(this.props.nextDetails);
     handleImageLoaded = () => this.setState({ imageIsLoading: false });
+
+    getTitle(): string {
+      const object = this.props.ngcInfo ? this.props.ngcInfo.object : null;
+      if (!object) return 'Unknown';
+      return [ `NGC ${object.ngc}`, object.messier ? `M ${object.messier}` : null, object.name || null ]
+        .filter(_ => _)
+        .join(' | ');
+    }
 
     renderContent() {
       if (!this.props.ngcInfo) return null;
@@ -229,7 +218,7 @@ export default connect(
               {imageIsLoading ? <CircularProgress /> : null}
               <img
                 alt={`preview of ${ngc}`}
-                src={getImgSrc(ngc)}
+                src={getObjectImgSrc(ngc)}
                 className={imageIsLoading ? 'hidden' : null}
                 onLoad={this.handleImageLoaded}
               />
@@ -259,19 +248,19 @@ export default connect(
           label="Previous"
           disabled={!prevDetails}
           onClick={this.handleClickPrevDetails}
-          style={leftButtonStyle}
+          style={{ float: 'left' }}
         />,
         <FlatButton
           label="Next"
           disabled={!nextDetails}
           onClick={this.handleClickNextDetails}
-          style={leftButtonStyle}
+          style={{ float: 'left' }}
         />,
         <FlatButton label="Close" primary onClick={closeDetails} />
       ];
       return (
         <Dialog
-          title={getTitle(this.props.ngcInfo)}
+          title={this.getTitle()}
           actions={actions}
           modal={false}
           open={isOpen}
