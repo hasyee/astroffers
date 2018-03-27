@@ -23,7 +23,7 @@ import {
   track
 } from '../actions';
 import { getFilter } from '../selectors';
-import { objectTypes, constellations } from 'astroffers-core';
+import { objectTypes, constellations, BirghtnessType } from 'astroffers-core';
 
 type Range = { min: number; max: number };
 
@@ -104,7 +104,7 @@ export default connect(state => ({ filter: getFilter(state) }), {
         'Filter',
         'submit-filter',
         this.props.filter.brightnessFilter,
-        this.props.filter.brightnessFilter === 'magnitude'
+        this.props.filter.brightnessFilter === BirghtnessType.magnitude
           ? this.props.filter.magnitude
           : this.props.filter.surfaceBrightness
       );
@@ -123,7 +123,9 @@ export default connect(state => ({ filter: getFilter(state) }), {
         Number.isFinite(longitude) &&
         Number.isFinite(twilight) &&
         Number.isFinite(altitude) &&
-        (brightnessFilter === 'magnitude' ? Number.isFinite(magnitude) : Number.isFinite(surfaceBrightness))
+        (brightnessFilter === BirghtnessType.magnitude
+          ? Number.isFinite(magnitude)
+          : Number.isFinite(surfaceBrightness))
       );
     }
 
@@ -320,9 +322,13 @@ export default connect(state => ({ filter: getFilter(state) }), {
                       floatingLabelText="Max"
                       floatingLabelFixed
                       fullWidth
-                      value={resolveValue(brightnessFilter === 'magnitude' ? magnitude : surfaceBrightness)}
+                      value={resolveValue(
+                        brightnessFilter === BirghtnessType.magnitude ? magnitude : surfaceBrightness
+                      )}
                       onChange={this.handleChange(brightnessFilter)}
-                      errorText={getErrorMessage(brightnessFilter === 'magnitude' ? magnitude : surfaceBrightness)}
+                      errorText={getErrorMessage(
+                        brightnessFilter === BirghtnessType.magnitude ? magnitude : surfaceBrightness
+                      )}
                       type="number"
                     />
                   </td>
@@ -335,8 +341,8 @@ export default connect(state => ({ filter: getFilter(state) }), {
                       labelStyle={{ paddingLeft: '0', userSelect: 'none', lineHeight: '68px' }}
                       iconStyle={{ right: '-15px', top: '9px' }}
                     >
-                      <MenuItem value="magnitude" primaryText="Magnitude" />
-                      <MenuItem value="surfaceBrightness" primaryText="Surface brightness" />
+                      <MenuItem value={BirghtnessType.magnitude} primaryText="Magnitude" />
+                      <MenuItem value={BirghtnessType.surfaceBrightness} primaryText="Surface brightness" />
                     </DropDownMenu>
                   </td>
                 </tr>

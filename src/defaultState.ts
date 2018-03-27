@@ -1,5 +1,5 @@
 import { State, ListItemProp } from './types';
-import { objectTypes, constellations } from 'astroffers-core';
+import { objectTypes, constellations, BirghtnessType } from 'astroffers-core';
 
 export default {
   packageJson: require('../package.json'),
@@ -11,7 +11,7 @@ export default {
     twilight: -18,
     altitude: 20,
     moonless: true,
-    brightnessFilter: 'magnitude',
+    brightnessFilter: BirghtnessType.magnitude,
     magnitude: 10,
     surfaceBrightness: 14,
     types: Object.keys(objectTypes).reduce((acc, type) => ({ ...acc, [type]: true }), {}),
