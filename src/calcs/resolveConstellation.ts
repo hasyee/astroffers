@@ -1,3 +1,3 @@
-const constellationMap = require('../../data/constellations.json');
+import { constellations } from './data';
 
-export const resolveConstellation = (cons: string): string => constellationMap[cons] || cons;
+export const resolveConstellation = (cons: string): string => constellations[cons] || cons;

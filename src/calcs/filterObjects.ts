@@ -1,7 +1,7 @@
 import { NgcObject, NgcInfo, Interval, Timestamp, Deg, Min, BirghtnessType, SetFilter } from './types';
 import getNgcInfo from './getNgcInfo';
 import { getLocation } from './units';
-const ngcObjects: NgcObject[] = require('../../data/ngc.json');
+import { catalog } from './data';
 
 import { Filter } from '../types';
 
@@ -34,7 +34,7 @@ export const filterObjects = ({
 }: Options): NgcInfo[] => {
   if (!night) return [];
   const location = getLocation(latitude, longitude);
-  return ngcObjects
+  return catalog
     .filter(object => {
       return (
         (brightnessFilter === 'magnitude'
