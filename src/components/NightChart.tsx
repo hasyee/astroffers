@@ -1,7 +1,7 @@
 import React = require('react');
 const { connect } = require('react-redux');
 import ReactHighcharts = require('react-highcharts');
-import { NightInfo, Interval, Timestamp, Hour, toNextDay, toMidnight, toNoon, getIntersection } from '../calcs';
+import { NightInfo, Interval, Timestamp, Hour, toNextDay, toMidnight, toNoon, getIntersection } from 'astroffers-core';
 import { getNightInfo, getDate } from '../selectors';
 
 type Band = { from: Hour; to: Hour; thickness: number; color: string };

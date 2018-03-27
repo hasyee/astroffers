@@ -3,7 +3,7 @@ import moment = require('moment');
 const { connect } = require('react-redux');
 import FlatButton from 'material-ui/FlatButton';
 import FontIcon from 'material-ui/FontIcon';
-import { NightInfo, NgcInfo } from '../calcs';
+import { NightInfo, NgcInfo } from 'astroffers-core';
 import { exportToCsv } from '../actions';
 import { isFiltering, getNightInfo, getCount, getList } from '../selectors';
 import Moon from './Moon';

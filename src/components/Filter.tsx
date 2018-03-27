@@ -23,7 +23,7 @@ import {
   track
 } from '../actions';
 import { getFilter } from '../selectors';
-import { objectTypes, constellations } from '../calcs';
+import { objectTypes, constellations } from 'astroffers-core';
 
 type Range = { min: number; max: number };
 

@@ -1,6 +1,5 @@
 import { State, ListItemProp } from './types';
-import { objectTypes, constellations } from './calcs';
-import { machineIdSync } from 'node-machine-id';
+import { objectTypes, constellations } from 'astroffers-core';
 
 export default {
   packageJson: require('../package.json'),

@@ -1,5 +1,5 @@
 import moment = require('moment');
-import { NgcInfo, radToDeg, stringifyTimeDiff } from '../calcs';
+import { NgcInfo, radToDeg, stringifyTimeDiff } from 'astroffers-core';
 
 export default ({
   object: { ngc, messier, name, constellation, magnitude, surfaceBrightness, types },

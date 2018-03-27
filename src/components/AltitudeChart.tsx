@@ -2,7 +2,7 @@ import React = require('react');
 import ReactHighcharts = require('react-highcharts');
 import HighchartsMore = require('highcharts/highcharts-more');
 import moment = require('moment');
-import { NgcInfo, NightInfo, Interval, Az, CoordSeries, Timestamp, Rad, radToDeg, PI2, toNextDay } from '../calcs';
+import { NgcInfo, NightInfo, Interval, Az, CoordSeries, Timestamp, Rad, radToDeg, PI2, toNextDay } from 'astroffers-core';
 
 export default class extends React.PureComponent<{
   minAltitude: number;
