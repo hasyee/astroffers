@@ -1,4 +1,4 @@
-import { NgcInfo, NightInfo } from './calcs/types';
+import { NgcInfo, NightInfo, SetFilter, BirghtnessType } from './calcs/types';
 
 export type State = {
   packageJson: any;
@@ -17,7 +17,7 @@ export type Filter = {
   twilight: number;
   altitude: number;
   moonless: boolean;
-  brightnessFilter: string;
+  brightnessFilter: BirghtnessType;
   magnitude: number;
   surfaceBrightness: number;
   types: SetFilter;
@@ -32,10 +32,6 @@ export type Result = {
   filter: Filter;
   nightInfo: NightInfo;
   list: NgcInfo[];
-};
-
-export type SetFilter = {
-  [typeKey: string]: boolean;
 };
 
 export enum ListItemProp {

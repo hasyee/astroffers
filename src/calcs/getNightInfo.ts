@@ -1,5 +1,4 @@
-import { Filter } from '../types';
-import { Timestamp, Loc, Deg, Interval, NightInfo } from './types';
+import { Timestamp, Deg, NightInfo } from './types';
 import { getNight } from './sun';
 import { getMoonNight, getMoonPhase } from './moon';
 import { getLocation, degToRad } from './units';
@@ -7,7 +6,7 @@ import { toNoon, toNextDay } from './time';
 import { getIntersection } from './interval';
 import { toMidnight } from './time';
 
-export default ({ date, latitude, longitude, twilight }: Filter): NightInfo => {
+export default (date: Timestamp, latitude: Deg, longitude: Deg, twilight: Deg): NightInfo => {
   const location = getLocation(latitude, longitude);
   const night = getNight(date, location);
   const astroNight = night ? getNight(date, location, degToRad(twilight), true) : null;

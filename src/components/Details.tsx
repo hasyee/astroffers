@@ -12,8 +12,8 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import { NgcInfo, NightInfo, Az, CoordSeries } from '../calcs/types';
-import resolveTypes from '../utils/resolveTypes';
-import resolveConstellation from '../utils/resolveConstellation';
+import resolveTypes from '../calcs/resolveTypes';
+import resolveConstellation from '../calcs/resolveConstellation';
 
 import { dmsToString, hmsToString, radToDmsString, radToHmsString, radToDeg } from '../calcs/units';
 import { openDetails, closeDetails, track } from '../actions';

@@ -13,8 +13,8 @@ import {
 import { ListItemProp } from '../types';
 import { NgcInfo } from '../calcs/types';
 import display from '../utils/display';
-import resolveTypes from '../utils/resolveTypes';
-import resolveConstellation from '../utils/resolveConstellation';
+import resolveTypes from '../calcs/resolveTypes';
+import resolveConstellation from '../calcs/resolveConstellation';
 import { openDetails, sort } from '../actions';
 import { getList, isFiltering, getSortBy } from '../selectors';
 import LazyInput from './LazyInput';
