@@ -1,4 +1,4 @@
-import { NgcInfo, NightInfo, SetFilter, BirghtnessType } from './calcs/types';
+import { NgcInfo, NightInfo, SetFilter, BirghtnessType } from './calcs';
 
 export type State = {
   packageJson: any;

@@ -23,8 +23,7 @@ import {
   track
 } from '../actions';
 import { getFilter } from '../selectors';
-const typeMap = require('../../data/types.json');
-const constellationMap = require('../../data/constellations.json');
+import { objectTypes, constellations } from '../calcs';
 
 type Range = { min: number; max: number };
 
@@ -146,14 +145,14 @@ export default connect(state => ({ filter: getFilter(state) }), {
           contentStyle={{ width: '350px', maxWidth: 'none' }}
         >
           <List>
-            {Object.keys(typeMap).map(key => (
+            {Object.keys(objectTypes).map(key => (
               <ListItem
                 key={key}
                 style={{ userSelect: 'none' }}
                 leftIcon={
                   <FontIcon className="mdi mdi-check" style={{ margin: '15px', opacity: types[key] ? 1 : 0 }} />
                 }
-                primaryText={typeMap[key]}
+                primaryText={objectTypes[key]}
                 onClick={() => toggleSetFilter('types', key)}
               />
             ))}
@@ -163,7 +162,11 @@ export default connect(state => ({ filter: getFilter(state) }), {
     }
 
     renderConstellationFilterDialog() {
-      const { filter: { constellations }, toggleSetFilter, changeAllConstellationFilter } = this.props;
+      const {
+        filter: { constellations: consellationFilter },
+        toggleSetFilter,
+        changeAllConstellationFilter
+      } = this.props;
       const { isOpenConstellationFilterDialog } = this.state;
       const actions = [
         <FlatButton label="Close" onClick={this.handleConstellationFilterDialogClose} primary />,
@@ -180,17 +183,17 @@ export default connect(state => ({ filter: getFilter(state) }), {
           contentStyle={{ width: '350px', maxWidth: 'none' }}
         >
           <List>
-            {Object.keys(constellationMap).map(key => (
+            {Object.keys(constellations).map(key => (
               <ListItem
                 key={key}
                 style={{ userSelect: 'none' }}
                 leftIcon={
                   <FontIcon
                     className="mdi mdi-check"
-                    style={{ margin: '15px', opacity: constellations[key] ? 1 : 0 }}
+                    style={{ margin: '15px', opacity: consellationFilter[key] ? 1 : 0 }}
                   />
                 }
-                primaryText={constellationMap[key]}
+                primaryText={constellations[key]}
                 onClick={() => toggleSetFilter('constellations', key)}
               />
             ))}

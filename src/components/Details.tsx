@@ -11,11 +11,20 @@ import leftpad = require('left-pad');
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import CircularProgress from 'material-ui/CircularProgress';
-import { NgcInfo, NightInfo, Az, CoordSeries } from '../calcs/types';
-import resolveTypes from '../calcs/resolveTypes';
-import resolveConstellation from '../calcs/resolveConstellation';
+import {
+  resolveTypes,
+  resolveConstellation,
+  NgcInfo,
+  NightInfo,
+  Az,
+  CoordSeries,
+  dmsToString,
+  hmsToString,
+  radToDmsString,
+  radToHmsString,
+  radToDeg
+} from '../calcs';
 
-import { dmsToString, hmsToString, radToDmsString, radToHmsString, radToDeg } from '../calcs/units';
 import { openDetails, closeDetails, track } from '../actions';
 import {
   isOpenDetails,

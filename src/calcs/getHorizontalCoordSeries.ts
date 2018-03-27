@@ -3,7 +3,7 @@ import { getLocation } from './units';
 import { toNoon, toNextDay } from './time';
 import { eqToAz } from './coords';
 
-export default (time: Timestamp, latitude: Deg, longitude: Deg, eq: Eq): CoordSeries<Az> => {
+export const getHorizontalCoordSeries = (time: Timestamp, latitude: Deg, longitude: Deg, eq: Eq): CoordSeries<Az> => {
   const location = getLocation(latitude, longitude);
   const todayNoon = toNoon(time);
   const nextDayNoon = toNextDay(todayNoon);

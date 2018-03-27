@@ -2,9 +2,7 @@ import React = require('react');
 import ReactHighcharts = require('react-highcharts');
 import HighchartsMore = require('highcharts/highcharts-more');
 import moment = require('moment');
-import { NgcInfo, NightInfo, Interval, Az, CoordSeries, Timestamp, Rad } from '../calcs/types';
-import { radToDeg, PI2 } from '../calcs/units';
-import { toNextDay } from '../calcs/time';
+import { NgcInfo, NightInfo, Interval, Az, CoordSeries, Timestamp, Rad, radToDeg, PI2, toNextDay } from '../calcs';
 
 export default class extends React.PureComponent<{
   minAltitude: number;

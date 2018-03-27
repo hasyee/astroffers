@@ -1,6 +1,5 @@
 import { State, ListItemProp } from './types';
-const typeMap = require('../data/types.json');
-const constellationMap = require('../data/constellations.json');
+import { objectTypes, constellations } from './calcs';
 import { machineIdSync } from 'node-machine-id';
 
 export default {
@@ -16,8 +15,8 @@ export default {
     brightnessFilter: 'magnitude',
     magnitude: 10,
     surfaceBrightness: 14,
-    types: Object.keys(typeMap).reduce((acc, type) => ({ ...acc, [type]: true }), {}),
-    constellations: Object.keys(constellationMap).reduce((acc, cons) => ({ ...acc, [cons]: true }), {})
+    types: Object.keys(objectTypes).reduce((acc, type) => ({ ...acc, [type]: true }), {}),
+    constellations: Object.keys(constellations).reduce((acc, cons) => ({ ...acc, [cons]: true }), {})
   },
   settings: {
     sortBy: ListItemProp.MAX
