@@ -12,7 +12,7 @@ import MenuItem from 'material-ui/MenuItem';
 import { List, ListItem } from 'material-ui/List';
 import Dialog from 'material-ui/Dialog';
 import SelectLocationDialog from './SelectLocationDialog';
-import { State, Filter as IFilter } from '../types';
+import { Filter as IFilter } from '../types';
 import {
   changeFilter,
   resetFilter,
