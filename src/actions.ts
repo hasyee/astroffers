@@ -1,5 +1,4 @@
 import { State, ListItemProp } from './types';
-import { Thunk } from 'repatch';
 import defaultState from './defaultState';
 import { getList } from './selectors';
 import sorters from './utils/sorters';
