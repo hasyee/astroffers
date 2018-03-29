@@ -7,10 +7,10 @@ import Summary from './Summary';
 import List from './List';
 import Details from './Details';
 
-export default connect(state => ({ hasResult: hasResult(state), isFiltering: isFiltering(state) }))(
+export default connect(state => ({ isFiltering: isFiltering(state) }))(
   class extends React.PureComponent<{ hasResult: boolean; isFiltering: boolean }> {
     render() {
-      const { hasResult, isFiltering } = this.props;
+      const { isFiltering } = this.props;
       return (
         <div className={classnames('fitted column layout result', isFiltering && 'center')}>
           {isFiltering && <CircularProgress />}
