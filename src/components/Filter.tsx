@@ -116,11 +116,21 @@ export default connect(state => ({ filter: getFilter(state) }), {
 
     getFilterButtonDisabled() {
       const {
-        filter: { latitude, longitude, twilight, altitude, brightnessFilter, magnitude, surfaceBrightness }
+        filter: {
+          latitude,
+          longitude,
+          observationTime,
+          twilight,
+          altitude,
+          brightnessFilter,
+          magnitude,
+          surfaceBrightness
+        }
       } = this.props;
       return !(
         Number.isFinite(latitude) &&
         Number.isFinite(longitude) &&
+        Number.isFinite(observationTime) &&
         Number.isFinite(twilight) &&
         Number.isFinite(altitude) &&
         (brightnessFilter === BirghtnessType.magnitude
@@ -326,9 +336,13 @@ export default connect(state => ({ filter: getFilter(state) }), {
                         brightnessFilter === BirghtnessType.magnitude ? magnitude : surfaceBrightness
                       )}
                       onChange={this.handleChange(brightnessFilter)}
-                      errorText={getErrorMessage(
-                        brightnessFilter === BirghtnessType.magnitude ? magnitude : surfaceBrightness
-                      ) ? ' ' : null}
+                      errorText={
+                        getErrorMessage(
+                          brightnessFilter === BirghtnessType.magnitude ? magnitude : surfaceBrightness
+                        ) ? (
+                          ' '
+                        ) : null
+                      }
                       type="number"
                     />
                   </td>
