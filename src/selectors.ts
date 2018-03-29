@@ -19,6 +19,8 @@ export const hasResult = ({ result }: State): boolean => !!result;
 
 export const getDate = ({ result }: State): number => (result ? result.filter.date : null);
 
+export const getMoonless = ({ result }: State): boolean => (result ? result.filter.moonless : null);
+
 export const getList = ({ result }: State): NgcInfo[] => (result ? result.list : null);
 
 export const getSortBy = ({ settings }: State): ListItemProp => settings.sortBy;
