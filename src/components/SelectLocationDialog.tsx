@@ -20,14 +20,17 @@ export default connect(null, { fetchLocation, track })(
   > {
     constructor(props) {
       super(props);
-      this.state = this.getInitialState();
+      this.state = this.getInitialState(this.props);
     }
 
-    getInitialState() {
-      return {
-        latitude: this.props.latitude,
-        longitude: this.props.longitude
-      };
+    getInitialState(props) {
+      const { latitude, longitude } = props;
+      return !Number.isFinite(latitude) || !Number.isFinite(longitude)
+        ? { latitude: 47, longitude: 19 }
+        : {
+            latitude,
+            longitude
+          };
     }
 
     handleFetchLocation = async () => {
@@ -46,16 +49,13 @@ export default connect(null, { fetchLocation, track })(
     };
 
     handleCancel = () => {
-      this.setState(this.getInitialState());
+      this.setState(this.getInitialState(this.props));
       this.props.onCancel();
     };
 
     componentWillUpdate(nextProps) {
       if (nextProps.latitude !== this.props.latitude || nextProps.longitude !== this.props.longitude) {
-        this.setState({
-          latitude: nextProps.latitude,
-          longitude: nextProps.longitude
-        });
+        this.setState(this.getInitialState(nextProps));
       }
     }
 
