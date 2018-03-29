@@ -1,4 +1,5 @@
-onmessage = ({ data: filter }) => {
+onmessage = ({ data: { cid, filter } }) => {
   const getResult = require('../lib/utils/getResult').default;
-  postMessage(getResult(filter));
+  const result = getResult(filter);
+  postMessage({ cid, result });
 };
