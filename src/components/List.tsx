@@ -139,14 +139,14 @@ export default connect(
                     From{this.renderSortByIcon(ListItemProp.FROM)}
                   </span>
                 </TableHeaderColumn>
-                <TableHeaderColumn className="to">
-                  <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.TO)}>
-                    To{this.renderSortByIcon(ListItemProp.TO)}
-                  </span>
-                </TableHeaderColumn>
                 <TableHeaderColumn className="max">
                   <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.MAX)}>
                     Max / Alt{this.renderSortByIcon(ListItemProp.MAX)}
+                  </span>
+                </TableHeaderColumn>
+                <TableHeaderColumn className="to">
+                  <span className="sorter" onClick={this.handleHeaderClick(ListItemProp.TO)}>
+                    To{this.renderSortByIcon(ListItemProp.TO)}
                   </span>
                 </TableHeaderColumn>
                 <TableHeaderColumn className="sum">
@@ -199,8 +199,8 @@ export default connect(
                       {constellation}
                     </TableRowColumn>
                     <TableRowColumn className="from">{from}</TableRowColumn>
-                    <TableRowColumn className="to">{to}</TableRowColumn>
                     <TableRowColumn className="max">{max}</TableRowColumn>
+                    <TableRowColumn className="to">{to}</TableRowColumn>
                     <TableRowColumn className="sum">{sum}</TableRowColumn>
                     <TableRowColumn className="magnitude">{magnitude}</TableRowColumn>
                     <TableRowColumn className="surface-brightness">{surfaceBrightness}</TableRowColumn>
