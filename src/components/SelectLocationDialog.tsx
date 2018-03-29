@@ -39,7 +39,10 @@ export default connect(null, { fetchLocation, track })(
     handleChange = state => this.setState(state);
 
     handleSubmit = () => {
-      this.props.onSubmit(this.state);
+      this.props.onSubmit({
+        latitude: parseFloat(this.state.latitude.toFixed(5)),
+        longitude: parseFloat(this.state.longitude.toFixed(5))
+      });
     };
 
     handleCancel = () => {
