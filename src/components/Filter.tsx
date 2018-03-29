@@ -30,7 +30,7 @@ type Range = { min: number; max: number };
 const resolveValue = (value: number) => (Number.isFinite(value) ? value.toString() : '');
 const checkRange = (value: number, range?: Range) =>
   !Number.isFinite(value) || !range || (value >= range.min && value <= range.max);
-const getErrorMessage = (value: number): string => !Number.isFinite(value) && 'This field is required';
+const getErrorMessage = (value: number): string => !Number.isFinite(value) && ' ';
 
 export default connect(state => ({ filter: getFilter(state) }), {
   changeFilter,
@@ -336,13 +336,9 @@ export default connect(state => ({ filter: getFilter(state) }), {
                         brightnessFilter === BirghtnessType.magnitude ? magnitude : surfaceBrightness
                       )}
                       onChange={this.handleChange(brightnessFilter)}
-                      errorText={
-                        getErrorMessage(
-                          brightnessFilter === BirghtnessType.magnitude ? magnitude : surfaceBrightness
-                        ) ? (
-                          ' '
-                        ) : null
-                      }
+                      errorText={getErrorMessage(
+                        brightnessFilter === BirghtnessType.magnitude ? magnitude : surfaceBrightness
+                      )}
                       type="number"
                     />
                   </td>
