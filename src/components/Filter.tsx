@@ -328,7 +328,7 @@ export default connect(state => ({ filter: getFilter(state) }), {
                       onChange={this.handleChange(brightnessFilter)}
                       errorText={getErrorMessage(
                         brightnessFilter === BirghtnessType.magnitude ? magnitude : surfaceBrightness
-                      )}
+                      ) ? ' ' : null}
                       type="number"
                     />
                   </td>
