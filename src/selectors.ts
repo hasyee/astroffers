@@ -42,7 +42,7 @@ export const getHorizontalCoords = (state: State): CoordSeries<Az> => {
     : null;
 };
 
-export const getMinAltitde = ({ result }: State): number => (result ? result.filter.altitude : null);
+export const getMinAltitude = ({ result }: State): number => (result ? result.filter.altitude : null);
 
 export const getAdjacentDetails = direction => (state: State): number => {
   if (!state.openedDetails || !state.result || !state.result.list || state.result.list.length === 0) return null;
