@@ -4,7 +4,7 @@ import ReactHighcharts = require('react-highcharts');
 import { NightInfo, Interval, Timestamp, Hour, toNextDay, toMidnight, toNoon, getIntersection } from 'astroffers-core';
 import { getNightInfo, getDate } from '../selectors';
 
-type Band = { from: Hour; to: Hour; thickness: number; color: string };
+type Band = { from: Hour; to: Hour; thickness: number; color: string; innerRadius: number };
 
 export default connect(state => ({ nightInfo: getNightInfo(state), date: getDate(state) }))(
   class extends React.PureComponent<{ date: Timestamp; nightInfo: NightInfo }> {
@@ -33,7 +33,8 @@ const toBand = (interval: Interval, color: string): Band =>
         from: getHoursOfTime(interval.start),
         to: getHoursOfTime(interval.end, true),
         thickness: 50,
-        color
+        color,
+        innerRadius: 0
       };
 
 const getNightBands = (date: Timestamp, interval: Interval, color: string): Band[] => {
@@ -71,6 +72,8 @@ const getConfig = (date: Timestamp, { night, moonlessNight, astroNight }: NightI
   },
 
   xAxis: {
+    lineWidth: 0,
+    lineColor: 'transparent',
     tickInterval: 6,
     min: 0,
     max: 24,
@@ -80,7 +83,7 @@ const getConfig = (date: Timestamp, { night, moonlessNight, astroNight }: NightI
       distance: 8
     },
     plotBands: [
-      { from: 0, to: 24, thickness: 50, color: 'lightblue' },
+      { from: 0, to: 24, thickness: 50, color: 'lightblue', innerRadius: 0 },
       ...getNightBands(date, night, '#01579B'),
       ...getNightBands(date, astroNight, 'grey'),
       ...getNightBands(date, moonlessNight, 'black')
