@@ -99,7 +99,7 @@ const getConfig = (date: Timestamp, { night, moonlessNight, astroNight }: NightI
   series: [
     {
       type: 'line',
-      data: [ {} ]
+      data: []
     }
   ]
 });
