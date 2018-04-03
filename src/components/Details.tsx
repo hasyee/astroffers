@@ -26,7 +26,7 @@ import {
   getAdjacentDetails,
   getOpenedNgcInfo,
   getHorizontalCoords,
-  getMinAltitde
+  getMinAltitude
 } from '../selectors';
 import AltitudeChart from './AltitudeChart';
 import AzimuthChart from './AzimuthChart';
@@ -37,7 +37,7 @@ export default connect(
     nightInfo: getNightInfo(state),
     ngcInfo: getOpenedNgcInfo(state),
     horizontalCoords: getHorizontalCoords(state),
-    minAltitude: getMinAltitde(state),
+    minAltitude: getMinAltitude(state),
     prevDetails: getAdjacentDetails(-1)(state),
     nextDetails: getAdjacentDetails(+1)(state)
   }),
