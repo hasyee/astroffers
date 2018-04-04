@@ -48,6 +48,7 @@ const getConfig = (
   return {
     plotOptions: {
       series: {
+        animation: false,
         turboThreshold: 1500
       }
     },
@@ -57,6 +58,7 @@ const getConfig = (
     },
 
     chart: {
+      animation: false,
       height: '200px'
     },
 

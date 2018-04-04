@@ -44,9 +44,16 @@ const getNightBands = (date: Timestamp, interval: Interval, color: string): Band
 
 const getConfig = (date: Timestamp, { night, moonlessNight, astroNight }: NightInfo) => ({
   chart: {
+    animation: false,
     polar: true,
     height: 150,
     width: 150
+  },
+
+  plotOptions: {
+    series: {
+      animation: false
+    }
   },
 
   credits: {
