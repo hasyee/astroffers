@@ -33,46 +33,50 @@ export default connect(state => ({
           onRequestClose={onClose}
           autoScrollBodyContent
         >
-          <div className="row layout about">
-            <img src="static/icons/icon.png" className="logo" />
-            <table className="about-table">
-              <tbody>
-                <tr>
-                  <td>
-                    <b>Version</b>
-                  </td>
-                  <td>{version}</td>
-                </tr>
-                <tr>
-                  <td>
-                    <b>Author</b>
-                  </td>
-                  <td>{author}</td>
-                </tr>
-                <tr>
-                  <td>
-                    <b>License</b>
-                  </td>
-                  <td>{license}</td>
-                </tr>
-                <tr>
-                  <td>
-                    <b>Feedback</b>
-                  </td>
-                  <td>
-                    <a onClick={() => shell.openExternal(feedback)}>{feedback}</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <b>Homepage</b>
-                  </td>
-                  <td>
-                    <a onClick={() => shell.openExternal(homepage)}>{homepage}</a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div className="fitted row layout about">
+            <div className="dynamic layout">
+              <img src="static/icons/icon.png" className="logo" />
+            </div>
+            <div className="fitted layout">
+              <table className="about-table">
+                <tbody>
+                  <tr>
+                    <td>
+                      <b>Version</b>
+                    </td>
+                    <td>{version}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <b>Author</b>
+                    </td>
+                    <td>{author}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <b>License</b>
+                    </td>
+                    <td>{license}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <b>Feedback</b>
+                    </td>
+                    <td>
+                      <a onClick={() => shell.openExternal(feedback)}>{feedback}</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <b>Homepage</b>
+                    </td>
+                    <td>
+                      <a onClick={() => shell.openExternal(homepage)}>{homepage}</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </Dialog>
       );
