@@ -66,8 +66,18 @@ body a:hover {
   z-index: 1;
 }
 
+.about-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
 .about-table td {
   padding: 1vw;
+  word-wrap: break-word;
+}
+
+.about-table tr > td:first-child {
+  width: 80px;
 }
 
 main {
@@ -86,14 +96,18 @@ header img {
 }
 
 .about img.logo {
-  width: 200px;
-  height: 200px;
+  width: 15vw;
+  height: 15vw;
 }
 
 .about img.nucleus {
   height: 26px;
   margin: 0px 5px -11px 5px;
   transform: translateY(-3px);
+}
+
+.about > div {
+  overflow: hidden;
 }
 
 .panel {
