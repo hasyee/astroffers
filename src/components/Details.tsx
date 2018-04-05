@@ -114,8 +114,6 @@ export default connect(
                       <b>Type</b>
                     </td>
                     <td>{resolveTypes(types).join(', ')}</td>
-                  </tr>
-                  <tr>
                     <td>
                       <b>Constellation</b>
                     </td>
@@ -123,21 +121,19 @@ export default connect(
                   </tr>
                   <tr>
                     <td>
-                      <b>Size</b>
-                    </td>
-                    <td>{size ? `${dmsToString(size[0])} × ${dmsToString(size[1])}` : 'Unknown'}</td>
-                  </tr>
-                  <tr>
-                    <td>
                       <b>Magnitude</b>
                     </td>
                     <td>{magnitude}</td>
-                  </tr>
-                  <tr>
                     <td>
                       <b>Surface brightness</b>
                     </td>
                     <td>{surfaceBrightness}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <b>Size</b>
+                    </td>
+                    <td>{size ? `${dmsToString(size[0])} × ${dmsToString(size[1])}` : 'Unknown'}</td>
                   </tr>
                   <tr>
                     <td>
