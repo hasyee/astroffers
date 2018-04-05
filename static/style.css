@@ -301,13 +301,13 @@ header img {
 }
 
 .details table td {
-  padding: 0px 7px 7px 0px;
+  padding: 0px 10px 12px 0px;
   font-size: 13px;
 }
 
 .details .image-container {
   margin: 0px 18px 10px 0px;
-  width: 280px;
+  width: 230px;
   height: 280px;
 }
 
