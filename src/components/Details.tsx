@@ -18,7 +18,7 @@ import {
   radToDeg,
   getObjectImgSrc
 } from 'astroffers-core';
-
+import { displayToDetails } from '../utils/display';
 import { openDetails, closeDetails, track } from '../actions';
 import {
   isOpenDetails,
@@ -85,23 +85,30 @@ export default connect(
 
     renderContent() {
       if (!this.props.ngcInfo) return null;
+      const { horizontalCoords, nightInfo, ngcInfo, minAltitude } = this.props;
       const {
-        horizontalCoords,
-        nightInfo,
-        ngcInfo: {
-          object: { ngc, messier, name, types, constellation, size, magnitude, surfaceBrightness, eqCoords },
-          eqCoordsOnDate,
-          max,
-          sum,
-          transit,
-          hda,
-          hda0,
-          intersection,
-          altitudeAtMax,
-          altitudeAtTransit
-        },
-        minAltitude
-      } = this.props;
+        ngc,
+        title,
+        types,
+        constellation,
+        size,
+        magnitude,
+        surfaceBrightness,
+        ra,
+        de,
+        raOnDate,
+        deOnDate,
+        rising,
+        setting,
+        risingAboveMinAltitude,
+        settingBelowMinAltitude,
+        from,
+        to,
+        max,
+        altitudeAtMax,
+        transit,
+        altitudeAtTransit
+      } = displayToDetails(ngcInfo);
       const { imageIsLoading } = this.state;
       return (
         <div className="details">
@@ -133,79 +140,79 @@ export default connect(
                     <td>
                       <b>Size</b>
                     </td>
-                    <td>{size ? `${dmsToString(size[0])} × ${dmsToString(size[1])}` : 'Unknown'}</td>
+                    <td>{size}</td>
                   </tr>
                   <tr>
                     <td>
                       <b>RA (J2000)</b>
                     </td>
-                    <td>{hmsToString(eqCoords.ra)}</td>
+                    <td>{ra}</td>
                     <td>
                       <b>Dec (J2000)</b>
                     </td>
-                    <td>{dmsToString(eqCoords.de)}</td>
+                    <td>{de}</td>
                   </tr>
                   <tr>
                     <td>
                       <b>RA (on date)</b>
                     </td>
-                    <td>{radToHmsString(eqCoordsOnDate.ra)}</td>
+                    <td>{raOnDate}</td>
                     <td>
                       <b>Dec (on date)</b>
                     </td>
-                    <td>{radToDmsString(eqCoordsOnDate.de)}</td>
+                    <td>{deOnDate}</td>
                   </tr>
                   <tr>
                     <td>
                       <b>Rising</b>
                     </td>
-                    <td>{Number.isFinite(hda0.start) ? moment(hda0.start).format('HH:mm') : '-'}</td>
+                    <td>{rising}</td>
                     <td>
                       <b>Setting</b>
                     </td>
-                    <td>{Number.isFinite(hda0.end) ? moment(hda0.end).format('HH:mm') : '-'}</td>
+                    <td>{setting}</td>
                   </tr>
                   {minAltitude !== 0 && (
                     <tr>
                       <td>
                         <b>Rising above {minAltitude}°</b>
                       </td>
-                      <td>{Number.isFinite(hda.start) ? moment(hda.start).format('HH:mm') : '-'}</td>
+                      <td>{risingAboveMinAltitude}</td>
                       <td>
                         <b>Setting below {minAltitude}°</b>
                       </td>
-                      <td>{Number.isFinite(hda.end) ? moment(hda.end).format('HH:mm') : '-'}</td>
+                      <td>{settingBelowMinAltitude}</td>
                     </tr>
                   )}
                   <tr>
                     <td>
                       <b>Visibility from</b>
                     </td>
-                    <td>{moment(intersection.start).format('HH:mm')}</td>
+                    <td>{from}</td>
                     <td>
                       <b>Visibility to</b>
                     </td>
-                    <td>{moment(intersection.end).format('HH:mm')}</td>
+                    <td>{to}</td>
                   </tr>
                   <tr>
                     <td>
                       <b>Best visibility</b>
                     </td>
-                    <td>{max ? moment(max).format('HH:mm') : '-'}</td>
+                    <td>{max}</td>
                     <td>
                       <b>Altitude</b>
                     </td>
-                    <td>{altitudeAtMax ? Math.round(radToDeg(altitudeAtMax)) : '-'}°</td>
+                    <td>{altitudeAtMax}</td>
                   </tr>
                   <tr>
                     <td>
                       <b>Transit</b>
                     </td>
-                    <td>{transit ? moment(transit).format('HH:mm') : '-'}</td>
+                    <td>{transit}</td>
                     <td>
                       <b>Altitude</b>
                     </td>
-                    <td>{altitudeAtTransit ? Math.round(radToDeg(altitudeAtTransit)) : '-'}°</td>
+                    <td>{altitudeAtTransit}</td>
                   </tr>
                 </tbody>
               </table>
