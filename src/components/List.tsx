@@ -11,7 +11,7 @@ import {
   TableRowColumn
 } from 'material-ui/Table';
 import { ListItemProp } from '../types';
-import display from '../utils/display';
+import { displayToList } from '../utils/display';
 import { NgcInfo, resolveTypes, resolveConstellation } from 'astroffers-core';
 import { openDetails, sort } from '../actions';
 import { getList, isFiltering, getSortBy, getMoonless } from '../selectors';
@@ -190,7 +190,7 @@ export default connect(
                     sum,
                     magnitude,
                     surfaceBrightness
-                  } = display(ngcInfo);
+                  } = displayToList(ngcInfo);
                   const typeStr = types.join(', ');
                   const resolvedTypeStr = resolveTypes(types);
                   return (

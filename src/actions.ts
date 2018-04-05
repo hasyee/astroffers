@@ -2,7 +2,7 @@ import { State, ListItemProp } from './types';
 import defaultState from './defaultState';
 import { getList } from './selectors';
 import sorters from './utils/sorters';
-import display from './utils/display';
+import { displayToList } from './utils/display';
 import { objectTypes, constellations } from 'astroffers-core';
 
 export const sort = (listItemProp: ListItemProp) => (state: State): State => ({
@@ -66,7 +66,7 @@ export const closeDetails = () => (state: State): State => ({ ...state, openedDe
 export const exportToCsv = () => (state: State) => async (dispatch, getState, { toCsv }) => {
   const list = getList(getState());
   if (!list || list.length === 0) return;
-  await toCsv(list.map(display));
+  await toCsv(list.map(displayToList));
 };
 
 export const trackScreen = (cd: string) => () => (dispatch, getState, { analytics }) =>
