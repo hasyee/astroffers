@@ -11,11 +11,6 @@ import {
   NightInfo,
   Az,
   CoordSeries,
-  dmsToString,
-  hmsToString,
-  radToDmsString,
-  radToHmsString,
-  radToDeg,
   getObjectImgSrc
 } from 'astroffers-core';
 import { displayToDetails } from '../utils/display';
