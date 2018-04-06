@@ -36,7 +36,6 @@
     "classnames": "2.2.5",
     "clone": "2.1.1",
     "electron-ga": "1.0.4",
-    "electron-google-analytics": "0.0.24",
     "electron-is-dev": "^0.3.0",
     "electron-log": "2.2.11",
     "electron-updater": "2.21.0",
@@ -72,6 +71,12 @@
   "build": {
     "productName": "Astroffers",
     "appId": "org.electron.astroffers",
+    "files": [
+      "lib",
+      "static",
+      "index.html",
+      "package.json"
+    ],
     "publish": {
       "provider": "github",
       "owner": "jayhasyee",
