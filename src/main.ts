@@ -39,9 +39,10 @@ autoUpdater.on('update-downloaded', ({ version }) => {
   notifyAboutUpdate(version);
 });
 
-autoUpdater.on('error', (event, error) =>
-  dialog.showErrorBox('Error: ', error == null ? 'unknown' : (error.stack || error).toString())
-);
+autoUpdater.on('error', (event, error) => {
+  //dialog.showErrorBox('Error: ', error == null ? 'unknown' : (error.stack || error).toString());
+  log.error('ERROR:', error == null ? 'unknown' : (error.stack || error).toString());
+});
 
 function createWindow() {
   // Create the browser window.

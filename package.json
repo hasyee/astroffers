@@ -10,9 +10,9 @@
     "start": "electron .",
     "start-prod": "NODE_ENV=production npm start",
     "dist": "rimraf dist && npm run build && electron-builder -mwl --publish always",
-    "mac-test": "npm run build && electron-builder --mac",
-    "linux-test": "npm run build && electron-builder --linux",
-    "win-test": "npm run build && electron-builder --win"
+    "mac": "npm run build && electron-builder --mac",
+    "linux": "npm run build && electron-builder --linux",
+    "win": "npm run build && electron-builder --win"
   },
   "files": [
     "lib"
