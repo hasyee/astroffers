@@ -1,6 +1,6 @@
 import { type ChangeEvent, useCallback } from 'react';
 import moment from 'moment';
-import { Button, ControlGroup, FormGroup, InputGroup } from '@blueprintjs/core';
+import { Button, Classes, ControlGroup, FormGroup, InputGroup } from '@blueprintjs/core';
 import { useDate, useDateSetter } from '../date/date.hooks';
 import { getToday } from '../date/date.utils';
 
@@ -28,7 +28,7 @@ export default function DateInput() {
   return (
     <FormGroup label="Night of">
       <ControlGroup fill>
-        <Button icon="chevron-left" onClick={handlePrevDay} aria-label="Previous night" />
+        <Button className={Classes.FIXED} icon="chevron-left" onClick={handlePrevDay} aria-label="Previous night" />
         <InputGroup
           type="date"
           fill
@@ -37,8 +37,8 @@ export default function DateInput() {
           value={moment(date).format(FORMAT)}
           onChange={handleChange}
         />
-        <Button icon="chevron-right" onClick={handleNextDay} aria-label="Next night" />
-        <Button onClick={handleToday} disabled={date === getToday()}>
+        <Button className={Classes.FIXED} icon="chevron-right" onClick={handleNextDay} aria-label="Next night" />
+        <Button className={Classes.FIXED} onClick={handleToday} disabled={date === getToday()}>
           Today
         </Button>
       </ControlGroup>

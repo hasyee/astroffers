@@ -62,7 +62,7 @@ export default function Details() {
   return (
     <Drawer
       title={title}
-      icon={<Button variant="minimal" icon="arrow-left" onClick={closeDetails} aria-label="Back" />}
+      icon={<Button variant="minimal" size="large" icon="arrow-left" onClick={closeDetails} aria-label="Back" />}
       isCloseButtonShown={false}
       isOpen={!!ngcInfo}
       onClose={closeDetails}
