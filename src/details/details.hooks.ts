@@ -24,14 +24,14 @@ export const useOpenedNgcInfo = () => {
   return useMemo(() => (ngc === null ? null : (list.find(({ object }) => object.ngc === ngc) ?? null)), [ngc, list]);
 };
 
-/** The previous (-1) and next (+1) objects of the displayed list */
-export const useAdjacentNgcs = (): [prev: number | null, next: number | null] => {
+/** The previous and next objects of the displayed list */
+export const useAdjacentNgcInfos = (): [prev: NgcInfo | null, next: NgcInfo | null] => {
   const ngc = useOpenedNgc();
   const list = useDisplayedList();
   return useMemo(() => {
     const index = list.findIndex(({ object }) => object.ngc === ngc);
     if (index < 0) return [null, null];
-    return [list[index - 1]?.object.ngc ?? null, list[index + 1]?.object.ngc ?? null];
+    return [list[index - 1] ?? null, list[index + 1] ?? null];
   }, [ngc, list]);
 };
 

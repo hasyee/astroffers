@@ -10,14 +10,28 @@
     padding-left: 0.25rem;
   }
 
-  .bp6-drawer-body {
+  .Carousel {
+    position: relative;
     padding: 0;
-    overflow-x: hidden;
-  }
+    overflow: hidden;
 
-  // horizontal swipes are handled by the app, vertical ones scroll natively
-  .swipeable {
-    touch-action: pan-y;
+    // three pages side by side, the current one in the middle of the viewport
+    .track {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -100%;
+      width: 300%;
+      display: flex;
+    }
+
+    .page {
+      flex: 0 0 calc(100% / 3);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      // horizontal swipes are handled by the app, vertical ones scroll natively
+      touch-action: pan-y;
+    }
   }
 
   .bp6-drawer-footer {

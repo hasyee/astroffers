@@ -1,18 +1,20 @@
-import { type PropsWithChildren, useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
+import classnames from 'classnames';
 import { Button, Classes, Dialog, Drawer } from '@blueprintjs/core';
+import type { NgcInfo } from '../calculator/calculator.types';
 import { getTitle } from '../catalog/catalog.utils';
 import { useCloseOnBack } from '../history/history.hooks';
 import { useIsWideScreen } from '../media/media.hooks';
-import { useAdjacentNgcs, useCloseDetails, useOpenedNgcInfo, useOpenedNgcSetter } from './details.hooks';
+import { useAdjacentNgcInfos, useCloseDetails, useOpenedNgcInfo, useOpenedNgcSetter } from './details.hooks';
 import DetailsContent from './details.content';
 import { useSwipe } from './details.swipe';
 import './details.scss';
 
 function Navigation() {
   const setOpenedNgc = useOpenedNgcSetter();
-  const [prev, next] = useAdjacentNgcs();
-  const handlePrev = useCallback(() => prev !== null && setOpenedNgc(prev), [prev, setOpenedNgc]);
-  const handleNext = useCallback(() => next !== null && setOpenedNgc(next), [next, setOpenedNgc]);
+  const [prev, next] = useAdjacentNgcInfos();
+  const handlePrev = useCallback(() => prev && setOpenedNgc(prev.object.ngc), [prev, setOpenedNgc]);
+  const handleNext = useCallback(() => next && setOpenedNgc(next.object.ngc), [next, setOpenedNgc]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -25,33 +27,42 @@ function Navigation() {
 
   return (
     <>
-      <Button variant="minimal" icon="arrow-left" onClick={handlePrev} disabled={prev === null}>
+      <Button variant="minimal" icon="arrow-left" onClick={handlePrev} disabled={!prev}>
         Previous
       </Button>
-      <Button variant="minimal" endIcon="arrow-right" onClick={handleNext} disabled={next === null}>
+      <Button variant="minimal" endIcon="arrow-right" onClick={handleNext} disabled={!next}>
         Next
       </Button>
     </>
   );
 }
 
-/** Body of the full-screen drawer: swipe to step, scrolled back to the top for every object */
-function SwipeableBody({ ngc, children }: PropsWithChildren<{ ngc: number | undefined }>) {
+/**
+ * Body of the full-screen drawer: the previous, the current and the next object side by side, each scrolling on
+ * its own, to swipe between them like the pages of a carousel
+ */
+function Carousel({ ngcInfo }: { ngcInfo: NgcInfo }) {
   const setOpenedNgc = useOpenedNgcSetter();
-  const [prev, next] = useAdjacentNgcs();
-  const onPrev = useMemo(() => (prev !== null ? () => setOpenedNgc(prev) : null), [prev, setOpenedNgc]);
-  const onNext = useMemo(() => (next !== null ? () => setOpenedNgc(next) : null), [next, setOpenedNgc]);
-  const swipeRef = useSwipe<HTMLDivElement>({ onPrev, onNext });
-  const bodyRef = useRef<HTMLDivElement>(null);
+  const [prev, next] = useAdjacentNgcInfos();
+  const onPrev = useMemo(() => (prev ? () => setOpenedNgc(prev.object.ngc) : null), [prev, setOpenedNgc]);
+  const onNext = useMemo(() => (next ? () => setOpenedNgc(next.object.ngc) : null), [next, setOpenedNgc]);
+  const trackRef = useSwipe<HTMLDivElement>({ onPrev, onNext }, ngcInfo.object.ngc);
 
-  useEffect(() => {
-    bodyRef.current?.scrollTo(0, 0);
-  }, [ngc]);
+  // keyed by the object, so a neighbor stepped to is kept as it is (e.g. its loaded image and charts)
+  const pages: [string, NgcInfo | null][] = [
+    [prev ? String(prev.object.ngc) : 'no-prev', prev],
+    [String(ngcInfo.object.ngc), ngcInfo],
+    [next ? String(next.object.ngc) : 'no-next', next]
+  ];
 
   return (
-    <div className={Classes.DRAWER_BODY} ref={bodyRef}>
-      <div className="swipeable" ref={swipeRef}>
-        {children}
+    <div className={classnames(Classes.DRAWER_BODY, 'Carousel')}>
+      <div className="track" ref={trackRef}>
+        {pages.map(([key, pageNgcInfo]) => (
+          <div key={key} className="page">
+            {pageNgcInfo && <DetailsContent ngcInfo={pageNgcInfo} />}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -92,7 +103,7 @@ export default function Details() {
       size="100%"
       className="Details compact"
     >
-      <SwipeableBody ngc={ngcInfo?.object.ngc}>{body}</SwipeableBody>
+      {ngcInfo && <Carousel ngcInfo={ngcInfo} />}
       <div className={Classes.DRAWER_FOOTER}>
         <Navigation />
       </div>
