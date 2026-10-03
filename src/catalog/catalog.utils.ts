@@ -20,7 +20,6 @@ export const resolveConstellation = (constellation: string) => constellations[co
 export const getTitle = ({ ngc, messier, name }: NgcObject) =>
   [`NGC ${ngc}`, messier ? `M ${messier}` : null, name || null].filter(term => term).join(' | ');
 
-const IMAGE_SIZE = 300;
 const MIN_FIELD_OF_VIEW: ArcMin = 6;
 const MAX_FIELD_OF_VIEW: ArcMin = 180;
 
@@ -29,11 +28,11 @@ const getFieldOfView = (size?: [ArcMin, ArcMin]): ArcMin =>
   Math.min(MAX_FIELD_OF_VIEW, Math.max(MIN_FIELD_OF_VIEW, size ? Math.max(...size) * 1.5 : 0));
 
 /** DSS2 color preview of the object from the hips2fits service of CDS (Strasbourg) */
-export const getObjectImgSrc = ({ ra, de, size }: NgcObject) => {
+export const getObjectImgSrc = ({ ra, de, size }: NgcObject, pixels = 300) => {
   const params = new URLSearchParams({
     hips: 'CDS/P/DSS2/color',
-    width: String(IMAGE_SIZE),
-    height: String(IMAGE_SIZE),
+    width: String(pixels),
+    height: String(pixels),
     fov: (getFieldOfView(size) / 60).toFixed(3),
     projection: 'TAN',
     coordsys: 'icrs',

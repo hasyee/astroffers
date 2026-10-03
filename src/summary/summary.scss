@@ -1,0 +1,146 @@
+@use '../chart/chart.colors' as colors;
+
+.NightTable {
+  border-collapse: collapse;
+  font-size: 0.8rem;
+
+  td {
+    padding: 0.2rem 0.4rem;
+    white-space: nowrap;
+  }
+
+  tr:not(:last-child) td {
+    border-bottom: 1px solid var(--bp-surface-border-color-default);
+  }
+
+  .label {
+    color: var(--bp-typography-color-muted);
+    text-align: right;
+  }
+
+  .time {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 0.25rem;
+    border: 1px solid var(--bp-typography-color-muted);
+
+    &.night {
+      background-color: colors.$twilight;
+    }
+    &.astroNight {
+      border-color: transparent;
+    }
+    &.moonNight {
+      background-color: colors.$moon-night;
+    }
+    &.moonlessNight {
+      background-color: colors.$moonless-night;
+    }
+  }
+}
+
+.Summary:not(.compact) {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex: 0 0 auto;
+
+  .count {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .value {
+      font-size: 2.5rem;
+      font-weight: 300;
+      line-height: 1;
+    }
+    .label {
+      color: var(--bp-typography-color-muted);
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .moon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .image {
+      width: 70px;
+      height: 60px;
+    }
+    .label {
+      color: var(--bp-typography-color-muted);
+      font-size: 0.8rem;
+    }
+  }
+
+  .night-info {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .date {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+  }
+}
+
+.Summary.compact {
+  flex: 0 0 auto;
+  border-bottom: 1px solid var(--bp-surface-border-color-default);
+  background-color: var(--bp-surface-background-color-default-rest);
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.25rem 0.5rem 0.25rem 1rem;
+    cursor: pointer;
+
+    .count {
+      flex: 1 1 auto;
+      .value {
+        font-size: 1.5rem;
+        font-weight: 300;
+        line-height: 1;
+      }
+      .label {
+        font-size: 0.7rem;
+        color: var(--bp-typography-color-muted);
+      }
+    }
+
+    .moon {
+      width: 40px;
+      height: 34px;
+    }
+
+    .observed-night {
+      font-size: 0.75rem;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  .details {
+    padding: 0 1rem 0.75rem;
+
+    .date {
+      font-size: 0.8rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .NightTable {
+      width: 100%;
+    }
+  }
+}

@@ -2,12 +2,14 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import oxlint from 'vite-plugin-oxlint';
 import { VitePWA } from 'vite-plugin-pwa';
+import packageJson from './package.json' with { type: 'json' };
 
 const THEME_COLOR = '#111418';
 
 export default defineConfig({
   define: {
-    'import.meta.env.VERSION': JSON.stringify(process.env.VERSION || process.env.RENDER_GIT_COMMIT)
+    'import.meta.env.VERSION': JSON.stringify(process.env.VERSION || process.env.RENDER_GIT_COMMIT),
+    'import.meta.env.APP_VERSION': JSON.stringify(packageJson.version)
   },
   worker: {
     format: 'es'

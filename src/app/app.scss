@@ -1,0 +1,53 @@
+.App {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+
+  main {
+    flex: 1 1 auto;
+    display: flex;
+    min-height: 0;
+  }
+}
+
+.App.wide {
+  main {
+    aside {
+      flex: 0 0 320px;
+      border-right: 1px solid var(--bp-surface-border-color-default);
+      background-color: var(--bp-surface-background-color-elevated-rest, #252a31);
+    }
+
+    section {
+      flex: 1 1 auto;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .list-card {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      border-radius: 4px;
+      overflow: hidden;
+      background-color: var(--bp-surface-background-color-default-rest);
+      box-shadow: var(--bp-surface-shadow-elevation-1, 0 0 0 1px rgba(255, 255, 255, 0.1));
+    }
+  }
+}
+
+.App.compact {
+  main {
+    flex-direction: column;
+  }
+}
+
+.FilterDrawer {
+  .bp6-drawer-header + .Filter {
+    min-height: 0;
+  }
+}

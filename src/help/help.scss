@@ -1,0 +1,32 @@
+@use '../chart/chart.colors' as colors;
+
+.Help {
+  width: 640px;
+  max-width: calc(100vw - 2rem);
+
+  .bp6-dialog-body {
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  .dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid var(--bp-typography-color-muted);
+
+    &.daylight {
+      background-color: colors.$daylight;
+    }
+    &.twilight {
+      background-color: colors.$twilight;
+    }
+    &.moonNight {
+      background-color: colors.$moon-night;
+    }
+    &.moonlessNight {
+      background-color: colors.$moonless-night;
+    }
+  }
+}

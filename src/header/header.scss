@@ -1,0 +1,34 @@
+.Header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 50px;
+  padding: 0 0.5rem 0 1rem;
+  background-color: var(--bp-surface-background-color-elevated-rest, #252a31);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  z-index: 3;
+
+  .logo {
+    width: 28px;
+    height: 28px;
+  }
+
+  .title {
+    font-size: 1.25rem;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  @media screen and (max-width: 959px) {
+    padding-left: 0.25rem;
+
+    .label {
+      display: none;
+    }
+  }
+}

@@ -29,10 +29,9 @@ export default function Location() {
 
   return (
     <Fragment>
-      <Button icon="locate" onClick={handleOpen} large className="location-button-with-text">
-        {locationShortName ? locationShortName.toUpperCase() : 'LOCATION'}
+      <Button icon="locate" fill alignText="start" ellipsizeText onClick={handleOpen}>
+        {locationShortName || 'Select location'}
       </Button>
-      <Button icon="locate" onClick={handleOpen} large className="location-button-without-text"></Button>
 
       <Dialog
         icon="locate"

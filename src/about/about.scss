@@ -1,0 +1,26 @@
+.About {
+  .heading {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    img {
+      width: 64px;
+      height: 64px;
+    }
+
+    p {
+      margin: 0;
+      color: var(--bp-typography-color-muted);
+    }
+  }
+
+  th {
+    white-space: nowrap;
+  }
+
+  td {
+    word-break: break-word;
+  }
+}
