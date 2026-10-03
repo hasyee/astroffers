@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { Button, Classes, Dialog, Drawer } from '@blueprintjs/core';
 import { getTitle } from '../catalog/catalog.utils';
+import { useCloseOnBack } from '../history/history.hooks';
 import { useIsWideScreen } from '../media/media.hooks';
 import { useAdjacentNgcs, useCloseDetails, useOpenedNgcInfo, useOpenedNgcSetter } from './details.hooks';
 import DetailsContent from './details.content';
@@ -37,6 +38,7 @@ export default function Details() {
   const ngcInfo = useOpenedNgcInfo();
   const closeDetails = useCloseDetails();
   const isWideScreen = useIsWideScreen();
+  useCloseOnBack(!!ngcInfo, closeDetails);
 
   const title = ngcInfo ? getTitle(ngcInfo.object) : '';
   const body = ngcInfo && <DetailsContent ngcInfo={ngcInfo} />;

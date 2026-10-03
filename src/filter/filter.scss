@@ -8,6 +8,10 @@
     overflow-y: auto;
     padding: 1rem;
 
+    .bp6-switch {
+      margin-bottom: 15px;
+    }
+
     // the brightness value input sits in a control group without its own label
     .bp6-control-group .bp6-form-group {
       margin: 0;

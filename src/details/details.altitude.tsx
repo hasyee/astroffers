@@ -9,8 +9,11 @@ import { DAYLIGHT, HIGHLIGHT, MOONLESS_NIGHT, MOON_NIGHT, TEXT, TWILIGHT } from 
 
 const HOUR = 3600 * 1000;
 
-const toBand = (interval: Interval | null, color: string): Highcharts.XAxisPlotBandsOptions[] =>
-  interval ? [{ from: interval.start, to: interval.end, color }] : [];
+/** Band of an interval, clamped to the displayed day, since the night intervals may be open-ended */
+const toBand =
+  (first: number, last: number) =>
+  (interval: Interval | null, color: string): Highcharts.XAxisPlotBandsOptions[] =>
+    interval ? [{ from: Math.max(first, interval.start), to: Math.min(last, interval.end), color }] : [];
 
 const toLine = (value: number, text: string, bold = false): Highcharts.XAxisPlotLinesOptions => ({
   value,
@@ -29,6 +32,7 @@ const getOptions = (
   const data = horizontalCoords.map(({ time, coord: { alt } }) => [time, radToDeg(alt)]);
   const first = horizontalCoords[0].time;
   const last = horizontalCoords[horizontalCoords.length - 1].time;
+  const band = toBand(first, last);
   // the transit is shown only when it is far enough from the best visibility, not to overlap
   const transitLine =
     transit && max && Math.abs(transit - max) > HOUR
@@ -53,9 +57,9 @@ const getOptions = (
       },
       plotBands: [
         { from: first, to: last, color: DAYLIGHT },
-        ...toBand(night, TWILIGHT),
-        ...toBand(astroNight, MOON_NIGHT),
-        ...toBand(moonlessNight, MOONLESS_NIGHT)
+        ...band(night, TWILIGHT),
+        ...band(astroNight, MOON_NIGHT),
+        ...band(moonlessNight, MOONLESS_NIGHT)
       ],
       plotLines: [...transitLine, ...(max ? [toLine(max, 'Best visibility', true)] : [])]
     },

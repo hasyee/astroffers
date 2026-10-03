@@ -3,6 +3,7 @@ import { Drawer } from '@blueprintjs/core';
 import Details from '../details/details';
 import Filter from '../filter/filter';
 import Header from '../header/header';
+import { useCloseOnBack } from '../history/history.hooks';
 import List from '../list/list';
 import { useIsWideScreen } from '../media/media.hooks';
 import { useCalculation } from '../result/result.hooks';
@@ -33,6 +34,7 @@ function CompactLayout() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const handleOpenFilter = useCallback(() => setIsFilterOpen(true), []);
   const handleCloseFilter = useCallback(() => setIsFilterOpen(false), []);
+  useCloseOnBack(isFilterOpen, handleCloseFilter);
 
   return (
     <div className="App compact">
