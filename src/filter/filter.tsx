@@ -101,13 +101,13 @@ export default function Filter() {
         </FormGroup>
 
         <FormGroup label="Object types">
-          <Button variant="minimal" fill alignText="start" endIcon="filter-list" onClick={handleOpenTypes}>
+          <Button fill alignText="start" endIcon="filter-list" onClick={handleOpenTypes}>
             {countSelected(filter.types)} of {typeCount} selected
           </Button>
         </FormGroup>
 
         <FormGroup label="Constellations">
-          <Button variant="minimal" fill alignText="start" endIcon="filter-list" onClick={handleOpenConstellations}>
+          <Button fill alignText="start" endIcon="filter-list" onClick={handleOpenConstellations}>
             {countSelected(filter.constellations)} of {constellationCount} selected
           </Button>
         </FormGroup>
