@@ -47,6 +47,11 @@
 }
 
 .FilterDrawer {
+  // as high as the header of the app
+  .bp6-drawer-header {
+    min-height: 50px;
+  }
+
   .bp6-drawer-header + .Filter {
     min-height: 0;
   }
