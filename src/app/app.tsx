@@ -1,3 +1,9 @@
+import { useCalculation, useIsCalculating, useResultList } from '../result/result.hooks';
+
 export default function App() {
-  return <div className="App">Astroffers</div>;
+  useCalculation();
+  const isCalculating = useIsCalculating();
+  const list = useResultList();
+
+  return <div className="App">{isCalculating ? 'Calculating...' : `${list.length} objects`}</div>;
 }

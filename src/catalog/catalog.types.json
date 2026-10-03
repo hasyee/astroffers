@@ -1,1 +1,10 @@
-{"Gxy":"Galaxy","PN":"Planetary Nebula","OC":"Open Cluster","GC":"Globular Cluster","Neb":"Nebula","Ast":"Asterism","SNR":"Supernova Remnant","MWSC":"Milky Way Star Cloud"}
+{
+  "Gxy": "Galaxy",
+  "PN": "Planetary Nebula",
+  "OC": "Open Cluster",
+  "GC": "Globular Cluster",
+  "Neb": "Nebula",
+  "Ast": "Asterism",
+  "SNR": "Supernova Remnant",
+  "MWSC": "Milky Way Star Cloud"
+}
