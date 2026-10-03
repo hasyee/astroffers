@@ -1,0 +1,8 @@
+node_modules
+dist
+public/version
+dev-dist
+public/version
+.DS_Store
+.env*.local
+npm-debug.log*

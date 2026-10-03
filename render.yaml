@@ -1,0 +1,23 @@
+services:
+  - name: astroffers
+    type: web
+    runtime: static
+    branch: master
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    domains:
+      - astroffers.hasyee.com
+    buildFilter:
+      paths:
+        - src/**
+        - public/**
+        - index.html
+        - vite.config.ts
+        - tsconfig*.json
+        - package.json
+        - package-lock.json
+    headers:
+      # the service worker must always be revalidated, or a PWA update would never reach installed clients
+      - path: /sw.js
+        name: Cache-Control
+        value: no-cache

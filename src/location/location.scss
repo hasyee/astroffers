@@ -1,0 +1,16 @@
+.Location {
+  .lat-lon {
+    display: flex;
+    > * {
+      flex: 1 1 0%;
+      flex-basis: 0%;
+    }
+
+    > *:first-child {
+      margin-right: 0.5rem;
+    }
+    > *:last-child {
+      margin-left: 0.5rem;
+    }
+  }
+}

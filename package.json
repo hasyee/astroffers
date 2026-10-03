@@ -1,0 +1,51 @@
+{
+  "name": "astroffers",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Take offers to watch at given nights by the NGC2000 catalog",
+  "author": {
+    "name": "Péter Hauszknecht",
+    "email": "hasyee@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://astroffers.hasyee.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hasyee/astroffers.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hasyee/astroffers/issues"
+  },
+  "scripts": {
+    "dev": "vite",
+    "version": "echo \"${VERSION:-$RENDER_GIT_COMMIT}\" > public/version",
+    "build": "npm run version && tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxlint": "^1.86.0",
+    "prettier": "^3.9.9",
+    "sass": "^1.105.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.2",
+    "vite-plugin-oxlint": "^2.2.0",
+    "vite-plugin-pwa": "^1.3.0"
+  },
+  "dependencies": {
+    "@blueprintjs/core": "^6.21.0",
+    "@blueprintjs/select": "^6.4.0",
+    "classnames": "^2.5.1",
+    "highcharts": "^13.1.1",
+    "moment": "^2.31.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "suncalc": "^2.1.0",
+    "svg-to-dataurl": "^1.0.0"
+  }
+}
