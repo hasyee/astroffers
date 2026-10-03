@@ -1,10 +1,11 @@
-import { useCallback, useEffect } from 'react';
+import { type PropsWithChildren, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Button, Classes, Dialog, Drawer } from '@blueprintjs/core';
 import { getTitle } from '../catalog/catalog.utils';
 import { useCloseOnBack } from '../history/history.hooks';
 import { useIsWideScreen } from '../media/media.hooks';
 import { useAdjacentNgcs, useCloseDetails, useOpenedNgcInfo, useOpenedNgcSetter } from './details.hooks';
 import DetailsContent from './details.content';
+import { useSwipe } from './details.swipe';
 import './details.scss';
 
 function Navigation() {
@@ -31,6 +32,28 @@ function Navigation() {
         Next
       </Button>
     </>
+  );
+}
+
+/** Body of the full-screen drawer: swipe to step, scrolled back to the top for every object */
+function SwipeableBody({ ngc, children }: PropsWithChildren<{ ngc: number | undefined }>) {
+  const setOpenedNgc = useOpenedNgcSetter();
+  const [prev, next] = useAdjacentNgcs();
+  const onPrev = useMemo(() => (prev !== null ? () => setOpenedNgc(prev) : null), [prev, setOpenedNgc]);
+  const onNext = useMemo(() => (next !== null ? () => setOpenedNgc(next) : null), [next, setOpenedNgc]);
+  const swipeRef = useSwipe<HTMLDivElement>({ onPrev, onNext });
+  const bodyRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bodyRef.current?.scrollTo(0, 0);
+  }, [ngc]);
+
+  return (
+    <div className={Classes.DRAWER_BODY} ref={bodyRef}>
+      <div className="swipeable" ref={swipeRef}>
+        {children}
+      </div>
+    </div>
   );
 }
 
@@ -69,7 +92,7 @@ export default function Details() {
       size="100%"
       className="Details compact"
     >
-      <div className={Classes.DRAWER_BODY}>{body}</div>
+      <SwipeableBody ngc={ngcInfo?.object.ngc}>{body}</SwipeableBody>
       <div className={Classes.DRAWER_FOOTER}>
         <Navigation />
       </div>

@@ -12,6 +12,12 @@
 
   .bp6-drawer-body {
     padding: 0;
+    overflow-x: hidden;
+  }
+
+  // horizontal swipes are handled by the app, vertical ones scroll natively
+  .swipeable {
+    touch-action: pan-y;
   }
 
   .bp6-drawer-footer {
