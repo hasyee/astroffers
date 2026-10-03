@@ -18,8 +18,13 @@ const getOptions = (horizontalCoords: CoordSeries<Az>, size: number): Highcharts
     time
   }));
   return {
-    chart: { polar: true, height: size, width: size },
-    pane: { startAngle: 0, endAngle: 360, background: [{ backgroundColor: 'rgba(0, 0, 0, 0.3)', borderColor: GRID }] },
+    // fixed margins leave room for the compass labels, which would be ellipsized at the sides otherwise
+    chart: { polar: true, height: size, width: size, margin: [24, 24, 24, 24] },
+    pane: {
+      startAngle: 0,
+      endAngle: 360,
+      background: [{ backgroundColor: 'rgba(0, 0, 0, 0.3)', borderColor: GRID }]
+    },
     tooltip: {
       formatter() {
         const { time } = this as unknown as Point;
@@ -31,8 +36,9 @@ const getOptions = (horizontalCoords: CoordSeries<Az>, size: number): Highcharts
       max: 360,
       tickInterval: 90,
       labels: {
+        style: { textOverflow: 'none', whiteSpace: 'nowrap' },
         formatter() {
-          return COMPASS[Number(this.value)] ?? '';
+          return COMPASS[Math.round(Number(this.value))] ?? '';
         }
       }
     },
