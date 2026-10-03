@@ -40,7 +40,12 @@ function Toolbar() {
           onChange={event => setSortBy(event.currentTarget.value as SortBy)}
           options={sortOptions.map(({ value, label }) => ({ value, label: `Sort by ${label.toLowerCase()}` }))}
         />
-        <Button icon={isSearchOpen ? 'cross' : 'search'} onClick={handleToggleSearch} aria-label="Search" />
+        <Button
+          variant="minimal"
+          icon={isSearchOpen ? 'cross' : 'search'}
+          onClick={handleToggleSearch}
+          aria-label="Search"
+        />
       </ControlGroup>
       <Collapse isOpen={isSearchOpen}>
         <div className="search">

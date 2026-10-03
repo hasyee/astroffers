@@ -101,20 +101,20 @@ export default function Filter() {
         </FormGroup>
 
         <FormGroup label="Object types">
-          <Button fill alignText="start" endIcon="filter-list" onClick={handleOpenTypes}>
+          <Button variant="minimal" fill alignText="start" endIcon="filter-list" onClick={handleOpenTypes}>
             {countSelected(filter.types)} of {typeCount} selected
           </Button>
         </FormGroup>
 
         <FormGroup label="Constellations">
-          <Button fill alignText="start" endIcon="filter-list" onClick={handleOpenConstellations}>
+          <Button variant="minimal" fill alignText="start" endIcon="filter-list" onClick={handleOpenConstellations}>
             {countSelected(filter.constellations)} of {constellationCount} selected
           </Button>
         </FormGroup>
       </div>
 
       <div className="actions">
-        <Button icon="reset" onClick={resetFilter}>
+        <Button variant="minimal" icon="reset" onClick={resetFilter}>
           Reset filter
         </Button>
       </div>

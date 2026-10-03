@@ -29,7 +29,7 @@ export default function Location() {
 
   return (
     <Fragment>
-      <Button icon="locate" fill alignText="start" ellipsizeText onClick={handleOpen}>
+      <Button variant="minimal" icon="locate" fill alignText="start" ellipsizeText onClick={handleOpen}>
         {locationShortName || 'Select location'}
       </Button>
 
@@ -69,7 +69,7 @@ export default function Location() {
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <Button large onClick={fetchLocation} icon={'locate'} loading={isFetchingLocation}>
+            <Button variant="minimal" large onClick={fetchLocation} icon={'locate'} loading={isFetchingLocation}>
               USE MY LOCATION
             </Button>
           </div>

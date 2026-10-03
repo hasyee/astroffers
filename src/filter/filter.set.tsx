@@ -32,9 +32,13 @@ export default function SetFilterDialog({ title, isOpen, options, value, onChang
       </div>
       <div className={Classes.DIALOG_FOOTER}>
         <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-          <Button onClick={() => onChange(selectAll(options, true))}>Select all</Button>
-          <Button onClick={() => onChange(selectAll(options, false))}>Select none</Button>
-          <Button intent="primary" onClick={onClose}>
+          <Button variant="minimal" onClick={() => onChange(selectAll(options, true))}>
+            Select all
+          </Button>
+          <Button variant="minimal" onClick={() => onChange(selectAll(options, false))}>
+            Select none
+          </Button>
+          <Button variant="minimal" intent="primary" onClick={onClose}>
             Close
           </Button>
         </div>

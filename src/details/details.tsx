@@ -24,10 +24,10 @@ function Navigation() {
 
   return (
     <>
-      <Button icon="arrow-left" onClick={handlePrev} disabled={prev === null}>
+      <Button variant="minimal" icon="arrow-left" onClick={handlePrev} disabled={prev === null}>
         Previous
       </Button>
-      <Button endIcon="arrow-right" onClick={handleNext} disabled={next === null}>
+      <Button variant="minimal" endIcon="arrow-right" onClick={handleNext} disabled={next === null}>
         Next
       </Button>
     </>
@@ -50,7 +50,7 @@ export default function Details() {
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
             <Navigation />
-            <Button intent="primary" onClick={closeDetails}>
+            <Button variant="minimal" intent="primary" onClick={closeDetails}>
               Close
             </Button>
           </div>

@@ -28,7 +28,13 @@ export default function DateInput() {
   return (
     <FormGroup label="Night of">
       <ControlGroup fill>
-        <Button className={Classes.FIXED} icon="chevron-left" onClick={handlePrevDay} aria-label="Previous night" />
+        <Button
+          variant="minimal"
+          className={Classes.FIXED}
+          icon="chevron-left"
+          onClick={handlePrevDay}
+          aria-label="Previous night"
+        />
         <InputGroup
           type="date"
           fill
@@ -37,8 +43,14 @@ export default function DateInput() {
           value={moment(date).format(FORMAT)}
           onChange={handleChange}
         />
-        <Button className={Classes.FIXED} icon="chevron-right" onClick={handleNextDay} aria-label="Next night" />
-        <Button className={Classes.FIXED} onClick={handleToday} disabled={date === getToday()}>
+        <Button
+          variant="minimal"
+          className={Classes.FIXED}
+          icon="chevron-right"
+          onClick={handleNextDay}
+          aria-label="Next night"
+        />
+        <Button variant="minimal" className={Classes.FIXED} onClick={handleToday} disabled={date === getToday()}>
           Today
         </Button>
       </ControlGroup>
