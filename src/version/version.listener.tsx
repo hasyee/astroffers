@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, Intent, Tag } from '@blueprintjs/core';
-import { useCurrentVersion, useFetchLatestVersion } from './version.hooks';
+import { useCurrentVersion, useFetchLatestVersion, useReloadToLatestVersion } from './version.hooks';
 import { VERSION_CHECK_INTERVAL } from './version.utils';
 
 export default function VersionListener() {
   const version = useCurrentVersion();
   const fetchLatestVersion = useFetchLatestVersion();
+  const reloadToLatestVersion = useReloadToLatestVersion();
   const [nextVersion, setNextVersion] = useState<string | null>(null);
+  const [isReloading, setIsReloading] = useState(false);
 
   useEffect(() => {
     if (!version) return;
@@ -18,7 +20,10 @@ export default function VersionListener() {
     return () => clearInterval(interval);
   }, [version, fetchLatestVersion]);
 
-  const handleConfirm = useCallback(() => window.location.reload(), []);
+  const handleConfirm = useCallback(() => {
+    setIsReloading(true);
+    reloadToLatestVersion();
+  }, [reloadToLatestVersion]);
 
   const handleClose = useCallback(() => setNextVersion(null), []);
 
@@ -28,6 +33,7 @@ export default function VersionListener() {
       cancelButtonText="Not now"
       intent={Intent.WARNING}
       isOpen={!!nextVersion}
+      loading={isReloading}
       onCancel={handleClose}
       onConfirm={handleConfirm}
       icon="warning-sign"
