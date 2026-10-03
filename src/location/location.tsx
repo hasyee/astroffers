@@ -29,7 +29,7 @@ export default function Location() {
 
   return (
     <Fragment>
-      <Button variant="minimal" icon="locate" fill alignText="start" ellipsizeText onClick={handleOpen}>
+      <Button icon="locate" fill alignText="start" ellipsizeText onClick={handleOpen}>
         {locationShortName || 'Select location'}
       </Button>
 
