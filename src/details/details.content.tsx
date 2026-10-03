@@ -32,6 +32,7 @@ function Preview({ ngcInfo }: { ngcInfo: NgcInfo }) {
         <img
           className={classnames({ hidden: loadedSrc !== src })}
           src={src}
+          crossOrigin="anonymous"
           alt={`DSS2 preview of NGC ${ngcInfo.object.ngc}`}
           onLoad={() => setLoadedSrc(src)}
           onError={() => setFailedSrc(src)}

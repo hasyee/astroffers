@@ -20,7 +20,21 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
-        globPatterns: ['**/*.{js,css,html,png,ico,svg,webmanifest}']
+        globPatterns: ['**/*.{js,css,html,png,ico,svg,webmanifest}'],
+        runtimeCaching: [
+          {
+            // the preview images are served without any cache headers, so the service worker keeps them instead
+            urlPattern: ({ url }) =>
+              url.origin === 'https://alasky.cds.unistra.fr' &&
+              url.pathname.startsWith('/hips-image-services/hips2fits'),
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'previews',
+              expiration: { maxEntries: 2000, maxAgeSeconds: 365 * 24 * 3600 },
+              cacheableResponse: { statuses: [200] }
+            }
+          }
+        ]
       },
       manifest: {
         name: 'Astroffers',

@@ -78,7 +78,13 @@ function Item({ ngcInfo }: { ngcInfo: NgcInfo }) {
   return (
     <div className="Item" onClick={handleClick}>
       <div className="heading">
-        <img className="thumbnail" src={getObjectImgSrc(ngcInfo.object, 80)} alt="" loading="lazy" />
+        <img
+          className="thumbnail"
+          src={getObjectImgSrc(ngcInfo.object, 80)}
+          crossOrigin="anonymous"
+          alt=""
+          loading="lazy"
+        />
         <div>
           <div className="title">{getTitle(ngcInfo.object)}</div>
           <div className="subtitle">
