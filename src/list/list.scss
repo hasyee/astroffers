@@ -7,6 +7,8 @@
 
   > .bp6-non-ideal-state {
     flex: 1 1 auto;
+    // Blueprint gives it the full height, which would squeeze the toolbar above it
+    height: auto;
     padding: 2rem 1rem;
   }
 
