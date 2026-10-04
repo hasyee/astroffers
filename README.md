@@ -36,8 +36,8 @@ Vite, React 19, TypeScript, MUI 9 (dark theme), Highcharts, sass. Source files a
 - `result/`: runs the calculation whenever an input changes (debounced)
 - `summary/`, `list/`, `details/`: the views of the result
 
-The layout is responsive: the desktop layout (filter panel, table) starts at 960px, below that the mobile layout
-(filter drawer, cards) is used.
+The layout is responsive: the desktop layout (summary, table) starts at 800px, with the filter panel beside it from
+1110px and the filter in a drawer below that; under 800px the mobile layout (filter drawer, cards) is used.
 
 ### Catalog
 

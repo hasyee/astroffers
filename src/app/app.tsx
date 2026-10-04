@@ -9,23 +9,59 @@ import Filter from '../filter/filter';
 import Header from '../header/header';
 import { useCloseOnBack } from '../history/history.hooks';
 import List from '../list/list';
-import { useIsWideScreen } from '../media/media.hooks';
+import { useHasFilterPanel, useIsWideScreen } from '../media/media.hooks';
 import { useCalculation } from '../result/result.hooks';
 import Summary from '../summary/summary';
 import './app.scss';
 
+/** The filter in a drawer from the left, closed by default; the back button closes it */
+function FilterDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  useCloseOnBack(isOpen, onClose);
+
+  return (
+    <Drawer
+      anchor="left"
+      open={isOpen}
+      onClose={onClose}
+      className="FilterDrawer"
+      slotProps={{ paper: { className: 'FilterDrawerPaper' } }}
+    >
+      <div className="header">
+        <Typography variant="h6" component="h2">
+          Filter
+        </Typography>
+        <IconButton onClick={onClose} aria-label="Close">
+          <CloseIcon />
+        </IconButton>
+      </div>
+      <Filter />
+    </Drawer>
+  );
+}
+
+/**
+ * Filter panel and table. The filter panel is open by default, the menu button of the header closes and opens it;
+ * below `FILTER_PANEL_QUERY` there is no room for it beside the summary, so the filter is in a drawer instead.
+ */
 function WideLayout() {
-  // the filter panel is open by default, the menu button of the header closes and opens it
-  const [isFilterOpen, setIsFilterOpen] = useState(true);
-  const handleToggleFilter = useCallback(() => setIsFilterOpen(isOpen => !isOpen), []);
+  const hasFilterPanel = useHasFilterPanel();
+  const [isPanelOpen, setIsPanelOpen] = useState(true);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const handleToggleFilter = useCallback(() => setIsPanelOpen(isOpen => !isOpen), []);
+  const handleOpenDrawer = useCallback(() => setIsDrawerOpen(true), []);
+  const handleCloseDrawer = useCallback(() => setIsDrawerOpen(false), []);
+  // the drawer closes when the window grows wide enough for the panel, and does not open again by shrinking
+  if (hasFilterPanel && isDrawerOpen) setIsDrawerOpen(false);
 
   return (
     <div className="App wide">
-      <Header onMenuClick={handleToggleFilter} />
+      <Header onMenuClick={hasFilterPanel ? handleToggleFilter : handleOpenDrawer} />
       <main>
-        <aside className={classnames({ closed: !isFilterOpen })} inert={!isFilterOpen}>
-          <Filter />
-        </aside>
+        {hasFilterPanel && (
+          <aside className={classnames({ closed: !isPanelOpen })} inert={!isPanelOpen}>
+            <Filter />
+          </aside>
+        )}
         <section>
           <Summary />
           <div className="list-card">
@@ -33,16 +69,17 @@ function WideLayout() {
           </div>
         </section>
       </main>
+      <FilterDrawer isOpen={isDrawerOpen} onClose={handleCloseDrawer} />
       <Details />
     </div>
   );
 }
 
+/** Summary bar, cards and the filter in a drawer */
 function CompactLayout() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const handleOpenFilter = useCallback(() => setIsFilterOpen(true), []);
   const handleCloseFilter = useCallback(() => setIsFilterOpen(false), []);
-  useCloseOnBack(isFilterOpen, handleCloseFilter);
 
   return (
     <div className="App compact">
@@ -51,23 +88,7 @@ function CompactLayout() {
         <Summary compact />
         <List compact />
       </main>
-      <Drawer
-        anchor="left"
-        open={isFilterOpen}
-        onClose={handleCloseFilter}
-        className="FilterDrawer"
-        slotProps={{ paper: { className: 'FilterDrawerPaper' } }}
-      >
-        <div className="header">
-          <Typography variant="h6" component="h2">
-            Filter
-          </Typography>
-          <IconButton onClick={handleCloseFilter} aria-label="Close">
-            <CloseIcon />
-          </IconButton>
-        </div>
-        <Filter />
-      </Drawer>
+      <FilterDrawer isOpen={isFilterOpen} onClose={handleCloseFilter} />
       <Details />
     </div>
   );
