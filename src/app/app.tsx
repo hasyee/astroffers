@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import classnames from 'classnames';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -14,11 +15,15 @@ import Summary from '../summary/summary';
 import './app.scss';
 
 function WideLayout() {
+  // the filter panel is open by default, the menu button of the header closes and opens it
+  const [isFilterOpen, setIsFilterOpen] = useState(true);
+  const handleToggleFilter = useCallback(() => setIsFilterOpen(isOpen => !isOpen), []);
+
   return (
     <div className="App wide">
-      <Header />
+      <Header onMenuClick={handleToggleFilter} />
       <main>
-        <aside>
+        <aside className={classnames({ closed: !isFilterOpen })} inert={!isFilterOpen}>
           <Filter />
         </aside>
         <section>
@@ -41,7 +46,7 @@ function CompactLayout() {
 
   return (
     <div className="App compact">
-      <Header onOpenFilter={handleOpenFilter} />
+      <Header onMenuClick={handleOpenFilter} />
       <main>
         <Summary compact />
         <List compact />

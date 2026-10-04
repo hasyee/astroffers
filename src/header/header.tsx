@@ -13,7 +13,8 @@ import { useIsWideScreen } from '../media/media.hooks';
 import { useGoBack, useMatchPath, useNavigate } from '../router/router.hooks';
 import './header.scss';
 
-export default function Header({ onOpenFilter }: { onOpenFilter?: () => void }) {
+/** `onMenuClick` toggles the filter panel on a wide screen, opens the filter drawer on a phone */
+export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
   const isWideScreen = useIsWideScreen();
   const navigate = useNavigate();
   const handleClose = useGoBack();
@@ -27,12 +28,9 @@ export default function Header({ onOpenFilter }: { onOpenFilter?: () => void }) 
 
   return (
     <AppBar position="static" color="inherit" elevation={2} className="Header">
-      {onOpenFilter && (
-        <IconButton onClick={onOpenFilter} aria-label="Filter">
-          <MenuIcon />
-        </IconButton>
-      )}
-      <img className="logo" src="/icons/logo.png" alt="" />
+      <IconButton onClick={onMenuClick} aria-label="Filter">
+        <MenuIcon />
+      </IconButton>
       <span className="title">Astroffers</span>
       <div className="spacer" />
       {isWideScreen ? (

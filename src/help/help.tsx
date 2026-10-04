@@ -17,7 +17,8 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
 
           <h3>Filter</h3>
           <p>
-            On a wide screen the filter is on the left side, on a phone it opens with the menu button of the header.
+            On a wide screen the filter is on the left side, the menu button of the header hides and shows it; on a
+            phone it opens with the menu button.
           </p>
           <ul>
             <li>

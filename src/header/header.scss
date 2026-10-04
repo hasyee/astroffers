@@ -4,13 +4,8 @@
   align-items: center;
   gap: 0.5rem;
   height: 50px;
-  padding: 0 0.5rem 0 1rem;
+  padding: 0 0.5rem 0 0.25rem;
   z-index: 3;
-
-  .logo {
-    width: 28px;
-    height: 28px;
-  }
 
   .title {
     font-size: 1.25rem;
@@ -20,9 +15,5 @@
 
   .spacer {
     flex: 1 1 auto;
-  }
-
-  @media screen and (max-width: 959px) {
-    padding-left: 0.25rem;
   }
 }

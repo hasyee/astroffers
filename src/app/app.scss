@@ -13,10 +13,23 @@
 
 .App.wide {
   main {
+    // as wide as the filter drawer on a phone
     aside {
-      flex: 0 0 320px;
+      flex: 0 0 340px;
+      overflow: hidden;
       border-right: 1px solid var(--mui-palette-divider);
       background-color: var(--mui-palette-background-paper);
+      transition: flex-basis 0.2s ease-out;
+
+      // keeps its width while sliding, not to reflow the filter
+      > .Filter {
+        width: 340px;
+      }
+
+      &.closed {
+        flex-basis: 0;
+        border-right-width: 0;
+      }
     }
 
     section {
