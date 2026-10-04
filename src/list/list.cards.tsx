@@ -1,10 +1,10 @@
-import { useCallback, useState } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
+import SearchIcon from '@mui/icons-material/Search';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
-import CloseIcon from '@mui/icons-material/Close';
-import SearchIcon from '@mui/icons-material/Search';
+import { useCallback, useState } from 'react';
 import type { NgcInfo } from '../calculator/calculator.types';
 import { getObjectImgSrc, getTitle } from '../catalog/catalog.utils';
 import { useOpenDetails } from '../details/details.hooks';
@@ -44,6 +44,7 @@ function Toolbar() {
           value={sortBy}
           onChange={event => setSortBy(event.target.value as SortBy)}
           slotProps={{ htmlInput: { 'aria-label': 'Sort by' } }}
+          style={{ marginRight: '0.5rem' }}
         >
           {sortOptions.map(({ value, label }) => (
             <MenuItem key={value} value={value}>
