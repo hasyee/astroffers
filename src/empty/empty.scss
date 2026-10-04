@@ -1,0 +1,20 @@
+.EmptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+
+  .icon {
+    display: flex;
+    margin-bottom: 0.5rem;
+    color: var(--mui-palette-text-secondary);
+
+    .MuiSvgIcon-root {
+      font-size: 48px;
+    }
+  }
+}

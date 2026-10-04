@@ -5,10 +5,8 @@
   flex-direction: column;
   min-height: 0;
 
-  > .bp6-non-ideal-state {
+  > .EmptyState {
     flex: 1 1 auto;
-    // Blueprint gives it the full height, which would squeeze the toolbar above it
-    height: auto;
     padding: 2rem 1rem;
   }
 
@@ -52,8 +50,8 @@
     top: 0;
     z-index: 1;
     vertical-align: top;
-    background-color: var(--bp-surface-background-color-default-rest);
-    border-bottom: 1px solid var(--bp-surface-border-color-default);
+    background-color: var(--mui-palette-background-default);
+    border-bottom: 1px solid var(--mui-palette-divider);
     font-weight: 600;
 
     .sorter {
@@ -71,13 +69,30 @@
         text-decoration: underline;
       }
       &.active {
-        color: var(--bp-intent-primary-foreground, #8abbff);
+        color: var(--mui-palette-primary-main);
       }
     }
 
-    .bp6-input-group {
+    .sort-icon {
+      font-size: 0.9rem;
+    }
+
+    .search {
+      display: flex;
       margin-top: 0.25rem;
       min-width: 3.5rem;
+      font-size: 0.8rem;
+      border: 1px solid var(--mui-palette-divider);
+      border-radius: var(--mui-shape-borderRadius);
+
+      &.Mui-focused {
+        border-color: var(--mui-palette-primary-main);
+      }
+
+      input {
+        padding: 0.2rem 0.4rem;
+        font-weight: 400;
+      }
     }
   }
 
@@ -124,20 +139,32 @@
     top: 0;
     z-index: 1;
     padding: 0.5rem 1rem;
-    background-color: var(--bp-surface-background-color-default-rest);
-    border-bottom: 1px solid var(--bp-surface-border-color-default);
+    background-color: var(--mui-palette-background-default);
+    border-bottom: 1px solid var(--mui-palette-divider);
+
+    .sort {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
 
     .search {
       display: grid;
       grid-template-columns: 1fr 1fr 2fr;
       gap: 0.5rem;
       padding-top: 0.5rem;
+
+      // narrow fields, room for the placeholders
+      .MuiInputBase-input {
+        padding-left: 0.6rem;
+        padding-right: 0.6rem;
+      }
     }
   }
 
   .Item {
     padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--bp-surface-border-color-default);
+    border-bottom: 1px solid var(--mui-palette-divider);
     cursor: pointer;
 
     &:active {
@@ -166,7 +193,7 @@
 
     .subtitle {
       font-size: 0.8rem;
-      color: var(--bp-typography-color-muted);
+      color: var(--mui-palette-text-secondary);
     }
 
     .properties {
@@ -180,7 +207,7 @@
         display: block;
         font-size: 0.7rem;
         font-weight: 600;
-        color: var(--bp-typography-color-muted);
+        color: var(--mui-palette-text-secondary);
       }
     }
   }

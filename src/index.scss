@@ -1,15 +1,3 @@
-@import '@blueprintjs/core/lib/css/blueprint.css';
-
-body {
-  margin: 0;
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
-    'Helvetica Neue', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--bp-surface-background-color-default-rest);
-}
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
@@ -19,13 +7,13 @@ code {
   outline: 0 !important;
 }
 
-// no highlight flashing on tapping anything clickable on phones; Blueprint shows its own active states
+// no highlight flashing on tapping anything clickable on phones; MUI shows its own ripples and active states
 * {
   -webkit-tap-highlight-color: transparent;
 }
 
-// iOS zooms into any input with a font size below 16px; important, since Blueprint sets the size of
-// its inputs with more specific (multi-class) selectors. `-webkit-touch-callout` is supported on iOS only.
+// iOS zooms into any input with a font size below 16px; important, since MUI sets the size of its inputs with
+// more specific selectors. `-webkit-touch-callout` is supported on iOS only.
 @supports (-webkit-touch-callout: none) {
   input,
   select,

@@ -1,12 +1,30 @@
 @use '../chart/chart.colors' as colors;
 
 .Help {
-  width: 640px;
-  max-width: calc(100vw - 2rem);
+  .running-text {
+    font-size: 0.875rem;
+    line-height: 1.5;
 
-  .bp6-dialog-body {
-    max-height: 70vh;
-    overflow-y: auto;
+    h3 {
+      margin: 1.25rem 0 0.5rem;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    p,
+    ul {
+      margin: 0 0 0.75rem;
+    }
+
+    li {
+      margin-bottom: 0.25rem;
+    }
+
+    code {
+      padding: 0 0.25rem;
+      border-radius: 3px;
+      background-color: var(--mui-palette-action-selected);
+    }
   }
 
   .dot {
@@ -14,7 +32,7 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    border: 1px solid var(--bp-typography-color-muted);
+    border: 1px solid var(--mui-palette-text-secondary);
 
     &.daylight {
       background-color: colors.$daylight;

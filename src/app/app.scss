@@ -15,8 +15,8 @@
   main {
     aside {
       flex: 0 0 320px;
-      border-right: 1px solid var(--bp-surface-border-color-default);
-      background-color: var(--bp-surface-background-color-elevated-rest, #252a31);
+      border-right: 1px solid var(--mui-palette-divider);
+      background-color: var(--mui-palette-background-paper);
     }
 
     section {
@@ -32,10 +32,10 @@
       flex: 1 1 auto;
       min-height: 0;
       display: flex;
-      border-radius: 4px;
+      border-radius: var(--mui-shape-borderRadius);
       overflow: hidden;
-      background-color: var(--bp-surface-background-color-default-rest);
-      box-shadow: var(--bp-surface-shadow-elevation-1, 0 0 0 1px rgba(255, 255, 255, 0.1));
+      border: 1px solid var(--mui-palette-divider);
+      background-color: var(--mui-palette-background-default);
     }
   }
 }
@@ -46,13 +46,21 @@
   }
 }
 
-.FilterDrawer {
+.FilterDrawerPaper {
+  width: min(340px, 90vw);
+
   // as high as the header of the app
-  .bp6-drawer-header {
-    min-height: 50px;
+  .header {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    padding: 0 0.5rem 0 1rem;
+    border-bottom: 1px solid var(--mui-palette-divider);
   }
 
-  .bp6-drawer-header + .Filter {
+  .Filter {
     min-height: 0;
   }
 }

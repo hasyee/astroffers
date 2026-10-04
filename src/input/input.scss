@@ -1,0 +1,11 @@
+.SelectorField {
+  .MuiInputBase-root,
+  .MuiInputBase-input {
+    cursor: pointer;
+  }
+
+  // the value is chosen in a dialog, so the caret would be misleading
+  .MuiInputBase-input {
+    caret-color: transparent;
+  }
+}

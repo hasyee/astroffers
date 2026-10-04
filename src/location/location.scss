@@ -1,16 +1,16 @@
-.Location {
+.Location.MuiDialogContent-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  // room for the floating label of the first field
+  padding-top: 0.5rem;
+
   .lat-lon {
     display: flex;
+    gap: 1rem;
+
     > * {
       flex: 1 1 0%;
-      flex-basis: 0%;
-    }
-
-    > *:first-child {
-      margin-right: 0.5rem;
-    }
-    > *:last-child {
-      margin-left: 0.5rem;
     }
   }
 }

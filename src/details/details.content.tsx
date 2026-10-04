@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import classnames from 'classnames';
-import { Spinner } from '@blueprintjs/core';
+import CircularProgress from '@mui/material/CircularProgress';
 import type { NgcInfo } from '../calculator/calculator.types';
 import { getObjectImgSrc } from '../catalog/catalog.utils';
 import { toDetails } from '../display/display.utils';
@@ -28,7 +28,7 @@ function Preview({ ngcInfo }: { ngcInfo: NgcInfo }) {
 
   return (
     <div className="Preview">
-      {loadedSrc !== src && failedSrc !== src && <Spinner />}
+      {loadedSrc !== src && failedSrc !== src && <CircularProgress />}
       {failedSrc === src ? (
         <div className="unavailable">Preview is unavailable</div>
       ) : (

@@ -1,4 +1,7 @@
-import { Classes, Dialog, HTMLTable } from '@blueprintjs/core';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import Typography from '@mui/material/Typography';
+import DialogTitleWithClose from '../dialog/dialog.title';
 import { appVersion, currentVersion } from '../version/version.utils';
 import './about.scss';
 
@@ -6,16 +9,19 @@ const REPOSITORY = 'https://github.com/hasyee/astroffers';
 
 export default function About({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   return (
-    <Dialog title="About Astroffers" icon="info-sign" isOpen={isOpen} onClose={onClose} className="About">
-      <div className={Classes.DIALOG_BODY}>
+    <Dialog open={isOpen} onClose={onClose} className="About">
+      <DialogTitleWithClose onClose={onClose}>About Astroffers</DialogTitleWithClose>
+      <DialogContent>
         <div className="heading">
           <img src="/icons/icon-192x192.png" alt="" />
           <div>
-            <h2 className={Classes.HEADING}>Astroffers</h2>
-            <p>Take offers to watch at given nights by the NGC 2000 catalog.</p>
+            <Typography variant="h5">Astroffers</Typography>
+            <Typography color="text.secondary">
+              Take offers to watch at given nights by the NGC 2000 catalog.
+            </Typography>
           </div>
         </div>
-        <HTMLTable compact>
+        <table>
           <tbody>
             <tr>
               <th>Version</th>
@@ -61,8 +67,8 @@ export default function About({ isOpen, onClose }: { isOpen: boolean; onClose: (
               </td>
             </tr>
           </tbody>
-        </HTMLTable>
-      </div>
+        </table>
+      </DialogContent>
     </Dialog>
   );
 }

@@ -1,6 +1,12 @@
 import { Fragment, useState, useCallback } from 'react';
-import classnames from 'classnames';
-import { Button, Dialog, Callout, Classes } from '@blueprintjs/core';
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import MyLocationIcon from '@mui/icons-material/MyLocation';
+import DialogTitleWithClose from '../dialog/dialog.title';
+import SelectorField from '../input/input.selector';
 import { useLocation, useLocationSetter, useMyLocation, useLocationShortName } from './location.hooks';
 import CoordinateInput from './location.coordinate';
 import PlaceSearch from './location.search';
@@ -26,21 +32,17 @@ export default function Location() {
     (lat: number) => setLocation(location => ({ coords: { ...location.coords, lat }, name: '' })),
     [setLocation]
   );
+  const handleDialogClose = useCallback(() => {
+    if (!isFetchingLocation) handleClose();
+  }, [isFetchingLocation, handleClose]);
 
   return (
     <Fragment>
-      <Button icon="locate" fill alignText="start" ellipsizeText onClick={handleOpen}>
-        {locationShortName || 'Select location'}
-      </Button>
+      <SelectorField label="Location" value={locationShortName} icon={<MyLocationIcon />} onClick={handleOpen} />
 
-      <Dialog
-        icon="locate"
-        title="Location"
-        isOpen={isOpen}
-        onClose={handleClose}
-        canOutsideClickClose={!isFetchingLocation}
-      >
-        <div className={classnames(Classes.DIALOG_BODY, 'Location')}>
+      <Dialog open={isOpen} onClose={handleDialogClose} maxWidth="sm" fullWidth>
+        <DialogTitleWithClose onClose={handleDialogClose}>Location</DialogTitleWithClose>
+        <DialogContent className="Location">
           <PlaceSearch onSelectLocation={handleClose} />
           <div className="lat-lon">
             <CoordinateInput
@@ -62,18 +64,16 @@ export default function Location() {
           </div>
 
           {locationFetchingError && (
-            <Callout icon={undefined} intent="danger">
+            <Alert severity="error" variant="outlined">
               {locationFetchingError}
-            </Callout>
+            </Alert>
           )}
-        </div>
-        <div className={Classes.DIALOG_FOOTER}>
-          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <Button variant="minimal" large onClick={fetchLocation} icon={'locate'} loading={isFetchingLocation}>
-              USE MY LOCATION
-            </Button>
-          </div>
-        </div>
+        </DialogContent>
+        <DialogActions>
+          <Button size="large" onClick={fetchLocation} startIcon={<MyLocationIcon />} loading={isFetchingLocation}>
+            Use my location
+          </Button>
+        </DialogActions>
       </Dialog>
     </Fragment>
   );

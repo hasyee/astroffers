@@ -1,6 +1,12 @@
 import { useCallback, useState } from 'react';
 import moment from 'moment';
-import { Button, Card, Collapse } from '@blueprintjs/core';
+import Button from '@mui/material/Button';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import { downloadCsv } from '../export/export.utils';
 import { formatDate, formatIntervalEnd, formatIntervalStart } from '../display/display.utils';
 import { useDisplayedList } from '../list/list.hooks';
@@ -44,9 +50,9 @@ export default function Summary({ compact = false }: { compact?: boolean }) {
             <div>{formatIntervalEnd(observedNight)}</div>
           </div>
           <NightChart date={params.date} nightInfo={nightInfo} size={64} />
-          <Button variant="minimal" icon={isExpanded ? 'chevron-up' : 'chevron-down'} aria-label="Night details" />
+          <IconButton aria-label="Night details">{isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}</IconButton>
         </div>
-        <Collapse isOpen={isExpanded}>
+        <Collapse in={isExpanded}>
           <div className="details">
             <div className="date">
               {formatDate(params.date)} · Moon illumination {moonIllumination}
@@ -59,11 +65,16 @@ export default function Summary({ compact = false }: { compact?: boolean }) {
   }
 
   return (
-    <Card className="Summary">
+    <Paper variant="outlined" className="Summary">
       <div className="count">
         <div className="value">{list.length}</div>
         <div className="label">objects</div>
-        <Button icon="export" variant="minimal" onClick={handleExport} disabled={list.length === 0}>
+        <Button
+          size="small"
+          startIcon={<FileDownloadOutlinedIcon />}
+          onClick={handleExport}
+          disabled={list.length === 0}
+        >
           Export CSV
         </Button>
       </div>
@@ -79,6 +90,6 @@ export default function Summary({ compact = false }: { compact?: boolean }) {
         <NightTable nightInfo={nightInfo} />
       </div>
       <NightChart date={params.date} nightInfo={nightInfo} />
-    </Card>
+    </Paper>
   );
 }

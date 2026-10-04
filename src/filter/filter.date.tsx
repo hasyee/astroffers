@@ -1,6 +1,10 @@
 import { type ChangeEvent, useCallback } from 'react';
 import moment from 'moment';
-import { Button, Classes, ControlGroup, FormGroup, InputGroup } from '@blueprintjs/core';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useDate, useDateSetter } from '../date/date.hooks';
 import { getToday } from '../date/date.utils';
 
@@ -26,34 +30,23 @@ export default function DateInput() {
   const handleToday = useCallback(() => setDate(getToday()), [setDate]);
 
   return (
-    <FormGroup label="Night of">
-      <ControlGroup fill>
-        <Button
-          variant="minimal"
-          className={Classes.FIXED}
-          icon="chevron-left"
-          onClick={handlePrevDay}
-          aria-label="Previous night"
-        />
-        <InputGroup
-          type="date"
-          fill
-          min={MIN_DATE}
-          max={MAX_DATE}
-          value={moment(date).format(FORMAT)}
-          onChange={handleChange}
-        />
-        <Button
-          variant="minimal"
-          className={Classes.FIXED}
-          icon="chevron-right"
-          onClick={handleNextDay}
-          aria-label="Next night"
-        />
-        <Button variant="minimal" className={Classes.FIXED} onClick={handleToday} disabled={date === getToday()}>
-          Today
-        </Button>
-      </ControlGroup>
-    </FormGroup>
+    <div className="DateInput">
+      <IconButton onClick={handlePrevDay} aria-label="Previous night">
+        <ChevronLeftIcon />
+      </IconButton>
+      <TextField
+        label="Night of"
+        type="date"
+        value={moment(date).format(FORMAT)}
+        onChange={handleChange}
+        slotProps={{ inputLabel: { shrink: true }, htmlInput: { min: MIN_DATE, max: MAX_DATE } }}
+      />
+      <IconButton onClick={handleNextDay} aria-label="Next night">
+        <ChevronRightIcon />
+      </IconButton>
+      <Button onClick={handleToday} disabled={date === getToday()}>
+        Today
+      </Button>
+    </div>
   );
 }
