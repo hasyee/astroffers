@@ -2,7 +2,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import Typography from '@mui/material/Typography';
 import DialogTitleWithClose from '../dialog/dialog.title';
-import { appVersion, currentVersion } from '../version/version.utils';
+import { currentVersion } from '../version/version.utils';
 import './about.scss';
 
 const REPOSITORY = 'https://github.com/hasyee/astroffers';
@@ -25,9 +25,7 @@ export default function About({ isOpen, onClose }: { isOpen: boolean; onClose: (
           <tbody>
             <tr>
               <th>Version</th>
-              <td>
-                {appVersion} ({currentVersion})
-              </td>
+              <td>{currentVersion}</td>
             </tr>
             <tr>
               <th>Author</th>
