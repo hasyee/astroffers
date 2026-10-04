@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import moment from 'moment';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -7,9 +7,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import type { CalendarDay, Timestamp } from '../calculator/calculator.types';
-import { useDate } from '../date/date.hooks';
 import { useSwipe } from '../swipe/swipe.hooks';
-import { useCalendarMonths } from './calendar.hooks';
+import { useCalendarMonth, useCalendarMonthRemover, useCalendarMonthSetter, useCalendarMonths } from './calendar.hooks';
 import CalendarItem from './calendar.item';
 import './calendar.scss';
 
@@ -33,17 +32,23 @@ function Month({ days, onShowNight }: { days: CalendarDay[] | undefined; onShowN
  * next month are side by side, to swipe between them like the pages of a carousel (see the details).
  */
 function CalendarContent({ onClose }: { onClose: () => void }) {
-  // opens on the month of the night chosen in the filter
-  const date = useDate();
-  const [month, setMonth] = useState(() => moment(date).startOf('month').valueOf());
+  // in the query (`month`), opens on the month of the night chosen in the filter
+  const month = useCalendarMonth();
+  const setMonth = useCalendarMonthSetter();
+
+  // the month shown is put into the query right away, e.g. for a link to it
+  useEffect(() => {
+    setMonth(month => month);
+  }, [setMonth]);
+
   const prevMonth = addMonths(month, -1);
   const nextMonth = addMonths(month, 1);
   const months = useMemo(() => [month, addMonths(month, -1), addMonths(month, 1)], [month]);
   const days = useCalendarMonths(months);
 
-  const handlePrevMonth = useCallback(() => setMonth(month => addMonths(month, -1)), []);
-  const handleNextMonth = useCallback(() => setMonth(month => addMonths(month, 1)), []);
-  const handleThisMonth = useCallback(() => setMonth(getThisMonth()), []);
+  const handlePrevMonth = useCallback(() => setMonth(month => addMonths(month, -1)), [setMonth]);
+  const handleNextMonth = useCallback(() => setMonth(month => addMonths(month, 1)), [setMonth]);
+  const handleThisMonth = useCallback(() => setMonth(getThisMonth()), [setMonth]);
   const trackRef = useSwipe<HTMLDivElement>({ onPrev: handlePrevMonth, onNext: handleNextMonth }, month);
 
   useEffect(() => {
@@ -88,8 +93,24 @@ function CalendarContent({ onClose }: { onClose: () => void }) {
 
 /** Full-screen calendar of the nights of a month: twilight, astronomical night and Moon phase day by day */
 export default function Calendar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const removeMonth = useCalendarMonthRemover();
+  const wasOpen = useRef(isOpen);
+
+  // the month is removed after the closing animation, not to switch the month while fading out; or right away
+  // when the calendar has not been open (e.g. a link to the main view with a month)
+  useEffect(() => {
+    if (isOpen) wasOpen.current = true;
+    else if (!wasOpen.current) removeMonth();
+  }, [isOpen, removeMonth]);
+
   return (
-    <Dialog fullScreen open={isOpen} onClose={onClose} className="Calendar">
+    <Dialog
+      fullScreen
+      open={isOpen}
+      onClose={onClose}
+      className="Calendar"
+      slotProps={{ transition: { onExited: removeMonth } }}
+    >
       <CalendarContent onClose={onClose} />
     </Dialog>
   );

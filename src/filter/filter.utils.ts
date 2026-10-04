@@ -1,5 +1,6 @@
 import type { ObjectFilter, SetFilter } from '../calculator/calculator.types';
 import { constellations, objectTypes } from '../catalog/catalog.utils';
+import type { Query } from '../router/router.types';
 
 const selectAll = (keys: Record<string, string>, value = true): SetFilter =>
   Object.fromEntries(Object.keys(keys).map(key => [key, value]));
@@ -56,3 +57,73 @@ export const parseStoredFilter = (json: string | null): ObjectFilter => {
 };
 
 export const countSelected = (setFilter: SetFilter) => Object.values(setFilter).filter(selected => selected).length;
+
+/**
+ * Query params of the filter. A set (object types, constellations) is left out when everything is selected,
+ * otherwise it lists the selected keys, or the excluded ones (`ex...`) when more are selected than not.
+ */
+export const FILTER_PARAMS = [
+  'alt',
+  'bf',
+  'mag',
+  'sb',
+  'tw',
+  'ot',
+  'ml',
+  'const',
+  'exConst',
+  'types',
+  'exTypes'
+] as const;
+
+const parseNumberParam = (value: string | undefined, min: number, max: number, fallback: number) => {
+  const number = Number(value);
+  return value?.trim() && Number.isFinite(number) && number >= min && number <= max ? number : fallback;
+};
+
+const parseSetParams = (included: string | undefined, excluded: string | undefined, fallback: SetFilter): SetFilter => {
+  const toKeys = (value: string) => value.split(',').filter(key => Object.hasOwn(fallback, key));
+  if (included !== undefined) {
+    const keys = toKeys(included);
+    return Object.fromEntries(Object.keys(fallback).map(key => [key, keys.includes(key)]));
+  }
+  if (excluded !== undefined) {
+    const keys = toKeys(excluded);
+    return Object.fromEntries(Object.keys(fallback).map(key => [key, !keys.includes(key)]));
+  }
+  return fallback;
+};
+
+const setToParams = (setFilter: SetFilter, includedParam: string, excludedParam: string): Query => {
+  const selected = Object.keys(setFilter).filter(key => setFilter[key]);
+  const excluded = Object.keys(setFilter).filter(key => !setFilter[key]);
+  if (excluded.length === 0) return {};
+  return selected.length > excluded.length
+    ? { [excludedParam]: excluded.join(',') }
+    : { [includedParam]: selected.join(',') };
+};
+
+/** The filter from the query; a missing or invalid param is taken from the fallback */
+export const filterFromQuery = (query: Query, fallback: ObjectFilter): ObjectFilter => ({
+  altitude: parseNumberParam(query.alt, -90, 90, fallback.altitude),
+  brightnessFilter: query.bf === 'magnitude' || query.bf === 'surfaceBrightness' ? query.bf : fallback.brightnessFilter,
+  magnitude: parseNumberParam(query.mag, -30, 30, fallback.magnitude),
+  surfaceBrightness: parseNumberParam(query.sb, -30, 30, fallback.surfaceBrightness),
+  twilight: parseNumberParam(query.tw, -90, 0, fallback.twilight),
+  observationTime: parseNumberParam(query.ot, 0, 1440, fallback.observationTime),
+  moonless: query.ml === '1' ? true : query.ml === '0' ? false : fallback.moonless,
+  constellations: parseSetParams(query.const, query.exConst, fallback.constellations),
+  types: parseSetParams(query.types, query.exTypes, fallback.types)
+});
+
+export const filterToQuery = (filter: ObjectFilter): Query => ({
+  alt: String(filter.altitude),
+  bf: filter.brightnessFilter,
+  mag: String(filter.magnitude),
+  sb: String(filter.surfaceBrightness),
+  tw: String(filter.twilight),
+  ot: String(filter.observationTime),
+  ml: filter.moonless ? '1' : '0',
+  ...setToParams(filter.constellations, 'const', 'exConst'),
+  ...setToParams(filter.types, 'types', 'exTypes')
+});

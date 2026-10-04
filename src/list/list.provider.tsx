@@ -1,17 +1,8 @@
-import { type PropsWithChildren, useCallback, useMemo } from 'react';
+import { type PropsWithChildren } from 'react';
 import StateProvider from '../provider/state.provider';
-import { SearchContext, SortContext } from './list.hooks';
-import type { SortBy } from './list.types';
-import { parseStoredSortBy } from './list.utils';
+import { SearchContext } from './list.hooks';
 
+/** The search of the list; its order is in the query (`list.hooks.ts`) */
 export default function ListProvider({ children }: PropsWithChildren<{}>) {
-  const initialSortBy = useMemo(() => parseStoredSortBy(localStorage.getItem('sortBy')), []);
-
-  const handleSortByChange = useCallback((sortBy: SortBy) => localStorage.setItem('sortBy', sortBy), []);
-
-  return (
-    <StateProvider context={SortContext} initialState={initialSortBy} onChange={handleSortByChange}>
-      <StateProvider context={SearchContext}>{children}</StateProvider>
-    </StateProvider>
-  );
+  return <StateProvider context={SearchContext}>{children}</StateProvider>;
 }

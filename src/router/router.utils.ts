@@ -63,7 +63,20 @@ export function parseQuery(search: string): Query {
 
 export function serializeQuery(query: Query): string {
   const entries = Object.entries(query);
-  return entries.length === 0 ? '' : `?${new URLSearchParams(query).toString()}`;
+  // commas are valid in a query, kept readable for the lists (e.g. `const=And,Cas`)
+  return entries.length === 0 ? '' : `?${new URLSearchParams(query).toString().replace(/%2C/gi, ',')}`;
+}
+
+/** The query without the given params */
+export function omitQuery(query: Query, keys: readonly string[]): Query {
+  return Object.fromEntries(Object.entries(query).filter(([key]) => !keys.includes(key)));
+}
+
+/** The given params of a query string, as a query string (in their order in the query) */
+export function pickQuery(search: string, keys: readonly string[]): string {
+  const params = new URLSearchParams(search);
+  for (const key of [...params.keys()]) if (!keys.includes(key)) params.delete(key);
+  return params.toString();
 }
 
 export const isAbsoluteUrl = (url: string) => {

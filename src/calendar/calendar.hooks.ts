@@ -1,11 +1,41 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import CalendarWorker from '../calculator/calculator.calendar.worker?worker';
 import type { CalendarDay, CalendarRequest, CalendarResponse, Timestamp } from '../calculator/calculator.types';
 import { useFilter } from '../filter/filter.hooks';
+import { useDate } from '../date/date.hooks';
 import { useCoords } from '../location/location.hooks';
+import { useQuerySelector, useQuerySetter } from '../router/router.hooks';
+import { omitQuery } from '../router/router.utils';
+import { MONTH_PARAMS, monthFromQuery, monthToQuery, toMonth } from './calendar.utils';
 
 /** The week starts on Monday */
 const WEEK_OFFSET = 1;
+
+/** The month of the query, or the month of the night chosen in the filter */
+export const useCalendarMonth = () => {
+  const date = useDate();
+  const month = useQuerySelector(query => monthFromQuery(query, NaN));
+  return Number.isNaN(month) ? toMonth(date) : month;
+};
+
+export const useCalendarMonthSetter = () => {
+  const date = useDate();
+  const setQuery = useQuerySetter();
+  return useCallback(
+    (update: Timestamp | ((month: Timestamp) => Timestamp)) =>
+      setQuery(query => {
+        const month = monthFromQuery(query, toMonth(date));
+        return { ...query, ...monthToQuery(typeof update === 'function' ? update(month) : update) };
+      }),
+    [date, setQuery]
+  );
+};
+
+/** Removes the month from the query, when the calendar is left */
+export const useCalendarMonthRemover = () => {
+  const setQuery = useQuerySetter();
+  return useCallback(() => setQuery(query => omitQuery(query, MONTH_PARAMS)), [setQuery]);
+};
 
 type Cache = { key: string; days: Record<Timestamp, CalendarDay[]> };
 

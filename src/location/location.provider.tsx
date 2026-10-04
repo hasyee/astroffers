@@ -1,8 +1,22 @@
-import { type PropsWithChildren, useCallback, useMemo } from 'react';
+import { type PropsWithChildren, useCallback, useEffect, useMemo } from 'react';
+import { useStateSetter, useStateValue } from '../provider/state.hooks';
 import StateProvider from '../provider/state.provider';
-import { LocationContext } from './location.hooks';
+import { LocationContext, useCoords } from './location.hooks';
 import type { Place } from './location.types';
-import { parseStoredPlace } from './location.utils';
+import { isSameCoords, parseStoredPlace } from './location.utils';
+
+/** Follows the coordinates of the query (e.g. of a shared link) with the stored place, without a name */
+function StoredPlaceSync({ children }: PropsWithChildren<{}>) {
+  const coords = useCoords();
+  const stored = useStateValue(LocationContext);
+  const setStored = useStateSetter(LocationContext);
+
+  useEffect(() => {
+    if (!isSameCoords(coords, stored.coords)) setStored({ coords, name: '' });
+  }, [coords, stored, setStored]);
+
+  return <>{children}</>;
+}
 
 export default function LocationProvider({ children }: PropsWithChildren<{}>) {
   const initialState = useMemo(() => parseStoredPlace(localStorage.getItem('location')), []);
@@ -11,7 +25,7 @@ export default function LocationProvider({ children }: PropsWithChildren<{}>) {
 
   return (
     <StateProvider context={LocationContext} initialState={initialState} onChange={handleChange}>
-      {children}
+      <StoredPlaceSync>{children}</StoredPlaceSync>
     </StateProvider>
   );
 }

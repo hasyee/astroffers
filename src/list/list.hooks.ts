@@ -1,14 +1,31 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { createStateContext, useStateSetter, useStateValue } from '../provider/state.hooks';
 import { useResultList } from '../result/result.hooks';
+import { useStatePart, useStatePartSetter } from '../query/query.hooks';
+import type { StoredState } from '../query/query.types';
+import type { Query } from '../router/router.types';
 import type { ListSearch, SortBy } from './list.types';
-import { defaultSortBy, emptySearch, isSearchEmpty, matchesSearch, sorters } from './list.utils';
+import {
+  defaultSortBy,
+  emptySearch,
+  isSearchEmpty,
+  matchesSearch,
+  sortByFromQuery,
+  sortByToQuery,
+  sorters
+} from './list.utils';
 
-export const SortContext = createStateContext<SortBy>(defaultSortBy);
+const getSortBy = (query: Query) => sortByFromQuery(query, defaultSortBy);
+const getStoredSortBy = (state: StoredState) => state.sortBy;
+const keepSortBy = (sortBy: SortBy) => sortBy;
+const parseSortBy = (serialized: string) => serialized as SortBy;
+const setQuerySortBy = (query: Query, sortBy: SortBy): Query => ({ ...query, ...sortByToQuery(sortBy) });
+const setStoredSortBy = (state: StoredState, sortBy: SortBy): StoredState => ({ ...state, sortBy });
 
-export const useSortBy = () => useStateValue(SortContext);
+/** Order of the list */
+export const useSortBy = () => useStatePart(getSortBy, getStoredSortBy, keepSortBy, parseSortBy);
 
-export const useSortBySetter = () => useStateSetter(SortContext);
+export const useSortBySetter = () => useStatePartSetter(getSortBy, setQuerySortBy, getStoredSortBy, setStoredSortBy);
 
 export const SearchContext = createStateContext<ListSearch>(emptySearch);
 

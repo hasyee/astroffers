@@ -6,13 +6,7 @@ import TextField from '@mui/material/TextField';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useDate, useDateSetter } from '../date/date.hooks';
-import { getToday } from '../date/date.utils';
-
-const FORMAT = 'YYYY-MM-DD';
-
-/** Dates outside of this range are ignored, e.g. the partial years while a year is being typed */
-const MIN_DATE = '1900-01-01';
-const MAX_DATE = '2100-12-31';
+import { DATE_FORMAT, MAX_DATE, MIN_DATE, getToday, parseDate } from '../date/date.utils';
 
 export default function DateInput() {
   const date = useDate();
@@ -20,8 +14,8 @@ export default function DateInput() {
 
   const handleChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
-      const value = moment(event.target.value, FORMAT, true);
-      if (value.isValid() && value.isBetween(MIN_DATE, MAX_DATE, 'day', '[]')) setDate(value.valueOf());
+      const value = parseDate(event.target.value);
+      if (value !== null) setDate(value);
     },
     [setDate]
   );
@@ -37,7 +31,7 @@ export default function DateInput() {
       <TextField
         label="Night of"
         type="date"
-        value={moment(date).format(FORMAT)}
+        value={moment(date).format(DATE_FORMAT)}
         onChange={handleChange}
         slotProps={{ inputLabel: { shrink: true }, htmlInput: { min: MIN_DATE, max: MAX_DATE } }}
       />

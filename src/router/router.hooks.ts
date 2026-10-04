@@ -10,7 +10,7 @@ import type {
   RouteMatch,
   RouterLocation
 } from './router.types';
-import { joinPath, matchPath, parseQuery, popSegments, serializeQuery } from './router.utils';
+import { joinPath, matchPath, parseQuery, pickQuery, popSegments, serializeQuery } from './router.utils';
 
 // `RouterLocation` / `usePathname` instead of tinc's `Location` / `useLocation`, not to mix them up with the
 // geographic location of the app (`location/`)
@@ -18,6 +18,11 @@ export const RouterLocationContext = createStateContext<RouterLocation>({ pathna
 export const RouteNameContext = createStateContext<BreadcrumbName[]>([]);
 /** Match of the closest `Route` rendered by `Routes` */
 export const RouteContext = createContext<RouteMatch | null>(null);
+/**
+ * A sticky query holds the state of the app rather than a part of the history: navigating without a query keeps
+ * it, and the back / forward buttons change the path only (see `RouterProvider`)
+ */
+export const RouterOptionsContext = createContext<{ isQuerySticky: boolean }>({ isQuerySticky: false });
 
 const noParams: Params = {};
 
@@ -72,13 +77,44 @@ export function useQuery(): Query {
   return useMemo(() => parseQuery(search), [search]);
 }
 
+/** A value selected from the query; the selector has to return a primitive (or another stable value) */
+export function useQuerySelector<S>(selector: (query: Query) => S): S {
+  return useStateSelector(RouterLocationContext, location => selector(parseQuery(location.search)));
+}
+
+/** A value parsed from the given params of the query, parsed again only when one of them changes */
+export function useQueryParams<T>(keys: readonly string[], parse: (query: Query) => T): T {
+  const params = useStateSelector(RouterLocationContext, location => pickQuery(location.search, keys));
+  return useMemo(() => parse(parseQuery(params)), [params, parse]);
+}
+
+/**
+ * Updates the query of the current path, replacing the history entry: the query as a state of the app, e.g. a
+ * filter, which should not add an entry to the history with every change
+ */
+export function useQuerySetter() {
+  const setLocation = useStateSetter(RouterLocationContext);
+
+  return useCallback(
+    (update: (query: Query) => Query) => {
+      const search = serializeQuery(update(parseQuery(window.location.search)));
+      if (search === window.location.search) return;
+      const { pathname } = window.location;
+      window.history.replaceState(window.history.state, '', pathname + search);
+      setLocation({ pathname, search });
+    },
+    [setLocation]
+  );
+}
+
 /**
  * Pushes a history entry by default; `replace` swaps the current one instead, e.g. to step between the objects of
- * the details without a history entry for each.
+ * the details without a history entry for each. Without a query the current one is kept when it is sticky.
  */
 export function useNavigate({ replace = false }: { replace?: boolean } = {}) {
   const setLocation = useStateSetter(RouterLocationContext);
   const match = useContext(RouteContext);
+  const { isQuerySticky } = useContext(RouterOptionsContext);
 
   return useCallback(
     (...args: [...NavigateStep[], NavigateQuery] | NavigateStep[]) => {
@@ -101,14 +137,16 @@ export function useNavigate({ replace = false }: { replace?: boolean } = {}) {
               : joinPath(pathname, step);
       }
 
-      const resolvedQuery = typeof query === 'function' ? query(parseQuery(window.location.search)) : (query ?? {});
+      const currentQuery = parseQuery(window.location.search);
+      const resolvedQuery =
+        typeof query === 'function' ? query(currentQuery) : (query ?? (isQuerySticky ? currentQuery : {}));
       const search = serializeQuery(resolvedQuery);
       if (pathname + search === window.location.pathname + window.location.search) return;
       if (replace) window.history.replaceState(window.history.state, '', pathname + search);
       else window.history.pushState({ isInApp: true } satisfies HistoryState, '', pathname + search);
       setLocation({ pathname, search });
     },
-    [replace, setLocation, match]
+    [replace, setLocation, match, isQuerySticky]
   );
 }
 

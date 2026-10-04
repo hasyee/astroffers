@@ -1,4 +1,5 @@
 import type { NgcInfo } from '../calculator/calculator.types';
+import type { Query } from '../router/router.types';
 import type { ListSearch, SortBy } from './list.types';
 
 type Selector = (ngcInfo: NgcInfo) => number | string | null | undefined;
@@ -49,8 +50,17 @@ export const sortOptions: { value: SortBy; label: string }[] = [
 
 export const defaultSortBy: SortBy = 'max';
 
-export const parseStoredSortBy = (value: string | null): SortBy =>
-  value && value in sorters ? (value as SortBy) : defaultSortBy;
+const isSortBy = (value: string | null | undefined): value is SortBy => !!value && Object.hasOwn(sorters, value);
+
+export const parseStoredSortBy = (value: string | null): SortBy => (isSortBy(value) ? value : defaultSortBy);
+
+/** Query param of the order of the list: `sort` */
+export const SORT_PARAMS = ['sort'] as const;
+
+export const sortByFromQuery = (query: Query, fallback: SortBy): SortBy =>
+  isSortBy(query.sort) ? query.sort : fallback;
+
+export const sortByToQuery = (sortBy: SortBy): Query => ({ sort: sortBy });
 
 export const emptySearch: ListSearch = { ngc: '', messier: '', name: '' };
 
