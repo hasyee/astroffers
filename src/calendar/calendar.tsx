@@ -32,7 +32,7 @@ function Month({ days, onShowNight }: { days: CalendarDay[] | undefined; onShowN
  * next month are side by side, to swipe between them like the pages of a carousel (see the details).
  */
 function CalendarContent({ onClose }: { onClose: () => void }) {
-  // in the query (`month`), opens on the month of the night chosen in the filter
+  // in the query (`month`), opens on this month
   const month = useCalendarMonth();
   const setMonth = useCalendarMonthSetter();
 

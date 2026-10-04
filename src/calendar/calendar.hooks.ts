@@ -2,32 +2,30 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import CalendarWorker from '../calculator/calculator.calendar.worker?worker';
 import type { CalendarDay, CalendarRequest, CalendarResponse, Timestamp } from '../calculator/calculator.types';
 import { useFilter } from '../filter/filter.hooks';
-import { useDate } from '../date/date.hooks';
+import { getToday } from '../date/date.utils';
 import { useCoords } from '../location/location.hooks';
 import { useQuerySelector, useQuerySetter } from '../router/router.hooks';
+import type { Query } from '../router/router.types';
 import { omitQuery } from '../router/router.utils';
 import { MONTH_PARAMS, monthFromQuery, monthToQuery, toMonth } from './calendar.utils';
 
 /** The week starts on Monday */
 const WEEK_OFFSET = 1;
 
-/** The month of the query, or the month of the night chosen in the filter */
-export const useCalendarMonth = () => {
-  const date = useDate();
-  const month = useQuerySelector(query => monthFromQuery(query, NaN));
-  return Number.isNaN(month) ? toMonth(date) : month;
-};
+const getMonth = (query: Query) => monthFromQuery(query, toMonth(getToday()));
+
+/** The month of the query, or this month: independent of the night chosen in the filter */
+export const useCalendarMonth = () => useQuerySelector(getMonth);
 
 export const useCalendarMonthSetter = () => {
-  const date = useDate();
   const setQuery = useQuerySetter();
   return useCallback(
     (update: Timestamp | ((month: Timestamp) => Timestamp)) =>
-      setQuery(query => {
-        const month = monthFromQuery(query, toMonth(date));
-        return { ...query, ...monthToQuery(typeof update === 'function' ? update(month) : update) };
-      }),
-    [date, setQuery]
+      setQuery(query => ({
+        ...query,
+        ...monthToQuery(typeof update === 'function' ? update(getMonth(query)) : update)
+      })),
+    [setQuery]
   );
 };
 
