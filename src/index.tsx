@@ -5,7 +5,6 @@ import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import App from './app/app';
 import LocationProvider from './location/location.provider';
 import ResultProvider from './result/result.provider';
-import ListProvider from './list/list.provider';
 import StoredStateProvider from './query/query.provider';
 import QuerySync from './query/query.sync';
 import { initQuery } from './query/query.utils';
@@ -26,10 +25,8 @@ createRoot(document.getElementById('root')!).render(
         <StoredStateProvider>
           <LocationProvider>
             <ResultProvider>
-              <ListProvider>
-                <App />
-                <QuerySync />
-              </ListProvider>
+              <App />
+              <QuerySync />
             </ResultProvider>
           </LocationProvider>
         </StoredStateProvider>

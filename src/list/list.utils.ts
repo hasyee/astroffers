@@ -64,6 +64,31 @@ export const sortByToQuery = (sortBy: SortBy): Query => ({ sort: sortBy });
 
 export const emptySearch: ListSearch = { ngc: '', messier: '', name: '' };
 
+/** Query params of the search of the list: `ngc`, `messier`, `name`, each left out when empty */
+export const SEARCH_PARAMS = ['ngc', 'messier', 'name'] as const;
+
+/** The search from the query; the fallback when none of its params is there */
+export const searchFromQuery = (query: Query, fallback: ListSearch): ListSearch =>
+  SEARCH_PARAMS.some(key => key in query)
+    ? { ngc: query.ngc ?? '', messier: query.messier ?? '', name: query.name ?? '' }
+    : fallback;
+
+export const searchToQuery = (search: ListSearch): Query =>
+  Object.fromEntries(SEARCH_PARAMS.filter(key => search[key]).map(key => [key, search[key]]));
+
+/** Restores the search from its stored JSON; empty for anything malformed */
+export const parseStoredSearch = (json: string | null): ListSearch => {
+  try {
+    const stored = JSON.parse(json ?? 'null');
+    return Object.fromEntries(
+      SEARCH_PARAMS.map(key => [key, typeof stored?.[key] === 'string' ? stored[key] : ''])
+    ) as ListSearch;
+  } catch (error) {
+    console.error(error);
+    return emptySearch;
+  }
+};
+
 export const isSearchEmpty = (search: ListSearch) => !search.ngc && !search.messier && !search.name;
 
 /** Search term matching every object that has the field at all */

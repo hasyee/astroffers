@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDate } from '../date/date.hooks';
 import { useFilter } from '../filter/filter.hooks';
-import { useSortBy } from '../list/list.hooks';
+import { useSearch, useSortBy } from '../list/list.hooks';
 import { LocationContext } from '../location/location.hooks';
 import { useStateSetter, useStateValue } from '../provider/state.hooks';
 import { usePathname, useQuerySetter } from '../router/router.hooks';
@@ -19,6 +19,7 @@ export default function QuerySync() {
   const hasQueryState = useHasQueryState();
   const date = useDate();
   const sortBy = useSortBy();
+  const search = useSearch();
   const filter = useFilter();
   const stored = useStateValue(StoredStateContext);
   const setStored = useStateSetter(StoredStateContext);
@@ -27,9 +28,9 @@ export default function QuerySync() {
 
   useEffect(() => {
     if (!hasQueryState) return;
-    if (stored.date !== date || stored.sortBy !== sortBy || stored.filter !== filter)
-      setStored({ date, sortBy, filter });
-  }, [hasQueryState, date, sortBy, filter, stored, setStored]);
+    if (stored.date !== date || stored.sortBy !== sortBy || stored.search !== search || stored.filter !== filter)
+      setStored({ date, sortBy, search, filter });
+  }, [hasQueryState, date, sortBy, search, filter, stored, setStored]);
 
   useEffect(() => {
     const isStateless = isStatelessRoute(pathname);

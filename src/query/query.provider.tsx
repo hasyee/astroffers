@@ -8,8 +8,9 @@ import { getStoredState } from './query.utils';
 export default function StoredStateProvider({ children }: PropsWithChildren<{}>) {
   const initialState = useMemo(getStoredState, []);
 
-  const handleChange = useCallback(({ sortBy, filter }: StoredState) => {
+  const handleChange = useCallback(({ sortBy, search, filter }: StoredState) => {
     localStorage.setItem('sortBy', sortBy);
+    localStorage.setItem('search', JSON.stringify(search));
     localStorage.setItem('filter', JSON.stringify(filter));
   }, []);
 

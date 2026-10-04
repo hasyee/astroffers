@@ -1,15 +1,18 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { createStateContext, useStateSetter, useStateValue } from '../provider/state.hooks';
 import { useResultList } from '../result/result.hooks';
 import { useStatePart, useStatePartSetter } from '../query/query.hooks';
 import type { StoredState } from '../query/query.types';
 import type { Query } from '../router/router.types';
+import { omitQuery, parseQuery, serializeQuery } from '../router/router.utils';
 import type { ListSearch, SortBy } from './list.types';
 import {
   defaultSortBy,
   emptySearch,
   isSearchEmpty,
   matchesSearch,
+  searchFromQuery,
+  searchToQuery,
+  SEARCH_PARAMS,
   sortByFromQuery,
   sortByToQuery,
   sorters
@@ -27,11 +30,21 @@ export const useSortBy = () => useStatePart(getSortBy, getStoredSortBy, keepSort
 
 export const useSortBySetter = () => useStatePartSetter(getSortBy, setQuerySortBy, getStoredSortBy, setStoredSortBy);
 
-export const SearchContext = createStateContext<ListSearch>(emptySearch);
+const getSearch = (query: Query) => searchFromQuery(query, emptySearch);
+const getStoredSearch = (state: StoredState) => state.search;
+const serializeSearch = (search: ListSearch) => serializeQuery(searchToQuery(search));
+const parseSearch = (serialized: string) => getSearch(parseQuery(serialized));
+// an emptied term is left out, so the search params are replaced
+const setQuerySearch = (query: Query, search: ListSearch): Query => ({
+  ...omitQuery(query, SEARCH_PARAMS),
+  ...searchToQuery(search)
+});
+const setStoredSearch = (state: StoredState, search: ListSearch): StoredState => ({ ...state, search });
 
-export const useSearch = () => useStateValue(SearchContext);
+/** Search terms of the list */
+export const useSearch = () => useStatePart(getSearch, getStoredSearch, serializeSearch, parseSearch);
 
-export const useSearchSetter = () => useStateSetter(SearchContext);
+export const useSearchSetter = () => useStatePartSetter(getSearch, setQuerySearch, getStoredSearch, setStoredSearch);
 
 export const useSearchValueSetter = (key: keyof ListSearch) => {
   const setSearch = useSearchSetter();

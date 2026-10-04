@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { defaultFilter } from '../filter/filter.utils';
-import { defaultSortBy } from '../list/list.utils';
+import { defaultSortBy, emptySearch } from '../list/list.utils';
 import { getToday } from '../date/date.utils';
 import { createStateContext, useStateSelector, useStateSetter } from '../provider/state.hooks';
 import { useQuerySelector, useQuerySetter } from '../router/router.hooks';
@@ -12,6 +12,7 @@ import { hasQueryState } from './query.utils';
 export const StoredStateContext = createStateContext<StoredState>({
   date: getToday(),
   sortBy: defaultSortBy,
+  search: emptySearch,
   filter: defaultFilter
 });
 
