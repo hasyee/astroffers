@@ -20,6 +20,8 @@ Highcharts.setOptions({
   accessibility: { enabled: false },
   tooltip: { backgroundColor: SURFACE, borderWidth: 0, style: { color: TEXT } },
   plotOptions: { series: { animation: false } },
+  // Highcharts 13 rounds the elements of a pane (plot bands, backgrounds) by default, e.g. the parts of the night
+  pane: { borderRadius: 0 },
   xAxis: axis,
   yAxis: axis
 });
