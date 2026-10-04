@@ -71,7 +71,7 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
               <span className="dot moonlessNight" /> moonless astronomical night
             </li>
           </ul>
-          <p>On a wide screen the result list can be exported to a CSV file from the summary.</p>
+          <p>The result list can be exported to a CSV file from the summary.</p>
 
           <h3>Calendar</h3>
           <p>
