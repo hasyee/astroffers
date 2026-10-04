@@ -110,6 +110,8 @@ export default function Calendar({ isOpen, onClose }: { isOpen: boolean; onClose
       onClose={onClose}
       className="Calendar"
       slotProps={{ transition: { onExited: removeMonth } }}
+      // the page itself does not scroll anyway, and the lock would block the pull to refresh of the browser
+      disableScrollLock
     >
       <CalendarContent onClose={onClose} />
     </Dialog>

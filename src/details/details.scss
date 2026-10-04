@@ -36,8 +36,8 @@
 
     .page {
       flex: 0 0 calc(100% / 3);
+      // scrolling over the top chains to the page, for the pull to refresh of the browser
       overflow-y: auto;
-      overscroll-behavior: contain;
       // horizontal swipes are handled by the app, vertical ones scroll natively
       touch-action: pan-y;
     }

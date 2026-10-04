@@ -116,6 +116,8 @@ export default function Details() {
       onClose={closeDetails}
       className="Details compact"
       slotProps={{ paper: { className: 'DetailsPaper' } }}
+      // the page itself does not scroll anyway, and the lock would block the pull to refresh of the browser
+      disableScrollLock
     >
       <div className="header">
         <IconButton onClick={closeDetails} aria-label="Back">
