@@ -18,6 +18,9 @@ function Property({ label, value }: { label: string; value: string }) {
   );
 }
 
+/** Size of the image opened by clicking the preview */
+const FULL_SIZE = 1200;
+
 function Preview({ ngcInfo }: { ngcInfo: NgcInfo }) {
   const src = getObjectImgSrc(ngcInfo.object);
   const [loadedSrc, setLoadedSrc] = useState<string | null>(null);
@@ -29,14 +32,16 @@ function Preview({ ngcInfo }: { ngcInfo: NgcInfo }) {
       {failedSrc === src ? (
         <div className="unavailable">Preview is unavailable</div>
       ) : (
-        <img
-          className={classnames({ hidden: loadedSrc !== src })}
-          src={src}
-          crossOrigin="anonymous"
-          alt={`DSS2 preview of NGC ${ngcInfo.object.ngc}`}
-          onLoad={() => setLoadedSrc(src)}
-          onError={() => setFailedSrc(src)}
-        />
+        <a href={getObjectImgSrc(ngcInfo.object, FULL_SIZE)} target="_blank" rel="noreferrer">
+          <img
+            className={classnames({ hidden: loadedSrc !== src })}
+            src={src}
+            crossOrigin="anonymous"
+            alt={`DSS2 preview of NGC ${ngcInfo.object.ngc}`}
+            onLoad={() => setLoadedSrc(src)}
+            onError={() => setFailedSrc(src)}
+          />
+        </a>
       )}
       <div className="credit">DSS2 · CDS hips2fits</div>
     </div>
