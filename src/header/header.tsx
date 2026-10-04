@@ -4,15 +4,18 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import { useCallback, useState } from 'react';
 import About from '../about/about';
+import Calendar from '../calendar/calendar';
 import Help from '../help/help';
 import { useIsWideScreen } from '../media/media.hooks';
 import './header.scss';
 
 export default function Header({ onOpenFilter }: { onOpenFilter?: () => void }) {
   const isWideScreen = useIsWideScreen();
-  const [openedDialog, setOpenedDialog] = useState<'help' | 'about' | null>(null);
+  const [openedDialog, setOpenedDialog] = useState<'calendar' | 'help' | 'about' | null>(null);
+  const handleOpenCalendar = useCallback(() => setOpenedDialog('calendar'), []);
   const handleOpenHelp = useCallback(() => setOpenedDialog('help'), []);
   const handleOpenAbout = useCallback(() => setOpenedDialog('about'), []);
   const handleClose = useCallback(() => setOpenedDialog(null), []);
@@ -29,6 +32,9 @@ export default function Header({ onOpenFilter }: { onOpenFilter?: () => void }) 
       <div className="spacer" />
       {isWideScreen ? (
         <>
+          <Button color="inherit" startIcon={<CalendarMonthOutlinedIcon />} onClick={handleOpenCalendar}>
+            Calendar
+          </Button>
           <Button color="inherit" startIcon={<HelpOutlineOutlinedIcon />} onClick={handleOpenHelp}>
             Help
           </Button>
@@ -38,6 +44,9 @@ export default function Header({ onOpenFilter }: { onOpenFilter?: () => void }) 
         </>
       ) : (
         <>
+          <IconButton onClick={handleOpenCalendar} aria-label="Calendar">
+            <CalendarMonthOutlinedIcon />
+          </IconButton>
           <IconButton onClick={handleOpenHelp} aria-label="Help">
             <HelpOutlineOutlinedIcon />
           </IconButton>
@@ -46,6 +55,7 @@ export default function Header({ onOpenFilter }: { onOpenFilter?: () => void }) 
           </IconButton>
         </>
       )}
+      <Calendar isOpen={openedDialog === 'calendar'} onClose={handleClose} />
       <Help isOpen={openedDialog === 'help'} onClose={handleClose} />
       <About isOpen={openedDialog === 'about'} onClose={handleClose} />
     </AppBar>

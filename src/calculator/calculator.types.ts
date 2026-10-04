@@ -93,3 +93,26 @@ export type CalcResult = { params: CalcParams; nightInfo: NightInfo; list: NgcIn
 /** Worker protocol */
 export type CalcRequest = { jobId: number; params: CalcParams };
 export type CalcResponse = { jobId: number; result: CalcResult };
+
+/** Start and end of a band as a fraction (0..1) of the day. */
+export type Band = [start: number, end: number];
+
+/** Parts of a calendar day with twilight, astronomical night and moonless night */
+export type Bands = {
+  night: Band[];
+  astroNight: Band[];
+  moonlessNight: Band[];
+};
+
+export type CalendarDay = {
+  day: Timestamp;
+  /** The day belongs to the previous or the next month */
+  isOtherMonth: boolean;
+  info: NightInfo;
+  bands: Bands;
+};
+
+/** Calendar worker protocol */
+export type CalendarParams = { month: Timestamp; weekOffset: number; coords: Coords; twilight: Degrees };
+export type CalendarRequest = { jobId: number; params: CalendarParams };
+export type CalendarResponse = { jobId: number; days: CalendarDay[] };

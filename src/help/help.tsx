@@ -72,6 +72,14 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
           </ul>
           <p>On a wide screen the result list can be exported to a CSV file from the summary.</p>
 
+          <h3>Calendar</h3>
+          <p>
+            The calendar button of the header shows the nights of a whole month at the chosen location: the phase of the
+            Moon and a strip of every day from midnight to midnight with the same colors as the clock face. The
+            astronomical night follows the maximum altitude of the Sun of the filter. Click a day to see the times of
+            its night, and <b>Show objects</b> to list the objects of that night.
+          </p>
+
           <h3>Result list</h3>
           <p>
             Every object shows its visibility interval (<b>From</b> – <b>To</b>), its best visibility with the related

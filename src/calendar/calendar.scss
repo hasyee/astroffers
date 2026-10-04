@@ -1,0 +1,177 @@
+@use '../chart/chart.colors' as colors;
+
+$today: #6f3434;
+
+.Calendar .MuiDialog-paper {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--mui-palette-background-default);
+
+  // as high as the header of the app
+  > .header {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    height: 50px;
+    padding: 0 0.5rem 0 0.25rem;
+    background-color: var(--mui-palette-background-paper);
+    border-bottom: 1px solid var(--mui-palette-divider);
+
+    .month {
+      flex: 1 1 auto;
+      min-width: 0;
+      margin: 0 0 0 0.25rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 1.25rem;
+      font-weight: 300;
+    }
+  }
+
+  > .grid {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-auto-rows: minmax(0, 1fr);
+
+    .cell {
+      min-height: 0;
+      border-right: 1px solid var(--mui-palette-divider);
+      border-bottom: 1px solid var(--mui-palette-divider);
+
+      &:nth-child(7n) {
+        border-right: 0;
+      }
+      // weekends
+      &:nth-child(7n),
+      &:nth-child(7n - 1) {
+        background-color: var(--mui-palette-background-paper);
+      }
+    }
+  }
+}
+
+.CalendarItem {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+
+  &:hover,
+  &.open {
+    background-color: var(--mui-palette-action-hover);
+  }
+
+  &.other-month {
+    color: var(--mui-palette-text-disabled);
+  }
+
+  &.today {
+    background-color: $today;
+
+    &:hover,
+    &.open {
+      background-color: color-mix(in srgb, $today, black 20%);
+    }
+  }
+
+  header {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5vw;
+
+    .day {
+      flex: 1 1 0;
+      text-align: center;
+    }
+
+    .day-number {
+      font-size: 2vw;
+      font-weight: 200;
+      line-height: 1.2;
+    }
+
+    .day-name {
+      font-size: 0.8rem;
+    }
+
+    .moon {
+      flex: 1 1 0;
+      align-self: stretch;
+      max-width: 80px;
+      min-height: 20px;
+    }
+  }
+
+  // phones: the moon below the day
+  @media (orientation: portrait) {
+    header {
+      flex-direction: column;
+      justify-content: center;
+
+      .day {
+        flex: 0 0 auto;
+      }
+
+      .day-number {
+        font-size: 1.25rem;
+      }
+
+      .moon {
+        width: 100%;
+      }
+    }
+  }
+
+  .Bands {
+    flex: 0 0 auto;
+    position: relative;
+    height: 10px;
+    background-color: colors.$daylight;
+
+    > * {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+    }
+
+    .night {
+      background-color: colors.$twilight;
+    }
+    .astroNight {
+      background-color: colors.$moon-night;
+    }
+    .moonlessNight {
+      background-color: colors.$moonless-night;
+    }
+  }
+}
+
+.CalendarInfo {
+  padding: 0.75rem 0.75rem 0.25rem;
+
+  .heading {
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+
+    .date {
+      font-weight: 600;
+    }
+
+    .moon-illumination {
+      color: var(--mui-palette-text-secondary);
+    }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.25rem;
+  }
+}
