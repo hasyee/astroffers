@@ -8,7 +8,6 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import type { CalendarDay, Timestamp } from '../calculator/calculator.types';
 import { useDate } from '../date/date.hooks';
-import { useCloseOnBack } from '../history/history.hooks';
 import { useSwipe } from '../swipe/swipe.hooks';
 import { useCalendarMonths } from './calendar.hooks';
 import CalendarItem from './calendar.item';
@@ -89,8 +88,6 @@ function CalendarContent({ onClose }: { onClose: () => void }) {
 
 /** Full-screen calendar of the nights of a month: twilight, astronomical night and Moon phase day by day */
 export default function Calendar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  useCloseOnBack(isOpen, onClose);
-
   return (
     <Dialog fullScreen open={isOpen} onClose={onClose} className="Calendar">
       <CalendarContent onClose={onClose} />

@@ -11,18 +11,24 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import type { NgcInfo } from '../calculator/calculator.types';
 import { getTitle } from '../catalog/catalog.utils';
 import DialogTitleWithClose from '../dialog/dialog.title';
-import { useCloseOnBack } from '../history/history.hooks';
 import { useIsWideScreen } from '../media/media.hooks';
-import { useAdjacentNgcInfos, useCloseDetails, useOpenedNgcInfo, useOpenedNgcSetter } from './details.hooks';
+import { useResult } from '../result/result.hooks';
+import {
+  useAdjacentNgcInfos,
+  useCloseDetails,
+  useIsDetailsRoute,
+  useOpenedNgcInfo,
+  useStepDetails
+} from './details.hooks';
 import DetailsContent from './details.content';
 import { useSwipe } from '../swipe/swipe.hooks';
 import './details.scss';
 
 function Navigation() {
-  const setOpenedNgc = useOpenedNgcSetter();
+  const stepDetails = useStepDetails();
   const [prev, next] = useAdjacentNgcInfos();
-  const handlePrev = useCallback(() => prev && setOpenedNgc(prev.object.ngc), [prev, setOpenedNgc]);
-  const handleNext = useCallback(() => next && setOpenedNgc(next.object.ngc), [next, setOpenedNgc]);
+  const handlePrev = useCallback(() => prev && stepDetails(prev.object.ngc), [prev, stepDetails]);
+  const handleNext = useCallback(() => next && stepDetails(next.object.ngc), [next, stepDetails]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -50,10 +56,10 @@ function Navigation() {
  * its own, to swipe between them like the pages of a carousel
  */
 function Carousel({ ngcInfo }: { ngcInfo: NgcInfo }) {
-  const setOpenedNgc = useOpenedNgcSetter();
+  const stepDetails = useStepDetails();
   const [prev, next] = useAdjacentNgcInfos();
-  const onPrev = useMemo(() => (prev ? () => setOpenedNgc(prev.object.ngc) : null), [prev, setOpenedNgc]);
-  const onNext = useMemo(() => (next ? () => setOpenedNgc(next.object.ngc) : null), [next, setOpenedNgc]);
+  const onPrev = useMemo(() => (prev ? () => stepDetails(prev.object.ngc) : null), [prev, stepDetails]);
+  const onNext = useMemo(() => (next ? () => stepDetails(next.object.ngc) : null), [next, stepDetails]);
   const trackRef = useSwipe<HTMLDivElement>({ onPrev, onNext }, ngcInfo.object.ngc);
 
   // keyed by the object, so a neighbor stepped to is kept as it is (e.g. its loaded image and charts)
@@ -80,7 +86,13 @@ export default function Details() {
   const ngcInfo = useOpenedNgcInfo();
   const closeDetails = useCloseDetails();
   const isWideScreen = useIsWideScreen();
-  useCloseOnBack(!!ngcInfo, closeDetails);
+  const isDetailsRoute = useIsDetailsRoute();
+  const hasResult = !!useResult();
+
+  // an object not in the result (e.g. a link to an object not visible tonight with the stored filter) is left
+  useEffect(() => {
+    if (isDetailsRoute && hasResult && !ngcInfo) closeDetails();
+  }, [isDetailsRoute, hasResult, ngcInfo, closeDetails]);
 
   const title = ngcInfo ? getTitle(ngcInfo.object) : '';
   const body = ngcInfo && <DetailsContent ngcInfo={ngcInfo} />;

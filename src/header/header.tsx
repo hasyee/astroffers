@@ -5,20 +5,25 @@ import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import About from '../about/about';
 import Calendar from '../calendar/calendar';
 import Help from '../help/help';
 import { useIsWideScreen } from '../media/media.hooks';
+import { useGoBack, useMatchPath, useNavigate } from '../router/router.hooks';
 import './header.scss';
 
 export default function Header({ onOpenFilter }: { onOpenFilter?: () => void }) {
   const isWideScreen = useIsWideScreen();
-  const [openedDialog, setOpenedDialog] = useState<'calendar' | 'help' | 'about' | null>(null);
-  const handleOpenCalendar = useCallback(() => setOpenedDialog('calendar'), []);
-  const handleOpenHelp = useCallback(() => setOpenedDialog('help'), []);
-  const handleOpenAbout = useCallback(() => setOpenedDialog('about'), []);
-  const handleClose = useCallback(() => setOpenedDialog(null), []);
+  const navigate = useNavigate();
+  const handleClose = useGoBack();
+  const handleOpenCalendar = useCallback(() => navigate('/calendar'), [navigate]);
+  const handleOpenHelp = useCallback(() => navigate('/help'), [navigate]);
+  const handleOpenAbout = useCallback(() => navigate('/about'), [navigate]);
+  // the dialogs are opened by their routes, but stay mounted to animate their closing
+  const isCalendarOpen = !!useMatchPath('calendar');
+  const isHelpOpen = !!useMatchPath('help');
+  const isAboutOpen = !!useMatchPath('about');
 
   return (
     <AppBar position="static" color="inherit" elevation={2} className="Header">
@@ -55,9 +60,9 @@ export default function Header({ onOpenFilter }: { onOpenFilter?: () => void }) 
           </IconButton>
         </>
       )}
-      <Calendar isOpen={openedDialog === 'calendar'} onClose={handleClose} />
-      <Help isOpen={openedDialog === 'help'} onClose={handleClose} />
-      <About isOpen={openedDialog === 'about'} onClose={handleClose} />
+      <Calendar isOpen={isCalendarOpen} onClose={handleClose} />
+      <Help isOpen={isHelpOpen} onClose={handleClose} />
+      <About isOpen={isAboutOpen} onClose={handleClose} />
     </AppBar>
   );
 }

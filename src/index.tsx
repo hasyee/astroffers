@@ -8,7 +8,7 @@ import LocationProvider from './location/location.provider';
 import FilterProvider from './filter/filter.provider';
 import ResultProvider from './result/result.provider';
 import ListProvider from './list/list.provider';
-import DetailsProvider from './details/details.provider';
+import RouterProvider from './router/router.provider';
 import theme from './theme/theme';
 import VersionListener from './version/version.listener';
 import './index.scss';
@@ -18,19 +18,19 @@ createRoot(document.getElementById('root')!).render(
   <StyledEngineProvider injectFirst>
     <ThemeProvider theme={theme}>
       <CssBaseline enableColorScheme />
-      <DateProvider>
-        <LocationProvider>
-          <FilterProvider>
-            <ResultProvider>
-              <ListProvider>
-                <DetailsProvider>
+      <RouterProvider>
+        <DateProvider>
+          <LocationProvider>
+            <FilterProvider>
+              <ResultProvider>
+                <ListProvider>
                   <App />
-                </DetailsProvider>
-              </ListProvider>
-            </ResultProvider>
-          </FilterProvider>
-        </LocationProvider>
-      </DateProvider>
+                </ListProvider>
+              </ResultProvider>
+            </FilterProvider>
+          </LocationProvider>
+        </DateProvider>
+      </RouterProvider>
       <VersionListener />
     </ThemeProvider>
   </StyledEngineProvider>

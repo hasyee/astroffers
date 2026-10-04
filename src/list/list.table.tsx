@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import InputBase from '@mui/material/InputBase';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import type { NgcInfo } from '../calculator/calculator.types';
-import { useOpenedNgcSetter } from '../details/details.hooks';
+import { useOpenDetails } from '../details/details.hooks';
 import { toListRow } from '../display/display.utils';
 import { useIncrementalList, useSearch, useSearchValueSetter, useSortBy, useSortBySetter } from './list.hooks';
 import type { ListSearch, SortBy } from './list.types';
@@ -50,9 +50,9 @@ function HeaderCell({ column }: { column: Column }) {
 }
 
 function Row({ ngcInfo }: { ngcInfo: NgcInfo }) {
-  const setOpenedNgc = useOpenedNgcSetter();
+  const openDetails = useOpenDetails();
   const row = toListRow(ngcInfo);
-  const handleClick = useCallback(() => setOpenedNgc(row.ngc), [setOpenedNgc, row.ngc]);
+  const handleClick = useCallback(() => openDetails(row.ngc), [openDetails, row.ngc]);
 
   return (
     <tr onClick={handleClick}>

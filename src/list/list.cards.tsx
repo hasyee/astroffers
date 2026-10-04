@@ -7,7 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import type { NgcInfo } from '../calculator/calculator.types';
 import { getObjectImgSrc, getTitle } from '../catalog/catalog.utils';
-import { useOpenedNgcSetter } from '../details/details.hooks';
+import { useOpenDetails } from '../details/details.hooks';
 import { toListRow } from '../display/display.utils';
 import {
   useIncrementalList,
@@ -85,9 +85,9 @@ function Toolbar() {
 }
 
 function Item({ ngcInfo }: { ngcInfo: NgcInfo }) {
-  const setOpenedNgc = useOpenedNgcSetter();
+  const openDetails = useOpenDetails();
   const row = toListRow(ngcInfo);
-  const handleClick = useCallback(() => setOpenedNgc(row.ngc), [setOpenedNgc, row.ngc]);
+  const handleClick = useCallback(() => openDetails(row.ngc), [openDetails, row.ngc]);
 
   return (
     <div className="Item" onClick={handleClick}>
