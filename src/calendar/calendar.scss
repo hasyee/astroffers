@@ -101,54 +101,62 @@ $today: #6f3434;
     }
   }
 
+  // as in astro-calendar: the day and the Moon side by side, or below each other in portrait, both centered
   header {
-    flex: 1 1 auto;
+    flex: 1 1 0;
     min-height: 0;
     display: flex;
-    align-items: center;
-    gap: 0.25rem;
+    justify-content: space-between;
     padding: 0.5vw;
+    // never over the bands
+    overflow: hidden;
 
     .day {
       flex: 1 1 0;
+      display: flex;
+      flex-direction: column;
+      align-self: center;
+      justify-content: center;
       text-align: center;
     }
 
     .day-number {
       font-size: 2vw;
       font-weight: 200;
-      line-height: 1.2;
+
+      @media screen and (max-width: 1000px) {
+        font-size: 1.5rem;
+      }
+      @media screen and (max-width: 600px) {
+        font-size: 1rem;
+        font-weight: 400;
+      }
+      // low cells, e.g. a phone in landscape
+      @media screen and (max-height: 500px) {
+        font-size: 1.25rem;
+        line-height: 1.1;
+      }
     }
 
     .day-name {
-      font-size: 0.8rem;
+      @media screen and (max-height: 500px) {
+        font-size: 0.7rem;
+      }
     }
 
     .moon {
       flex: 1 1 0;
-      align-self: stretch;
+      width: 100%;
       max-width: 80px;
       min-height: 20px;
     }
   }
 
-  // phones: the moon below the day
   @media (orientation: portrait) {
     header {
       flex-direction: column;
+      align-items: center;
       justify-content: center;
-
-      .day {
-        flex: 0 0 auto;
-      }
-
-      .day-number {
-        font-size: 1.25rem;
-      }
-
-      .moon {
-        width: 100%;
-      }
     }
   }
 
