@@ -28,6 +28,7 @@ PWA listing the NGC 2000 objects visible on a given night at a given location. V
 ## Gotchas
 
 - A selector of `useStateSelector` / `useQuerySelector` must return a primitive or an otherwise stable value: a new object on every call makes `useSyncExternalStore` loop. Select a string and parse it in a `useMemo` (`useQueryParams`, `useStatePart`).
+- Swipes (`swipe/swipe.hooks.ts`) call `preventDefault()` on the `touchmove`s of a horizontal swipe (non-passive listener): otherwise Chrome on Android starts a fling with nothing to scroll, and the next tap anywhere only stops it instead of clicking. Happens on a real device only, not in the emulator or headless.
 - A `useEffect` callback must not return `element.scrollTo(...)`: it returns a Promise in current Chrome, React calls it as the cleanup, and the whole root unmounts. Use a block body.
 - Highcharts polar: `pane.background: []` crashes (`innerRadius` of undefined) — pass an object; axis labels at the sides get ellipsized to nothing without a fixed `chart.margin` and `textOverflow: 'none'`; round `this.value` in label formatters (float ticks like 89.999).
 - `DialogTitle` + `DialogContent` zeroes the content's top padding, which clips the floating label of a first field — give that `DialogContent` a top padding (see `location.scss`). The `Autocomplete` of the place search ignores every `onInputChange` but typing (it resets the input itself on selecting) and uses `clearOnBlur={false}`.

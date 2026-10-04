@@ -97,11 +97,20 @@ export const useSwipe = <T extends HTMLElement>({ onPrev, onNext }: Handlers, cu
       setOffset(0, true);
     };
 
+    // A horizontal swipe is taken from the browser too: Chrome on Android would start a fling with it, which has
+    // nothing to scroll, and the next tap anywhere would only stop that fling instead of clicking (on a device
+    // only, not in the emulator). The pointer events come before the touch events, so the direction is known here.
+    const handleTouchMove = (event: TouchEvent) => {
+      if (isHorizontal && event.cancelable) event.preventDefault();
+    };
+
+    track.addEventListener('touchmove', handleTouchMove, { passive: false });
     track.addEventListener('pointerdown', handlePointerDown);
     track.addEventListener('pointermove', handlePointerMove);
     track.addEventListener('pointerup', handlePointerUp);
     track.addEventListener('pointercancel', handlePointerCancel);
     return () => {
+      track.removeEventListener('touchmove', handleTouchMove);
       track.removeEventListener('pointerdown', handlePointerDown);
       track.removeEventListener('pointermove', handlePointerMove);
       track.removeEventListener('pointerup', handlePointerUp);
