@@ -7,31 +7,49 @@ import { useCoords } from '../location/location.hooks';
 /** The week starts on Monday */
 const WEEK_OFFSET = 1;
 
-const noDays: CalendarDay[] = [];
+type Cache = { key: string; days: Record<Timestamp, CalendarDay[]> };
 
-/** Days of the month with their nights, calculated in a worker at the location and the twilight of the filter */
-export const useCalendarDays = (month: Timestamp) => {
-  const jobId = useRef(0);
+/**
+ * Days of the given months with their nights, calculated in a worker at the location and the twilight of the filter.
+ * Calculated months are kept (until the location or the twilight changes), so stepping to a neighbor month needs
+ * the calculation of the new neighbor only. The months are requested in their order, the visible one first.
+ */
+export const useCalendarMonths = (months: Timestamp[]) => {
   const worker = useMemo(() => new CalendarWorker(), []);
   const coords = useCoords();
   const twilight = useFilter().twilight;
-  const [days, setDays] = useState(noDays);
+  const key = `${coords.lat} ${coords.lng} ${twilight}`;
+  const keyRef = useRef(key);
+  const requested = useRef(new Set<string>());
+  const [cache, setCache] = useState<Cache>({ key, days: {} });
+
+  useEffect(() => {
+    keyRef.current = key;
+  }, [key]);
 
   useEffect(() => {
     worker.onmessage = ({ data }: MessageEvent<CalendarResponse>) => {
-      if (data.jobId === jobId.current) setDays(data.days);
+      if (data.key !== keyRef.current) return;
+      setCache(cache =>
+        cache.key === data.key
+          ? { key: data.key, days: { ...cache.days, [data.month]: data.days } }
+          : { key: data.key, days: { [data.month]: data.days } }
+      );
     };
   }, [worker]);
 
   useEffect(() => {
-    const request: CalendarRequest = {
-      jobId: ++jobId.current,
-      params: { month, weekOffset: WEEK_OFFSET, coords, twilight }
-    };
-    worker.postMessage(request);
-  }, [worker, month, coords, twilight]);
+    for (const month of months) {
+      const id = `${key}|${month}`;
+      if (requested.current.has(id)) continue;
+      requested.current.add(id);
+      const request: CalendarRequest = { key, params: { month, weekOffset: WEEK_OFFSET, coords, twilight } };
+      worker.postMessage(request);
+    }
+  }, [worker, months, key, coords, twilight]);
 
   useEffect(() => () => worker.terminate(), [worker]);
 
-  return days;
+  // after a change of the location or the twilight the earlier months are shown until their recalculation arrives
+  return cache.days;
 };

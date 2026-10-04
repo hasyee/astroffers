@@ -112,7 +112,7 @@ export type CalendarDay = {
   bands: Bands;
 };
 
-/** Calendar worker protocol */
+/** Calendar worker protocol, month by month; `key` identifies the location and the twilight of the request */
 export type CalendarParams = { month: Timestamp; weekOffset: number; coords: Coords; twilight: Degrees };
-export type CalendarRequest = { jobId: number; params: CalendarParams };
-export type CalendarResponse = { jobId: number; days: CalendarDay[] };
+export type CalendarRequest = { key: string; params: CalendarParams };
+export type CalendarResponse = { key: string; month: Timestamp; days: CalendarDay[] };

@@ -30,9 +30,32 @@ $today: #6f3434;
     }
   }
 
-  > .grid {
+  > .carousel {
+    position: relative;
     flex: 1 1 auto;
     min-height: 0;
+    overflow: hidden;
+
+    // three months side by side, the current one in the middle of the viewport
+    .track {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -100%;
+      width: 300%;
+      display: flex;
+    }
+
+    .page {
+      flex: 0 0 calc(100% / 3);
+      min-width: 0;
+      // horizontal swipes are handled by the app
+      touch-action: pan-y;
+    }
+  }
+
+  .grid {
+    height: 100%;
     display: grid;
     grid-template-columns: repeat(7, minmax(0, 1fr));
     grid-auto-rows: minmax(0, 1fr);

@@ -15,7 +15,7 @@ import { useCloseOnBack } from '../history/history.hooks';
 import { useIsWideScreen } from '../media/media.hooks';
 import { useAdjacentNgcInfos, useCloseDetails, useOpenedNgcInfo, useOpenedNgcSetter } from './details.hooks';
 import DetailsContent from './details.content';
-import { useSwipe } from './details.swipe';
+import { useSwipe } from '../swipe/swipe.hooks';
 import './details.scss';
 
 function Navigation() {
