@@ -19,6 +19,11 @@ code {
   outline: 0 !important;
 }
 
+// no highlight flashing on tapping anything clickable on phones; Blueprint shows its own active states
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 // iOS zooms into any input with a font size below 16px; important, since Blueprint sets the size of
 // its inputs with more specific (multi-class) selectors. `-webkit-touch-callout` is supported on iOS only.
 @supports (-webkit-touch-callout: none) {
