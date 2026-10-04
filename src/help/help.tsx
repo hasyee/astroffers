@@ -1,11 +1,14 @@
-import { Classes, Dialog } from '@blueprintjs/core';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitleWithClose from '../dialog/dialog.title';
 import './help.scss';
 
 export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   return (
-    <Dialog title="How to use Astroffers" icon="help" isOpen={isOpen} onClose={onClose} className="Help">
-      <div className={Classes.DIALOG_BODY}>
-        <div className={Classes.RUNNING_TEXT}>
+    <Dialog open={isOpen} onClose={onClose} scroll="paper" maxWidth="md" className="Help">
+      <DialogTitleWithClose onClose={onClose}>How to use Astroffers</DialogTitleWithClose>
+      <DialogContent dividers>
+        <div className="running-text">
           <p>
             Astroffers helps you to discover the objects of the NGC 2000 catalog. Along with your filter it lists the
             objects that are visible on the chosen night at your location. The list is recalculated automatically
@@ -39,8 +42,8 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
               <b>Moonless night only:</b> leaves out the part of the night when the Moon is above the horizon.
             </li>
             <li>
-              <b>Maximum brightness value:</b> filters by the maximum magnitude or surface brightness. The surface
-              brightness is computed from the magnitude and the size, so objects without size data are left out by it.
+              <b>Maximum brightness:</b> filters by the maximum magnitude or surface brightness. The surface brightness
+              is computed from the magnitude and the size, so objects without size data are left out by it.
             </li>
             <li>
               <b>Object types and constellations:</b> select the kinds of objects and the constellations you are
@@ -86,7 +89,7 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             object is circumpolar. Step to the previous or next object with the buttons or the arrow keys.
           </p>
         </div>
-      </div>
+      </DialogContent>
     </Dialog>
   );
 }

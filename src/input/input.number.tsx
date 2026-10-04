@@ -1,5 +1,6 @@
 import { type ChangeEvent, type ReactNode, useState } from 'react';
-import { FormGroup, InputGroup, Tag } from '@blueprintjs/core';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
 
 type Props = {
   label: ReactNode;
@@ -35,20 +36,17 @@ export default function NumberInput({ label, value, min, max, unit, disabled, on
   };
 
   return (
-    <FormGroup label={label}>
-      <InputGroup
-        fill
-        type="number"
-        inputMode="decimal"
-        step="any"
-        min={min}
-        max={max}
-        value={draft}
-        onChange={handleChange}
-        intent={parse(draft, min, max) === null ? 'danger' : 'none'}
-        disabled={disabled}
-        rightElement={unit ? <Tag minimal>{unit}</Tag> : undefined}
-      />
-    </FormGroup>
+    <TextField
+      label={label}
+      type="number"
+      value={draft}
+      onChange={handleChange}
+      error={parse(draft, min, max) === null}
+      disabled={disabled}
+      slotProps={{
+        htmlInput: { inputMode: 'decimal', step: 'any', min, max },
+        input: unit ? { endAdornment: <InputAdornment position="end">{unit}</InputAdornment> } : undefined
+      }}
+    />
   );
 }

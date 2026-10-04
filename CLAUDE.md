@@ -1,6 +1,6 @@
 # astroffers
 
-PWA listing the NGC 2000 objects visible on a given night at a given location. Vite, React 19, TypeScript (strict), Blueprint 6 (dark), Highcharts 13, sass; deployed as a Render static site ([render.yaml](render.yaml)) — **every push to `master` deploys** to https://astroffers.hasyee.com. Successor of the archived `hasyee/astroffers-electron` (desktop) and `hasyee/astroffers-app` (React Native) apps; tooling and shared modules (`provider/`, `location/`, `version/`, `moon/`, `debounce/`) follow the sibling `../astro-calendar` repo — keep the two in sync when fixing a shared module.
+PWA listing the NGC 2000 objects visible on a given night at a given location. Vite, React 19, TypeScript (strict), MUI 9 (dark, emotion), Highcharts 13, sass; deployed as a Render static site ([render.yaml](render.yaml)) — **every push to `master` deploys** to https://astroffers.hasyee.com. Successor of the archived `hasyee/astroffers-electron` (desktop) and `hasyee/astroffers-app` (React Native) apps; tooling and shared modules (`provider/`, `location/`, `version/`, `moon/`, `debounce/`) follow the sibling `../astro-calendar` repo — keep the two in sync when fixing a shared module (astro-calendar's UI is Blueprint, so only the hooks/utils/providers are shared, not the components).
 
 ## Structure
 
@@ -13,7 +13,9 @@ PWA listing the NGC 2000 objects visible on a given night at a given location. V
 
 ## UI conventions
 
-- Buttons are `variant="minimal"` everywhere, except the field-like selectors in the filter (Location, Object types, Constellations).
+- Theme in `theme/theme.ts` (dark, flat `#1c2127` papers without the elevation overlay, 14px base font, small fields by default) with `cssVariables: true`: the stylesheets use `var(--mui-palette-*)`, the charts read the palette through `chart/chart.colors.ts`. `StyledEngineProvider injectFirst` (`index.tsx`) puts MUI's styles first, so the SCSS overrides them at the same specificity. Styling stays in the per-domain `.scss` files, not `sx`.
+- Import components and icons by path (`@mui/material/Button`, `@mui/icons-material/Close`); icon names are not guessable (the outlined help circle is `HelpOutlineOutlined`, `HelpOutline` doesn't exist), check `node_modules/@mui/icons-material`.
+- Text buttons and `IconButton`s everywhere; fields are outlined `TextField`s with floating labels. Choices made in a dialog (Location, Object types, Constellations) are read-only `SelectorField`s (`input/input.selector.tsx`). Dialogs use `DialogTitleWithClose` (`dialog/`), placeholders `EmptyState` (`empty/`).
 - Preview images (CDS hips2fits, DSS2) are grayscale via CSS; clicking the details preview opens a 1200px color version in a new tab.
 - Search: `*` in the Messier or name search matches every object having one; on phones the Messier field uses `inputMode="tel"` (a numeric keypad that has `*`).
 
@@ -21,10 +23,9 @@ PWA listing the NGC 2000 objects visible on a given night at a given location. V
 
 - A `useEffect` callback must not return `element.scrollTo(...)`: it returns a Promise in current Chrome, React calls it as the cleanup, and the whole root unmounts. Use a block body.
 - Highcharts polar: `pane.background: []` crashes (`innerRadius` of undefined) — pass an object; axis labels at the sides get ellipsized to nothing without a fixed `chart.margin` and `textOverflow: 'none'`; round `this.value` in label formatters (float ticks like 89.999).
-- Blueprint `NonIdealState` has `height: 100%`, which squeezes its flex siblings — override with `height: auto`. In a `fill` `ControlGroup`, give fixed-size buttons `Classes.FIXED`.
-- iOS zooms into inputs below 16px: `index.scss` sets 1rem only under `@supports (-webkit-touch-callout: none)` (iOS only; `!important` beats Blueprint's multi-class selectors). The mobile tap highlight is turned off globally.
+- `DialogTitle` + `DialogContent` zeroes the content's top padding, which clips the floating label of a first field — give that `DialogContent` a top padding (see `location.scss`). The `Autocomplete` of the place search ignores every `onInputChange` but typing (it resets the input itself on selecting) and uses `clearOnBlur={false}`.
+- iOS zooms into inputs below 16px: `index.scss` sets 1rem only under `@supports (-webkit-touch-callout: none)` (iOS only; `!important` beats MUI's more specific selectors). The mobile tap highlight is turned off globally.
 - hips2fits sends no cache headers: the service worker caches it (`runtimeCaching` CacheFirst in `vite.config.ts`), and the `<img>`s use `crossOrigin="anonymous"` so cached responses are not opaque (quota padding).
 - "Reload now" (`version/`) must fetch and activate the new service worker before reloading; a plain reload is still served from the old precache.
 - Don't add a `beforeinstallprompt` handler that calls `prompt()` without a user gesture: it suppresses the browser's own install prompt and the call is rejected.
 - The maskable icon is sized for the launcher showing about the central 88% of it (measured on a Pixel); the full-bleed size gets cut, the 80% safe zone looks small.
-- `npm install` can loop forever on the React 18/19 peer conflict of Blueprint: install `react@^19 react-dom@^19` first, then the rest.

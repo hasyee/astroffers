@@ -1,8 +1,16 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import classnames from 'classnames';
-import { Button, Classes, Dialog, Drawer } from '@blueprintjs/core';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import type { NgcInfo } from '../calculator/calculator.types';
 import { getTitle } from '../catalog/catalog.utils';
+import DialogTitleWithClose from '../dialog/dialog.title';
 import { useCloseOnBack } from '../history/history.hooks';
 import { useIsWideScreen } from '../media/media.hooks';
 import { useAdjacentNgcInfos, useCloseDetails, useOpenedNgcInfo, useOpenedNgcSetter } from './details.hooks';
@@ -27,10 +35,10 @@ function Navigation() {
 
   return (
     <>
-      <Button variant="minimal" icon="arrow-left" onClick={handlePrev} disabled={!prev}>
+      <Button startIcon={<ArrowBackIcon />} onClick={handlePrev} disabled={!prev}>
         Previous
       </Button>
-      <Button variant="minimal" endIcon="arrow-right" onClick={handleNext} disabled={!next}>
+      <Button endIcon={<ArrowForwardIcon />} onClick={handleNext} disabled={!next}>
         Next
       </Button>
     </>
@@ -56,7 +64,7 @@ function Carousel({ ngcInfo }: { ngcInfo: NgcInfo }) {
   ];
 
   return (
-    <div className={classnames(Classes.DRAWER_BODY, 'Carousel')}>
+    <div className="Carousel">
       <div className="track" ref={trackRef}>
         {pages.map(([key, pageNgcInfo]) => (
           <div key={key} className="page">
@@ -79,32 +87,34 @@ export default function Details() {
 
   if (isWideScreen) {
     return (
-      <Dialog title={title} isOpen={!!ngcInfo} onClose={closeDetails} className="Details">
-        <div className={Classes.DIALOG_BODY}>{body}</div>
-        <div className={Classes.DIALOG_FOOTER}>
-          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <Navigation />
-            <Button variant="minimal" intent="primary" onClick={closeDetails}>
-              Close
-            </Button>
-          </div>
-        </div>
+      <Dialog open={!!ngcInfo} onClose={closeDetails} maxWidth={false} className="Details">
+        <DialogTitleWithClose onClose={closeDetails}>{title}</DialogTitleWithClose>
+        <DialogContent dividers>{body}</DialogContent>
+        <DialogActions>
+          <Navigation />
+        </DialogActions>
       </Dialog>
     );
   }
 
   return (
     <Drawer
-      title={title}
-      icon={<Button variant="minimal" size="large" icon="arrow-left" onClick={closeDetails} aria-label="Back" />}
-      isCloseButtonShown={false}
-      isOpen={!!ngcInfo}
+      anchor="right"
+      open={!!ngcInfo}
       onClose={closeDetails}
-      size="100%"
       className="Details compact"
+      slotProps={{ paper: { className: 'DetailsPaper' } }}
     >
+      <div className="header">
+        <IconButton onClick={closeDetails} aria-label="Back">
+          <ArrowBackIcon />
+        </IconButton>
+        <Typography variant="h6" component="h2" noWrap>
+          {title}
+        </Typography>
+      </div>
       {ngcInfo && <Carousel ngcInfo={ngcInfo} />}
-      <div className={Classes.DRAWER_FOOTER}>
+      <div className="footer">
         <Navigation />
       </div>
     </Drawer>

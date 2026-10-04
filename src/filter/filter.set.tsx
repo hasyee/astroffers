@@ -1,4 +1,10 @@
-import { Button, Checkbox, Classes, Dialog } from '@blueprintjs/core';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import type { SetFilter } from '../calculator/calculator.types';
 
 type Props = {
@@ -17,32 +23,30 @@ const selectAll = (options: Record<string, string>, selected: boolean): SetFilte
 /** Dialog to select a subset of object types or constellations */
 export default function SetFilterDialog({ title, isOpen, options, value, onChange, onClose }: Props) {
   return (
-    <Dialog title={title} isOpen={isOpen} onClose={onClose} className="SetFilterDialog">
-      <div className={Classes.DIALOG_BODY}>
+    <Dialog open={isOpen} onClose={onClose} scroll="paper" maxWidth="md" fullWidth className="SetFilterDialog">
+      <DialogTitle>{title}</DialogTitle>
+      <DialogContent dividers>
         <div className="options">
           {Object.entries(options).map(([key, label]) => (
-            <Checkbox
+            <FormControlLabel
               key={key}
               label={label}
-              checked={!!value[key]}
-              onChange={() => onChange({ ...value, [key]: !value[key] })}
+              control={
+                <Checkbox
+                  size="small"
+                  checked={!!value[key]}
+                  onChange={() => onChange({ ...value, [key]: !value[key] })}
+                />
+              }
             />
           ))}
         </div>
-      </div>
-      <div className={Classes.DIALOG_FOOTER}>
-        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-          <Button variant="minimal" onClick={() => onChange(selectAll(options, true))}>
-            Select all
-          </Button>
-          <Button variant="minimal" onClick={() => onChange(selectAll(options, false))}>
-            Select none
-          </Button>
-          <Button variant="minimal" intent="primary" onClick={onClose}>
-            Close
-          </Button>
-        </div>
-      </div>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => onChange(selectAll(options, true))}>Select all</Button>
+        <Button onClick={() => onChange(selectAll(options, false))}>Select none</Button>
+        <Button onClick={onClose}>Close</Button>
+      </DialogActions>
     </Dialog>
   );
 }

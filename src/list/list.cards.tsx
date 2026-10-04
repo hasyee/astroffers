@@ -1,5 +1,10 @@
 import { useCallback, useState } from 'react';
-import { Button, Collapse, ControlGroup, HTMLSelect, InputGroup } from '@blueprintjs/core';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import CloseIcon from '@mui/icons-material/Close';
+import SearchIcon from '@mui/icons-material/Search';
 import type { NgcInfo } from '../calculator/calculator.types';
 import { getObjectImgSrc, getTitle } from '../catalog/catalog.utils';
 import { useOpenedNgcSetter } from '../details/details.hooks';
@@ -33,38 +38,41 @@ function Toolbar() {
 
   return (
     <div className="Toolbar">
-      <ControlGroup fill>
-        <HTMLSelect
-          fill
+      <div className="sort">
+        <TextField
+          select
           value={sortBy}
-          onChange={event => setSortBy(event.currentTarget.value as SortBy)}
-          options={sortOptions.map(({ value, label }) => ({ value, label: `Sort by ${label.toLowerCase()}` }))}
-        />
-        <Button
-          variant="minimal"
-          icon={isSearchOpen ? 'cross' : 'search'}
-          onClick={handleToggleSearch}
-          aria-label="Search"
-        />
-      </ControlGroup>
-      <Collapse isOpen={isSearchOpen}>
+          onChange={event => setSortBy(event.target.value as SortBy)}
+          slotProps={{ htmlInput: { 'aria-label': 'Sort by' } }}
+        >
+          {sortOptions.map(({ value, label }) => (
+            <MenuItem key={value} value={value}>
+              Sort by {label.toLowerCase()}
+            </MenuItem>
+          ))}
+        </TextField>
+        <IconButton onClick={handleToggleSearch} aria-label="Search">
+          {isSearchOpen ? <CloseIcon /> : <SearchIcon />}
+        </IconButton>
+      </div>
+      <Collapse in={isSearchOpen}>
         <div className="search">
-          <InputGroup
+          <TextField
             type="search"
-            inputMode="numeric"
             placeholder="NGC"
             value={search.ngc}
             onChange={event => setNgc(event.target.value)}
+            slotProps={{ htmlInput: { inputMode: 'numeric' } }}
           />
-          <InputGroup
+          <TextField
             type="search"
-            // a numeric keypad with "*", to list every object with a Messier number
-            inputMode="tel"
             placeholder="Messier"
             value={search.messier}
             onChange={event => setMessier(event.target.value)}
+            // a numeric keypad with "*", to list every object with a Messier number
+            slotProps={{ htmlInput: { inputMode: 'tel' } }}
           />
-          <InputGroup
+          <TextField
             type="search"
             placeholder="Name"
             value={search.name}

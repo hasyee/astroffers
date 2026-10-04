@@ -1,5 +1,8 @@
 import classnames from 'classnames';
-import { NonIdealState, Spinner } from '@blueprintjs/core';
+import CircularProgress from '@mui/material/CircularProgress';
+import NightsStayOutlinedIcon from '@mui/icons-material/NightsStayOutlined';
+import SearchOffIcon from '@mui/icons-material/SearchOff';
+import EmptyState from '../empty/empty';
 import { useIsCalculating, useResult, useResultList } from '../result/result.hooks';
 import { useDisplayedList } from './list.hooks';
 import ListCards from './list.cards';
@@ -17,7 +20,7 @@ function NoResults() {
       : params.filter.moonless
         ? 'Try to turn off the Moonless night only filter, or loosen the filter.'
         : 'Try to loosen the filter.';
-  return <NonIdealState icon="moon" title="No results to show" description={description} />;
+  return <EmptyState icon={<NightsStayOutlinedIcon />} title="No results to show" description={description} />;
 }
 
 export default function List({ compact = false }: { compact?: boolean }) {
@@ -29,20 +32,20 @@ export default function List({ compact = false }: { compact?: boolean }) {
   if (!result) {
     return (
       <div className="List">
-        <NonIdealState icon={<Spinner />} title="Calculating..." />
+        <EmptyState icon={<CircularProgress />} title="Calculating..." />
       </div>
     );
   }
 
   return (
     <div className={classnames('List', { calculating: isCalculating, compact })}>
-      {isCalculating && <Spinner className="progress" size={20} />}
+      {isCalculating && <CircularProgress className="progress" size={20} />}
       {resultList.length === 0 ? (
         <NoResults />
       ) : (
         <>
           {compact ? <ListCards list={list} /> : <ListTable list={list} />}
-          {list.length === 0 && <NonIdealState icon="search" title="No matching objects" />}
+          {list.length === 0 && <EmptyState icon={<SearchOffIcon />} title="No matching objects" />}
         </>
       )}
     </div>

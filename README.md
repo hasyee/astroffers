@@ -26,7 +26,7 @@ Node version: see `.nvmrc`.
 
 ## Structure
 
-Vite, React 19, TypeScript, Blueprint 6 (dark theme), Highcharts, sass. Source files are grouped by domain
+Vite, React 19, TypeScript, MUI 9 (dark theme), Highcharts, sass. Source files are grouped by domain
 (`src/<domain>/<domain>.<role>.ts(x)`); state lives in small context-selector based state providers
 (`src/provider/`), persisted to `localStorage` where needed (location, filter, sorting).
 

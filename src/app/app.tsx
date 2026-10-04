@@ -1,5 +1,8 @@
 import { useCallback, useState } from 'react';
-import { Drawer } from '@blueprintjs/core';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import CloseIcon from '@mui/icons-material/Close';
 import Details from '../details/details';
 import Filter from '../filter/filter';
 import Header from '../header/header';
@@ -44,14 +47,20 @@ function CompactLayout() {
         <List compact />
       </main>
       <Drawer
-        isOpen={isFilterOpen}
+        anchor="left"
+        open={isFilterOpen}
         onClose={handleCloseFilter}
-        position="left"
-        size="min(340px, 90vw)"
-        title="Filter"
-        icon="filter"
         className="FilterDrawer"
+        slotProps={{ paper: { className: 'FilterDrawerPaper' } }}
       >
+        <div className="header">
+          <Typography variant="h6" component="h2">
+            Filter
+          </Typography>
+          <IconButton onClick={handleCloseFilter} aria-label="Close">
+            <CloseIcon />
+          </IconButton>
+        </div>
         <Filter />
       </Drawer>
       <Details />

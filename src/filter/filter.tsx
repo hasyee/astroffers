@@ -1,8 +1,15 @@
 import { useCallback, useState } from 'react';
-import { Button, ControlGroup, FormGroup, HTMLSelect, Switch } from '@blueprintjs/core';
+import Button from '@mui/material/Button';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Switch from '@mui/material/Switch';
+import TextField from '@mui/material/TextField';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import type { BrightnessType } from '../calculator/calculator.types';
 import { constellations, objectTypes } from '../catalog/catalog.utils';
 import NumberInput from '../input/input.number';
+import SelectorField from '../input/input.selector';
 import Location from '../location/location';
 import { useFilter, useFilterValueSetter, useResetFilter } from './filter.hooks';
 import { countSelected } from './filter.utils';
@@ -43,9 +50,7 @@ export default function Filter() {
       <div className="inputs">
         <DateInput />
 
-        <FormGroup label="Location">
-          <Location />
-        </FormGroup>
+        <Location />
 
         <NumberInput
           label="Minimum observation time"
@@ -72,49 +77,54 @@ export default function Filter() {
           onChange={setAltitude}
         />
 
-        <Switch
+        <FormControlLabel
           label="Moonless night only"
-          checked={filter.moonless}
-          onChange={event => setMoonless(event.currentTarget.checked)}
-          large
+          control={<Switch checked={filter.moonless} onChange={event => setMoonless(event.target.checked)} />}
         />
 
-        <FormGroup label="Maximum brightness value">
-          <ControlGroup fill>
-            <HTMLSelect
-              value={filter.brightnessFilter}
-              onChange={event => setBrightnessFilter(event.currentTarget.value as BrightnessType)}
-              options={brightnessOptions}
+        <div className="brightness">
+          <TextField
+            select
+            label="Maximum brightness"
+            value={filter.brightnessFilter}
+            onChange={event => setBrightnessFilter(event.target.value as BrightnessType)}
+          >
+            {brightnessOptions.map(({ value, label }) => (
+              <MenuItem key={value} value={value}>
+                {label}
+              </MenuItem>
+            ))}
+          </TextField>
+          {isMagnitude ? (
+            <NumberInput label="Value" min={-30} max={30} value={filter.magnitude} onChange={setMagnitude} />
+          ) : (
+            <NumberInput
+              label="Value"
+              min={-30}
+              max={30}
+              value={filter.surfaceBrightness}
+              onChange={setSurfaceBrightness}
             />
-            {isMagnitude ? (
-              <NumberInput label={null} min={-30} max={30} value={filter.magnitude} onChange={setMagnitude} />
-            ) : (
-              <NumberInput
-                label={null}
-                min={-30}
-                max={30}
-                value={filter.surfaceBrightness}
-                onChange={setSurfaceBrightness}
-              />
-            )}
-          </ControlGroup>
-        </FormGroup>
+          )}
+        </div>
 
-        <FormGroup label="Object types">
-          <Button fill alignText="start" endIcon="filter-list" onClick={handleOpenTypes}>
-            {countSelected(filter.types)} of {typeCount} selected
-          </Button>
-        </FormGroup>
+        <SelectorField
+          label="Object types"
+          value={`${countSelected(filter.types)} of ${typeCount} selected`}
+          icon={<FilterListIcon />}
+          onClick={handleOpenTypes}
+        />
 
-        <FormGroup label="Constellations">
-          <Button fill alignText="start" endIcon="filter-list" onClick={handleOpenConstellations}>
-            {countSelected(filter.constellations)} of {constellationCount} selected
-          </Button>
-        </FormGroup>
+        <SelectorField
+          label="Constellations"
+          value={`${countSelected(filter.constellations)} of ${constellationCount} selected`}
+          icon={<FilterListIcon />}
+          onClick={handleOpenConstellations}
+        />
       </div>
 
       <div className="actions">
-        <Button variant="minimal" icon="reset" onClick={resetFilter}>
+        <Button startIcon={<RestartAltIcon />} onClick={resetFilter}>
           Reset filter
         </Button>
       </div>

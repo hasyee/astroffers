@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import classnames from 'classnames';
-import { Icon, InputGroup } from '@blueprintjs/core';
+import InputBase from '@mui/material/InputBase';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import type { NgcInfo } from '../calculator/calculator.types';
 import { useOpenedNgcSetter } from '../details/details.hooks';
 import { toListRow } from '../display/display.utils';
@@ -33,11 +34,11 @@ function HeaderCell({ column }: { column: Column }) {
     <th className={classnames(column.key, column.className)} title={column.title}>
       <button className={classnames('sorter', { active: sortBy === column.key })} onClick={() => setSortBy(column.key)}>
         {column.label}
-        {sortBy === column.key && <Icon icon="arrow-down" size={12} />}
+        {sortBy === column.key && <ArrowDownwardIcon className="sort-icon" />}
       </button>
       {column.search && (
-        <InputGroup
-          small
+        <InputBase
+          className="search"
           type="search"
           placeholder={column.search === 'name' ? 'Search' : '#'}
           value={search[column.search]}

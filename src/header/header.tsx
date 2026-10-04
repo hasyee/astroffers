@@ -1,29 +1,53 @@
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import MenuIcon from '@mui/icons-material/Menu';
+import AppBar from '@mui/material/AppBar';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import { useCallback, useState } from 'react';
-import { Button } from '@blueprintjs/core';
 import About from '../about/about';
 import Help from '../help/help';
+import { useIsWideScreen } from '../media/media.hooks';
 import './header.scss';
 
 export default function Header({ onOpenFilter }: { onOpenFilter?: () => void }) {
+  const isWideScreen = useIsWideScreen();
   const [openedDialog, setOpenedDialog] = useState<'help' | 'about' | null>(null);
   const handleOpenHelp = useCallback(() => setOpenedDialog('help'), []);
   const handleOpenAbout = useCallback(() => setOpenedDialog('about'), []);
   const handleClose = useCallback(() => setOpenedDialog(null), []);
 
   return (
-    <div className="Header">
-      {onOpenFilter && <Button variant="minimal" size="large" icon="menu" onClick={onOpenFilter} aria-label="Filter" />}
+    <AppBar position="static" color="inherit" elevation={2} className="Header">
+      {onOpenFilter && (
+        <IconButton onClick={onOpenFilter} aria-label="Filter">
+          <MenuIcon />
+        </IconButton>
+      )}
       <img className="logo" src="/icons/logo.png" alt="" />
       <span className="title">Astroffers</span>
       <div className="spacer" />
-      <Button variant="minimal" icon="help" onClick={handleOpenHelp} aria-label="Help">
-        <span className="label">Help</span>
-      </Button>
-      <Button variant="minimal" icon="info-sign" onClick={handleOpenAbout} aria-label="About">
-        <span className="label">About</span>
-      </Button>
+      {isWideScreen ? (
+        <>
+          <Button color="inherit" startIcon={<HelpOutlineOutlinedIcon />} onClick={handleOpenHelp}>
+            Help
+          </Button>
+          <Button color="inherit" startIcon={<InfoOutlinedIcon />} onClick={handleOpenAbout}>
+            About
+          </Button>
+        </>
+      ) : (
+        <>
+          <IconButton onClick={handleOpenHelp} aria-label="Help">
+            <HelpOutlineOutlinedIcon />
+          </IconButton>
+          <IconButton onClick={handleOpenAbout} aria-label="About">
+            <InfoOutlinedIcon />
+          </IconButton>
+        </>
+      )}
       <Help isOpen={openedDialog === 'help'} onClose={handleClose} />
       <About isOpen={openedDialog === 'about'} onClose={handleClose} />
-    </div>
+    </AppBar>
   );
 }
