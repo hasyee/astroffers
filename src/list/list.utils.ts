@@ -56,9 +56,18 @@ export const emptySearch: ListSearch = { ngc: '', messier: '', name: '' };
 
 export const isSearchEmpty = (search: ListSearch) => !search.ngc && !search.messier && !search.name;
 
+/** Search term matching every object that has the field at all */
+const ANY = '*';
+
+const matchesMessier = (term: string, messier: number | undefined) =>
+  !term || (term === ANY ? messier !== undefined : String(messier) === term);
+
+const matchesName = (term: string, name: string | undefined) =>
+  !term || (term === ANY ? !!name : !!name?.toLowerCase().includes(term.toLowerCase()));
+
 export const matchesSearch =
   ({ ngc, messier, name }: ListSearch) =>
   ({ object }: NgcInfo) =>
     (!ngc.trim() || String(object.ngc) === ngc.trim()) &&
-    (!messier.trim() || String(object.messier) === messier.trim()) &&
-    (!name.trim() || !!object.name?.toLowerCase().includes(name.trim().toLowerCase()));
+    matchesMessier(messier.trim(), object.messier) &&
+    matchesName(name.trim(), object.name);

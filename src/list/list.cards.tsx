@@ -58,7 +58,8 @@ function Toolbar() {
           />
           <InputGroup
             type="search"
-            inputMode="numeric"
+            // a numeric keypad with "*", to list every object with a Messier number
+            inputMode="tel"
             placeholder="Messier"
             value={search.messier}
             onChange={event => setMessier(event.target.value)}
