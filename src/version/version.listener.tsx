@@ -18,10 +18,13 @@ export default function VersionListener() {
 
   useEffect(() => {
     if (!version) return;
-    const interval = setInterval(async () => {
+    const checkVersion = async () => {
       const latestVersion = await fetchLatestVersion();
       if (latestVersion && latestVersion !== version) setNextVersion(latestVersion);
-    }, VERSION_CHECK_INTERVAL);
+    };
+    // on start too, not only after the first interval
+    checkVersion();
+    const interval = setInterval(checkVersion, VERSION_CHECK_INTERVAL);
 
     return () => clearInterval(interval);
   }, [version, fetchLatestVersion]);
