@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import moment from 'moment';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -94,13 +94,10 @@ function CalendarContent({ onClose }: { onClose: () => void }) {
 /** Full-screen calendar of the nights of a month: twilight, astronomical night and Moon phase day by day */
 export default function Calendar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const removeMonth = useCalendarMonthRemover();
-  const wasOpen = useRef(isOpen);
 
-  // the month is removed after the closing animation, not to switch the month while fading out; or right away
-  // when the calendar has not been open (e.g. a link to the main view with a month)
+  // the month belongs to the calendar only, removed when it is left (or with a link to the main view)
   useEffect(() => {
-    if (isOpen) wasOpen.current = true;
-    else if (!wasOpen.current) removeMonth();
+    if (!isOpen) removeMonth();
   }, [isOpen, removeMonth]);
 
   return (
@@ -109,7 +106,8 @@ export default function Calendar({ isOpen, onClose }: { isOpen: boolean; onClose
       open={isOpen}
       onClose={onClose}
       className="Calendar"
-      slotProps={{ transition: { onExited: removeMonth } }}
+      // opens and closes like a page of its own, without an animation
+      transitionDuration={0}
       // the page itself does not scroll anyway, and the lock would block the pull to refresh of the browser
       disableScrollLock
     >
