@@ -1,12 +1,8 @@
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import Button from '@mui/material/Button';
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import moment from 'moment';
-import { type MouseEvent, useCallback, useState } from 'react';
+import { type MouseEvent, useCallback } from 'react';
 import { formatIntervalEnd, formatIntervalStart } from '../display/display.utils';
 import { downloadCsv } from '../export/export.utils';
 import { useDisplayedList } from '../list/list.hooks';
@@ -18,13 +14,18 @@ import './summary.scss';
 
 const formatPercent = (value: number) => `${Math.round(value * 100)}%`;
 
-export default function Summary({ compact = false }: { compact?: boolean }) {
+type Props = {
+  /** The bar of a phone */
+  compact?: boolean;
+  /** The bar shows the times of the night below it while the calendar is open, and toggles the calendar */
+  isExpanded?: boolean;
+  onToggle?: () => void;
+};
+
+export default function Summary({ compact = false, isExpanded = false, onToggle }: Props) {
   const nightInfo = useNightInfo();
   const params = useResultParams();
   const list = useDisplayedList();
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const handleToggle = useCallback(() => setIsExpanded(isExpanded => !isExpanded), []);
   const handleExport = useCallback(
     (event: MouseEvent) => {
       // not to toggle the bar of the compact summary
@@ -42,7 +43,7 @@ export default function Summary({ compact = false }: { compact?: boolean }) {
   if (compact) {
     return (
       <div className="Summary compact">
-        <div className="bar" onClick={handleToggle}>
+        <div className="bar" onClick={onToggle}>
           <div className="count">
             <div className="value">{list.length}</div>
             <div className="label">objects</div>
@@ -65,13 +66,13 @@ export default function Summary({ compact = false }: { compact?: boolean }) {
             <div>{formatIntervalEnd(observedNight)}</div>
           </div>
           <NightChart date={params.date} nightInfo={nightInfo} size={42} />
-          <IconButton aria-label="Night details">{isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}</IconButton>
         </div>
-        <Collapse in={isExpanded}>
+        {/* shown at once with the calendar, which fills the rest of the screen */}
+        {isExpanded && (
           <div className="details">
             <NightTable nightInfo={nightInfo} />
           </div>
-        </Collapse>
+        )}
       </div>
     );
   }

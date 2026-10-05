@@ -6,7 +6,7 @@ export const getToday = (): Timestamp => moment().startOf('day').valueOf();
 
 export const DATE_FORMAT = 'YYYY-MM-DD';
 
-/** Dates outside of this range are ignored, e.g. the partial years while a year is being typed */
+/** Dates of the query outside of this range are ignored */
 export const MIN_DATE = '1900-01-01';
 export const MAX_DATE = '2100-12-31';
 

@@ -13,7 +13,6 @@ import SelectorField from '../input/input.selector';
 import Location from '../location/location';
 import { useFilter, useFilterValueSetter, useResetFilter } from './filter.hooks';
 import { countSelected } from './filter.utils';
-import DateInput from './filter.date';
 import SetFilterDialog from './filter.set';
 import './filter.scss';
 
@@ -48,8 +47,6 @@ export default function Filter() {
   return (
     <div className="Filter">
       <div className="inputs">
-        <DateInput />
-
         <Location />
 
         <NumberInput

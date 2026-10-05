@@ -102,7 +102,7 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.25rem 0.5rem 0.25rem 1rem;
+    padding: 0.25rem 1rem;
     cursor: pointer;
 
     .count {
@@ -133,10 +133,15 @@
   }
 
   .details {
-    padding: 0 1rem 0.5rem;
+    padding: 0 0.5rem 0.5rem;
 
+    // fits a phone of 360px
     .NightTable {
       width: 100%;
+
+      td {
+        padding: 0.2rem 0.25rem;
+      }
     }
   }
 }

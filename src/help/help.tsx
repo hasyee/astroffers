@@ -11,8 +11,8 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
         <div className="running-text">
           <p>
             Astroffers helps you to discover the objects of the NGC 2000 catalog. Along with your filter it lists the
-            objects that are visible on the chosen night at your location. The list is recalculated automatically
-            whenever you change the filter.
+            objects that are visible on the chosen night at your location. The night is chosen in the calendar, opened
+            by the date in the header. The list is recalculated automatically whenever you change the filter.
           </p>
 
           <h3>Filter</h3>
@@ -21,9 +21,6 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             narrower screen or a phone it opens with the menu button.
           </p>
           <ul>
-            <li>
-              <b>Night of:</b> the night starting on the selected date.
-            </li>
             <li>
               <b>Location:</b> search for a place, type its coordinates, or use the location of your device.
             </li>
@@ -75,11 +72,10 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
 
           <h3>Calendar</h3>
           <p>
-            The calendar button of the header shows the nights of a whole month at the chosen location: the phase of the
-            Moon and a strip of every day from midnight to midnight with the same colors as the clock face. The
-            astronomical night follows the maximum altitude of the Sun of the filter. It opens on the month of the
-            chosen night, which is framed. Click a day to see the times of its night, and <b>Show objects</b> to list
-            the objects of that night.
+            The date in the header opens the calendar above the summary, which shows the nights of a whole month at the
+            chosen location: the phase of the Moon and a strip of every day from midnight to midnight with the same
+            colors as the clock face. The astronomical night follows the maximum altitude of the Sun of the filter. It
+            opens on the month of the chosen night, which is framed; click a day to choose its night.
           </p>
 
           <h3>Result list</h3>

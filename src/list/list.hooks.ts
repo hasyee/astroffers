@@ -1,7 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useResultList } from '../result/result.hooks';
 import { useStatePart, useStatePartSetter } from '../query/query.hooks';
-import type { StoredState } from '../query/query.types';
 import type { Query } from '../router/router.types';
 import { omitQuery, parseQuery, serializeQuery } from '../router/router.utils';
 import type { ListSearch, SortBy } from './list.types';
@@ -19,19 +18,16 @@ import {
 } from './list.utils';
 
 const getSortBy = (query: Query) => sortByFromQuery(query, defaultSortBy);
-const getStoredSortBy = (state: StoredState) => state.sortBy;
 const keepSortBy = (sortBy: SortBy) => sortBy;
 const parseSortBy = (serialized: string) => serialized as SortBy;
 const setQuerySortBy = (query: Query, sortBy: SortBy): Query => ({ ...query, ...sortByToQuery(sortBy) });
-const setStoredSortBy = (state: StoredState, sortBy: SortBy): StoredState => ({ ...state, sortBy });
 
 /** Order of the list */
-export const useSortBy = () => useStatePart(getSortBy, getStoredSortBy, keepSortBy, parseSortBy);
+export const useSortBy = () => useStatePart(getSortBy, keepSortBy, parseSortBy);
 
-export const useSortBySetter = () => useStatePartSetter(getSortBy, setQuerySortBy, getStoredSortBy, setStoredSortBy);
+export const useSortBySetter = () => useStatePartSetter(getSortBy, setQuerySortBy);
 
 const getSearch = (query: Query) => searchFromQuery(query, emptySearch);
-const getStoredSearch = (state: StoredState) => state.search;
 const serializeSearch = (search: ListSearch) => serializeQuery(searchToQuery(search));
 const parseSearch = (serialized: string) => getSearch(parseQuery(serialized));
 // an emptied term is left out, so the search params are replaced
@@ -39,12 +35,11 @@ const setQuerySearch = (query: Query, search: ListSearch): Query => ({
   ...omitQuery(query, SEARCH_PARAMS),
   ...searchToQuery(search)
 });
-const setStoredSearch = (state: StoredState, search: ListSearch): StoredState => ({ ...state, search });
 
 /** Search terms of the list */
-export const useSearch = () => useStatePart(getSearch, getStoredSearch, serializeSearch, parseSearch);
+export const useSearch = () => useStatePart(getSearch, serializeSearch, parseSearch);
 
-export const useSearchSetter = () => useStatePartSetter(getSearch, setQuerySearch, getStoredSearch, setStoredSearch);
+export const useSearchSetter = () => useStatePartSetter(getSearch, setQuerySearch);
 
 export const useSearchValueSetter = (key: keyof ListSearch) => {
   const setSearch = useSearchSetter();

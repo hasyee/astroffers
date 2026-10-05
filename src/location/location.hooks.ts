@@ -1,17 +1,13 @@
 import { useState, useCallback, useMemo } from 'react';
 import type { Coords, NominatimPlace, Place } from './location.types';
 import { useDebounce } from '../debounce/debounce.hooks';
-import { createStateContext, useStateSelector, useStateSetter, useStateValue } from '../provider/state.hooks';
-import { hasQueryState } from '../query/query.utils';
+import { createStateContext, useStateSetter, useStateValue } from '../provider/state.hooks';
 import { useQuerySelector, useQuerySetter } from '../router/router.hooks';
 import { parseQuery, serializeQuery } from '../router/router.utils';
 import type { Query } from '../router/router.types';
 import { coordsFromQuery, coordsToQuery, defaultPlace, getPlaceShortName, isSameCoords } from './location.utils';
 
-/**
- * The stored place (`localStorage`), the only place of its name; the coordinates come from the query while it
- * holds the state (see `StoredState`)
- */
+/** The stored place (`localStorage`), the only place of its name; the coordinates come from the query */
 export const LocationContext = createStateContext<Place>(defaultPlace);
 
 const getCoords = (query: Query) => coordsFromQuery(query, defaultPlace.coords);
@@ -25,10 +21,8 @@ const toPlace = (coords: Coords, stored: Place): Place => ({
 const serializeCoords = (coords: Coords) => serializeQuery(coordsToQuery(coords));
 
 export const useCoords = () => {
-  // selected in a serialized form, to keep their identity while the state moves between the query and the store
-  const queryCoords = useQuerySelector(query => (hasQueryState(query) ? serializeCoords(getCoords(query)) : null));
-  const storedCoords = useStateSelector(LocationContext, place => serializeCoords(place.coords));
-  const serialized = queryCoords ?? storedCoords;
+  // selected in a serialized form, to keep their identity while other params change
+  const serialized = useQuerySelector(query => serializeCoords(getCoords(query)));
   return useMemo(() => getCoords(parseQuery(serialized)), [serialized]);
 };
 
@@ -38,18 +32,17 @@ export const useLocation = (): Place => {
   return useMemo(() => toPlace(coords, stored), [coords, stored]);
 };
 
-/** Stores the place with its name, and sets its coordinates in the query while it holds the state */
+/** Stores the place with its name, and sets its coordinates in the query */
 export const useLocationSetter = () => {
   const stored = useStateValue(LocationContext);
   const setStored = useStateSetter(LocationContext);
   const setQuery = useQuerySetter();
   return useCallback(
     (update: Place | ((place: Place) => Place)) => {
-      const query = parseQuery(window.location.search);
-      const place = hasQueryState(query) ? toPlace(getCoords(query), stored) : stored;
+      const place = toPlace(getCoords(parseQuery(window.location.search)), stored);
       const nextPlace = typeof update === 'function' ? update(place) : update;
       setStored(nextPlace);
-      if (hasQueryState(query)) setQuery(query => ({ ...query, ...coordsToQuery(nextPlace.coords) }));
+      setQuery(query => ({ ...query, ...coordsToQuery(nextPlace.coords) }));
     },
     [stored, setStored, setQuery]
   );

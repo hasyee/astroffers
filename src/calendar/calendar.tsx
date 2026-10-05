@@ -1,35 +1,27 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import moment from 'moment';
-import Dialog from '@mui/material/Dialog';
+import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TodayOutlinedIcon from '@mui/icons-material/TodayOutlined';
 import type { CalendarDay, Timestamp } from '../calculator/calculator.types';
 import { useDate } from '../date/date.hooks';
 import { useSwipe } from '../swipe/swipe.hooks';
-import { useCalendarMonth, useCalendarMonthRemover, useCalendarMonthSetter, useCalendarMonths } from './calendar.hooks';
+import { useCalendarMonths } from './calendar.hooks';
 import CalendarItem from './calendar.item';
 import './calendar.scss';
 
-const getThisMonth = () => moment().startOf('month').valueOf();
+const toMonth = (date: Timestamp) => moment(date).startOf('month').valueOf();
+const getThisMonth = () => toMonth(Date.now());
 const addMonths = (month: Timestamp, count: number) => moment(month).add(count, 'month').valueOf();
 
-function Month({
-  days,
-  selectedDay,
-  onShowNight
-}: {
-  days: CalendarDay[] | undefined;
-  selectedDay: Timestamp;
-  onShowNight: () => void;
-}) {
+function Month({ days, selectedDay }: { days: CalendarDay[] | undefined; selectedDay: Timestamp }) {
   return (
     <div className="grid">
       {days?.map(day => (
         <div key={day.day} className="cell">
-          <CalendarItem {...day} isSelected={day.day === selectedDay} onShowNight={onShowNight} />
+          <CalendarItem {...day} isSelected={day.day === selectedDay} />
         </div>
       ))}
     </div>
@@ -40,16 +32,11 @@ function Month({
  * Header and months of the calendar, mounted only while the calendar is open. The previous, the current and the
  * next month are side by side, to swipe between them like the pages of a carousel (see the details).
  */
-function CalendarContent({ onClose }: { onClose: () => void }) {
-  // in the query (`month`), opens on the month of the chosen night
-  const month = useCalendarMonth();
-  const setMonth = useCalendarMonthSetter();
+function CalendarContent() {
+  const rootRef = useRef<HTMLDivElement>(null);
   const selectedDay = useDate();
-
-  // the month shown is put into the query right away, e.g. for a link to it
-  useEffect(() => {
-    setMonth(month => month);
-  }, [setMonth]);
+  // opens on the month of the chosen night
+  const [month, setMonth] = useState(() => toMonth(selectedDay));
 
   const prevMonth = addMonths(month, -1);
   const nextMonth = addMonths(month, 1);
@@ -63,6 +50,8 @@ function CalendarContent({ onClose }: { onClose: () => void }) {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      // not while typing into a field or in an overlay (e.g. stepping between the objects of the details)
+      if (event.target !== document.body && !rootRef.current?.contains(event.target as Node)) return;
       if (event.key === 'ArrowLeft') handlePrevMonth();
       if (event.key === 'ArrowRight') handleNextMonth();
     };
@@ -71,11 +60,8 @@ function CalendarContent({ onClose }: { onClose: () => void }) {
   }, [handlePrevMonth, handleNextMonth]);
 
   return (
-    <>
+    <div className="content" ref={rootRef}>
       <div className="header">
-        <IconButton onClick={onClose} aria-label="Back">
-          <ArrowBackIcon />
-        </IconButton>
         <h2 className="month">{moment(month).format('MMMM YYYY')}</h2>
         <IconButton onClick={handlePrevMonth} aria-label="Previous month">
           <ChevronLeftIcon />
@@ -92,36 +78,33 @@ function CalendarContent({ onClose }: { onClose: () => void }) {
         <div className="track" ref={trackRef}>
           {[prevMonth, month, nextMonth].map(pageMonth => (
             <div key={pageMonth} className="page">
-              <Month days={days[pageMonth]} selectedDay={selectedDay} onShowNight={onClose} />
+              <Month days={days[pageMonth]} selectedDay={selectedDay} />
             </div>
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
-/** Full-screen calendar of the nights of a month: twilight, astronomical night and Moon phase day by day */
-export default function Calendar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const removeMonth = useCalendarMonthRemover();
-
-  // the month belongs to the calendar only, removed when it is left (or with a link to the main view)
-  useEffect(() => {
-    if (!isOpen) removeMonth();
-  }, [isOpen, removeMonth]);
+/**
+ * Calendar of the nights of a month above the summary, opened by the date in the header: twilight, astronomical
+ * night and Moon phase day by day; a click on a day chooses its night. A card of about half of the screen on a wide
+ * screen; on a phone it fills the screen with the summary, instead of the list.
+ */
+export default function Calendar({ isOpen, compact = false }: { isOpen: boolean; compact?: boolean }) {
+  if (compact)
+    return isOpen ? (
+      <div className="Calendar compact">
+        <CalendarContent />
+      </div>
+    ) : null;
 
   return (
-    <Dialog
-      fullScreen
-      open={isOpen}
-      onClose={onClose}
-      className="Calendar"
-      // opens and closes like a page of its own, without an animation
-      transitionDuration={0}
-      // the page itself does not scroll anyway, and the lock would block the pull to refresh of the browser
-      disableScrollLock
-    >
-      <CalendarContent onClose={onClose} />
-    </Dialog>
+    <Collapse in={isOpen} unmountOnExit className="CalendarCollapse">
+      <div className="Calendar">
+        <CalendarContent />
+      </div>
+    </Collapse>
   );
 }

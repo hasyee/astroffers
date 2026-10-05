@@ -2,35 +2,66 @@
 
 $today: #6f3434;
 
-.Calendar .MuiDialog-paper {
+// on a wide screen the gap of the section below the card only while it is open
+.CalendarCollapse {
+  flex: 0 0 auto;
+  margin-bottom: -1rem;
+
+  .MuiCollapse-wrapperInner {
+    padding-bottom: 1rem;
+  }
+}
+
+.Calendar {
   display: flex;
   flex-direction: column;
   background-color: var(--mui-palette-background-default);
 
-  // as high as the header of the app
-  > .header {
+  // a card of about half of the screen
+  &:not(.compact) {
+    height: 50dvh;
+    overflow: hidden;
+    border: 1px solid var(--mui-palette-divider);
+    border-radius: var(--mui-shape-borderRadius);
+  }
+
+  // the room left by the summary (the list is hidden meanwhile, see `app.scss`)
+  &.compact {
+    flex: 1 1 auto;
+    min-height: 0;
+    border-bottom: 1px solid var(--mui-palette-divider);
+  }
+
+  > .content {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header {
     flex: 0 0 auto;
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    height: 50px;
-    padding: 0 0.5rem 0 0.25rem;
+    height: 44px;
+    padding: 0 0.5rem 0 1rem;
     background-color: var(--mui-palette-background-paper);
     border-bottom: 1px solid var(--mui-palette-divider);
 
     .month {
       flex: 1 1 auto;
       min-width: 0;
-      margin: 0 0 0 0.25rem;
+      margin: 0;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      font-size: 1.25rem;
+      font-size: 1.1rem;
       font-weight: 300;
     }
   }
 
-  > .carousel {
+  .carousel {
     position: relative;
     flex: 1 1 auto;
     min-height: 0;
@@ -62,6 +93,8 @@ $today: #6f3434;
 
     .cell {
       min-height: 0;
+      // the day is laid out by the size of its cell (see `.CalendarItem`)
+      container-type: size;
       border-right: 1px solid var(--mui-palette-divider);
       border-bottom: 1px solid var(--mui-palette-divider);
 
@@ -72,6 +105,9 @@ $today: #6f3434;
       &:nth-child(7n),
       &:nth-child(7n - 1) {
         background-color: var(--mui-palette-background-paper);
+      }
+      &:nth-last-child(-n + 7) {
+        border-bottom: 0;
       }
     }
   }
@@ -84,9 +120,11 @@ $today: #6f3434;
   flex-direction: column;
   cursor: pointer;
 
-  &:hover,
-  &.open {
-    background-color: var(--mui-palette-action-hover);
+  // not on a touch screen, where the hover would stick to the day tapped
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--mui-palette-action-hover);
+    }
   }
 
   &.other-month {
@@ -96,9 +134,10 @@ $today: #6f3434;
   &.today {
     background-color: $today;
 
-    &:hover,
-    &.open {
-      background-color: color-mix(in srgb, $today, black 20%);
+    @media (hover: hover) {
+      &:hover {
+        background-color: color-mix(in srgb, $today, black 20%);
+      }
     }
   }
 
@@ -111,62 +150,65 @@ $today: #6f3434;
     pointer-events: none;
   }
 
-  // as in astro-calendar: the day and the Moon side by side, or below each other in portrait, both centered
+  // as in astro-calendar: the day and the Moon side by side in a wide cell, both centered
   header {
     flex: 1 1 0;
     min-height: 0;
     display: flex;
-    justify-content: space-between;
-    padding: 0.5vw;
+    align-items: center;
+    padding: 4px;
     // never over the bands
     overflow: hidden;
 
     .day {
       flex: 1 1 0;
-      display: flex;
-      flex-direction: column;
-      align-self: center;
-      justify-content: center;
       text-align: center;
     }
 
     .day-number {
-      font-size: 2vw;
+      font-size: clamp(1rem, 35cqh, 2rem);
       font-weight: 200;
-
-      @media screen and (max-width: 1000px) {
-        font-size: 1.5rem;
-      }
-      @media screen and (max-width: 600px) {
-        font-size: 1rem;
-        font-weight: 400;
-      }
-      // low cells, e.g. a phone in landscape
-      @media screen and (max-height: 500px) {
-        font-size: 1.25rem;
-        line-height: 1.1;
-      }
+      line-height: 1.1;
     }
 
     .day-name {
-      @media screen and (max-height: 500px) {
-        font-size: 0.7rem;
-      }
+      font-size: 0.75rem;
     }
 
     .moon {
       flex: 1 1 0;
-      width: 100%;
+      align-self: stretch;
       max-width: 80px;
-      min-height: 20px;
     }
   }
 
-  @media (orientation: portrait) {
+  // in a narrow cell (e.g. on a phone) the day in a line above the Moon
+  @container (aspect-ratio < 1.6) {
     header {
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      gap: 2px;
+
+      .day {
+        flex: 0 0 auto;
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        gap: 0.25em;
+      }
+
+      .day-number {
+        font-size: 0.9rem;
+        font-weight: 400;
+      }
+
+      .day-name {
+        font-size: 0.7rem;
+      }
+
+      .moon {
+        width: 100%;
+        min-height: 0;
+      }
     }
   }
 
@@ -191,28 +233,5 @@ $today: #6f3434;
     .moonlessNight {
       background-color: colors.$moonless-night;
     }
-  }
-}
-
-.CalendarInfo {
-  padding: 0.75rem 0.75rem 0.25rem;
-
-  .heading {
-    margin-bottom: 0.5rem;
-    font-size: 0.85rem;
-
-    .date {
-      font-weight: 600;
-    }
-
-    .moon-illumination {
-      color: var(--mui-palette-text-secondary);
-    }
-  }
-
-  .actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 0.25rem;
   }
 }

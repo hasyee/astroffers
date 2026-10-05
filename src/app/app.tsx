@@ -4,6 +4,7 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
+import Calendar from '../calendar/calendar';
 import Details from '../details/details';
 import Filter from '../filter/filter';
 import Header from '../header/header';
@@ -43,7 +44,9 @@ function FilterDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
  * Filter panel and table. The filter panel is open by default, the menu button of the header closes and opens it;
  * below `FILTER_PANEL_QUERY` there is no room for it beside the summary, so the filter is in a drawer instead.
  */
-function WideLayout() {
+type LayoutProps = { isCalendarOpen: boolean; onToggleCalendar: () => void };
+
+function WideLayout({ isCalendarOpen, onToggleCalendar }: LayoutProps) {
   const hasFilterPanel = useHasFilterPanel();
   const [isPanelOpen, setIsPanelOpen] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -55,7 +58,11 @@ function WideLayout() {
 
   return (
     <div className="App wide">
-      <Header onMenuClick={hasFilterPanel ? handleToggleFilter : handleOpenDrawer} />
+      <Header
+        onMenuClick={hasFilterPanel ? handleToggleFilter : handleOpenDrawer}
+        isCalendarOpen={isCalendarOpen}
+        onCalendarClick={onToggleCalendar}
+      />
       <main>
         {hasFilterPanel && (
           <aside className={classnames({ closed: !isPanelOpen })} inert={!isPanelOpen}>
@@ -63,6 +70,7 @@ function WideLayout() {
           </aside>
         )}
         <section>
+          <Calendar isOpen={isCalendarOpen} />
           <Summary />
           <div className="list-card">
             <List />
@@ -75,17 +83,18 @@ function WideLayout() {
   );
 }
 
-/** Summary bar, cards and the filter in a drawer */
-function CompactLayout() {
+/** Summary bar, cards and the filter in a drawer; the open calendar shows the times of the night below it */
+function CompactLayout({ isCalendarOpen, onToggleCalendar }: LayoutProps) {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const handleOpenFilter = useCallback(() => setIsFilterOpen(true), []);
   const handleCloseFilter = useCallback(() => setIsFilterOpen(false), []);
 
   return (
     <div className="App compact">
-      <Header onMenuClick={handleOpenFilter} />
-      <main>
-        <Summary compact />
+      <Header onMenuClick={handleOpenFilter} isCalendarOpen={isCalendarOpen} onCalendarClick={onToggleCalendar} />
+      <main className={classnames({ 'calendar-open': isCalendarOpen })}>
+        <Calendar isOpen={isCalendarOpen} compact />
+        <Summary compact isExpanded={isCalendarOpen} onToggle={onToggleCalendar} />
         <List compact />
       </main>
       <FilterDrawer isOpen={isFilterOpen} onClose={handleCloseFilter} />
@@ -97,6 +106,12 @@ function CompactLayout() {
 export default function App() {
   useCalculation();
   const isWideScreen = useIsWideScreen();
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const handleToggleCalendar = useCallback(() => setIsCalendarOpen(isOpen => !isOpen), []);
 
-  return isWideScreen ? <WideLayout /> : <CompactLayout />;
+  return isWideScreen ? (
+    <WideLayout isCalendarOpen={isCalendarOpen} onToggleCalendar={handleToggleCalendar} />
+  ) : (
+    <CompactLayout isCalendarOpen={isCalendarOpen} onToggleCalendar={handleToggleCalendar} />
+  );
 }

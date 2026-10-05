@@ -5,8 +5,7 @@ import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import App from './app/app';
 import LocationProvider from './location/location.provider';
 import ResultProvider from './result/result.provider';
-import StoredStateProvider from './query/query.provider';
-import QuerySync from './query/query.sync';
+import QueryStorage from './query/query.storage';
 import { initQuery } from './query/query.utils';
 import RouterProvider from './router/router.provider';
 import theme from './theme/theme';
@@ -22,14 +21,12 @@ createRoot(document.getElementById('root')!).render(
     <ThemeProvider theme={theme}>
       <CssBaseline enableColorScheme />
       <RouterProvider isQuerySticky>
-        <StoredStateProvider>
-          <LocationProvider>
-            <ResultProvider>
-              <App />
-              <QuerySync />
-            </ResultProvider>
-          </LocationProvider>
-        </StoredStateProvider>
+        <LocationProvider>
+          <ResultProvider>
+            <App />
+            <QueryStorage />
+          </ResultProvider>
+        </LocationProvider>
       </RouterProvider>
       <VersionListener />
     </ThemeProvider>

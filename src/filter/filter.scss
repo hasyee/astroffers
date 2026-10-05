@@ -13,22 +13,6 @@
     padding: 1.25rem 1rem 1rem;
   }
 
-  .DateInput {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-
-    .MuiTextField-root {
-      flex: 1 1 auto;
-      min-width: 0;
-    }
-
-    .MuiButton-root {
-      flex: 0 0 auto;
-      min-width: 0;
-    }
-  }
-
   .brightness {
     display: grid;
     grid-template-columns: 3fr 2fr;

@@ -12,36 +12,39 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import About from '../about/about';
-import Calendar from '../calendar/calendar';
 import { useDate } from '../date/date.hooks';
 import { formatShortDate } from '../display/display.utils';
 import Help from '../help/help';
+import { useCloseOnBack } from '../history/history.hooks';
 import { useIsWideScreen } from '../media/media.hooks';
-import { useGoBack, useMatchPath, useNavigate } from '../router/router.hooks';
 import './header.scss';
 
-/** `onMenuClick` toggles the filter panel on a wide screen, opens the filter drawer on a phone */
-export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
+type Dialog = 'help' | 'about';
+
+type Props = {
+  /** Toggles the filter panel on a wide screen, opens the filter drawer on a phone */
+  onMenuClick: () => void;
+  isCalendarOpen: boolean;
+  onCalendarClick: () => void;
+};
+
+export default function Header({ onMenuClick, isCalendarOpen, onCalendarClick }: Props) {
   const isWideScreen = useIsWideScreen();
   const date = useDate();
-  const navigate = useNavigate();
-  const handleClose = useGoBack();
   const [moreAnchor, setMoreAnchor] = useState<HTMLElement | null>(null);
+  const [dialog, setDialog] = useState<Dialog | null>(null);
   const handleOpenMore = useCallback((event: MouseEvent<HTMLElement>) => setMoreAnchor(event.currentTarget), []);
   const handleCloseMore = useCallback(() => setMoreAnchor(null), []);
-  const handleOpenCalendar = useCallback(() => navigate('/calendar'), [navigate]);
   const handleOpenHelp = useCallback(() => {
     setMoreAnchor(null);
-    navigate('/help');
-  }, [navigate]);
+    setDialog('help');
+  }, []);
   const handleOpenAbout = useCallback(() => {
     setMoreAnchor(null);
-    navigate('/about');
-  }, [navigate]);
-  // the dialogs are opened by their routes, but stay mounted to animate their closing
-  const isCalendarOpen = !!useMatchPath('calendar');
-  const isHelpOpen = !!useMatchPath('help');
-  const isAboutOpen = !!useMatchPath('about');
+    setDialog('about');
+  }, []);
+  const handleClose = useCallback(() => setDialog(null), []);
+  useCloseOnBack(!!dialog, handleClose);
 
   return (
     <AppBar position="static" color="inherit" elevation={2} className="Header">
@@ -52,10 +55,11 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
       {isWideScreen && <span className="title">Astroffers</span>}
       <div className="spacer" />
       <Button
-        color="inherit"
+        color={isCalendarOpen ? 'primary' : 'inherit'}
         startIcon={<CalendarMonthOutlinedIcon />}
-        onClick={handleOpenCalendar}
+        onClick={onCalendarClick}
         aria-label="Calendar"
+        aria-expanded={isCalendarOpen}
       >
         {formatShortDate(date)}
       </Button>
@@ -82,9 +86,8 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
           <ListItemText>About</ListItemText>
         </MenuItem>
       </Menu>
-      <Calendar isOpen={isCalendarOpen} onClose={handleClose} />
-      <Help isOpen={isHelpOpen} onClose={handleClose} />
-      <About isOpen={isAboutOpen} onClose={handleClose} />
+      <Help isOpen={dialog === 'help'} onClose={handleClose} />
+      <About isOpen={dialog === 'about'} onClose={handleClose} />
     </AppBar>
   );
 }
