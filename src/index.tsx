@@ -1,4 +1,5 @@
 import { createRoot } from 'react-dom/client';
+import '@fontsource-variable/inter';
 import { registerSW } from 'virtual:pwa-register';
 import CssBaseline from '@mui/material/CssBaseline';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';

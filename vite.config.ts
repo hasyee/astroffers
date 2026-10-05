@@ -18,8 +18,14 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
-        globPatterns: ['**/*.{js,css,html,png,ico,svg,webmanifest}'],
+        // of the font only its latin subset, the others are cached when a text needs them (e.g. a place name)
+        globPatterns: ['**/*.{js,css,html,png,ico,svg,webmanifest}', '**/inter-latin-wght-normal-*.woff2'],
         runtimeCaching: [
+          {
+            urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.endsWith('.woff2'),
+            handler: 'CacheFirst',
+            options: { cacheName: 'fonts', expiration: { maxEntries: 20 } }
+          },
           {
             // the preview images are served without any cache headers, so the service worker keeps them instead
             urlPattern: ({ url }) =>

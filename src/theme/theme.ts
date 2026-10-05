@@ -14,11 +14,12 @@ const theme = createTheme({
   typography: {
     // a dense app: 14px instead of 16px as the base size
     fontSize: 14,
+    // bundled (`index.tsx`); the system fonts only until it is loaded
     fontFamily: [
+      '"Inter Variable"',
       '-apple-system',
       'BlinkMacSystemFont',
       '"Segoe UI"',
-      'Roboto',
       'Oxygen',
       'Ubuntu',
       'Cantarell',
