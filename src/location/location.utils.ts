@@ -3,6 +3,20 @@ import type { Coords, Place } from './location.types';
 
 export const defaultPlace: Place = { coords: { lng: 19, lat: 47 }, name: '' };
 
+/** The name of the location of the device: the app follows it (see `useLocationFollowing`) */
+export const MY_LOCATION_NAME = 'My location';
+
+export const isMyLocation = (place: Place) => place.name === MY_LOCATION_NAME;
+
+/**
+ * The location of the device rounded to about a kilometer: precise enough for the sky, and the jitter of the
+ * positioning does not recalculate the result every minute
+ */
+export const roundMyLocation = ({ lng, lat }: Coords): Coords => ({
+  lng: Math.round(lng * 100) / 100,
+  lat: Math.round(lat * 100) / 100
+});
+
 export const getPlaceShortName = ({ coords: { lng, lat }, name }: Place) =>
   name
     .split(',')

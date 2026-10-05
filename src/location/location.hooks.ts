@@ -1,11 +1,23 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import type { Coords, NominatimPlace, Place } from './location.types';
 import { useDebounce } from '../debounce/debounce.hooks';
 import { createStateContext, useStateSetter, useStateValue } from '../provider/state.hooks';
 import { useQuerySelector, useQuerySetter } from '../router/router.hooks';
 import { parseQuery, serializeQuery } from '../router/router.utils';
 import type { Query } from '../router/router.types';
-import { coordsFromQuery, coordsToQuery, defaultPlace, getPlaceShortName, isSameCoords } from './location.utils';
+import {
+  MY_LOCATION_NAME,
+  coordsFromQuery,
+  coordsToQuery,
+  defaultPlace,
+  getPlaceShortName,
+  isMyLocation,
+  isSameCoords,
+  roundMyLocation
+} from './location.utils';
+
+/** Refresh interval of the location of the device while the app follows it */
+const FOLLOW_INTERVAL = 60 * 1000;
 
 /** The stored place (`localStorage`), the only place of its name; the coordinates come from the query */
 export const LocationContext = createStateContext<Place>(defaultPlace);
@@ -83,8 +95,9 @@ export const useMyLocation = (onFinish: () => void) => {
     try {
       setIsFetchingLocation(true);
       setLocationFetchingError(null);
-      const coords = await geolocation.fetch();
-      setLocation({ coords, name: '' });
+      const coords = roundMyLocation(await geolocation.fetch());
+      // followed from now on (see `useLocationFollowing`)
+      setLocation({ coords, name: MY_LOCATION_NAME });
       setIsFetchingLocation(false);
       onFinish();
     } catch (error) {
@@ -96,9 +109,57 @@ export const useMyLocation = (onFinish: () => void) => {
   return { isFetchingLocation, locationFetchingError, fetchLocation };
 };
 
+/**
+ * Follows the location of the device while it is chosen ("My location"): refreshes it on start, every minute and
+ * whenever the app gets visible again. Typed coordinates or a searched place stop it; a failed positioning (e.g.
+ * offline) keeps the last location.
+ */
+export const useLocationFollowing = () => {
+  const geolocation = useGeolocation();
+  const location = useLocation();
+  const setLocation = useLocationSetter();
+  const isFollowing = isMyLocation(location);
+  // read at the refresh, not to restart the following on every change
+  const locationRef = useRef(location);
+  const setLocationRef = useRef(setLocation);
+  useEffect(() => {
+    locationRef.current = location;
+    setLocationRef.current = setLocation;
+  }, [location, setLocation]);
+
+  useEffect(() => {
+    if (!isFollowing) return;
+    let isActive = true;
+    const refresh = async () => {
+      try {
+        const coords = roundMyLocation(await geolocation.fetch());
+        const place = locationRef.current;
+        if (isActive && isMyLocation(place) && !isSameCoords(place.coords, coords))
+          setLocationRef.current({ coords, name: MY_LOCATION_NAME });
+      } catch {
+        // the last location is kept
+      }
+    };
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') refresh();
+    };
+
+    refresh();
+    const interval = setInterval(refresh, FOLLOW_INTERVAL);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      isActive = false;
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [isFollowing, geolocation]);
+};
+
 export const useSearch = () => {
   const nominatim = useNominatim();
-  const { name } = useLocation();
+  const location = useLocation();
+  // the search starts from the name of a searched place, empty for the location of the device
+  const name = isMyLocation(location) ? '' : location.name;
 
   const [items, setItems] = useState<NominatimPlace[]>([]);
   const [isSearching, setIsSearching] = useState(false);

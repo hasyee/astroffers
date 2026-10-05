@@ -22,7 +22,8 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
           </p>
           <ul>
             <li>
-              <b>Location:</b> search for a place, type its coordinates, or use the location of your device.
+              <b>Location:</b> search for a place, type its coordinates, or use the location of your device. Your
+              location is followed: it is refreshed on start and every minute, until you choose another place.
             </li>
             <li>
               <b>Minimum observation time:</b> how long an object should be visible during the night at least.

@@ -10,6 +10,7 @@ import { ResetFilterButton } from '../filter/filter';
 import Header from '../header/header';
 import { useCloseOnBack } from '../history/history.hooks';
 import List from '../list/list';
+import { useLocationFollowing } from '../location/location.hooks';
 import { useHasFilterPanel, useIsWideScreen } from '../media/media.hooks';
 import { useCalculation } from '../result/result.hooks';
 import Sidebar from '../sidebar/sidebar';
@@ -106,6 +107,7 @@ function CompactLayout({ isCalendarOpen, onToggleCalendar }: LayoutProps) {
 export default function App() {
   useCalculation();
   useCalendarPrefetch();
+  useLocationFollowing();
   const isWideScreen = useIsWideScreen();
   const [isCalendarOpen, handleToggleCalendar] = useCalendarOpen();
 
