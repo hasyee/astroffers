@@ -28,6 +28,11 @@
     flex: 1 1 auto;
     min-height: 0;
     border-bottom: 1px solid var(--mui-palette-divider);
+
+    // black on a phone, as the header of the app above it (a paper on a wide screen)
+    .header {
+      background-color: var(--mui-palette-background-default);
+    }
   }
 
   > .content {

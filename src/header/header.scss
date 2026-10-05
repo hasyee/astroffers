@@ -13,6 +13,11 @@
     flex: 1 1 auto;
   }
 
+  // black on a phone, as the summary bar below it (a paper on a wide screen)
+  .App.compact & {
+    background-color: var(--mui-palette-background-default);
+  }
+
   // red as today in the calendar in the normal mode; in the red light mode in the color of the text, which the filter turns into a bright red
   // (red itself would turn dark)
   html:not(.red-light) & .red-light-toggle {
