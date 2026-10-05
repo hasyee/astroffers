@@ -24,9 +24,18 @@ const brightnessOptions: { value: BrightnessType; label: string }[] = [
 const typeCount = Object.keys(objectTypes).length;
 const constellationCount = Object.keys(constellations).length;
 
+export function ResetFilterButton() {
+  const resetFilter = useResetFilter();
+  return (
+    <Button startIcon={<RestartAltIcon />} onClick={resetFilter}>
+      Reset filter
+    </Button>
+  );
+}
+
+/** The fields of the filter, scrolled on their own */
 export default function Filter() {
   const filter = useFilter();
-  const resetFilter = useResetFilter();
   const setObservationTime = useFilterValueSetter('observationTime');
   const setTwilight = useFilterValueSetter('twilight');
   const setAltitude = useFilterValueSetter('altitude');
@@ -46,85 +55,77 @@ export default function Filter() {
 
   return (
     <div className="Filter">
-      <div className="inputs">
-        <Location />
+      <Location />
 
-        <NumberInput
-          label="Minimum observation time"
-          unit="min"
-          min={0}
-          max={1440}
-          value={filter.observationTime}
-          onChange={setObservationTime}
-        />
-        <NumberInput
-          label="Maximum altitude of the Sun"
-          unit="°"
-          min={-90}
-          max={0}
-          value={filter.twilight}
-          onChange={setTwilight}
-        />
-        <NumberInput
-          label="Minimum altitude of objects"
-          unit="°"
-          min={-90}
-          max={90}
-          value={filter.altitude}
-          onChange={setAltitude}
-        />
+      <NumberInput
+        label="Minimum observation time"
+        unit="min"
+        min={0}
+        max={1440}
+        value={filter.observationTime}
+        onChange={setObservationTime}
+      />
+      <NumberInput
+        label="Maximum altitude of the Sun"
+        unit="°"
+        min={-90}
+        max={0}
+        value={filter.twilight}
+        onChange={setTwilight}
+      />
+      <NumberInput
+        label="Minimum altitude of objects"
+        unit="°"
+        min={-90}
+        max={90}
+        value={filter.altitude}
+        onChange={setAltitude}
+      />
 
-        <FormControlLabel
-          label="Moonless night only"
-          control={<Switch checked={filter.moonless} onChange={event => setMoonless(event.target.checked)} />}
-        />
+      <FormControlLabel
+        label="Moonless night only"
+        control={<Switch checked={filter.moonless} onChange={event => setMoonless(event.target.checked)} />}
+      />
 
-        <div className="brightness">
-          <TextField
-            select
-            label="Maximum brightness"
-            value={filter.brightnessFilter}
-            onChange={event => setBrightnessFilter(event.target.value as BrightnessType)}
-          >
-            {brightnessOptions.map(({ value, label }) => (
-              <MenuItem key={value} value={value}>
-                {label}
-              </MenuItem>
-            ))}
-          </TextField>
-          {isMagnitude ? (
-            <NumberInput label="Value" min={-30} max={30} value={filter.magnitude} onChange={setMagnitude} />
-          ) : (
-            <NumberInput
-              label="Value"
-              min={-30}
-              max={30}
-              value={filter.surfaceBrightness}
-              onChange={setSurfaceBrightness}
-            />
-          )}
-        </div>
-
-        <SelectorField
-          label="Object types"
-          value={`${countSelected(filter.types)} of ${typeCount} selected`}
-          icon={<FilterListIcon />}
-          onClick={handleOpenTypes}
-        />
-
-        <SelectorField
-          label="Constellations"
-          value={`${countSelected(filter.constellations)} of ${constellationCount} selected`}
-          icon={<FilterListIcon />}
-          onClick={handleOpenConstellations}
-        />
+      <div className="brightness">
+        <TextField
+          select
+          label="Maximum brightness"
+          value={filter.brightnessFilter}
+          onChange={event => setBrightnessFilter(event.target.value as BrightnessType)}
+        >
+          {brightnessOptions.map(({ value, label }) => (
+            <MenuItem key={value} value={value}>
+              {label}
+            </MenuItem>
+          ))}
+        </TextField>
+        {isMagnitude ? (
+          <NumberInput label="Value" min={-30} max={30} value={filter.magnitude} onChange={setMagnitude} />
+        ) : (
+          <NumberInput
+            label="Value"
+            min={-30}
+            max={30}
+            value={filter.surfaceBrightness}
+            onChange={setSurfaceBrightness}
+          />
+        )}
       </div>
 
-      <div className="actions">
-        <Button startIcon={<RestartAltIcon />} onClick={resetFilter}>
-          Reset filter
-        </Button>
-      </div>
+      <SelectorField
+        label="Object types"
+        value={`${countSelected(filter.types)} of ${typeCount} selected`}
+        icon={<FilterListIcon />}
+        onClick={handleOpenTypes}
+      />
+
+      <SelectorField
+        label="Constellations"
+        value={`${countSelected(filter.constellations)} of ${constellationCount} selected`}
+        icon={<FilterListIcon />}
+        onClick={handleOpenConstellations}
+      />
 
       <SetFilterDialog
         title="Object types"

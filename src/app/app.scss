@@ -22,7 +22,7 @@
       transition: flex-basis 0.2s ease-out;
 
       // keeps its width while sliding, not to reflow the filter
-      > .Filter {
+      > .Sidebar {
         width: 320px;
       }
 
@@ -74,11 +74,11 @@
     align-items: center;
     justify-content: space-between;
     height: 50px;
-    padding: 0 0.5rem 0 1rem;
+    padding: 0 0.5rem;
     border-bottom: 1px solid var(--mui-palette-divider);
   }
 
-  .Filter {
+  .Sidebar {
     min-height: 0;
   }
 }

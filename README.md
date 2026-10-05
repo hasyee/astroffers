@@ -27,13 +27,16 @@ Node version: see `.nvmrc`.
 ## Structure
 
 Vite, React 19, TypeScript, MUI 9 (dark theme), Highcharts, sass. Source files are grouped by domain
-(`src/<domain>/<domain>.<role>.ts(x)`); state lives in small context-selector based state providers
-(`src/provider/`), persisted to `localStorage` where needed (location, filter, sorting).
+(`src/<domain>/<domain>.<role>.ts(x)`); the state of the main view (date, location, sorting, search, filter) lives in the
+URL query, so it can be shared, and is persisted to `localStorage` where needed (location, filter, sorting, search);
+the rest is in small context-selector based state providers (`src/provider/`).
 
 - `calculator/`: astronomical calculations (night, Moon, visibility of the objects), run in a web worker
 - `catalog/`: the compact NGC catalog and its type/constellation names
-- `filter/`, `location/`, `date/`: the inputs of the calculation
-- `result/`: runs the calculation whenever an input changes (debounced)
+- `filter/`, `location/`, `date/`: the inputs of the calculation; `sidebar/` frames the filter with its reset button
+  and the About and Help
+- `calendar/`: the nights of a month, the date picker of the app
+- `result/`: runs the calculation whenever an input changes (the night at once, the list debounced for typed fields)
 - `summary/`, `list/`, `details/`: the views of the result
 
 The layout is responsive: the desktop layout (summary, table) starts at 800px, with the filter panel beside it from

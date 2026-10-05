@@ -1,0 +1,30 @@
+.Sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  // as high as the header of the filter drawer; the icon of the button in line with the fields
+  .header {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    height: 50px;
+    padding: 0 0.5rem;
+    border-bottom: 1px solid var(--mui-palette-divider);
+  }
+
+  .content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  // the About at the left, the Help at the right, the icons in line with the fields
+  .footer {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-top: 1px solid var(--mui-palette-divider);
+  }
+}

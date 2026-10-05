@@ -2,17 +2,17 @@ import { useCallback, useState } from 'react';
 import classnames from 'classnames';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Calendar from '../calendar/calendar';
 import { useCalendarPrefetch } from '../calendar/calendar.hooks';
 import Details from '../details/details';
-import Filter from '../filter/filter';
+import { ResetFilterButton } from '../filter/filter';
 import Header from '../header/header';
 import { useCloseOnBack } from '../history/history.hooks';
 import List from '../list/list';
 import { useHasFilterPanel, useIsWideScreen } from '../media/media.hooks';
 import { useCalculation } from '../result/result.hooks';
+import Sidebar from '../sidebar/sidebar';
 import Summary from '../summary/summary';
 import './app.scss';
 
@@ -29,14 +29,12 @@ function FilterDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
       slotProps={{ paper: { className: 'FilterDrawerPaper' } }}
     >
       <div className="header">
-        <Typography variant="h6" component="h2">
-          Filter
-        </Typography>
+        <ResetFilterButton />
         <IconButton onClick={onClose} aria-label="Close">
           <CloseIcon />
         </IconButton>
       </div>
-      <Filter />
+      <Sidebar hasHeader={false} />
     </Drawer>
   );
 }
@@ -67,7 +65,7 @@ function WideLayout({ isCalendarOpen, onToggleCalendar }: LayoutProps) {
       <main>
         {hasFilterPanel && (
           <aside className={classnames({ closed: !isPanelOpen })} inert={!isPanelOpen}>
-            <Filter />
+            <Sidebar />
           </aside>
         )}
         <section>
