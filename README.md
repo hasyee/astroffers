@@ -37,7 +37,7 @@ the rest is in small context-selector based state providers (`src/provider/`).
   and the About and Help
 - `calendar/`: the nights of a month, the date picker of the app
 - `result/`: runs the calculation whenever an input changes (the night at once, the list debounced for typed fields)
-- `summary/`, `list/`, `details/`: the views of the result
+- `summary/`, `list/`, `details/`: the views of the result; `stellarium/` opens an object on Stellarium Web
 
 The layout is responsive: the desktop layout (summary, table) starts at 800px, with the filter panel beside it from
 1110px and the filter in a drawer below that; under 800px the mobile layout (filter drawer, cards) is used.

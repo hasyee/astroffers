@@ -21,11 +21,15 @@ import {
   useStepDetails
 } from './details.hooks';
 import DetailsContent from './details.content';
+import StellariumMenu from '../stellarium/stellarium.menu';
 import { useSwipe } from '../swipe/swipe.hooks';
 import './details.scss';
 
-/** Steps to the previous / next object of the list; icons only in the footer of the compact drawer */
-function Navigation({ isCompact = false }: { isCompact?: boolean }) {
+/**
+ * Steps to the previous / next object of the list, with the Stellarium menu between them; icons only in the footer
+ * of the compact drawer
+ */
+function Navigation({ ngcInfo, isCompact = false }: { ngcInfo: NgcInfo | null; isCompact?: boolean }) {
   const stepDetails = useStepDetails();
   const [prev, next] = useAdjacentNgcInfos();
   const handlePrev = useCallback(() => prev && stepDetails(prev.object.id), [prev, stepDetails]);
@@ -46,6 +50,7 @@ function Navigation({ isCompact = false }: { isCompact?: boolean }) {
         <IconButton onClick={handlePrev} disabled={!prev} aria-label="Previous">
           <ArrowBackIcon />
         </IconButton>
+        {ngcInfo && <StellariumMenu ngcInfo={ngcInfo} />}
         <IconButton onClick={handleNext} disabled={!next} aria-label="Next">
           <ArrowForwardIcon />
         </IconButton>
@@ -58,6 +63,7 @@ function Navigation({ isCompact = false }: { isCompact?: boolean }) {
       <Button startIcon={<ArrowBackIcon />} onClick={handlePrev} disabled={!prev}>
         Previous
       </Button>
+      {ngcInfo && <StellariumMenu ngcInfo={ngcInfo} />}
       <Button endIcon={<ArrowForwardIcon />} onClick={handleNext} disabled={!next}>
         Next
       </Button>
@@ -117,7 +123,7 @@ export default function Details() {
         <DialogTitleWithClose onClose={closeDetails}>{title}</DialogTitleWithClose>
         <DialogContent dividers>{body}</DialogContent>
         <DialogActions>
-          <Navigation />
+          <Navigation ngcInfo={ngcInfo} />
         </DialogActions>
       </Dialog>
     );
@@ -143,7 +149,7 @@ export default function Details() {
       </div>
       {ngcInfo && <Carousel ngcInfo={ngcInfo} />}
       <div className="footer">
-        <Navigation isCompact />
+        <Navigation ngcInfo={ngcInfo} isCompact />
       </div>
     </Drawer>
   );
