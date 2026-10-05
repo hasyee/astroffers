@@ -47,7 +47,7 @@ export default defineConfig({
       manifest: {
         name: 'Astroffers',
         short_name: 'Astroffers',
-        description: 'Take offers to watch at given nights by the NGC2000 catalog',
+        description: 'Take offers to watch at given nights by the NGC 2000 and the Messier catalogs',
         start_url: '.',
         display: 'standalone',
         theme_color: THEME_COLOR,

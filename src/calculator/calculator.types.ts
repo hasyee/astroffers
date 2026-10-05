@@ -37,7 +37,8 @@ export type BrightnessType = 'magnitude' | 'surfaceBrightness';
 export type NgcObject = {
   /** `m<Messier number>` for a Messier object, else `ngc<NGC number>` (e.g. `m27`, `ngc884`); in the route too */
   id: string;
-  ngc: number;
+  /** Missing for the Messier objects without an NGC number (M24, M25, M40, M45), at the end of the catalog */
+  ngc?: number;
   messier?: number;
   name?: string;
   /** Right ascension (J2000) */

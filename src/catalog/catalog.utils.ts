@@ -18,7 +18,7 @@ export const resolveTypes = (types: string[]) => types.map(type => allTypes[type
 export const resolveConstellation = (constellation: string) => constellations[constellation] ?? constellation;
 
 export const getTitle = ({ ngc, messier, name }: NgcObject) =>
-  [`NGC ${ngc}`, messier ? `M ${messier}` : null, name || null].filter(term => term).join(' | ');
+  [ngc ? `NGC ${ngc}` : null, messier ? `M ${messier}` : null, name || null].filter(term => term).join(' | ');
 
 const MIN_FIELD_OF_VIEW: ArcMin = 6;
 const MAX_FIELD_OF_VIEW: ArcMin = 180;

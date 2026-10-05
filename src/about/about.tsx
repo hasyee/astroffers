@@ -61,7 +61,7 @@ export default function About({ isOpen, onClose }: { isOpen: boolean; onClose: (
           <div>
             <Typography variant="h5">Astroffers</Typography>
             <Typography color="text.secondary">
-              Take offers to watch at given nights by the NGC 2000 catalog.
+              Take offers to watch at given nights by the NGC 2000 and the Messier catalogs.
             </Typography>
           </div>
         </div>
@@ -98,7 +98,12 @@ export default function About({ isOpen, onClose }: { isOpen: boolean; onClose: (
             </tr>
             <tr>
               <th>Catalog</th>
-              <td>NGC 2000.0 (R. W. Sinnott, 1988)</td>
+              <td>
+                NGC 2000.0 (R. W. Sinnott, 1988); the Messier objects without an NGC number from{' '}
+                <a href="http://www.messier.seds.org" target="_blank" rel="noreferrer">
+                  SEDS
+                </a>
+              </td>
             </tr>
             <tr>
               <th>Previews</th>

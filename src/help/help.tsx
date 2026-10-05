@@ -10,9 +10,10 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
       <DialogContent dividers>
         <div className="running-text">
           <p>
-            Astroffers helps you to discover the objects of the NGC 2000 catalog. Along with your filter it lists the
-            objects that are visible on the chosen night at your location. The night is chosen in the calendar, opened
-            by the date in the header. The list is recalculated automatically whenever you change the filter.
+            Astroffers helps you to discover the objects of the NGC 2000 catalog and every Messier object, including the
+            few without an NGC number (M24, M25, M40 and the Pleiades, M45). Along with your filter it lists the objects
+            that are visible on the chosen night at your location. The night is chosen in the calendar, opened by the
+            date in the header. The list is recalculated automatically whenever you change the filter.
           </p>
 
           <h3>Filter</h3>
@@ -45,8 +46,8 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
               is computed from the magnitude and the size, so objects without size data are left out by it.
             </li>
             <li>
-              <b>Object types and constellations:</b> select the kinds of objects and the constellations you are
-              interested in.
+              <b>Object types and constellations:</b> select the kinds of objects (galaxies, clusters, nebulae, double
+              stars and more) and the constellations you are interested in.
             </li>
           </ul>
 
@@ -91,8 +92,9 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             altitude (<b>Max / Alt</b>) and the length of the visibility (<b>Sum</b>). The list is sorted by the best
             visibility by default; click a header (or use the sort selector on a phone) to sort otherwise. Objects can
             be searched by their NGC number, Messier number and name; <code>*</code> in the Messier or the name search
-            (or its asterisk button) lists every object that has a Messier number or a name. On a wide screen the image
-            button in the corner of the table shows or hides the images of the objects.
+            (or its asterisk button) lists every object that has a Messier number or a name. Sorted by the NGC number,
+            the Messier objects without one come last. On a wide screen the image button in the corner of the table
+            shows or hides the images of the objects.
           </p>
 
           <h3>Details</h3>

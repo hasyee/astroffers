@@ -60,13 +60,13 @@ function Carousel({ ngcInfo }: { ngcInfo: NgcInfo }) {
   const [prev, next] = useAdjacentNgcInfos();
   const onPrev = useMemo(() => (prev ? () => stepDetails(prev.object.id) : null), [prev, stepDetails]);
   const onNext = useMemo(() => (next ? () => stepDetails(next.object.id) : null), [next, stepDetails]);
-  const trackRef = useSwipe<HTMLDivElement>({ onPrev, onNext }, ngcInfo.object.ngc);
+  const trackRef = useSwipe<HTMLDivElement>({ onPrev, onNext }, ngcInfo.object.id);
 
   // keyed by the object, so a neighbor stepped to is kept as it is (e.g. its loaded image and charts)
   const pages: [string, NgcInfo | null][] = [
-    [prev ? String(prev.object.ngc) : 'no-prev', prev],
-    [String(ngcInfo.object.ngc), ngcInfo],
-    [next ? String(next.object.ngc) : 'no-next', next]
+    [prev ? prev.object.id : 'no-prev', prev],
+    [ngcInfo.object.id, ngcInfo],
+    [next ? next.object.id : 'no-next', next]
   ];
 
   return (

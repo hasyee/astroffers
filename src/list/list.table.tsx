@@ -133,7 +133,7 @@ export default function ListTable({ list }: { list: NgcInfo[] }) {
         </thead>
         <tbody>
           {visibleList.map(ngcInfo => (
-            <Row key={ngcInfo.object.ngc} ngcInfo={ngcInfo} hasImages={hasImages} />
+            <Row key={ngcInfo.object.id} ngcInfo={ngcInfo} hasImages={hasImages} />
           ))}
         </tbody>
       </table>

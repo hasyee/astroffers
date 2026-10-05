@@ -2,7 +2,7 @@ import { useState } from 'react';
 import classnames from 'classnames';
 import CircularProgress from '@mui/material/CircularProgress';
 import type { NgcInfo } from '../calculator/calculator.types';
-import { getObjectImgSrc } from '../catalog/catalog.utils';
+import { getObjectImgSrc, getTitle } from '../catalog/catalog.utils';
 import { toDetails } from '../display/display.utils';
 import { useResultNightInfo, useResultParams } from '../result/result.hooks';
 import { useHorizontalCoords } from './details.hooks';
@@ -37,7 +37,7 @@ function Preview({ ngcInfo }: { ngcInfo: NgcInfo }) {
             className={classnames({ hidden: loadedSrc !== src })}
             src={src}
             crossOrigin="anonymous"
-            alt={`DSS2 preview of NGC ${ngcInfo.object.ngc}`}
+            alt={`DSS2 preview of ${getTitle(ngcInfo.object)}`}
             onLoad={() => setLoadedSrc(src)}
             onError={() => setFailedSrc(src)}
           />

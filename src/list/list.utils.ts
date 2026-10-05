@@ -4,7 +4,17 @@ import type { ListSearch, SortBy } from './list.types';
 
 type Selector = (ngcInfo: NgcInfo) => number | string | null | undefined;
 
-/** Ascending order; objects missing the value go to the end, in NGC order */
+/** The order of the catalog: by NGC number, the Messier objects without one at the end by their Messier number */
+const byCatalog = ({ object: a }: NgcInfo, { object: b }: NgcInfo) =>
+  a.ngc !== undefined && b.ngc !== undefined
+    ? a.ngc - b.ngc
+    : a.ngc !== undefined
+      ? -1
+      : b.ngc !== undefined
+        ? +1
+        : (a.messier ?? 0) - (b.messier ?? 0);
+
+/** Ascending order; objects missing the value go to the end, in the order of the catalog */
 const by =
   (select: Selector) =>
   (a: NgcInfo, b: NgcInfo): number => {
@@ -12,7 +22,7 @@ const by =
     const bValue = select(b);
     const aMissing = aValue === undefined || aValue === null;
     const bMissing = bValue === undefined || bValue === null;
-    if (aMissing && bMissing) return a.object.ngc - b.object.ngc;
+    if (aMissing && bMissing) return byCatalog(a, b);
     if (aMissing) return +1;
     if (bMissing) return -1;
     if (aValue < bValue) return -1;

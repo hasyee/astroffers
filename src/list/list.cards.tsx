@@ -148,7 +148,7 @@ export default function ListCards({ list }: { list: NgcInfo[] }) {
     <div className="ListCards">
       <Toolbar />
       {visibleList.map(ngcInfo => (
-        <Item key={ngcInfo.object.ngc} ngcInfo={ngcInfo} />
+        <Item key={ngcInfo.object.id} ngcInfo={ngcInfo} />
       ))}
       {hasMore && <div ref={sentinelRef} className="sentinel" />}
     </div>

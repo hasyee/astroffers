@@ -6,5 +6,6 @@
   "Neb": "Nebula",
   "Ast": "Asterism",
   "SNR": "Supernova Remnant",
-  "MWSC": "Milky Way Star Cloud"
+  "MWSC": "Milky Way Star Cloud",
+  "**": "Double Star"
 }

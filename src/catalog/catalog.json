@@ -48667,9 +48667,8 @@
     "types": ["Gxy"]
   },
   {
-    "id": "m24",
+    "id": "ngc4715",
     "ngc": 4715,
-    "messier": 24,
     "ra": 3.3596061,
     "de": 0.4855894,
     "constellation": "Com",
@@ -48778,9 +48777,8 @@
     "types": ["Gxy"]
   },
   {
-    "id": "m25",
+    "id": "ngc4725",
     "ngc": 4725,
-    "messier": 25,
     "ra": 3.3616859,
     "de": 0.4450638,
     "constellation": "Com",
@@ -81107,5 +81105,50 @@
     "magnitude": 15.2,
     "surfaceBrightness": 12.6,
     "types": ["Gxy"]
+  },
+  {
+    "id": "m24",
+    "messier": 24,
+    "name": "Sagittarius Star Cloud",
+    "ra": 4.7861291,
+    "de": -0.322595,
+    "constellation": "Sgr",
+    "size": [90, 90],
+    "magnitude": 4.6,
+    "surfaceBrightness": 14.1,
+    "types": ["MWSC"]
+  },
+  {
+    "id": "m25",
+    "messier": 25,
+    "ra": 4.85027,
+    "de": -0.3359759,
+    "constellation": "Sgr",
+    "size": [32, 32],
+    "magnitude": 4.6,
+    "surfaceBrightness": 11.9,
+    "types": ["OC"]
+  },
+  {
+    "id": "m40",
+    "messier": 40,
+    "name": "Winnecke 4",
+    "ra": 3.2393311,
+    "de": 1.0137454,
+    "constellation": "UMa",
+    "magnitude": 8.4,
+    "types": ["**"]
+  },
+  {
+    "id": "m45",
+    "messier": 45,
+    "name": "Pleiades",
+    "ra": 0.9904744,
+    "de": 0.4209152,
+    "constellation": "Tau",
+    "size": [110, 110],
+    "magnitude": 1.6,
+    "surfaceBrightness": 11.5,
+    "types": ["OC"]
   }
 ]

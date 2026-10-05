@@ -51,6 +51,8 @@ node scripts/catalog.mjs [path/to/astroffers-core/data]
 ```
 
 It keeps the J2000 coordinates in radians and the size in arc minutes, and omits the missing values (4 MB → 1 MB).
+It also adds the Messier objects without an NGC number (M24, M25, M40, M45) at the end, and fixes M24 and M25,
+which the source data gives to NGC 4715 and 4725 instead of IC 4715 and 4725.
 
 ### Preview images
 
