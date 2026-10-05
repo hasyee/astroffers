@@ -94,8 +94,10 @@ const getSize = (diameter: number, distance: number): [ArcMin, ArcMin] => {
 const getSurfaceBrightness = (magnitude: number, [a, b]: [ArcMin, ArcMin]) =>
   round1(magnitude + 2.5 * log10((PI / 4) * a * b));
 
+type SolarBody = { id: string; name: string; type: string; diameter: number; skySource: string; wikipedia: string };
+
 const toObject = (
-  { id, name, type, diameter, skySource }: { id: string; name: string; type: string; diameter: number; skySource: string },
+  { id, name, type, diameter, skySource, wikipedia }: SolarBody,
   geocentric: Vector,
   magnitude: number
 ): NgcObject => {
@@ -112,12 +114,18 @@ const toObject = (
     surfaceBrightness: getSurfaceBrightness(magnitude, size),
     types: [type],
     photo: photos[id],
-    skySource
+    skySource,
+    wikipedia
   };
 };
 
 const getMajorObject = (body: (typeof MAJOR_BODIES)[number], time: AstroTime) =>
-  toObject({ ...body, skySource: body.name }, GeoVector(body.body, time, true), Illumination(body.body, time).mag);
+  toObject(
+    // Mercury is the planet in parentheses only
+    { ...body, skySource: body.name, wikipedia: body.id === 'mercury' ? 'Mercury (planet)' : body.name },
+    GeoVector(body.body, time, true),
+    Illumination(body.body, time).mag
+  );
 
 const getMinorObject = (body: MinorBody, time: AstroTime, earth: Xyz, julianDate: number) => {
   // corrected for the light time: the position where the body was when its light left it
@@ -132,7 +140,7 @@ const getMinorObject = (body: MinorBody, time: AstroTime, earth: Xyz, julianDate
   );
   return toObject(
     // by the provisional designation: some names are of other objects in Stellarium Web (e.g. Iris, Metis)
-    { ...body, skySource: body.designation },
+    { ...body, skySource: body.designation, wikipedia: `${body.number} ${body.name}` },
     new Vector(...geo, time),
     getMinorMagnitude(body, sunDistance, earthDistance, phaseAngle)
   );

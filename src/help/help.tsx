@@ -118,12 +118,13 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             without the pull of the planets, so their positions drift slowly, by up to a degree years away from now.
           </p>
           <p>
-            The <b>Stellarium</b> button between them opens the object on{' '}
+            The <b>Open in</b> button between them opens the object on{' '}
             <a href="https://stellarium-web.org" target="_blank" rel="noopener">
               Stellarium Web
-            </a>{' '}
-            in a new tab, as the sky looks <b>now</b> or at its <b>best visibility</b> in the chosen night, from your
-            location.
+            </a>
+            , as the sky looks <b>now</b> or at its <b>best visibility</b> in the chosen night, from your location, or
+            its article on Wikipedia (in its app, if installed); an NGC object without an article is looked up by the
+            search of Wikipedia.
           </p>
         </div>
       </DialogContent>

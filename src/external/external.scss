@@ -1,0 +1,14 @@
+.OpenInMenu {
+  .time {
+    margin-left: 1.5rem;
+    color: var(--mui-palette-text-secondary);
+  }
+
+  // the arrow of an item opening a submenu, at its right end
+  .submenu {
+    margin-left: auto;
+    padding-left: 1rem;
+    box-sizing: content-box;
+    color: var(--mui-palette-text-secondary);
+  }
+}

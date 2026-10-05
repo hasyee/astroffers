@@ -57,6 +57,8 @@ export type NgcObject = {
   photo?: Photo;
   /** The name of the object in Stellarium Web, when it is not its id upper-cased (the bodies of the Solar System) */
   skySource?: string;
+  /** The title of its Wikipedia article, when it is not `Messier <n>` or `NGC <n>` (the bodies of the Solar System) */
+  wikipedia?: string;
 };
 
 /** Photo of an object with its credit and license, linking to its source page */

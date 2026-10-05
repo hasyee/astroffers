@@ -2,6 +2,7 @@ import type { ArcMin, Degrees, NgcInfo, NgcObject, Timestamp } from '../calculat
 import { eqToAz } from '../calculator/calculator.coords';
 import { getLocation, normalizeRad, radToDeg } from '../calculator/calculator.units';
 import type { Coords } from '../location/location.types';
+import wikipediaNgcs from './external.wikipedia.json';
 
 const MIN_FIELD_OF_VIEW: Degrees = 2;
 const MAX_FIELD_OF_VIEW: Degrees = 60;
@@ -32,4 +33,22 @@ export const getStellariumWebUrl = ({ object, eqCoordsOnDate }: NgcInfo, time: T
     fov: getFieldOfView(object.size).toFixed(2)
   });
   return `https://stellarium-web.org/skysource/${encodeURIComponent(getSkySourceName(object))}?${params}`;
+};
+
+/** The NGC objects having an article on Wikipedia (`scripts/wikipedia.mjs`) */
+const articleNgcs = new Set<number>(wikipediaNgcs);
+
+const toArticleUrl = (title: string) =>
+  `https://en.wikipedia.org/wiki/${encodeURIComponent(title.replaceAll(' ', '_'))}`;
+
+/**
+ * Link to the article of the object on the English Wikipedia (`Messier 27`, `NGC 884`, `Mars`), opened by its app
+ * when installed; an NGC object without an article by its search (a missing article would be an error page in the
+ * app, which takes over only the links of the articles), which lists it among the other objects of the catalog
+ */
+export const getWikipediaUrl = ({ id, ngc, messier, wikipedia }: NgcObject) => {
+  if (wikipedia) return toArticleUrl(wikipedia);
+  if (id.startsWith('m') && messier !== undefined) return toArticleUrl(`Messier ${messier}`);
+  if (ngc !== undefined && articleNgcs.has(ngc)) return toArticleUrl(`NGC ${ngc}`);
+  return `https://en.wikipedia.org/w/index.php?${new URLSearchParams({ search: `NGC ${ngc}` })}`;
 };

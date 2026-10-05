@@ -21,12 +21,12 @@ import {
   useStepDetails
 } from './details.hooks';
 import DetailsContent from './details.content';
-import StellariumMenu from '../stellarium/stellarium.menu';
+import OpenInMenu from '../external/external.menu';
 import { useSwipe } from '../swipe/swipe.hooks';
 import './details.scss';
 
 /**
- * Steps to the previous / next object of the list, with the Stellarium menu between them; icons only in the footer
+ * Steps to the previous / next object of the list, with the Open in menu between them; icons only in the footer
  * of the compact drawer
  */
 function Navigation({ ngcInfo, isCompact = false }: { ngcInfo: NgcInfo | null; isCompact?: boolean }) {
@@ -50,7 +50,7 @@ function Navigation({ ngcInfo, isCompact = false }: { ngcInfo: NgcInfo | null; i
         <IconButton onClick={handlePrev} disabled={!prev} aria-label="Previous">
           <ArrowBackIcon />
         </IconButton>
-        {ngcInfo && <StellariumMenu ngcInfo={ngcInfo} />}
+        {ngcInfo && <OpenInMenu ngcInfo={ngcInfo} />}
         <IconButton onClick={handleNext} disabled={!next} aria-label="Next">
           <ArrowForwardIcon />
         </IconButton>
@@ -63,7 +63,7 @@ function Navigation({ ngcInfo, isCompact = false }: { ngcInfo: NgcInfo | null; i
       <Button startIcon={<ArrowBackIcon />} onClick={handlePrev} disabled={!prev}>
         Previous
       </Button>
-      {ngcInfo && <StellariumMenu ngcInfo={ngcInfo} />}
+      {ngcInfo && <OpenInMenu ngcInfo={ngcInfo} />}
       <Button endIcon={<ArrowForwardIcon />} onClick={handleNext} disabled={!next}>
         Next
       </Button>

@@ -38,7 +38,7 @@ the rest is in small context-selector based state providers (`src/provider/`).
   and the About and Help
 - `calendar/`: the nights of a month, the date picker of the app
 - `result/`: runs the calculation whenever an input changes (the night at once, the list debounced for typed fields)
-- `summary/`, `list/`, `details/`: the views of the result; `stellarium/` opens an object on Stellarium Web
+- `summary/`, `list/`, `details/`: the views of the result; `external/` opens an object on Stellarium Web or Wikipedia
 
 The layout is responsive: the desktop layout (summary, table) starts at 800px, with the filter panel beside it from
 1110px and the filter in a drawer below that; under 800px the mobile layout (filter drawer, cards) is used.
@@ -67,6 +67,16 @@ node scripts/solar.mjs
 
 Their photos (`public/solar/`) come from the Wikipedia articles of the bodies, via Wikimedia Commons; the credits and
 licenses are in `src/solar/solar.photos.ts`.
+
+### Wikipedia
+
+The details open the articles of the objects on Wikipedia. About half of the NGC objects have none: they are opened by
+the search of Wikipedia instead. Refresh the list of the NGC objects having an article
+(`src/external/external.wikipedia.json`) by
+
+```
+node scripts/wikipedia.mjs
+```
 
 ### Preview images
 
