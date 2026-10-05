@@ -92,45 +92,38 @@ function Item({ ngcInfo }: { ngcInfo: NgcInfo }) {
 
   return (
     <div className="Item" onClick={handleClick}>
-      <div className="heading">
-        <img
-          className="thumbnail"
-          src={getObjectImgSrc(ngcInfo.object, 80)}
-          crossOrigin="anonymous"
-          alt=""
-          loading="lazy"
-        />
-        <div>
-          <div className="title">{getTitle(ngcInfo.object)}</div>
-          <div className="subtitle">
-            {row.typeNames} in {row.constellationName}
+      {/* as high as the card; the size of the details, to share its cached image */}
+      <img className="thumbnail" src={getObjectImgSrc(ngcInfo.object)} crossOrigin="anonymous" alt="" loading="lazy" />
+      <div className="info">
+        <div className="title">{getTitle(ngcInfo.object)}</div>
+        <div className="subtitle">
+          {row.typeNames} in {row.constellationName}
+        </div>
+        <div className="properties">
+          <div>
+            <label>From</label>
+            {row.from}
           </div>
-        </div>
-      </div>
-      <div className="properties">
-        <div>
-          <label>From</label>
-          {row.from}
-        </div>
-        <div>
-          <label>Max / Alt</label>
-          {row.max} / {row.altitudeAtMax}
-        </div>
-        <div>
-          <label>To</label>
-          {row.to}
-        </div>
-        <div>
-          <label>Sum</label>
-          {row.sum}
-        </div>
-        <div>
-          <label>Magnitude</label>
-          {row.magnitude}
-        </div>
-        <div>
-          <label>Surface br.</label>
-          {row.surfaceBrightness}
+          <div>
+            <label>Max / Alt</label>
+            {row.max} / {row.altitudeAtMax}
+          </div>
+          <div>
+            <label>To</label>
+            {row.to}
+          </div>
+          <div>
+            <label>Sum</label>
+            {row.sum}
+          </div>
+          <div>
+            <label>Magnitude</label>
+            {row.magnitude}
+          </div>
+          <div>
+            <label>Surface br.</label>
+            {row.surfaceBrightness}
+          </div>
         </div>
       </div>
     </div>

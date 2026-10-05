@@ -162,7 +162,19 @@
     }
   }
 
+  // the image is a square as high as the information beside it, which is laid out in fixed lines for that: the
+  // title, the subtitle, and two rows of properties (a label and a value each) below a margin
   .Item {
+    $title: 1.25rem;
+    $subtitle: 1.125rem;
+    $margin: 0.5rem;
+    $label: 1rem;
+    $value: 1.125rem;
+    $row-gap: 0.25rem;
+    $height: $title + $subtitle + $margin + 2 * ($label + $value) + $row-gap;
+
+    display: flex;
+    gap: 0.5rem;
     padding: 0.5rem;
     border-bottom: 1px solid var(--mui-palette-divider);
     cursor: pointer;
@@ -171,42 +183,56 @@
       background-color: rgba(255, 255, 255, 0.07);
     }
 
-    .heading {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 0.5rem;
-    }
-
     .thumbnail {
       flex: 0 0 auto;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
+      width: $height;
+      height: $height;
+      border-radius: var(--mui-shape-borderRadius);
       background-color: black;
       filter: grayscale(1);
     }
 
+    .info {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    // a line each, whatever long
+    .title,
+    .subtitle,
+    .properties > div {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     .title {
       font-weight: 600;
+      line-height: $title;
     }
 
     .subtitle {
       font-size: 0.8rem;
+      line-height: $subtitle;
       color: var(--mui-palette-text-secondary);
     }
 
     .properties {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      row-gap: 0.25rem;
+      // the middle column has the longest values (Max / Alt)
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) minmax(0, 1fr);
+      column-gap: 0.25rem;
+      row-gap: $row-gap;
+      margin-top: $margin;
       font-size: 0.8rem;
+      line-height: $value;
       font-variant-numeric: tabular-nums;
 
       label {
         display: block;
         font-size: 0.7rem;
         font-weight: 600;
+        line-height: $label;
         color: var(--mui-palette-text-secondary);
       }
     }
