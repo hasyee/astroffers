@@ -22,7 +22,7 @@ services:
         name: Cache-Control
         value: no-cache
     routes:
-      # client-side routes (/objects/:ngc) are served by the app; existing files are served as they are
+      # client-side routes (/:ngc) are served by the app; existing files are served as they are
       - type: rewrite
         source: /*
         destination: /index.html

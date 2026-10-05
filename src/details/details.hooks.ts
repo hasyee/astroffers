@@ -6,10 +6,10 @@ import { useDisplayedList } from '../list/list.hooks';
 import { useResultList, useResultParams } from '../result/result.hooks';
 import { useGoBack, useMatchPath, useNavigate } from '../router/router.hooks';
 
-/** Route of the details view */
-const DETAILS_PATH = 'objects/:ngc';
+/** Route of the details view: the NGC number itself (e.g. `/224`) */
+const DETAILS_PATH = ':ngc';
 
-const getDetailsPath = (ngc: number) => `/objects/${ngc}`;
+const getDetailsPath = (ngc: number) => `/${ngc}`;
 
 /** NGC number of the object opened in the details view, from the route */
 export const useOpenedNgc = () => {
