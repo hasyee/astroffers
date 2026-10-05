@@ -78,6 +78,7 @@ $today: #6f3434;
 }
 
 .CalendarItem {
+  position: relative;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -99,6 +100,15 @@ $today: #6f3434;
     &.open {
       background-color: color-mix(in srgb, $today, black 20%);
     }
+  }
+
+  // the night chosen in the filter: a frame over the cell, the bands included
+  &.selected::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 2px solid var(--mui-palette-primary-main);
+    pointer-events: none;
   }
 
   // as in astro-calendar: the day and the Moon side by side, or below each other in portrait, both centered

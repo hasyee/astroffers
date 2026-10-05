@@ -18,8 +18,9 @@ export default function CalendarItem({
   isOtherMonth,
   info,
   bands,
+  isSelected,
   onShowNight
-}: CalendarDay & { onShowNight: () => void }) {
+}: CalendarDay & { isSelected: boolean; onShowNight: () => void }) {
   const setDate = useDateSetter();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -36,6 +37,7 @@ export default function CalendarItem({
         className={classnames('CalendarItem', {
           'other-month': isOtherMonth,
           today: day === getToday(),
+          selected: isSelected,
           open: !!anchorEl
         })}
         onClick={handleOpen}

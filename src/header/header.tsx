@@ -13,6 +13,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import About from '../about/about';
 import Calendar from '../calendar/calendar';
+import { useDate } from '../date/date.hooks';
+import { formatShortDate } from '../display/display.utils';
 import Help from '../help/help';
 import { useIsWideScreen } from '../media/media.hooks';
 import { useGoBack, useMatchPath, useNavigate } from '../router/router.hooks';
@@ -21,6 +23,7 @@ import './header.scss';
 /** `onMenuClick` toggles the filter panel on a wide screen, opens the filter drawer on a phone */
 export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
   const isWideScreen = useIsWideScreen();
+  const date = useDate();
   const navigate = useNavigate();
   const handleClose = useGoBack();
   const [moreAnchor, setMoreAnchor] = useState<HTMLElement | null>(null);
@@ -45,17 +48,17 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
       <IconButton onClick={onMenuClick} aria-label="Filter">
         <MenuIcon />
       </IconButton>
-      <span className="title">Astroffers</span>
+      {/* on a phone the date takes the room of the title */}
+      {isWideScreen && <span className="title">Astroffers</span>}
       <div className="spacer" />
-      {isWideScreen ? (
-        <Button color="inherit" startIcon={<CalendarMonthOutlinedIcon />} onClick={handleOpenCalendar}>
-          Calendar
-        </Button>
-      ) : (
-        <IconButton onClick={handleOpenCalendar} aria-label="Calendar">
-          <CalendarMonthOutlinedIcon />
-        </IconButton>
-      )}
+      <Button
+        color="inherit"
+        startIcon={<CalendarMonthOutlinedIcon />}
+        onClick={handleOpenCalendar}
+        aria-label="Calendar"
+      >
+        {formatShortDate(date)}
+      </Button>
       <IconButton onClick={handleOpenMore} aria-label="More" aria-haspopup="menu">
         <MoreVertIcon />
       </IconButton>

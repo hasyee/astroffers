@@ -77,8 +77,9 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
           <p>
             The calendar button of the header shows the nights of a whole month at the chosen location: the phase of the
             Moon and a strip of every day from midnight to midnight with the same colors as the clock face. The
-            astronomical night follows the maximum altitude of the Sun of the filter. Click a day to see the times of
-            its night, and <b>Show objects</b> to list the objects of that night.
+            astronomical night follows the maximum altitude of the Sun of the filter. It opens on the month of the
+            chosen night, which is framed. Click a day to see the times of its night, and <b>Show objects</b> to list
+            the objects of that night.
           </p>
 
           <h3>Result list</h3>

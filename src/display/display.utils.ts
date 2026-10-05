@@ -31,6 +31,10 @@ export const formatSize = (size?: [ArcMin, ArcMin]) => (size ? size.map(formatAr
 
 export const formatDate = (date: Timestamp) => moment(date).format('ddd, D MMM YYYY');
 
+/** Like `formatDate`, but without the year when it is this year */
+export const formatShortDate = (date: Timestamp) =>
+  moment(date).format(moment(date).isSame(moment(), 'year') ? 'ddd, D MMM' : 'ddd, D MMM YYYY');
+
 const pad = (value: number) => String(value).padStart(2, '0');
 
 /** Splits a value rounded to whole units into sexagesimal parts, e.g. seconds into hours, minutes and seconds */

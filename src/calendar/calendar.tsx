@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import moment from 'moment';
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import TodayOutlinedIcon from '@mui/icons-material/TodayOutlined';
 import type { CalendarDay, Timestamp } from '../calculator/calculator.types';
+import { useDate } from '../date/date.hooks';
 import { useSwipe } from '../swipe/swipe.hooks';
 import { useCalendarMonth, useCalendarMonthRemover, useCalendarMonthSetter, useCalendarMonths } from './calendar.hooks';
 import CalendarItem from './calendar.item';
@@ -15,12 +16,20 @@ import './calendar.scss';
 const getThisMonth = () => moment().startOf('month').valueOf();
 const addMonths = (month: Timestamp, count: number) => moment(month).add(count, 'month').valueOf();
 
-function Month({ days, onShowNight }: { days: CalendarDay[] | undefined; onShowNight: () => void }) {
+function Month({
+  days,
+  selectedDay,
+  onShowNight
+}: {
+  days: CalendarDay[] | undefined;
+  selectedDay: Timestamp;
+  onShowNight: () => void;
+}) {
   return (
     <div className="grid">
       {days?.map(day => (
         <div key={day.day} className="cell">
-          <CalendarItem {...day} onShowNight={onShowNight} />
+          <CalendarItem {...day} isSelected={day.day === selectedDay} onShowNight={onShowNight} />
         </div>
       ))}
     </div>
@@ -32,9 +41,10 @@ function Month({ days, onShowNight }: { days: CalendarDay[] | undefined; onShowN
  * next month are side by side, to swipe between them like the pages of a carousel (see the details).
  */
 function CalendarContent({ onClose }: { onClose: () => void }) {
-  // in the query (`month`), opens on this month
+  // in the query (`month`), opens on the month of the chosen night
   const month = useCalendarMonth();
   const setMonth = useCalendarMonthSetter();
+  const selectedDay = useDate();
 
   // the month shown is put into the query right away, e.g. for a link to it
   useEffect(() => {
@@ -73,16 +83,16 @@ function CalendarContent({ onClose }: { onClose: () => void }) {
         <IconButton onClick={handleNextMonth} aria-label="Next month">
           <ChevronRightIcon />
         </IconButton>
-        <Button onClick={handleThisMonth} disabled={month === getThisMonth()}>
-          Today
-        </Button>
+        <IconButton onClick={handleThisMonth} disabled={month === getThisMonth()} aria-label="This month">
+          <TodayOutlinedIcon />
+        </IconButton>
       </div>
       <div className="carousel">
         {/* keyed by the month, so a neighbor stepped to is kept as it is */}
         <div className="track" ref={trackRef}>
           {[prevMonth, month, nextMonth].map(pageMonth => (
             <div key={pageMonth} className="page">
-              <Month days={days[pageMonth]} onShowNight={onClose} />
+              <Month days={days[pageMonth]} selectedDay={selectedDay} onShowNight={onClose} />
             </div>
           ))}
         </div>
