@@ -1,26 +1,42 @@
-import { getMoonTimes, getMoonIllumination } from 'suncalc';
+import moment from 'moment';
+import { Body, Illumination, MoonPhase, SearchRiseSet } from 'astronomy-engine';
+import type { Observer } from 'astronomy-engine';
 import type { Interval, Position, Timestamp } from './calculator.types';
-import { radToDeg } from './calculator.units';
-import { toNoon } from './calculator.time';
+import { getAltitude, searchTime, toObserver } from './calculator.astronomy';
 import { getIntersection } from './calculator.interval';
 
 type Cross = { type: 'rise' | 'set'; time: Timestamp };
 
-const getLowerHalfDayArcsOfMoon = ({ start, end }: Interval, { lat, lon }: Position): Interval[] => {
-  const latDeg = radToDeg(lat);
-  const lonDeg = radToDeg(lon);
-  // both calls cover the local solar day of the given date, so together they span the whole night
-  const { rise: riseDate1, set: setDate1, alwaysUp: alwaysUp1 } = getMoonTimes(new Date(toNoon(start)), latDeg, lonDeg);
-  const { rise: riseDate2, set: setDate2 } = getMoonTimes(new Date(toNoon(end)), latDeg, lonDeg);
-  const crosses = [
-    riseDate1 ? { type: 'rise', time: riseDate1.getTime() } : null,
-    setDate1 ? { type: 'set', time: setDate1.getTime() } : null,
-    riseDate2 ? { type: 'rise', time: riseDate2.getTime() } : null,
-    setDate2 ? { type: 'set', time: setDate2.getTime() } : null
-  ]
-    .filter((cross): cross is Cross => !!cross)
-    .sort((a, b) => a.time - b.time);
-  if (crosses.length === 0) return alwaysUp1 ? [] : [{ start: -Infinity, end: Infinity }];
+const DAY = 24 * 60 * 60 * 1000;
+const MINUTE = 60 * 1000;
+
+/** The next moonrise (+1) or moonset (-1) after `from` till `to` */
+const searchMoon = (observer: Observer, direction: -1 | 1, from: Timestamp, to: Timestamp) =>
+  searchTime((date, limit) => SearchRiseSet(Body.Moon, observer, direction, date, limit), from, (to - from) / DAY);
+
+/** The moonrises and moonsets of the days of the interval, in order */
+const getCrosses = (observer: Observer, from: Timestamp, to: Timestamp): Cross[] => {
+  const crosses: Cross[] = [];
+  let rise = searchMoon(observer, +1, from, to);
+  let set = searchMoon(observer, -1, from, to);
+  while (rise !== null || set !== null) {
+    if (set === null || (rise !== null && rise < set)) {
+      crosses.push({ type: 'rise', time: rise! });
+      rise = searchMoon(observer, +1, rise! + MINUTE, to);
+    } else {
+      crosses.push({ type: 'set', time: set });
+      set = searchMoon(observer, -1, set + MINUTE, to);
+    }
+  }
+  return crosses;
+};
+
+/** The times the Moon is below the horizon, from the start of the day of the night's start to the end of its end */
+const getLowerHalfDayArcsOfMoon = ({ start, end }: Interval, location: Position): Interval[] => {
+  const observer = toObserver(location);
+  const from = moment(start).startOf('day').valueOf();
+  const crosses = getCrosses(observer, from, moment(end).endOf('day').valueOf());
+  if (crosses.length === 0) return getAltitude(Body.Moon, from, observer) > 0 ? [] : [{ start: -Infinity, end: Infinity }];
   return crosses.reduce<Interval[]>((halfDayArcs, cross) => {
     if (cross.type === 'set') return [...halfDayArcs, { start: cross.time, end: Infinity }];
     else {
@@ -40,7 +56,8 @@ export const getMoonNight = (interval: Interval | null, loc: Position): Interval
   return lowerHalfDayArcsOfMoon.find(halfDayArc => !!getIntersection(interval, halfDayArc)) || null;
 };
 
+/** The phase (0: new, 0.25: first quarter, 0.5: full, 0.75: last quarter) and the illuminated fraction of the Moon */
 export const getMoonPhase = (midnight: Timestamp) => {
-  const { phase: moonPhase, fraction: moonIllumination } = getMoonIllumination(new Date(midnight));
-  return { moonPhase, moonIllumination };
+  const date = new Date(midnight);
+  return { moonPhase: MoonPhase(date) / 360, moonIllumination: Illumination(Body.Moon, date).phase_fraction };
 };
