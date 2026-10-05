@@ -5,6 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import App from './app/app';
 import LocationProvider from './location/location.provider';
+import { lockPhoneOrientation } from './media/media.utils';
 import ResultProvider from './result/result.provider';
 import QueryStorage from './query/query.storage';
 import { initQuery } from './query/query.utils';
@@ -14,6 +15,7 @@ import './index.scss';
 
 // the state of the app is in the query (date, location, order, filter), completed from the stored state
 initQuery();
+lockPhoneOrientation();
 
 createRoot(document.getElementById('root')!).render(
   // MUI styles come first, so the stylesheets of the app override them at the same specificity
