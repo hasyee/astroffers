@@ -106,7 +106,9 @@ export const useMyLocation = (onFinish: () => void) => {
     }
   }, [setIsFetchingLocation, geolocation, setLocation, onFinish]);
 
-  return { isFetchingLocation, locationFetchingError, fetchLocation };
+  const clearLocationFetchingError = useCallback(() => setLocationFetchingError(null), []);
+
+  return { isFetchingLocation, locationFetchingError, fetchLocation, clearLocationFetchingError };
 };
 
 /**

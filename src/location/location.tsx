@@ -1,4 +1,4 @@
-import { Fragment, useState, useCallback } from 'react';
+import { Fragment, useState, useCallback, useEffect } from 'react';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -22,7 +22,13 @@ export default function Location() {
   const handleOpen = useCallback(() => setIsOpen(true), []);
   const handleClose = useCallback(() => setIsOpen(false), []);
 
-  const { fetchLocation, isFetchingLocation, locationFetchingError } = useMyLocation(handleClose);
+  const { fetchLocation, isFetchingLocation, locationFetchingError, clearLocationFetchingError } =
+    useMyLocation(handleClose);
+
+  // the error of the positioning belongs to the attempt: the dialog opens without it again
+  useEffect(() => {
+    if (!isOpen) clearLocationFetchingError();
+  }, [isOpen, clearLocationFetchingError]);
 
   const handleLngChange = useCallback(
     (lng: number) => setLocation(location => ({ coords: { ...location.coords, lng }, name: '' })),
