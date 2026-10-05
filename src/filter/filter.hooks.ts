@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
 import type { ObjectFilter } from '../calculator/calculator.types';
 import { useStatePart, useStatePartSetter } from '../query/query.hooks';
+import { useSearchSetter } from '../list/list.hooks';
+import { emptySearch } from '../list/list.utils';
 import type { StoredState } from '../query/query.types';
 import type { Query } from '../router/router.types';
 import { omitQuery, parseQuery, serializeQuery } from '../router/router.utils';
@@ -27,7 +29,12 @@ export const useFilterValueSetter = <K extends keyof ObjectFilter>(key: K) => {
   return useCallback((value: ObjectFilter[K]) => setFilter(filter => ({ ...filter, [key]: value })), [setFilter, key]);
 };
 
+/** Resets the filter and the search of the list */
 export const useResetFilter = () => {
   const setFilter = useFilterSetter();
-  return useCallback(() => setFilter(defaultFilter), [setFilter]);
+  const setSearch = useSearchSetter();
+  return useCallback(() => {
+    setFilter(defaultFilter);
+    setSearch(emptySearch);
+  }, [setFilter, setSearch]);
 };
