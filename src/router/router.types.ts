@@ -5,7 +5,7 @@ export type Query = Record<string, string>;
 export type RouterLocation = { pathname: string; search: string };
 
 export type RouteMatch = {
-  matchedPrefix: string; // absolute path matched so far, e.g. "/object/224" (root value is "/")
+  matchedPrefix: string; // absolute path matched so far, e.g. "/objects/224" (root value is "/")
   remainder: string; // unmatched remainder, no leading slash, "" once fully consumed
   params: Params; // merged captures from this Route + all ancestors
 };

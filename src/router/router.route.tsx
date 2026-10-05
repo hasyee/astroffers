@@ -3,7 +3,7 @@ import { RouteContext, useRouteNameRegistrar } from './router.hooks';
 import type { Params } from './router.types';
 
 export type RouteProps = {
-  /** Pattern like `object/:ngc`, `deleted/:collection?` or `items/*`, matched by the parent `Routes` */
+  /** Pattern like `objects/:ngc`, `deleted/:collection?` or `items/*`, matched by the parent `Routes` */
   path: string;
   /** Name of the route among the breadcrumb names (`useBreadcrumbNames`) */
   name?: string | ((params: Params) => string);

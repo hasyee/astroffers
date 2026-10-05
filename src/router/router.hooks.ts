@@ -65,7 +65,7 @@ export function useMatch(): RouteMatch | null {
   return useContext(RouteContext);
 }
 
-/** Params of the pattern (e.g. `object/:ngc`) when it matches the current path, otherwise null */
+/** Params of the pattern (e.g. `objects/:ngc`) when it matches the current path, otherwise null */
 export function useMatchPath(pattern: string): Params | null {
   // the selector has to return a stable value, so the path is selected and matched outside of it
   const pathname = usePathname();

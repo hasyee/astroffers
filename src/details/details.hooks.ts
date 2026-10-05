@@ -7,9 +7,9 @@ import { useResultList, useResultParams } from '../result/result.hooks';
 import { useGoBack, useMatchPath, useNavigate } from '../router/router.hooks';
 
 /** Route of the details view */
-const DETAILS_PATH = 'object/:ngc';
+const DETAILS_PATH = 'objects/:ngc';
 
-const getDetailsPath = (ngc: number) => `/object/${ngc}`;
+const getDetailsPath = (ngc: number) => `/objects/${ngc}`;
 
 /** NGC number of the object opened in the details view, from the route */
 export const useOpenedNgc = () => {
