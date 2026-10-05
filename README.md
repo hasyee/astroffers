@@ -2,9 +2,9 @@
 
 Take offers to watch at given nights by the NGC 2000 catalog.
 
-Astroffers lists the objects of the NGC 2000 catalog that are visible on a chosen night at a given location, along
-with their visibility interval, best visibility and altitude, filtered by magnitude or surface brightness, object
-type and constellation. It is an installable, offline-capable PWA.
+Astroffers lists the objects of the NGC 2000 catalog, the planets, the dwarf planets and the brightest asteroids that
+are visible on a chosen night at a given location, along with their visibility interval, best visibility and altitude,
+filtered by magnitude or surface brightness, object type and constellation. It is an installable, offline-capable PWA.
 
 Live: https://astroffers.hasyee.com (also https://astroffers.onrender.com)
 
@@ -33,6 +33,7 @@ the rest is in small context-selector based state providers (`src/provider/`).
 
 - `calculator/`: astronomical calculations (night, Moon, visibility of the objects), run in a web worker
 - `catalog/`: the compact NGC catalog and its type/constellation names
+- `solar/`: the bodies of the Solar System, calculated for every night
 - `filter/`, `location/`, `date/`: the inputs of the calculation; `sidebar/` frames the filter with its reset button
   and the About and Help
 - `calendar/`: the nights of a month, the date picker of the app
@@ -53,6 +54,19 @@ node scripts/catalog.mjs [path/to/astroffers-core/data]
 It keeps the J2000 coordinates in radians and the size in arc minutes, and omits the missing values (4 MB → 1 MB).
 It also adds the Messier objects without an NGC number (M24, M25, M40, M45) at the end, and fixes M24 and M25,
 which the source data gives to NGC 4715 and 4725 instead of IC 4715 and 4725.
+
+### Solar System
+
+The planets and Pluto are calculated by [Astronomy Engine](https://github.com/cosinekitty/astronomy). The other dwarf
+planets and the brightest asteroids follow their orbits from the JPL Small-Body Database, without the perturbations of
+the planets; refresh their elements (`src/solar/solar.json`) now and then by
+
+```
+node scripts/solar.mjs
+```
+
+Their photos (`public/solar/`) come from the Wikipedia articles of the bodies, via Wikimedia Commons; the credits and
+licenses are in `src/solar/solar.photos.ts`.
 
 ### Preview images
 

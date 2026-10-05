@@ -10,8 +10,11 @@ const MAX_FIELD_OF_VIEW: Degrees = 60;
 const getFieldOfView = (size?: [ArcMin, ArcMin]): Degrees =>
   Math.min(MAX_FIELD_OF_VIEW, Math.max(MIN_FIELD_OF_VIEW, size ? (Math.max(...size) * 5) / 60 : 0));
 
-/** Name of the object for Stellarium Web, from its id: `M27`, `NGC884` (the second object of M51 is `NGC5195`) */
-const getSkySourceName = ({ id }: NgcObject) => id.toUpperCase();
+/**
+ * Name of the object for Stellarium Web, from its id: `M27`, `NGC884` (the second object of M51 is `NGC5195`); the
+ * bodies of the Solar System have their own (`Mars`, `A847 PA` for Iris)
+ */
+const getSkySourceName = ({ id, skySource }: NgcObject) => skySource ?? id.toUpperCase();
 
 /**
  * Link to the object on Stellarium Web (`stellarium-web.org/skysource/<name>`) at the time and place. Its name
@@ -28,5 +31,5 @@ export const getStellariumWebUrl = ({ object, eqCoordsOnDate }: NgcInfo, time: T
     alt: radToDeg(alt).toFixed(2),
     fov: getFieldOfView(object.size).toFixed(2)
   });
-  return `https://stellarium-web.org/skysource/${getSkySourceName(object)}?${params}`;
+  return `https://stellarium-web.org/skysource/${encodeURIComponent(getSkySourceName(object))}?${params}`;
 };

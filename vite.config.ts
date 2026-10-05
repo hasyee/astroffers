@@ -24,7 +24,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       workbox: {
         // of the font only its latin subset, the others are cached when a text needs them (e.g. a place name)
-        globPatterns: ['**/*.{js,css,html,png,ico,svg,webmanifest}', '**/inter-latin-wght-normal-*.woff2'],
+        globPatterns: ['**/*.{js,css,html,png,ico,svg,webmanifest}', '**/inter-latin-wght-normal-*.woff2', 'solar/*.jpg'],
         runtimeCaching: [
           {
             urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.endsWith('.woff2'),

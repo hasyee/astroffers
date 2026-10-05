@@ -61,7 +61,7 @@ export default function About({ isOpen, onClose }: { isOpen: boolean; onClose: (
           <div>
             <Typography variant="h5">Astroffers</Typography>
             <Typography color="text.secondary">
-              Take offers to watch at given nights by the NGC 2000 and the Messier catalogs.
+              Take offers to watch at given nights by the NGC 2000 and the Messier catalogs, and from the Solar System.
             </Typography>
           </div>
         </div>
@@ -111,6 +111,24 @@ export default function About({ isOpen, onClose }: { isOpen: boolean; onClose: (
                 DSS2 color survey via{' '}
                 <a href="https://alasky.cds.unistra.fr/hips-image-services/hips2fits" target="_blank" rel="noreferrer">
                   CDS hips2fits
+                </a>
+                ; photos of the Solar System from NASA, ESA, ESO and others via{' '}
+                <a href="https://commons.wikimedia.org" target="_blank" rel="noreferrer">
+                  Wikimedia Commons
+                </a>
+                , credited on each
+              </td>
+            </tr>
+            <tr>
+              <th>Solar System</th>
+              <td>
+                Planets and Pluto by{' '}
+                <a href="https://github.com/cosinekitty/astronomy" target="_blank" rel="noreferrer">
+                  Astronomy Engine
+                </a>
+                ; orbits of the other dwarf planets and the asteroids from the{' '}
+                <a href="https://ssd.jpl.nasa.gov/tools/sbdb_query.html" target="_blank" rel="noreferrer">
+                  JPL Small-Body Database
                 </a>
               </td>
             </tr>

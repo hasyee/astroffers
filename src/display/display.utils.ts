@@ -25,7 +25,12 @@ export const formatAltitude = (altitude: Radians | null) =>
 
 export const formatValue = (value: number | undefined) => (value === undefined ? NONE : String(value));
 
-const formatArcMin = (arcMin: ArcMin) => (arcMin < 1 ? `${Math.round(arcMin * 60)}"` : `${arcMin.toFixed(1)}'`);
+/** Arc seconds below 1', with decimals below 10" (the bodies of the Solar System, down to hundredths) */
+const formatArcMin = (arcMin: ArcMin) => {
+  const arcSec = arcMin * 60;
+  if (arcMin >= 1) return `${arcMin.toFixed(1)}'`;
+  return `${arcSec < 1 ? arcSec.toFixed(2) : arcSec < 10 ? arcSec.toFixed(1) : Math.round(arcSec)}"`;
+};
 
 export const formatSize = (size?: [ArcMin, ArcMin]) => (size ? size.map(formatArcMin).join(' × ') : 'Unknown');
 

@@ -3,12 +3,13 @@ import { radToDeg } from '../calculator/calculator.units';
 import objectTypesJson from './catalog.types.json';
 import allTypesJson from './catalog.allTypes.json';
 import constellationsJson from './catalog.constellations.json';
+import solarTypesJson from '../solar/solar.types.json';
 
-/** Object types that can be filtered on, by key */
-export const objectTypes: Record<string, string> = objectTypesJson;
+/** Object types that can be filtered on, by key: the ones of the catalog and of the Solar System (`solar/`) */
+export const objectTypes: Record<string, string> = { ...objectTypesJson, ...solarTypesJson };
 
 /** Display names of every object type, by key */
-const allTypes: Record<string, string> = allTypesJson;
+const allTypes: Record<string, string> = { ...allTypesJson, ...solarTypesJson };
 
 /** Display names of the constellations, by abbreviation */
 export const constellations: Record<string, string> = constellationsJson;
@@ -34,8 +35,12 @@ const MAX_FIELD_OF_VIEW: ArcMin = 180;
 const getFieldOfView = (size?: [ArcMin, ArcMin]): ArcMin =>
   Math.min(MAX_FIELD_OF_VIEW, Math.max(MIN_FIELD_OF_VIEW, size ? Math.max(...size) * 1.5 : 0));
 
-/** DSS2 color preview of the object from the hips2fits service of CDS (Strasbourg) */
-export const getObjectImgSrc = ({ ra, de, size }: NgcObject, pixels = 300) => {
+/**
+ * DSS2 color preview of the object from the hips2fits service of CDS (Strasbourg), or the bundled photo of a body of
+ * the Solar System
+ */
+export const getObjectImgSrc = ({ ra, de, size, photo }: NgcObject, pixels = 300) => {
+  if (photo) return photo.src;
   const params = new URLSearchParams({
     hips: 'CDS/P/DSS2/color',
     width: String(pixels),

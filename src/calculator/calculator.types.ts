@@ -33,7 +33,10 @@ export type NightInfo = {
 
 export type BrightnessType = 'magnitude' | 'surfaceBrightness';
 
-/** Object of the NGC 2000 catalog, as stored in `catalog.json` */
+/**
+ * Object of the NGC 2000 catalog, as stored in `catalog.json`, or a body of the Solar System at the time of the
+ * calculation (`solar/`)
+ */
 export type NgcObject = {
   /** `m<Messier number>` for a Messier object, else `ngc<NGC number>` (e.g. `m27`, `ngc884`); in the route too */
   id: string;
@@ -50,7 +53,14 @@ export type NgcObject = {
   magnitude?: number;
   surfaceBrightness?: number;
   types: string[];
+  /** A bundled photo instead of the DSS2 preview (the bodies of the Solar System, which move on the sky) */
+  photo?: Photo;
+  /** The name of the object in Stellarium Web, when it is not its id upper-cased (the bodies of the Solar System) */
+  skySource?: string;
 };
+
+/** Photo of an object with its credit and license, linking to its source page */
+export type Photo = { src: string; credit: string; page: string };
 
 /** Visibility of an object during the observed night */
 export type NgcInfo = {

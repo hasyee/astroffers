@@ -11,7 +11,8 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
         <div className="running-text">
           <p>
             Astroffers helps you to discover the objects of the NGC 2000 catalog and every Messier object, including the
-            few without an NGC number (M24, M25, M40 and the Pleiades, M45). Along with your filter it lists the objects
+            few without an NGC number (M24, M25, M40 and the Pleiades, M45), and of the Solar System: the planets, the
+            dwarf planets and the brightest asteroids. Along with your filter it lists the objects
             that are visible on the chosen night at your location. The night is chosen in the calendar, opened by the
             date in the header. The list is recalculated automatically whenever you change the filter. The address of the
             page holds the night, the location, the filter and the search, so a link to it shows the same list.
@@ -50,7 +51,7 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             </li>
             <li>
               <b>Object types and constellations:</b> select the kinds of objects (galaxies, clusters, nebulae, double
-              stars and more) and the constellations you are interested in.
+              stars, planets, dwarf planets, asteroids and more) and the constellations you are interested in.
             </li>
           </ul>
 
@@ -109,6 +110,12 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             the next noon, and a <b>polar chart</b> of its path on the sky, where the distance from the center is the
             distance from the zenith. A full circle means that the object is circumpolar. Step to the previous or next
             object with the buttons, the arrow keys or by swiping on a phone.
+          </p>
+          <p>
+            The bodies of the Solar System move on the sky: their position, constellation, size and magnitude are
+            calculated for the middle of the chosen night, and they show a photo instead of the DSS2 preview (click it
+            for its source and license). The asteroids and the dwarf planets beyond Pluto follow their orbits without
+            the pull of the planets, so their positions drift slowly, by up to a degree years away from now.
           </p>
           <p>
             The <b>Stellarium</b> button between them opens the object on{' '}
