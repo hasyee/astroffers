@@ -5,6 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Calendar from '../calendar/calendar';
+import { useCalendarPrefetch } from '../calendar/calendar.hooks';
 import Details from '../details/details';
 import Filter from '../filter/filter';
 import Header from '../header/header';
@@ -105,6 +106,7 @@ function CompactLayout({ isCalendarOpen, onToggleCalendar }: LayoutProps) {
 
 export default function App() {
   useCalculation();
+  useCalendarPrefetch();
   const isWideScreen = useIsWideScreen();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const handleToggleCalendar = useCallback(() => setIsCalendarOpen(isOpen => !isOpen), []);

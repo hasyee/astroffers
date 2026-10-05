@@ -4,7 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import type { NgcInfo } from '../calculator/calculator.types';
 import { getObjectImgSrc } from '../catalog/catalog.utils';
 import { toDetails } from '../display/display.utils';
-import { useNightInfo, useResultParams } from '../result/result.hooks';
+import { useResultNightInfo, useResultParams } from '../result/result.hooks';
 import { useHorizontalCoords } from './details.hooks';
 import AltitudeChart from './details.altitude';
 import AzimuthChart from './details.azimuth';
@@ -49,7 +49,7 @@ function Preview({ ngcInfo }: { ngcInfo: NgcInfo }) {
 }
 
 export default function DetailsContent({ ngcInfo }: { ngcInfo: NgcInfo }) {
-  const nightInfo = useNightInfo();
+  const nightInfo = useResultNightInfo();
   const params = useResultParams();
   const horizontalCoords = useHorizontalCoords(ngcInfo);
   const details = toDetails(ngcInfo);

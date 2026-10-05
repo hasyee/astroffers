@@ -8,11 +8,10 @@ import TodayOutlinedIcon from '@mui/icons-material/TodayOutlined';
 import type { CalendarDay, Timestamp } from '../calculator/calculator.types';
 import { useDate } from '../date/date.hooks';
 import { useSwipe } from '../swipe/swipe.hooks';
-import { useCalendarMonths } from './calendar.hooks';
+import { toMonth, useCalendarMonths } from './calendar.hooks';
 import CalendarItem from './calendar.item';
 import './calendar.scss';
 
-const toMonth = (date: Timestamp) => moment(date).startOf('month').valueOf();
 const getThisMonth = () => toMonth(Date.now());
 const addMonths = (month: Timestamp, count: number) => moment(month).add(count, 'month').valueOf();
 

@@ -90,9 +90,16 @@ export type CalcParams = { date: Timestamp; coords: Coords; filter: ObjectFilter
 
 export type CalcResult = { params: CalcParams; nightInfo: NightInfo; list: NgcInfo[] };
 
-/** Worker protocol */
-export type CalcRequest = { jobId: number; params: CalcParams };
-export type CalcResponse = { jobId: number; result: CalcResult };
+/** Everything the night depends on */
+export type NightParams = { date: Timestamp; coords: Coords; twilight: number };
+
+export type NightResult = { params: NightParams; nightInfo: NightInfo };
+
+/** Worker protocol: the night is requested on its own too, to show it before the list (see `useCalculation`) */
+export type CalcRequest =
+  { jobId: number; type: 'night'; params: NightParams } | { jobId: number; type: 'result'; params: CalcParams };
+export type CalcResponse =
+  { jobId: number; type: 'night'; night: NightResult } | { jobId: number; type: 'result'; result: CalcResult };
 
 /** Start and end of a band as a fraction (0..1) of the day. */
 export type Band = [start: number, end: number];

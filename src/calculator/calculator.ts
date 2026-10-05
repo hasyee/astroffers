@@ -1,7 +1,12 @@
-import type { CalcParams, CalcResult, NgcObject } from './calculator.types';
+import type { CalcParams, CalcResult, NgcObject, NightParams, NightResult } from './calculator.types';
 import { getNightInfo } from './calculator.night';
 import { getObjects } from './calculator.ngc';
 import { getLocation } from './calculator.units';
+
+export const calculateNight = (params: NightParams): NightResult => {
+  const { date, coords, twilight } = params;
+  return { params, nightInfo: getNightInfo(date, coords.lat, coords.lng, twilight) };
+};
 
 export default (catalog: NgcObject[], params: CalcParams): CalcResult => {
   const {

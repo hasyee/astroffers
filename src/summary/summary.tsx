@@ -7,7 +7,8 @@ import { formatIntervalEnd, formatIntervalStart } from '../display/display.utils
 import { downloadCsv } from '../export/export.utils';
 import { useDisplayedList } from '../list/list.hooks';
 import Moon from '../moon/moon';
-import { useNightInfo, useResultParams } from '../result/result.hooks';
+import { useFilter } from '../filter/filter.hooks';
+import { useNight, useResultParams } from '../result/result.hooks';
 import NightChart from './summary.chart';
 import NightTable from './summary.night';
 import './summary.scss';
@@ -23,7 +24,9 @@ type Props = {
 };
 
 export default function Summary({ compact = false, isExpanded = false, onToggle }: Props) {
-  const nightInfo = useNightInfo();
+  // the night arrives before the list; the count and the export follow the list
+  const night = useNight();
+  const { moonless } = useFilter();
   const params = useResultParams();
   const list = useDisplayedList();
   const handleExport = useCallback(
@@ -35,9 +38,13 @@ export default function Summary({ compact = false, isExpanded = false, onToggle 
     [list, params]
   );
 
-  if (!nightInfo || !params) return null;
+  if (!night) return null;
 
-  const observedNight = params.filter.moonless ? nightInfo.moonlessNight : nightInfo.astroNight;
+  const {
+    nightInfo,
+    params: { date }
+  } = night;
+  const observedNight = moonless ? nightInfo.moonlessNight : nightInfo.astroNight;
   const moonIllumination = formatPercent(nightInfo.moonIllumination);
 
   if (compact) {
@@ -65,7 +72,7 @@ export default function Summary({ compact = false, isExpanded = false, onToggle 
             <div>{formatIntervalStart(observedNight)}</div>
             <div>{formatIntervalEnd(observedNight)}</div>
           </div>
-          <NightChart date={params.date} nightInfo={nightInfo} size={42} />
+          <NightChart date={date} nightInfo={nightInfo} size={42} />
         </div>
         {/* shown at once with the calendar, which fills the rest of the screen */}
         {isExpanded && (
@@ -100,7 +107,7 @@ export default function Summary({ compact = false, isExpanded = false, onToggle 
       <div className="night-info">
         <NightTable nightInfo={nightInfo} />
       </div>
-      <NightChart date={params.date} nightInfo={nightInfo} />
+      <NightChart date={date} nightInfo={nightInfo} />
     </Paper>
   );
 }
