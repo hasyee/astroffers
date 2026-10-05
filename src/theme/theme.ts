@@ -1,6 +1,6 @@
-import { blueGrey, red } from '@mui/material/colors';
-import { createTheme, darken } from '@mui/material/styles';
+import { common, red } from '@mui/material/colors';
 import type { PaletteColor, PaletteColorOptions } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 
 declare module '@mui/material/styles' {
   interface Palette {
@@ -15,11 +15,12 @@ declare module '@mui/material/styles' {
 const { augmentColor } = createTheme({ palette: { mode: 'dark' } }).palette;
 
 /**
- * Background of the app; also the theme color of the PWA as a hex (`#111619`, `THEME_COLOR` in `vite.config.ts`,
+ * Black as the night sky; also the theme color of the PWA as a hex (`#000000`, `THEME_COLOR` in `vite.config.ts`,
  * `index.html`), needed before the app is loaded
  */
-const BACKGROUND = darken(blueGrey[900], 0.55);
-const PAPER = darken(blueGrey[900], 0.4);
+const BACKGROUND = common.black;
+/** The papers (the header, the sidebar, the summary, the dialogs, the menus) raised over the black: 7.5% white over it */
+const PAPER = '#131313';
 
 const theme = createTheme({
   // exposes the palette as CSS variables (`--mui-palette-*`) for the stylesheets
@@ -27,6 +28,8 @@ const theme = createTheme({
   palette: {
     mode: 'dark',
     background: { default: BACKGROUND, paper: PAPER },
+    // a shade lighter than the default (12%), to part the black papers
+    divider: 'rgba(255, 255, 255, 0.18)',
     // its dark shade (#aa2e25) is today in the calendar and the red light toggle of the header
     red: augmentColor({ color: { main: red[500] }, name: 'red' })
   },

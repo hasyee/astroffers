@@ -4,7 +4,7 @@ import oxlint from 'vite-plugin-oxlint';
 import { VitePWA } from 'vite-plugin-pwa';
 
 // the background of the app (`theme.ts`)
-const THEME_COLOR = '#111619';
+const THEME_COLOR = '#000000';
 
 export default defineConfig({
   define: {
