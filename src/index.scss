@@ -22,7 +22,30 @@ code {
   }
 }
 
-// the red light mode (see `redlight/`)
-html.red-light {
-  filter: url(#red-light);
+// The red light mode (see `redlight/`): two layers over everything (`index.html`, after the root, above the
+// dialogs), not catching a pointer. The lower one turns what is below it gray, the upper one multiplies it by dim red
+// (70%): the brightness of every pixel in red, black stays black. Not a filter on the root: an SVG filter (`url()`)
+// misses the layers composited apart on iOS (the scrolling list, the drawers), and a chain of CSS filter functions
+// doing the same is computed in 8 bits a step by WebKit, which bands it.
+.red-light-gray,
+.red-light-tint {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  pointer-events: none;
+
+  html.red-light & {
+    display: block;
+  }
+}
+
+.red-light-gray {
+  -webkit-backdrop-filter: grayscale(1);
+  backdrop-filter: grayscale(1);
+}
+
+.red-light-tint {
+  background-color: rgb(179, 0, 0);
+  mix-blend-mode: multiply;
 }
