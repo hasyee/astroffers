@@ -13,6 +13,7 @@ import List from '../list/list';
 import { useHasFilterPanel, useIsWideScreen } from '../media/media.hooks';
 import { useCalculation } from '../result/result.hooks';
 import Sidebar from '../sidebar/sidebar';
+import SidebarDialogProvider from '../sidebar/sidebar.dialogs';
 import Summary from '../summary/summary';
 import './app.scss';
 
@@ -109,9 +110,13 @@ export default function App() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const handleToggleCalendar = useCallback(() => setIsCalendarOpen(isOpen => !isOpen), []);
 
-  return isWideScreen ? (
-    <WideLayout isCalendarOpen={isCalendarOpen} onToggleCalendar={handleToggleCalendar} />
-  ) : (
-    <CompactLayout isCalendarOpen={isCalendarOpen} onToggleCalendar={handleToggleCalendar} />
+  return (
+    <SidebarDialogProvider>
+      {isWideScreen ? (
+        <WideLayout isCalendarOpen={isCalendarOpen} onToggleCalendar={handleToggleCalendar} />
+      ) : (
+        <CompactLayout isCalendarOpen={isCalendarOpen} onToggleCalendar={handleToggleCalendar} />
+      )}
+    </SidebarDialogProvider>
   );
 }
