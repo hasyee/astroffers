@@ -10,12 +10,12 @@ export const selectAllTypes = (value: boolean) => selectAll(objectTypes, value);
 export const selectAllConstellations = (value: boolean) => selectAll(constellations, value);
 
 export const defaultFilter: ObjectFilter = {
-  observationTime: 60,
+  observationTime: 30,
   twilight: -18,
   altitude: 20,
   moonless: true,
   brightnessFilter: 'magnitude',
-  magnitude: 10,
+  magnitude: 8,
   surfaceBrightness: 14,
   types: selectAllTypes(true),
   constellations: selectAllConstellations(true)
