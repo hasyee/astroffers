@@ -1,6 +1,6 @@
 # astroffers
 
-PWA listing the NGC 2000 objects visible on a given night at a given location. Vite, React 19, TypeScript (strict), MUI 9 (dark, emotion), Highcharts 13, sass; deployed as a Render static site ([render.yaml](render.yaml)) — **every push to `master` deploys** to https://astroffers.hasyee.com. Successor of the archived `hasyee/astroffers-electron` (desktop) and `hasyee/astroffers-app` (React Native) apps; tooling and the shared modules (`provider/`, `moon/`, `debounce/`, `version/version.hooks.ts`) follow the sibling `../astro-calendar` repo (MUI as well) — keep them in sync when fixing one. `location/` started from it but differs here (the coordinates are in the query).
+PWA listing the NGC 2000 objects visible on a given night at a given location. Vite, React 19, TypeScript (strict), MUI 9 (dark, emotion), Highcharts 13, sass; deployed as a Render static site ([render.yaml](render.yaml)) — **every push to `master` deploys** to https://astroffers.hasyee.com. Successor of the archived `hasyee/astroffers-electron` (desktop) and `hasyee/astroffers-app` (React Native) apps; tooling, the icons (`public/icons/`, copied onto this repo's file names) and the shared modules (`provider/`, `moon/`, `debounce/`, `version/version.hooks.ts`) follow the sibling `../astro-calendar` repo (MUI as well) — keep them in sync when fixing one. `location/` started from it but differs here (the coordinates are in the query).
 
 ## Structure
 
