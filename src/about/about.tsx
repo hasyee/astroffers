@@ -1,11 +1,55 @@
+import { useCallback, useEffect, useState } from 'react';
+import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import Typography from '@mui/material/Typography';
 import DialogTitleWithClose from '../dialog/dialog.title';
+import { useFetchLatestVersion, useReloadToLatestVersion } from '../version/version.hooks';
 import { currentVersion } from '../version/version.utils';
 import './about.scss';
 
 const REPOSITORY = 'https://github.com/hasyee/astroffers';
+
+/**
+ * An Update button when a newer version is deployed, in case the service worker does not update the app by itself.
+ * Checked whenever the dialog opens (it is mounted only while open).
+ */
+function UpdateRow() {
+  const fetchLatestVersion = useFetchLatestVersion();
+  const reloadToLatestVersion = useReloadToLatestVersion();
+  const [latestVersion, setLatestVersion] = useState('');
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  useEffect(() => {
+    let isActive = true;
+    fetchLatestVersion().then(version => {
+      if (isActive) setLatestVersion(version);
+    });
+    return () => {
+      isActive = false;
+    };
+  }, [fetchLatestVersion]);
+
+  const handleUpdate = useCallback(() => {
+    setIsUpdating(true);
+    reloadToLatestVersion();
+  }, [reloadToLatestVersion]);
+
+  if (!latestVersion || latestVersion === currentVersion) return null;
+
+  return (
+    <tr className="update">
+      <td colSpan={2}>
+        <div className="content">
+          <Button variant="contained" size="small" onClick={handleUpdate} loading={isUpdating}>
+            Update
+          </Button>
+          <span className="hint">Version {latestVersion} is available</span>
+        </div>
+      </td>
+    </tr>
+  );
+}
 
 export default function About({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   return (
@@ -23,6 +67,7 @@ export default function About({ isOpen, onClose }: { isOpen: boolean; onClose: (
         </div>
         <table>
           <tbody>
+            <UpdateRow />
             <tr>
               <th>Version</th>
               <td>{currentVersion}</td>

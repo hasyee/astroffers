@@ -10,7 +10,6 @@ import QueryStorage from './query/query.storage';
 import { initQuery } from './query/query.utils';
 import RouterProvider from './router/router.provider';
 import theme from './theme/theme';
-import VersionListener from './version/version.listener';
 import './index.scss';
 
 // the state of the app is in the query (date, location, order, filter), completed from the stored state
@@ -29,7 +28,6 @@ createRoot(document.getElementById('root')!).render(
           </ResultProvider>
         </LocationProvider>
       </RouterProvider>
-      <VersionListener />
     </ThemeProvider>
   </StyledEngineProvider>
 );
