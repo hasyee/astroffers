@@ -1,5 +1,6 @@
 import { CALENDAR_PARAMS, calendarFromQuery, calendarToQuery, parseStoredCalendar } from '../calendar/calendar.utils';
 import type { Coords } from '../location/location.types';
+import { RED_LIGHT_PARAMS, parseStoredRedLight, redLightFromQuery, redLightToQuery } from '../redlight/redlight.utils';
 import { DATE_PARAMS, dateFromQuery, dateToQuery, getToday } from '../date/date.utils';
 import {
   FILTER_PARAMS,
@@ -36,6 +37,7 @@ export const STATE_PARAMS = [
   ...SEARCH_PARAMS,
   ...IMAGES_PARAMS,
   ...CALENDAR_PARAMS,
+  ...RED_LIGHT_PARAMS,
   ...FILTER_PARAMS
 ];
 
@@ -43,7 +45,7 @@ export const hasQueryState = (query: Query) => STATE_PARAMS.some(key => key in q
 
 /** The query of the whole state, in the order of the params */
 export const stateToQuery = (
-  { date, sortBy, search, hasImages, isCalendarOpen, filter }: StoredState,
+  { date, sortBy, search, hasImages, isCalendarOpen, isRedLight, filter }: StoredState,
   coords: Coords
 ): Query => ({
   ...dateToQuery(date),
@@ -52,6 +54,7 @@ export const stateToQuery = (
   ...searchToQuery(search),
   ...imagesToQuery(hasImages),
   ...calendarToQuery(isCalendarOpen),
+  ...redLightToQuery(isRedLight),
   ...filterToQuery(filter)
 });
 
@@ -61,6 +64,7 @@ export const getStoredState = (): StoredState => ({
   search: parseStoredSearch(localStorage.getItem('search')),
   hasImages: parseStoredImages(localStorage.getItem('images')),
   isCalendarOpen: parseStoredCalendar(localStorage.getItem('calendar')),
+  isRedLight: parseStoredRedLight(localStorage.getItem('redLight')),
   filter: parseStoredFilter(localStorage.getItem('filter'))
 });
 
@@ -68,7 +72,7 @@ export const getStoredState = (): StoredState => ({
  * Completes the query with the whole state of the app, before the first render: a param missing from the query
  * is taken from the stored state, or from the defaults (the night of today). A query having any of the params
  * (e.g. a shared link) means every object type and constellation by a missing set, no search by a missing search
- * and the compact table and the closed calendar by a missing `img` and `cal`; without them (e.g. the start of the PWA) the stored ones are taken too.
+ * and the compact table, the closed calendar and the normal colors by a missing `img`, `cal` and `red`; without them (e.g. the start of the PWA) the stored ones are taken too.
  */
 export const initQuery = () => {
   const { pathname, hash } = window.location;
@@ -78,6 +82,7 @@ export const initQuery = () => {
   const searchFallback = hasQueryState(query) ? emptySearch : stored.search;
   const imagesFallback = hasQueryState(query) ? false : stored.hasImages;
   const calendarFallback = hasQueryState(query) ? false : stored.isCalendarOpen;
+  const redLightFallback = hasQueryState(query) ? false : stored.isRedLight;
   const filterFallback = hasQueryState(query)
     ? { ...stored.filter, types: defaultFilter.types, constellations: defaultFilter.constellations }
     : stored.filter;
@@ -90,6 +95,7 @@ export const initQuery = () => {
         search: searchFromQuery(query, searchFallback),
         hasImages: imagesFromQuery(query, imagesFallback),
         isCalendarOpen: calendarFromQuery(query, calendarFallback),
+        isRedLight: redLightFromQuery(query, redLightFallback),
         filter: filterFromQuery(query, filterFallback)
       },
       coordsFromQuery(query, parseStoredPlace(localStorage.getItem('location')).coords)

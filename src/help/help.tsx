@@ -50,6 +50,12 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             </li>
           </ul>
 
+          <h3>Red light</h3>
+          <p>
+            The eye button of the header turns the whole app red, images included, to keep your eyes adapted to the dark
+            in the field. Press it again for the normal colors.
+          </p>
+
           <h3>Summary</h3>
           <p>
             The summary shows the number of results, the phase of the Moon and the times of the night. The clock face

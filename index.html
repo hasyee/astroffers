@@ -15,6 +15,15 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <!--
+      the filter of the red light mode (src/redlight/): the brightness of every pixel in dim red (70%), black stays
+      black; computed in sRGB, as the colors are given
+    -->
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <filter id="red-light" color-interpolation-filters="sRGB">
+        <feColorMatrix type="matrix" values="0.149 0.501 0.051 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" />
+      </filter>
+    </svg>
     <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>

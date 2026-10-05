@@ -11,5 +11,6 @@ export type StoredState = {
   search: ListSearch;
   hasImages: boolean;
   isCalendarOpen: boolean;
+  isRedLight: boolean;
   filter: ObjectFilter;
 };

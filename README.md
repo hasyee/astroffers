@@ -27,7 +27,7 @@ Node version: see `.nvmrc`.
 ## Structure
 
 Vite, React 19, TypeScript, MUI 9 (dark theme), Highcharts, sass. Source files are grouped by domain
-(`src/<domain>/<domain>.<role>.ts(x)`); the state of the main view (date, location, sorting, search, images of the table, open calendar, filter) lives
+(`src/<domain>/<domain>.<role>.ts(x)`); the state of the main view (date, location, sorting, search, images of the table, open calendar, red light, filter) lives
 in the URL query, so it can be shared, and is persisted to `localStorage` where needed (all but the date);
 the rest is in small context-selector based state providers (`src/provider/`).
 

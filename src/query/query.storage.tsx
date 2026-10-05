@@ -2,16 +2,18 @@ import { useEffect } from 'react';
 import { useCalendarOpen } from '../calendar/calendar.hooks';
 import { useFilter } from '../filter/filter.hooks';
 import { useListImages, useSearch, useSortBy } from '../list/list.hooks';
+import { useRedLight } from '../redlight/redlight.hooks';
 
 /**
  * Stores the state of the query but the date (the filter, the order, the search, the images of the table and the
- * open calendar) in `localStorage`, to complete the query on start
+ * open calendar, the red light mode) in `localStorage`, to complete the query on start
  */
 export default function QueryStorage() {
   const sortBy = useSortBy();
   const search = useSearch();
   const [hasImages] = useListImages();
   const [isCalendarOpen] = useCalendarOpen();
+  const [isRedLight] = useRedLight();
   const filter = useFilter();
 
   useEffect(() => {
@@ -26,6 +28,9 @@ export default function QueryStorage() {
   useEffect(() => {
     localStorage.setItem('calendar', String(isCalendarOpen));
   }, [isCalendarOpen]);
+  useEffect(() => {
+    localStorage.setItem('redLight', String(isRedLight));
+  }, [isRedLight]);
   useEffect(() => {
     localStorage.setItem('filter', JSON.stringify(filter));
   }, [filter]);

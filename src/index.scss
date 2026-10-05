@@ -21,3 +21,8 @@ code {
     font-size: 1rem !important;
   }
 }
+
+// the red light mode (see `redlight/`)
+html.red-light {
+  filter: url(#red-light);
+}
