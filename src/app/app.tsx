@@ -4,7 +4,7 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Calendar from '../calendar/calendar';
-import { useCalendarPrefetch } from '../calendar/calendar.hooks';
+import { useCalendarOpen, useCalendarPrefetch } from '../calendar/calendar.hooks';
 import Details from '../details/details';
 import { ResetFilterButton } from '../filter/filter';
 import Header from '../header/header';
@@ -107,8 +107,7 @@ export default function App() {
   useCalculation();
   useCalendarPrefetch();
   const isWideScreen = useIsWideScreen();
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const handleToggleCalendar = useCallback(() => setIsCalendarOpen(isOpen => !isOpen), []);
+  const [isCalendarOpen, handleToggleCalendar] = useCalendarOpen();
 
   return (
     <SidebarDialogProvider>

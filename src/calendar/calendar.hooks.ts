@@ -6,6 +6,10 @@ import { useDate } from '../date/date.hooks';
 import { useFilter } from '../filter/filter.hooks';
 import { useCoords } from '../location/location.hooks';
 import type { Coords } from '../location/location.types';
+import { useStatePart, useStatePartSetter } from '../query/query.hooks';
+import type { Query } from '../router/router.types';
+import { omitQuery } from '../router/router.utils';
+import { CALENDAR_PARAMS, calendarFromQuery, calendarToQuery } from './calendar.utils';
 
 /** The week starts on Monday */
 const WEEK_OFFSET = 1;
@@ -14,6 +18,22 @@ const WEEK_OFFSET = 1;
 const PREFETCH_DELAY = 1000;
 
 export const toMonth = (date: Timestamp) => moment(date).startOf('month').valueOf();
+
+const getIsOpen = (query: Query) => calendarFromQuery(query, false);
+const parseIsOpen = (serialized: string) => serialized === 'true';
+// the param is left out while the calendar is closed, so it is replaced
+const setQueryIsOpen = (query: Query, isOpen: boolean): Query => ({
+  ...omitQuery(query, CALENDAR_PARAMS),
+  ...calendarToQuery(isOpen)
+});
+
+/** The calendar is open (above the summary), toggled by the date in the header */
+export const useCalendarOpen = () => {
+  const isOpen = useStatePart(getIsOpen, String, parseIsOpen);
+  const setIsOpen = useStatePartSetter(getIsOpen, setQueryIsOpen);
+  const toggle = useCallback(() => setIsOpen(isOpen => !isOpen), [setIsOpen]);
+  return [isOpen, toggle] as const;
+};
 
 type Cache = { key: string; days: Record<Timestamp, CalendarDay[]> };
 
