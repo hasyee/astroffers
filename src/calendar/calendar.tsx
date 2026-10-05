@@ -6,7 +6,8 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TodayOutlinedIcon from '@mui/icons-material/TodayOutlined';
 import type { CalendarDay, Timestamp } from '../calculator/calculator.types';
-import { useDate } from '../date/date.hooks';
+import { useDate, useDateSetter } from '../date/date.hooks';
+import { getToday } from '../date/date.utils';
 import { useSwipe } from '../swipe/swipe.hooks';
 import { toMonth, useCalendarMonths } from './calendar.hooks';
 import CalendarItem from './calendar.item';
@@ -44,7 +45,11 @@ function CalendarContent() {
 
   const handlePrevMonth = useCallback(() => setMonth(month => addMonths(month, -1)), [setMonth]);
   const handleNextMonth = useCallback(() => setMonth(month => addMonths(month, 1)), [setMonth]);
-  const handleThisMonth = useCallback(() => setMonth(getThisMonth()), [setMonth]);
+  const setDate = useDateSetter();
+  const handleToday = useCallback(() => {
+    setMonth(getThisMonth());
+    setDate(getToday());
+  }, [setMonth, setDate]);
   const trackRef = useSwipe<HTMLDivElement>({ onPrev: handlePrevMonth, onNext: handleNextMonth }, month);
 
   useEffect(() => {
@@ -68,7 +73,11 @@ function CalendarContent() {
         <IconButton onClick={handleNextMonth} aria-label="Next month">
           <ChevronRightIcon />
         </IconButton>
-        <IconButton onClick={handleThisMonth} disabled={month === getThisMonth()} aria-label="This month">
+        <IconButton
+          onClick={handleToday}
+          disabled={month === getThisMonth() && selectedDay === getToday()}
+          aria-label="Today"
+        >
           <TodayOutlinedIcon />
         </IconButton>
       </div>
