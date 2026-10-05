@@ -233,15 +233,18 @@
   }
 
   // the image is a square as high as the information beside it, which is laid out in fixed lines for that: the
-  // title, the subtitle, and two rows of properties (a label and a value each) below a margin
+  // title, the catalog numbers below a name, the subtitle, and two rows of properties (a label and a value each)
+  // below a margin; the line of the catalog numbers is left empty for an object without a name (its title shows
+  // them), so every card and image is the same size
   .Item {
     $title: 1.25rem;
+    $designations: 1.125rem;
     $subtitle: 1.125rem;
     $margin: 0.5rem;
     $label: 1rem;
     $value: 1.125rem;
     $row-gap: 0.25rem;
-    $height: $title + $subtitle + $margin + 2 * ($label + $value) + $row-gap;
+    $height: $title + $designations + $subtitle + $margin + 2 * ($label + $value) + $row-gap;
 
     display: flex;
     gap: 0.5rem;
@@ -269,6 +272,7 @@
 
     // a line each, whatever long
     .title,
+    .designations,
     .subtitle,
     .properties > div {
       overflow: hidden;
@@ -279,6 +283,13 @@
     .title {
       font-weight: 600;
       line-height: $title;
+    }
+
+    .designations {
+      // empty too
+      height: $designations;
+      font-size: 0.8rem;
+      line-height: $designations;
     }
 
     .subtitle {

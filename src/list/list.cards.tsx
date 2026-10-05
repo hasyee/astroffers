@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { useCallback, useState } from 'react';
 import type { NgcInfo } from '../calculator/calculator.types';
-import { getObjectImgSrc, getTitle } from '../catalog/catalog.utils';
+import { getObjectImgSrc, getSubtitle, getTitle } from '../catalog/catalog.utils';
 import { useOpenDetails } from '../details/details.hooks';
 import { toListRow } from '../display/display.utils';
 import {
@@ -99,6 +99,7 @@ function Item({ ngcInfo }: { ngcInfo: NgcInfo }) {
   const row = toListRow(ngcInfo);
   const { id } = ngcInfo.object;
   const handleClick = useCallback(() => openDetails(id), [openDetails, id]);
+  const designations = getSubtitle(ngcInfo.object);
 
   return (
     <div className="Item" onClick={handleClick}>
@@ -106,6 +107,7 @@ function Item({ ngcInfo }: { ngcInfo: NgcInfo }) {
       <img className="thumbnail" src={getObjectImgSrc(ngcInfo.object)} crossOrigin="anonymous" alt="" loading="lazy" />
       <div className="info">
         <div className="title">{getTitle(ngcInfo.object)}</div>
+        <div className="designations">{designations}</div>
         <div className="subtitle">
           {row.typeNames} in {row.constellationName}
         </div>

@@ -17,8 +17,15 @@ export const resolveTypes = (types: string[]) => types.map(type => allTypes[type
 
 export const resolveConstellation = (constellation: string) => constellations[constellation] ?? constellation;
 
-export const getTitle = ({ ngc, messier, name }: NgcObject) =>
-  [ngc ? `NGC ${ngc}` : null, messier ? `M ${messier}` : null, name || null].filter(term => term).join(' | ');
+/** Catalog numbers of the object, e.g. `M 13 – NGC 6205` */
+const getDesignations = ({ ngc, messier }: NgcObject) =>
+  [messier ? `M ${messier}` : null, ngc ? `NGC ${ngc}` : null].filter(term => term).join(' – ');
+
+/** The name of the object, or its catalog numbers when it has no name */
+export const getTitle = (object: NgcObject) => object.name || getDesignations(object);
+
+/** The catalog numbers below the name, or none when the title shows them already (an object without a name) */
+export const getSubtitle = (object: NgcObject) => (object.name ? getDesignations(object) : null);
 
 const MIN_FIELD_OF_VIEW: ArcMin = 6;
 const MAX_FIELD_OF_VIEW: ArcMin = 180;

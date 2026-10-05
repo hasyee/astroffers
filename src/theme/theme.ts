@@ -32,6 +32,8 @@ const theme = createTheme({
   components: {
     // no lighter overlay on the elevated surfaces (dark mode default): every paper is the same dark color
     MuiPaper: { styleOverrides: { root: { backgroundImage: 'none' } } },
+    // smaller than the default h6, to fit the longer names of the objects in the details
+    MuiDialogTitle: { styleOverrides: { root: { fontSize: '1rem' } } },
     MuiButton: { defaultProps: { disableElevation: true } },
     MuiTextField: { defaultProps: { size: 'small', fullWidth: true } },
     MuiFormControl: { defaultProps: { size: 'small' } }

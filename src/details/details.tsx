@@ -8,8 +8,8 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import type { NgcInfo } from '../calculator/calculator.types';
-import { getTitle } from '../catalog/catalog.utils';
+import type { NgcInfo, NgcObject } from '../calculator/calculator.types';
+import { getSubtitle, getTitle } from '../catalog/catalog.utils';
 import DialogTitleWithClose from '../dialog/dialog.title';
 import { useIsWideScreen } from '../media/media.hooks';
 import { useResult } from '../result/result.hooks';
@@ -102,6 +102,17 @@ function Carousel({ ngcInfo }: { ngcInfo: NgcInfo }) {
   );
 }
 
+/** The name of the object with its catalog numbers below it, or its catalog numbers only */
+function DetailsTitle({ object }: { object: NgcObject }) {
+  const subtitle = getSubtitle(object);
+  return (
+    <span className="DetailsTitle">
+      <span className="title">{getTitle(object)}</span>
+      {subtitle && <span className="subtitle">{subtitle}</span>}
+    </span>
+  );
+}
+
 export default function Details() {
   const ngcInfo = useOpenedNgcInfo();
   const closeDetails = useCloseDetails();
@@ -114,7 +125,7 @@ export default function Details() {
     if (isDetailsRoute && hasResult && !ngcInfo) closeDetails();
   }, [isDetailsRoute, hasResult, ngcInfo, closeDetails]);
 
-  const title = ngcInfo ? getTitle(ngcInfo.object) : '';
+  const title = ngcInfo && <DetailsTitle object={ngcInfo.object} />;
   const body = ngcInfo && <DetailsContent ngcInfo={ngcInfo} />;
 
   if (isWideScreen) {
@@ -143,7 +154,7 @@ export default function Details() {
         <IconButton onClick={closeDetails} aria-label="Back">
           <ArrowBackIcon />
         </IconButton>
-        <Typography variant="h6" component="h2" noWrap>
+        <Typography variant="h6" component="h2">
           {title}
         </Typography>
       </div>

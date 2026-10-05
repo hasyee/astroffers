@@ -3,6 +3,26 @@
   max-width: calc(100vw - 2rem);
 }
 
+// in the title of the dialog and in the header of the drawer
+.DetailsTitle {
+  display: block;
+
+  .title,
+  .subtitle {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .subtitle {
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--mui-palette-text-secondary);
+  }
+}
+
 // previous on the left, next on the right, as in the compact footer
 .Details:not(.compact) .MuiDialogActions-root {
   justify-content: space-between;
@@ -22,6 +42,13 @@
     height: 50px;
     padding: 0 1rem 0 0.25rem;
     border-bottom: 1px solid var(--mui-palette-divider);
+
+    // as the titles of the dialogs (theme), to fit the longer names
+    h2 {
+      flex: 1 1 auto;
+      min-width: 0;
+      font-size: 1rem;
+    }
   }
 
   .Carousel {
