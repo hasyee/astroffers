@@ -60,15 +60,15 @@ export const useDisplayedList = () => {
   );
 };
 
-const getImages = (query: Query) => imagesFromQuery(query, false);
+const getImages = (query: Query) => imagesFromQuery(query, true);
 const parseImages = (serialized: string) => serialized === 'true';
-// the param is left out for the compact table, so it is replaced
+// the param is left out with the images, so it is replaced
 const setQueryImages = (query: Query, hasImages: boolean): Query => ({
   ...omitQuery(query, IMAGES_PARAMS),
   ...imagesToQuery(hasImages)
 });
 
-/** The comfortable table with the images of the objects, or the compact one without them (the default) */
+/** The comfortable table with the images of the objects (the default), or the compact one without them */
 export const useListImages = () => {
   const hasImages = useStatePart(getImages, String, parseImages);
   const setImages = useStatePartSetter(getImages, setQueryImages);

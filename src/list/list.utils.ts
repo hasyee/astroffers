@@ -72,15 +72,16 @@ export const sortByFromQuery = (query: Query, fallback: SortBy): SortBy =>
 
 export const sortByToQuery = (sortBy: SortBy): Query => ({ sort: sortBy });
 
-/** Query param of the images of the table: `img=1`, left out for the compact table without them (the default) */
+/** Query param of the images of the table: `img=0` for the compact table without them, left out with them (the default) */
 export const IMAGES_PARAMS = ['img'] as const;
 
 export const imagesFromQuery = (query: Query, fallback: boolean): boolean =>
-  'img' in query ? query.img === '1' : fallback;
+  'img' in query ? query.img !== '0' : fallback;
 
-export const imagesToQuery = (hasImages: boolean): Query => (hasImages ? { img: '1' } : {});
+export const imagesToQuery = (hasImages: boolean): Query => (hasImages ? {} : { img: '0' });
 
-export const parseStoredImages = (value: string | null) => value === 'true';
+/** Shown unless turned off (nothing stored yet too) */
+export const parseStoredImages = (value: string | null) => value !== 'false';
 
 export const emptySearch: ListSearch = { ngc: '', messier: '', name: '' };
 

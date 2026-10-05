@@ -72,7 +72,8 @@ export const getStoredState = (): StoredState => ({
  * Completes the query with the whole state of the app, before the first render: a param missing from the query
  * is taken from the stored state, or from the defaults (the night of today). A query having any of the params
  * (e.g. a shared link) means every object type and constellation by a missing set, no search by a missing search
- * and the compact table, the closed calendar and the normal colors by a missing `img`, `cal` and `red`; without them (e.g. the start of the PWA) the stored ones are taken too.
+ * the images, the closed calendar and the normal colors by a missing `img`, `cal` and `red`; without them (e.g. the
+ * start of the PWA) the stored ones are taken too.
  */
 export const initQuery = () => {
   const { pathname, hash } = window.location;
@@ -80,7 +81,7 @@ export const initQuery = () => {
   const query = parseQuery(window.location.search);
   const stored = getStoredState();
   const searchFallback = hasQueryState(query) ? emptySearch : stored.search;
-  const imagesFallback = hasQueryState(query) ? false : stored.hasImages;
+  const imagesFallback = hasQueryState(query) ? true : stored.hasImages;
   const calendarFallback = hasQueryState(query) ? false : stored.isCalendarOpen;
   const redLightFallback = hasQueryState(query) ? false : stored.isRedLight;
   const filterFallback = hasQueryState(query)
