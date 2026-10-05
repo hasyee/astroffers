@@ -1,11 +1,10 @@
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import MenuIcon from '@mui/icons-material/Menu';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
-import MenuIcon from '@mui/icons-material/Menu';
 import { useDate } from '../date/date.hooks';
 import { formatShortDate } from '../display/display.utils';
-import { useIsWideScreen } from '../media/media.hooks';
 import './header.scss';
 
 type Props = {
@@ -16,7 +15,6 @@ type Props = {
 };
 
 export default function Header({ onMenuClick, isCalendarOpen, onCalendarClick }: Props) {
-  const isWideScreen = useIsWideScreen();
   const date = useDate();
 
   return (
@@ -24,8 +22,6 @@ export default function Header({ onMenuClick, isCalendarOpen, onCalendarClick }:
       <IconButton onClick={onMenuClick} aria-label="Filter">
         <MenuIcon />
       </IconButton>
-      {/* on a phone the date takes the room of the title */}
-      {isWideScreen && <span className="title">Astroffers</span>}
       <div className="spacer" />
       <Button
         color={isCalendarOpen ? 'primary' : 'inherit'}
