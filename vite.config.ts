@@ -3,7 +3,8 @@ import react from '@vitejs/plugin-react';
 import oxlint from 'vite-plugin-oxlint';
 import { VitePWA } from 'vite-plugin-pwa';
 
-const THEME_COLOR = '#111418';
+// the background of the app (`theme.ts`)
+const THEME_COLOR = '#111619';
 
 export default defineConfig({
   define: {

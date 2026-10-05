@@ -1,7 +1,5 @@
 @use '../chart/chart.colors' as colors;
 
-$today: #6f3434;
-
 // on a wide screen the gap of the section below the card only while it is open
 .CalendarCollapse {
   flex: 0 0 auto;
@@ -133,11 +131,11 @@ $today: #6f3434;
   }
 
   &.today {
-    background-color: $today;
+    background-color: var(--mui-palette-red-dark);
 
     @media (hover: hover) {
       &:hover {
-        background-color: color-mix(in srgb, $today, black 20%);
+        background-color: color-mix(in srgb, var(--mui-palette-red-dark), black 20%);
       }
     }
   }

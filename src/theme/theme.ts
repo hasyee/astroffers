@@ -1,15 +1,34 @@
-import { createTheme } from '@mui/material/styles';
+import { blueGrey, red } from '@mui/material/colors';
+import { createTheme, darken } from '@mui/material/styles';
+import type { PaletteColor, PaletteColorOptions } from '@mui/material/styles';
 
-/** Background of the app, also the theme color of the PWA (`vite.config.ts`, `index.html`) */
-export const BACKGROUND = '#111418';
-export const PAPER = '#1c2127';
+declare module '@mui/material/styles' {
+  interface Palette {
+    red: PaletteColor;
+  }
+  interface PaletteOptions {
+    red?: PaletteColorOptions;
+  }
+}
+
+// the light and dark shades of a custom color are not computed by `createTheme`, only of the built-in ones
+const { augmentColor } = createTheme({ palette: { mode: 'dark' } }).palette;
+
+/**
+ * Background of the app; also the theme color of the PWA as a hex (`#111619`, `THEME_COLOR` in `vite.config.ts`,
+ * `index.html`), needed before the app is loaded
+ */
+const BACKGROUND = darken(blueGrey[900], 0.55);
+const PAPER = darken(blueGrey[900], 0.4);
 
 const theme = createTheme({
   // exposes the palette as CSS variables (`--mui-palette-*`) for the stylesheets
   cssVariables: true,
   palette: {
     mode: 'dark',
-    background: { default: BACKGROUND, paper: PAPER }
+    background: { default: BACKGROUND, paper: PAPER },
+    // its dark shade (#aa2e25) is today in the calendar and the red light toggle of the header
+    red: augmentColor({ color: { main: red[500] }, name: 'red' })
   },
   typography: {
     // a dense app: 14px instead of 16px as the base size
