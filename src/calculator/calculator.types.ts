@@ -35,6 +35,8 @@ export type BrightnessType = 'magnitude' | 'surfaceBrightness';
 
 /** Object of the NGC 2000 catalog, as stored in `catalog.json` */
 export type NgcObject = {
+  /** `m<Messier number>` for a Messier object, else `ngc<NGC number>` (e.g. `m27`, `ngc884`); in the route too */
+  id: string;
   ngc: number;
   messier?: number;
   name?: string;

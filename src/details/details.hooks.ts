@@ -6,49 +6,45 @@ import { useDisplayedList } from '../list/list.hooks';
 import { useResultList, useResultParams } from '../result/result.hooks';
 import { useGoBack, useMatchPath, useNavigate } from '../router/router.hooks';
 
-/** Route of the details view: the NGC number itself (e.g. `/224`) */
-const DETAILS_PATH = ':ngc';
+/** Route of the details view: the id of the object (e.g. `/m27`, `/ngc884`) */
+const DETAILS_PATH = ':id';
 
-const getDetailsPath = (ngc: number) => `/${ngc}`;
+const getDetailsPath = (id: string) => `/${id}`;
 
-/** NGC number of the object opened in the details view, from the route */
-export const useOpenedNgc = () => {
-  const params = useMatchPath(DETAILS_PATH);
-  const ngc = Number(params?.ngc);
-  return params && Number.isInteger(ngc) ? ngc : null;
-};
+/** Id of the object opened in the details view, from the route */
+export const useOpenedId = () => useMatchPath(DETAILS_PATH)?.id ?? null;
 
 /** The details route is open, even with an unknown object */
 export const useIsDetailsRoute = () => !!useMatchPath(DETAILS_PATH);
 
 export const useOpenDetails = () => {
   const navigate = useNavigate();
-  return useCallback((ngc: number) => navigate(getDetailsPath(ngc)), [navigate]);
+  return useCallback((id: string) => navigate(getDetailsPath(id)), [navigate]);
 };
 
 /** Steps to another object without a history entry, so the back button closes the details */
 export const useStepDetails = () => {
   const navigate = useNavigate({ replace: true });
-  return useCallback((ngc: number) => navigate(getDetailsPath(ngc)), [navigate]);
+  return useCallback((id: string) => navigate(getDetailsPath(id)), [navigate]);
 };
 
 export const useCloseDetails = () => useGoBack();
 
 export const useOpenedNgcInfo = () => {
-  const ngc = useOpenedNgc();
+  const id = useOpenedId();
   const list = useResultList();
-  return useMemo(() => (ngc === null ? null : (list.find(({ object }) => object.ngc === ngc) ?? null)), [ngc, list]);
+  return useMemo(() => (id === null ? null : (list.find(({ object }) => object.id === id) ?? null)), [id, list]);
 };
 
 /** The previous and next objects of the displayed list */
 export const useAdjacentNgcInfos = (): [prev: NgcInfo | null, next: NgcInfo | null] => {
-  const ngc = useOpenedNgc();
+  const id = useOpenedId();
   const list = useDisplayedList();
   return useMemo(() => {
-    const index = list.findIndex(({ object }) => object.ngc === ngc);
+    const index = list.findIndex(({ object }) => object.id === id);
     if (index < 0) return [null, null];
     return [list[index - 1] ?? null, list[index + 1] ?? null];
-  }, [ngc, list]);
+  }, [id, list]);
 };
 
 /** Altitude and azimuth of the object minute by minute, from the noon of the date to the next noon */

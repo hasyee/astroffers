@@ -6,7 +6,7 @@ function splitSegments(path: string): string[] {
   return path.split('/').filter(segment => segment.length > 0);
 }
 
-/** Matches a pattern like `:ngc`, `deleted/:collection?` or `items/*` against a path (from tinc) */
+/** Matches a pattern like `:id`, `deleted/:collection?` or `items/*` against a path (from tinc) */
 export function matchPath(pattern: string, candidate: string): PathMatch | null {
   const patternSegments = splitSegments(pattern);
   const candidateSegments = splitSegments(candidate);

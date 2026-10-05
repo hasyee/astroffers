@@ -32,9 +32,24 @@ const dmsToArcMin = ({ deg = 0, arcMin = 0, arcSec = 0 }) => deg * 60 + arcMin +
 
 const isNumber = value => typeof value === 'number' && Number.isFinite(value);
 
-const toCompact = ({ ngc, messier, name, eqCoords, constellation, size, magnitude, surfaceBrightness, types }) =>
+/**
+ * Id of an object, also in the route of the app: `m<Messier number>` for a Messier object, else `ngc<NGC number>`.
+ * A Messier number of more NGC objects (e.g. M76 of NGC 650 and 651) is the id of the first one only.
+ */
+const withIds = objects => {
+  const messierIds = new Set();
+  return objects.map(object => {
+    const messierId = object.messier !== undefined && object.messier !== null ? `m${object.messier}` : null;
+    const id = messierId && !messierIds.has(messierId) ? messierId : `ngc${object.ngc}`;
+    if (messierId) messierIds.add(messierId);
+    return { id, ...object };
+  });
+};
+
+const toCompact = ({ id, ngc, messier, name, eqCoords, constellation, size, magnitude, surfaceBrightness, types }) =>
   Object.fromEntries(
     Object.entries({
+      id,
       ngc,
       messier,
       name,
@@ -49,7 +64,7 @@ const toCompact = ({ ngc, messier, name, eqCoords, constellation, size, magnitud
   );
 
 mkdirSync(target, { recursive: true });
-write('catalog.json', read('ngc.json').map(toCompact));
+write('catalog.json', withIds(read('ngc.json')).map(toCompact));
 write('catalog.types.json', read('types.json'));
 write('catalog.allTypes.json', read('all-types.json'));
 write('catalog.constellations.json', read('constellations.json'));

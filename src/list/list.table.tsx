@@ -81,7 +81,8 @@ function ImageHeaderCell({ hasImages, onToggle }: { hasImages: boolean; onToggle
 function Row({ ngcInfo, hasImages }: { ngcInfo: NgcInfo; hasImages: boolean }) {
   const openDetails = useOpenDetails();
   const row = toListRow(ngcInfo);
-  const handleClick = useCallback(() => openDetails(row.ngc), [openDetails, row.ngc]);
+  const { id } = ngcInfo.object;
+  const handleClick = useCallback(() => openDetails(id), [openDetails, id]);
 
   return (
     <tr onClick={handleClick}>

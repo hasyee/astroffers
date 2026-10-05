@@ -27,8 +27,8 @@ import './details.scss';
 function Navigation() {
   const stepDetails = useStepDetails();
   const [prev, next] = useAdjacentNgcInfos();
-  const handlePrev = useCallback(() => prev && stepDetails(prev.object.ngc), [prev, stepDetails]);
-  const handleNext = useCallback(() => next && stepDetails(next.object.ngc), [next, stepDetails]);
+  const handlePrev = useCallback(() => prev && stepDetails(prev.object.id), [prev, stepDetails]);
+  const handleNext = useCallback(() => next && stepDetails(next.object.id), [next, stepDetails]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -58,8 +58,8 @@ function Navigation() {
 function Carousel({ ngcInfo }: { ngcInfo: NgcInfo }) {
   const stepDetails = useStepDetails();
   const [prev, next] = useAdjacentNgcInfos();
-  const onPrev = useMemo(() => (prev ? () => stepDetails(prev.object.ngc) : null), [prev, stepDetails]);
-  const onNext = useMemo(() => (next ? () => stepDetails(next.object.ngc) : null), [next, stepDetails]);
+  const onPrev = useMemo(() => (prev ? () => stepDetails(prev.object.id) : null), [prev, stepDetails]);
+  const onNext = useMemo(() => (next ? () => stepDetails(next.object.id) : null), [next, stepDetails]);
   const trackRef = useSwipe<HTMLDivElement>({ onPrev, onNext }, ngcInfo.object.ngc);
 
   // keyed by the object, so a neighbor stepped to is kept as it is (e.g. its loaded image and charts)

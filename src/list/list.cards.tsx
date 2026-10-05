@@ -97,7 +97,8 @@ function Toolbar() {
 function Item({ ngcInfo }: { ngcInfo: NgcInfo }) {
   const openDetails = useOpenDetails();
   const row = toListRow(ngcInfo);
-  const handleClick = useCallback(() => openDetails(row.ngc), [openDetails, row.ngc]);
+  const { id } = ngcInfo.object;
+  const handleClick = useCallback(() => openDetails(id), [openDetails, id]);
 
   return (
     <div className="Item" onClick={handleClick}>
