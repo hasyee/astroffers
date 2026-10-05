@@ -19,7 +19,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "version": "echo \"${VERSION:-$RENDER_GIT_COMMIT}\" > public/version",
+    "version": "echo \"${VERSION:-$RENDER_GIT_COMMIT}\" > public/version.txt",
     "build": "npm run version && tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview"

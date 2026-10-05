@@ -1,8 +1,7 @@
 node_modules
 dist
-public/version
+public/version.txt
 dev-dist
-public/version
 .DS_Store
 .env*.local
 npm-debug.log*

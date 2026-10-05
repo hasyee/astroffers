@@ -21,6 +21,10 @@ services:
       - path: /sw.js
         name: Cache-Control
         value: no-cache
+      # compared with the running version by the About dialog (which also asks it by a unique URL)
+      - path: /version.txt
+        name: Cache-Control
+        value: no-cache
     routes:
       # client-side routes (/:id) are served by the app; existing files are served as they are
       - type: rewrite

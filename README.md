@@ -62,8 +62,8 @@ service of CDS (Strasbourg), with a field of view fitted to the size of the obje
 ## Deployment
 
 [render.yaml](render.yaml) defines the `astroffers` static site on Render. Every build writes the deployed commit to
-`/version`. The service worker updates the app by itself; in case it does not, the About dialog compares the running
-version with `/version` and offers an Update button.
+`/version.txt`. The service worker updates the app by itself; in case it does not, the About dialog compares the running
+version with `/version.txt` and offers an Update button.
 
 ## Known limitations
 
