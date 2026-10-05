@@ -13,18 +13,21 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             Astroffers helps you to discover the objects of the NGC 2000 catalog and every Messier object, including the
             few without an NGC number (M24, M25, M40 and the Pleiades, M45). Along with your filter it lists the objects
             that are visible on the chosen night at your location. The night is chosen in the calendar, opened by the
-            date in the header. The list is recalculated automatically whenever you change the filter.
+            date in the header. The list is recalculated automatically whenever you change the filter. The address of the
+            page holds the night, the location, the filter and the search, so a link to it shows the same list.
           </p>
 
           <h3>Filter</h3>
           <p>
             On a wide screen the filter is on the left side, the menu button of the header hides and shows it; on a
-            narrower screen or a phone it opens with the menu button.
+            narrower screen or a phone it opens with the menu button. The reset button at its top restores the default
+            filter and clears the search.
           </p>
           <ul>
             <li>
               <b>Location:</b> search for a place, type its coordinates, or use the location of your device. Your
-              location is followed: it is refreshed on start and every minute, until you choose another place.
+              location is followed: it is refreshed on start, every minute and when you return to the app, until you
+              choose another place.
             </li>
             <li>
               <b>Minimum observation time:</b> how long an object should be visible during the night at least.
@@ -83,7 +86,8 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             The date in the header opens the calendar above the summary, which shows the nights of a whole month at the
             chosen location: the phase of the Moon and a strip of every day from midnight to midnight with the same
             colors as the clock face. The astronomical night follows the maximum altitude of the Sun of the filter. It
-            opens on the month of the chosen night, which is framed; click a day to choose its night.
+            opens on the month of the chosen night, which is framed; click a day to choose its night. Step between the
+            months with the arrows, the arrow keys or by swiping; the today button jumps to tonight.
           </p>
 
           <h3>Result list</h3>
@@ -99,10 +103,20 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
 
           <h3>Details</h3>
           <p>
-            Click an object to see its details: a preview image from the DSS2 survey, its coordinates, rising, setting
-            and transit, an <b>altitude chart</b> from noon to the next noon, and a <b>polar chart</b> of its path on
-            the sky, where the distance from the center is the distance from the zenith. A full circle means that the
-            object is circumpolar. Step to the previous or next object with the buttons or the arrow keys.
+            Objects are titled by their name, with their Messier and NGC numbers below it, or by their numbers when they
+            have no name. Click an object to see its details: a preview image from the DSS2 survey (click it for a
+            larger color version), its coordinates, rising, setting and transit, an <b>altitude chart</b> from noon to
+            the next noon, and a <b>polar chart</b> of its path on the sky, where the distance from the center is the
+            distance from the zenith. A full circle means that the object is circumpolar. Step to the previous or next
+            object with the buttons, the arrow keys or by swiping on a phone.
+          </p>
+          <p>
+            The <b>Stellarium</b> button between them opens the object on{' '}
+            <a href="https://stellarium-web.org" target="_blank" rel="noopener">
+              Stellarium Web
+            </a>{' '}
+            in a new tab, as the sky looks <b>now</b> or at its <b>best visibility</b> in the chosen night, from your
+            location.
           </p>
         </div>
       </DialogContent>
