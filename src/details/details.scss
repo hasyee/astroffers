@@ -3,6 +3,11 @@
   max-width: calc(100vw - 2rem);
 }
 
+// previous on the left, next on the right, as in the compact footer
+.Details:not(.compact) .MuiDialogActions-root {
+  justify-content: space-between;
+}
+
 .Details.compact .DetailsPaper {
   width: 100%;
   // a page of the app rather than a floating panel

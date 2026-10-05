@@ -24,7 +24,8 @@ import DetailsContent from './details.content';
 import { useSwipe } from '../swipe/swipe.hooks';
 import './details.scss';
 
-function Navigation() {
+/** Steps to the previous / next object of the list; icons only in the footer of the compact drawer */
+function Navigation({ isCompact = false }: { isCompact?: boolean }) {
   const stepDetails = useStepDetails();
   const [prev, next] = useAdjacentNgcInfos();
   const handlePrev = useCallback(() => prev && stepDetails(prev.object.id), [prev, stepDetails]);
@@ -38,6 +39,19 @@ function Navigation() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handlePrev, handleNext]);
+
+  if (isCompact) {
+    return (
+      <>
+        <IconButton onClick={handlePrev} disabled={!prev} aria-label="Previous">
+          <ArrowBackIcon />
+        </IconButton>
+        <IconButton onClick={handleNext} disabled={!next} aria-label="Next">
+          <ArrowForwardIcon />
+        </IconButton>
+      </>
+    );
+  }
 
   return (
     <>
@@ -129,7 +143,7 @@ export default function Details() {
       </div>
       {ngcInfo && <Carousel ngcInfo={ngcInfo} />}
       <div className="footer">
-        <Navigation />
+        <Navigation isCompact />
       </div>
     </Drawer>
   );
