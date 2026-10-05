@@ -15,7 +15,7 @@ export const defaultFilter: ObjectFilter = {
   altitude: 20,
   moonless: true,
   brightnessFilter: 'magnitude',
-  magnitude: 8,
+  magnitude: 10,
   surfaceBrightness: 14,
   types: selectAllTypes(true),
   constellations: selectAllConstellations(true)
