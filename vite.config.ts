@@ -9,6 +9,10 @@ export default defineConfig({
   define: {
     'import.meta.env.VERSION': JSON.stringify(process.env.VERSION || process.env.RENDER_GIT_COMMIT)
   },
+  // reachable from the local network too, e.g. from a phone (`vite preview` takes it over)
+  server: {
+    host: true
+  },
   worker: {
     format: 'es'
   },

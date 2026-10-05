@@ -18,11 +18,11 @@
     "url": "https://github.com/hasyee/astroffers/issues"
   },
   "scripts": {
-    "dev": "vite --host",
+    "dev": "vite",
     "version": "echo \"${VERSION:-$RENDER_GIT_COMMIT}\" > public/version",
     "build": "npm run version && tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview --host"
+    "preview": "vite preview"
   },
   "devDependencies": {
     "@types/node": "^26.6.4",
