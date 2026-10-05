@@ -7,6 +7,9 @@ import type { ListSearch, SortBy } from './list.types';
 import {
   defaultSortBy,
   emptySearch,
+  IMAGES_PARAMS,
+  imagesFromQuery,
+  imagesToQuery,
   isSearchEmpty,
   matchesSearch,
   searchFromQuery,
@@ -55,6 +58,22 @@ export const useDisplayedList = () => {
     () => (isSearchEmpty(search) ? list : list.filter(matchesSearch(search))).toSorted(sorters[sortBy]),
     [list, sortBy, search]
   );
+};
+
+const getImages = (query: Query) => imagesFromQuery(query, false);
+const parseImages = (serialized: string) => serialized === 'true';
+// the param is left out for the compact table, so it is replaced
+const setQueryImages = (query: Query, hasImages: boolean): Query => ({
+  ...omitQuery(query, IMAGES_PARAMS),
+  ...imagesToQuery(hasImages)
+});
+
+/** The comfortable table with the images of the objects, or the compact one without them (the default) */
+export const useListImages = () => {
+  const hasImages = useStatePart(getImages, String, parseImages);
+  const setImages = useStatePartSetter(getImages, setQueryImages);
+  const toggleImages = useCallback(() => setImages(hasImages => !hasImages), [setImages]);
+  return [hasImages, toggleImages] as const;
 };
 
 const PAGE_SIZE = 100;

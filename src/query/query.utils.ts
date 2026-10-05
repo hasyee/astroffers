@@ -8,9 +8,13 @@ import {
   parseStoredFilter
 } from '../filter/filter.utils';
 import {
+  IMAGES_PARAMS,
   SEARCH_PARAMS,
   SORT_PARAMS,
   emptySearch,
+  imagesFromQuery,
+  imagesToQuery,
+  parseStoredImages,
   parseStoredSearch,
   parseStoredSortBy,
   searchFromQuery,
@@ -24,16 +28,24 @@ import { omitQuery, parseQuery, serializeQuery } from '../router/router.utils';
 import type { StoredState } from './query.types';
 
 /** Params of the state of the main view in the query */
-export const STATE_PARAMS = [...DATE_PARAMS, ...COORDS_PARAMS, ...SORT_PARAMS, ...SEARCH_PARAMS, ...FILTER_PARAMS];
+export const STATE_PARAMS = [
+  ...DATE_PARAMS,
+  ...COORDS_PARAMS,
+  ...SORT_PARAMS,
+  ...SEARCH_PARAMS,
+  ...IMAGES_PARAMS,
+  ...FILTER_PARAMS
+];
 
 export const hasQueryState = (query: Query) => STATE_PARAMS.some(key => key in query);
 
 /** The query of the whole state, in the order of the params */
-export const stateToQuery = ({ date, sortBy, search, filter }: StoredState, coords: Coords): Query => ({
+export const stateToQuery = ({ date, sortBy, search, hasImages, filter }: StoredState, coords: Coords): Query => ({
   ...dateToQuery(date),
   ...coordsToQuery(coords),
   ...sortByToQuery(sortBy),
   ...searchToQuery(search),
+  ...imagesToQuery(hasImages),
   ...filterToQuery(filter)
 });
 
@@ -41,14 +53,15 @@ export const getStoredState = (): StoredState => ({
   date: getToday(),
   sortBy: parseStoredSortBy(localStorage.getItem('sortBy')),
   search: parseStoredSearch(localStorage.getItem('search')),
+  hasImages: parseStoredImages(localStorage.getItem('images')),
   filter: parseStoredFilter(localStorage.getItem('filter'))
 });
 
 /**
  * Completes the query with the whole state of the app, before the first render: a param missing from the query
  * is taken from the stored state, or from the defaults (the night of today). A query having any of the params
- * (e.g. a shared link) means every object type and constellation by a missing set, and no search by a missing
- * search; without them (e.g. the start of the PWA) the stored sets and search are taken too.
+ * (e.g. a shared link) means every object type and constellation by a missing set, no search by a missing search
+ * and the compact table by a missing `img`; without them (e.g. the start of the PWA) the stored ones are taken too.
  */
 export const initQuery = () => {
   const { pathname, hash } = window.location;
@@ -56,6 +69,7 @@ export const initQuery = () => {
   const query = parseQuery(window.location.search);
   const stored = getStoredState();
   const searchFallback = hasQueryState(query) ? emptySearch : stored.search;
+  const imagesFallback = hasQueryState(query) ? false : stored.hasImages;
   const filterFallback = hasQueryState(query)
     ? { ...stored.filter, types: defaultFilter.types, constellations: defaultFilter.constellations }
     : stored.filter;
@@ -66,6 +80,7 @@ export const initQuery = () => {
         date: dateFromQuery(query, stored.date),
         sortBy: sortByFromQuery(query, stored.sortBy),
         search: searchFromQuery(query, searchFallback),
+        hasImages: imagesFromQuery(query, imagesFallback),
         filter: filterFromQuery(query, filterFallback)
       },
       coordsFromQuery(query, parseStoredPlace(localStorage.getItem('location')).coords)

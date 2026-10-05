@@ -1,11 +1,22 @@
 import { useCallback } from 'react';
 import classnames from 'classnames';
+import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
+import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import type { NgcInfo } from '../calculator/calculator.types';
+import { getObjectImgSrc } from '../catalog/catalog.utils';
 import { useOpenDetails } from '../details/details.hooks';
 import { toListRow } from '../display/display.utils';
-import { useIncrementalList, useSearch, useSearchValueSetter, useSortBy, useSortBySetter } from './list.hooks';
+import {
+  useIncrementalList,
+  useListImages,
+  useSearch,
+  useSearchValueSetter,
+  useSortBy,
+  useSortBySetter
+} from './list.hooks';
 import type { ListSearch, SortBy } from './list.types';
 
 type Column = { key: SortBy; label: string; title: string; search?: keyof ListSearch; className?: string };
@@ -49,13 +60,29 @@ function HeaderCell({ column }: { column: Column }) {
   );
 }
 
-function Row({ ngcInfo }: { ngcInfo: NgcInfo }) {
+/** The column of the images, its header toggles them */
+function ImageHeaderCell({ hasImages, onToggle }: { hasImages: boolean; onToggle: () => void }) {
+  const label = hasImages ? 'Hide images' : 'Show images';
+  return (
+    <th className="image">
+      <IconButton size="small" onClick={onToggle} title={label} aria-label={label} aria-pressed={hasImages}>
+        {hasImages ? <HideImageOutlinedIcon fontSize="small" /> : <ImageOutlinedIcon fontSize="small" />}
+      </IconButton>
+    </th>
+  );
+}
+
+function Row({ ngcInfo, hasImages }: { ngcInfo: NgcInfo; hasImages: boolean }) {
   const openDetails = useOpenDetails();
   const row = toListRow(ngcInfo);
   const handleClick = useCallback(() => openDetails(row.ngc), [openDetails, row.ngc]);
 
   return (
     <tr onClick={handleClick}>
+      <td className="image">
+        {/* the size of the details, to share its cached image */}
+        {hasImages && <img src={getObjectImgSrc(ngcInfo.object)} crossOrigin="anonymous" alt="" loading="lazy" />}
+      </td>
       <td className="ngc">
         <b>{row.ngc}</b>
       </td>
@@ -81,15 +108,17 @@ function Row({ ngcInfo }: { ngcInfo: NgcInfo }) {
   );
 }
 
-/** Result list as a sortable, searchable table (desktop layout) */
+/** Result list as a sortable, searchable table (desktop layout), compact or comfortable with the images */
 export default function ListTable({ list }: { list: NgcInfo[] }) {
   const { visibleList, hasMore, sentinelRef } = useIncrementalList(list);
+  const [hasImages, toggleImages] = useListImages();
 
   return (
-    <div className="ListTable">
+    <div className={classnames('ListTable', { 'has-images': hasImages })}>
       <table>
         <thead>
           <tr>
+            <ImageHeaderCell hasImages={hasImages} onToggle={toggleImages} />
             {columns.map(column => (
               <HeaderCell key={column.key} column={column} />
             ))}
@@ -97,7 +126,7 @@ export default function ListTable({ list }: { list: NgcInfo[] }) {
         </thead>
         <tbody>
           {visibleList.map(ngcInfo => (
-            <Row key={ngcInfo.object.ngc} ngcInfo={ngcInfo} />
+            <Row key={ngcInfo.object.ngc} ngcInfo={ngcInfo} hasImages={hasImages} />
           ))}
         </tbody>
       </table>

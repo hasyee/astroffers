@@ -96,6 +96,37 @@
     }
   }
 
+  // narrow: the toggle in the header, the images of the comfortable table in the rows
+  th.image,
+  td.image {
+    width: 0;
+    padding-right: 0;
+  }
+
+  th.image {
+    // in line with the sorters of the other headers
+    padding-top: 0.1rem;
+    padding-left: 0.25rem;
+  }
+
+  td.image {
+    padding-left: 0.6rem;
+
+    img {
+      display: block;
+      width: 56px;
+      height: 56px;
+      border-radius: var(--mui-shape-borderRadius);
+      background-color: black;
+      filter: grayscale(1);
+    }
+  }
+
+  // the rows of the comfortable table are as high as their images
+  &.has-images td {
+    vertical-align: middle;
+  }
+
   td.name,
   th.name {
     width: 100%;
