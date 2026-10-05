@@ -17,6 +17,7 @@ import {
   useSortBy,
   useSortBySetter
 } from './list.hooks';
+import { getSearchAnyAdornment } from './list.search';
 import type { ListSearch, SortBy } from './list.types';
 
 type Column = { key: SortBy; label: string; title: string; search?: keyof ListSearch; className?: string };
@@ -54,6 +55,11 @@ function HeaderCell({ column }: { column: Column }) {
           placeholder={column.search === 'name' ? 'Search' : '#'}
           value={search[column.search]}
           onChange={event => setSearchValue(event.target.value)}
+          endAdornment={
+            column.search !== 'ngc'
+              ? getSearchAnyAdornment(column.search, search[column.search], setSearchValue)
+              : undefined
+          }
         />
       )}
     </th>

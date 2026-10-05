@@ -81,6 +81,19 @@
       display: flex;
       margin-top: 0.25rem;
       min-width: 3.5rem;
+
+      &.MuiInputBase-adornedEnd {
+        padding-right: 0.25rem;
+      }
+
+      .SearchAnyAdornment {
+        margin-left: 0;
+        font-size: 0.9rem;
+
+        .MuiIconButton-root {
+          margin-right: 0;
+        }
+      }
       font-size: 0.8rem;
       border: 1px solid var(--mui-palette-divider);
       border-radius: var(--mui-shape-borderRadius);
@@ -92,6 +105,19 @@
       input {
         padding: 0.2rem 0.4rem;
         font-weight: 400;
+      }
+
+      // the clear button of the browser, larger and with a pointer, in the color of the asterisk button
+      input::-webkit-search-cancel-button {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 1.25rem;
+        height: 1.25rem;
+        margin: -0.2rem -0.25rem -0.2rem 0.25rem;
+        cursor: pointer;
+        background-color: var(--mui-palette-action-active);
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/%3E%3C/svg%3E")
+          center / 1rem no-repeat;
       }
     }
   }
@@ -125,6 +151,11 @@
   // the rows of the comfortable table are as high as their images
   &.has-images td {
     vertical-align: middle;
+  }
+
+  // room for the asterisk button of its search, also while it is hidden, not to resize the column by typing
+  th.messier .search {
+    min-width: 4.5rem;
   }
 
   td.name,
@@ -181,7 +212,7 @@
 
     .search {
       display: grid;
-      grid-template-columns: 1fr 1fr 2fr;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 2fr);
       gap: 0.5rem;
       padding-top: 0.5rem;
 
@@ -189,6 +220,14 @@
       .MuiInputBase-input {
         padding-left: 0.6rem;
         padding-right: 0.6rem;
+      }
+
+      .MuiInputBase-adornedEnd {
+        padding-right: 0.5rem;
+
+        .MuiInputBase-input {
+          padding-right: 0;
+        }
       }
     }
   }
@@ -268,4 +307,15 @@
       }
     }
   }
+}
+
+// the asterisk toggle of the Messier and the name search (`list.search.tsx`)
+.SearchAnyAdornment .MuiIconButton-root {
+  padding: 3px;
+  margin-right: -4px;
+  font-size: inherit;
+}
+
+.ListCards .SearchAnyAdornment {
+  font-size: 1.1rem;
 }

@@ -24,7 +24,7 @@ PWA listing the NGC 2000 objects visible on a given night at a given location. V
 - Text buttons and `IconButton`s everywhere; fields are outlined `TextField`s with floating labels. Choices made in a dialog (Location, Object types, Constellations) are read-only `SelectorField`s (`input/input.selector.tsx`). Dialogs use `DialogTitleWithClose` (`dialog/`), placeholders `EmptyState` (`empty/`).
 - Red light mode (`redlight/`, the eye button of the header): an SVG `feColorMatrix` filter (`index.html`) on `<html>` maps the brightness of every pixel to dim red, so everything turns red without touching the components — keep it on the root: a filter elsewhere would miss the dialogs and drawers rendered into the body, and would become the containing block of their fixed positions. Colors that differ in hue only (e.g. the bands of the night) differ in brightness only there.
 - Preview images (CDS hips2fits, DSS2) are grayscale via CSS; clicking the details preview opens a 1200px color version in a new tab. The cards and the comfortable table (images toggled in the header of its first column, `useListImages`) request them in the size of the details (300px), to share the cached image.
-- Search: `*` in the Messier or name search matches every object having one; on phones the Messier field uses `inputMode="tel"` (a numeric keypad that has `*`).
+- Search: `*` in the Messier or name search matches every object having one, toggled by the asterisk button at the end of the field (`list/list.search.tsx`; typing it works too), so the Messier field has a plain numeric keypad on phones (`inputMode="numeric"`).
 
 ## Gotchas
 

@@ -17,6 +17,7 @@ import {
   useSortBy,
   useSortBySetter
 } from './list.hooks';
+import { getSearchAnyAdornment } from './list.search';
 import type { SortBy } from './list.types';
 import { emptySearch, isSearchEmpty, sortOptions } from './list.utils';
 
@@ -67,17 +68,25 @@ function Toolbar() {
           />
           <TextField
             type="search"
-            placeholder="Messier"
+            // short, as in the header of the table: its asterisk button takes room too
+            placeholder="M"
             value={search.messier}
             onChange={event => setMessier(event.target.value)}
-            // a numeric keypad with "*", to list every object with a Messier number
-            slotProps={{ htmlInput: { inputMode: 'tel' } }}
+            slotProps={{
+              htmlInput: { inputMode: 'numeric' },
+              input: {
+                endAdornment: getSearchAnyAdornment('messier', search.messier, setMessier)
+              }
+            }}
           />
           <TextField
             type="search"
             placeholder="Name"
             value={search.name}
             onChange={event => setName(event.target.value)}
+            slotProps={{
+              input: { endAdornment: getSearchAnyAdornment('name', search.name, setName) }
+            }}
           />
         </div>
       </Collapse>

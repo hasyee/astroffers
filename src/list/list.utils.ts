@@ -101,14 +101,14 @@ export const parseStoredSearch = (json: string | null): ListSearch => {
 
 export const isSearchEmpty = (search: ListSearch) => !search.ngc && !search.messier && !search.name;
 
-/** Search term matching every object that has the field at all */
-const ANY = '*';
+/** Search term matching every object that has the field at all (toggled by `SearchAnyAdornment`) */
+export const SEARCH_ANY = '*';
 
 const matchesMessier = (term: string, messier: number | undefined) =>
-  !term || (term === ANY ? messier !== undefined : String(messier) === term);
+  !term || (term === SEARCH_ANY ? messier !== undefined : String(messier) === term);
 
 const matchesName = (term: string, name: string | undefined) =>
-  !term || (term === ANY ? !!name : !!name?.toLowerCase().includes(term.toLowerCase()));
+  !term || (term === SEARCH_ANY ? !!name : !!name?.toLowerCase().includes(term.toLowerCase()));
 
 export const matchesSearch =
   ({ ngc, messier, name }: ListSearch) =>

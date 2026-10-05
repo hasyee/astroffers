@@ -91,8 +91,8 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             altitude (<b>Max / Alt</b>) and the length of the visibility (<b>Sum</b>). The list is sorted by the best
             visibility by default; click a header (or use the sort selector on a phone) to sort otherwise. Objects can
             be searched by their NGC number, Messier number and name; <code>*</code> in the Messier or the name search
-            lists every object that has a Messier number or a name. On a wide screen the image button in the corner of
-            the table shows or hides the images of the objects.
+            (or its asterisk button) lists every object that has a Messier number or a name. On a wide screen the image
+            button in the corner of the table shows or hides the images of the objects.
           </p>
 
           <h3>Details</h3>
