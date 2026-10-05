@@ -28,6 +28,9 @@ export const getTitle = (object: NgcObject) => object.name || getDesignations(ob
 /** The catalog numbers below the name, or none when the title shows them already (an object without a name) */
 export const getSubtitle = (object: NgcObject) => (object.name ? getDesignations(object) : null);
 
+/** Pixels of the preview, the same for the details, the cards and the table, to share the cached image */
+const PREVIEW_SIZE = 300;
+
 const MIN_FIELD_OF_VIEW: ArcMin = 6;
 const MAX_FIELD_OF_VIEW: ArcMin = 180;
 
@@ -39,12 +42,12 @@ const getFieldOfView = (size?: [ArcMin, ArcMin]): ArcMin =>
  * DSS2 color preview of the object from the hips2fits service of CDS (Strasbourg), or the bundled photo of a body of
  * the Solar System
  */
-export const getObjectImgSrc = ({ ra, de, size, photo }: NgcObject, pixels = 300) => {
+export const getObjectImgSrc = ({ ra, de, size, photo }: NgcObject) => {
   if (photo) return photo.src;
   const params = new URLSearchParams({
     hips: 'CDS/P/DSS2/color',
-    width: String(pixels),
-    height: String(pixels),
+    width: String(PREVIEW_SIZE),
+    height: String(PREVIEW_SIZE),
     fov: (getFieldOfView(size) / 60).toFixed(3),
     projection: 'TAN',
     coordsys: 'icrs',
