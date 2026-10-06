@@ -1,4 +1,12 @@
-import type { CalcParams, CalcResult, Interval, NgcObject, NightParams, NightResult, Timestamp } from './calculator.types';
+import type {
+  CalcParams,
+  CalcResult,
+  Interval,
+  NgcObject,
+  NightParams,
+  NightResult,
+  Timestamp
+} from './calculator.types';
 import { getSolarSystemObjects } from '../solar/solar.utils';
 import { getNightInfo } from './calculator.night';
 import { getObjects } from './calculator.ngc';
@@ -21,7 +29,7 @@ export default (catalog: NgcObject[], params: CalcParams): CalcResult => {
     filter
   } = params;
   const nightInfo = getNightInfo(date, lat, lng, filter.twilight);
-  const night = filter.moonless ? nightInfo.moonlessNight : nightInfo.astroNight;
+  const night = nightInfo[filter.observationWindow];
   const objects = night ? [...catalog, ...getSolarSystemObjects(getMiddle(night, date))] : catalog;
   const list = getObjects(objects, date, getLocation(lat, lng), night, filter);
   return { params, nightInfo, list };

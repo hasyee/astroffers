@@ -31,9 +31,6 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
               choose another place.
             </li>
             <li>
-              <b>Minimum observation time:</b> how long an object should be visible during the night at least.
-            </li>
-            <li>
               <b>Maximum altitude of the Sun:</b> how deep the Sun should dive below the horizon to start the
               astronomical night. <code>-18°</code> by default; <code>0°</code> means that the night starts right after
               sunset.
@@ -43,11 +40,15 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
               <code>20°</code> by default.
             </li>
             <li>
-              <b>Moonless night only:</b> leaves out the part of the night when the Moon is above the horizon.
+              <b>Minimum observation time:</b> how long an object should be visible during the night at least.
             </li>
             <li>
-              <b>Maximum brightness:</b> filters by the maximum magnitude or surface brightness. The surface brightness
-              is computed from the magnitude and the size, so objects without size data are left out by it.
+              <b>Observation window:</b> the part of the night the objects are observed in: the astronomical night (by
+              default), only its part when the Moon is below the horizon, or the whole night from sunset to sunrise.
+            </li>
+            <li>
+              <b>Brightness limit type:</b> filters by the maximum magnitude or surface brightness. The surface
+              brightness is computed from the magnitude and the size, so objects without size data are left out by it.
             </li>
             <li>
               <b>Object types and constellations:</b> select the kinds of objects (galaxies, clusters, nebulae, double

@@ -31,7 +31,7 @@ type Props = {
 export default function Summary({ compact = false, isExpanded = false, isAnimated = true, onToggle }: Props) {
   // the night arrives before the list; the count and the export follow the list
   const night = useNight();
-  const { moonless } = useFilter();
+  const { observationWindow } = useFilter();
   const params = useResultParams();
   const list = useDisplayedList();
   const handleExport = useCallback(
@@ -49,7 +49,7 @@ export default function Summary({ compact = false, isExpanded = false, isAnimate
     nightInfo,
     params: { date }
   } = night;
-  const observedNight = moonless ? nightInfo.moonlessNight : nightInfo.astroNight;
+  const observedNight = nightInfo[observationWindow];
   const moonIllumination = formatPercent(nightInfo.moonIllumination);
 
   if (compact) {

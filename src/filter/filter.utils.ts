@@ -1,4 +1,4 @@
-import type { ObjectFilter, SetFilter } from '../calculator/calculator.types';
+import type { BrightnessType, ObjectFilter, ObservationWindow, SetFilter } from '../calculator/calculator.types';
 import { constellations, objectTypes } from '../catalog/catalog.utils';
 import type { Query } from '../router/router.types';
 
@@ -13,8 +13,8 @@ export const defaultFilter: ObjectFilter = {
   observationTime: 30,
   twilight: -18,
   altitude: 20,
-  moonless: false,
-  brightnessFilter: 'magnitude',
+  observationWindow: 'astroNight',
+  brightnessLimitType: 'magnitude',
   magnitude: 10,
   surfaceBrightness: 14,
   types: selectAllTypes(true),
@@ -24,6 +24,19 @@ export const defaultFilter: ObjectFilter = {
 const isNumber = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value);
 
 const parseNumber = (value: unknown, fallback: number) => (isNumber(value) ? value : fallback);
+
+const OBSERVATION_WINDOWS: ObservationWindow[] = ['moonlessNight', 'astroNight', 'night'];
+
+const isObservationWindow = (value: unknown): value is ObservationWindow =>
+  OBSERVATION_WINDOWS.includes(value as ObservationWindow);
+
+/** The observation window of a filter stored before it, by its `moonless` switch */
+const parseStoredObservationWindow = ({ observationWindow, moonless }: Record<string, unknown>): ObservationWindow =>
+  isObservationWindow(observationWindow)
+    ? observationWindow
+    : moonless === true
+      ? 'moonlessNight'
+      : defaultFilter.observationWindow;
 
 /** Keeps the known keys only, defaulting the missing ones to selected */
 const parseSetFilter = (value: unknown, defaults: SetFilter): SetFilter =>
@@ -43,8 +56,12 @@ export const parseStoredFilter = (json: string | null): ObjectFilter => {
       observationTime: parseNumber(stored.observationTime, defaultFilter.observationTime),
       twilight: parseNumber(stored.twilight, defaultFilter.twilight),
       altitude: parseNumber(stored.altitude, defaultFilter.altitude),
-      moonless: typeof stored.moonless === 'boolean' ? stored.moonless : defaultFilter.moonless,
-      brightnessFilter: stored.brightnessFilter === 'surfaceBrightness' ? 'surfaceBrightness' : 'magnitude',
+      observationWindow: parseStoredObservationWindow(stored),
+      // `brightnessFilter` before its renaming
+      brightnessLimitType:
+        (stored.brightnessLimitType ?? stored.brightnessFilter) === 'surfaceBrightness'
+          ? 'surfaceBrightness'
+          : 'magnitude',
       magnitude: parseNumber(stored.magnitude, defaultFilter.magnitude),
       surfaceBrightness: parseNumber(stored.surfaceBrightness, defaultFilter.surfaceBrightness),
       types: parseSetFilter(stored.types, defaultFilter.types),
@@ -65,12 +82,16 @@ export const countSelected = (setFilter: SetFilter) => Object.values(setFilter).
  */
 export const FILTER_PARAMS = [
   'alt',
-  'bf',
+  'blt',
   'mag',
   'sb',
   'tw',
   'ot',
+  'ow',
+  // read only, from old links: the switch of the moonless night before the observation window, and `blt` before its
+  // renaming
   'ml',
+  'bf',
   'const',
   'exConst',
   'types',
@@ -80,6 +101,28 @@ export const FILTER_PARAMS = [
 const parseNumberParam = (value: string | undefined, min: number, max: number, fallback: number) => {
   const number = Number(value);
   return value?.trim() && Number.isFinite(number) && number >= min && number <= max ? number : fallback;
+};
+
+/** The params of the observation window: `man`, `an`, `n` */
+const observationWindowParams: Record<ObservationWindow, string> = {
+  moonlessNight: 'man',
+  astroNight: 'an',
+  night: 'n'
+};
+
+const parseObservationWindowParam = (query: Query, fallback: ObservationWindow): ObservationWindow => {
+  const fromParam = OBSERVATION_WINDOWS.find(key => observationWindowParams[key] === query.ow);
+  return fromParam ?? (query.ml === '1' ? 'moonlessNight' : query.ml === '0' ? 'astroNight' : fallback);
+};
+
+/** The params of the brightness limit type: `mag`, `sb` (`bf` before took the keys themselves) */
+const brightnessLimitTypeParams: Record<BrightnessType, string> = { magnitude: 'mag', surfaceBrightness: 'sb' };
+
+const parseBrightnessLimitTypeParam = (query: Query, fallback: BrightnessType): BrightnessType => {
+  const fromParam = (Object.keys(brightnessLimitTypeParams) as BrightnessType[]).find(
+    key => brightnessLimitTypeParams[key] === query.blt
+  );
+  return fromParam ?? (query.bf === 'magnitude' || query.bf === 'surfaceBrightness' ? query.bf : fallback);
 };
 
 const parseSetParams = (included: string | undefined, excluded: string | undefined, fallback: SetFilter): SetFilter => {
@@ -107,12 +150,12 @@ const setToParams = (setFilter: SetFilter, includedParam: string, excludedParam:
 /** The filter from the query; a missing or invalid param is taken from the fallback */
 export const filterFromQuery = (query: Query, fallback: ObjectFilter): ObjectFilter => ({
   altitude: parseNumberParam(query.alt, -90, 90, fallback.altitude),
-  brightnessFilter: query.bf === 'magnitude' || query.bf === 'surfaceBrightness' ? query.bf : fallback.brightnessFilter,
+  brightnessLimitType: parseBrightnessLimitTypeParam(query, fallback.brightnessLimitType),
   magnitude: parseNumberParam(query.mag, -30, 30, fallback.magnitude),
   surfaceBrightness: parseNumberParam(query.sb, -30, 30, fallback.surfaceBrightness),
   twilight: parseNumberParam(query.tw, -90, 0, fallback.twilight),
   observationTime: parseNumberParam(query.ot, 0, 1440, fallback.observationTime),
-  moonless: query.ml === '1' ? true : query.ml === '0' ? false : fallback.moonless,
+  observationWindow: parseObservationWindowParam(query, fallback.observationWindow),
   constellations: parseSetParams(query.const, query.exConst, fallback.constellations),
   types: parseSetParams(query.types, query.exTypes, fallback.types)
 });
@@ -127,12 +170,12 @@ const fieldToParam = <K extends keyof ObjectFilter>(
 
 export const filterToQuery = (filter: ObjectFilter): Query => ({
   ...fieldToParam(filter, 'altitude', 'alt'),
-  ...fieldToParam(filter, 'brightnessFilter', 'bf'),
+  ...fieldToParam(filter, 'brightnessLimitType', 'blt', key => brightnessLimitTypeParams[key]),
   ...fieldToParam(filter, 'magnitude', 'mag'),
   ...fieldToParam(filter, 'surfaceBrightness', 'sb'),
   ...fieldToParam(filter, 'twilight', 'tw'),
   ...fieldToParam(filter, 'observationTime', 'ot'),
-  ...fieldToParam(filter, 'moonless', 'ml', moonless => (moonless ? '1' : '0')),
+  ...fieldToParam(filter, 'observationWindow', 'ow', key => observationWindowParams[key]),
   ...setToParams(filter.constellations, 'const', 'exConst'),
   ...setToParams(filter.types, 'types', 'exTypes')
 });

@@ -1,12 +1,10 @@
 import { useCallback, useState } from 'react';
 import Button from '@mui/material/Button';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import MenuItem from '@mui/material/MenuItem';
-import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import type { BrightnessType } from '../calculator/calculator.types';
+import type { BrightnessType, ObservationWindow } from '../calculator/calculator.types';
 import { constellations, objectTypes } from '../catalog/catalog.utils';
 import NumberInput from '../input/input.number';
 import SelectorField from '../input/input.selector';
@@ -16,7 +14,13 @@ import { countSelected } from './filter.utils';
 import SetFilterDialog from './filter.set';
 import './filter.scss';
 
-const brightnessOptions: { value: BrightnessType; label: string }[] = [
+const observationWindowOptions: { value: ObservationWindow; label: string }[] = [
+  { value: 'moonlessNight', label: 'Moonless astronomical night' },
+  { value: 'astroNight', label: 'Astronomical night' },
+  { value: 'night', label: 'Night' }
+];
+
+const brightnessLimitTypeOptions: { value: BrightnessType; label: string }[] = [
   { value: 'magnitude', label: 'Magnitude' },
   { value: 'surfaceBrightness', label: 'Surface brightness' }
 ];
@@ -39,8 +43,8 @@ export default function Filter() {
   const setObservationTime = useFilterValueSetter('observationTime');
   const setTwilight = useFilterValueSetter('twilight');
   const setAltitude = useFilterValueSetter('altitude');
-  const setMoonless = useFilterValueSetter('moonless');
-  const setBrightnessFilter = useFilterValueSetter('brightnessFilter');
+  const setObservationWindow = useFilterValueSetter('observationWindow');
+  const setBrightnessLimitType = useFilterValueSetter('brightnessLimitType');
   const setMagnitude = useFilterValueSetter('magnitude');
   const setSurfaceBrightness = useFilterValueSetter('surfaceBrightness');
   const setTypes = useFilterValueSetter('types');
@@ -51,20 +55,12 @@ export default function Filter() {
   const handleOpenConstellations = useCallback(() => setOpenedDialog('constellations'), []);
   const handleCloseDialog = useCallback(() => setOpenedDialog(null), []);
 
-  const isMagnitude = filter.brightnessFilter === 'magnitude';
+  const isMagnitude = filter.brightnessLimitType === 'magnitude';
 
   return (
     <div className="Filter">
       <Location />
 
-      <NumberInput
-        label="Minimum observation time"
-        unit="min"
-        min={0}
-        max={1440}
-        value={filter.observationTime}
-        onChange={setObservationTime}
-      />
       <NumberInput
         label="Maximum altitude of the Sun"
         unit="°"
@@ -82,19 +78,35 @@ export default function Filter() {
         onChange={setAltitude}
       />
 
-      <FormControlLabel
-        label="Moonless night only"
-        control={<Switch checked={filter.moonless} onChange={event => setMoonless(event.target.checked)} />}
+      <NumberInput
+        label="Minimum observation time"
+        unit="min"
+        min={0}
+        max={1440}
+        value={filter.observationTime}
+        onChange={setObservationTime}
       />
+      <TextField
+        select
+        label="Observation window"
+        value={filter.observationWindow}
+        onChange={event => setObservationWindow(event.target.value as ObservationWindow)}
+      >
+        {observationWindowOptions.map(({ value, label }) => (
+          <MenuItem key={value} value={value}>
+            {label}
+          </MenuItem>
+        ))}
+      </TextField>
 
       <div className="brightness">
         <TextField
           select
-          label="Maximum brightness"
-          value={filter.brightnessFilter}
-          onChange={event => setBrightnessFilter(event.target.value as BrightnessType)}
+          label="Brightness limit type"
+          value={filter.brightnessLimitType}
+          onChange={event => setBrightnessLimitType(event.target.value as BrightnessType)}
         >
-          {brightnessOptions.map(({ value, label }) => (
+          {brightnessLimitTypeOptions.map(({ value, label }) => (
             <MenuItem key={value} value={value}>
               {label}
             </MenuItem>

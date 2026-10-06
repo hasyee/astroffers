@@ -13,13 +13,16 @@ function NoResults() {
   const result = useResult();
   if (!result) return null;
   const { params, nightInfo } = result;
-  const description = !nightInfo.astroNight
-    ? 'There is no astronomical night on this date at this location. Try to raise the maximum altitude of the Sun.'
-    : params.filter.moonless && !nightInfo.moonlessNight
-      ? 'The Moon is up during the whole astronomical night. Try to turn off the Moonless night only filter.'
-      : params.filter.moonless
-        ? 'Try to turn off the Moonless night only filter, or loosen the filter.'
-        : 'Try to loosen the filter.';
+  const { observationWindow } = params.filter;
+  const description = !nightInfo.night
+    ? 'The Sun does not set on this date at this location.'
+    : observationWindow !== 'night' && !nightInfo.astroNight
+      ? 'There is no astronomical night on this date at this location. Try to raise the maximum altitude of the Sun, or to observe in the whole night.'
+      : observationWindow === 'moonlessNight' && !nightInfo.moonlessNight
+        ? 'The Moon is up during the whole astronomical night. Try another observation window.'
+        : observationWindow === 'moonlessNight'
+          ? 'Try another observation window, or loosen the filter.'
+          : 'Try to loosen the filter.';
   return <EmptyState icon={<NightsStayOutlinedIcon />} title="No results to show" description={description} />;
 }
 

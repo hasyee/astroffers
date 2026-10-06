@@ -33,6 +33,9 @@ export type NightInfo = {
 
 export type BrightnessType = 'magnitude' | 'surfaceBrightness';
 
+/** The part of the night the objects are observed in, by its key in `NightInfo` */
+export type ObservationWindow = 'moonlessNight' | 'astroNight' | 'night';
+
 /**
  * Object of the NGC 2000 catalog, as stored in `catalog.json`, or a body of the Solar System at the time of the
  * calculation (`solar/`)
@@ -92,8 +95,9 @@ export type ObjectFilter = {
   twilight: Degrees;
   /** Minimum altitude of the objects */
   altitude: Degrees;
-  moonless: boolean;
-  brightnessFilter: BrightnessType;
+  observationWindow: ObservationWindow;
+  /** Which of the magnitude and the surface brightness is limited */
+  brightnessLimitType: BrightnessType;
   magnitude: number;
   surfaceBrightness: number;
   types: SetFilter;

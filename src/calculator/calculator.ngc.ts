@@ -44,8 +44,8 @@ const getNgcInfo = (
 };
 
 const matchesBrightness = (object: NgcObject, filter: ObjectFilter) => {
-  const value = object[filter.brightnessFilter];
-  return value !== undefined && value < filter[filter.brightnessFilter];
+  const value = object[filter.brightnessLimitType];
+  return value !== undefined && value < filter[filter.brightnessLimitType];
 };
 
 const isVisible = (ngcInfo: ReturnType<typeof getNgcInfo>, observationTime: number): ngcInfo is NgcInfo =>
