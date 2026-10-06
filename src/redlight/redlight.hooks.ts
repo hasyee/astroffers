@@ -1,5 +1,5 @@
 import { useCallback, useLayoutEffect } from 'react';
-import { useStatePart, useStatePartSetter } from '../query/query.hooks';
+import { useQueryState, useQueryStateSetter } from '../query/query.hooks';
 import type { Query } from '../router/router.types';
 import { omitQuery } from '../router/router.utils';
 import { RED_LIGHT_PARAMS, redLightFromQuery, redLightToQuery } from './redlight.utils';
@@ -14,8 +14,8 @@ const setQueryRedLight = (query: Query, isRedLight: boolean): Query => ({
 
 /** The red light mode, for the eyes adapted to the dark in the field */
 export const useRedLight = () => {
-  const isRedLight = useStatePart(getRedLight, String, parseRedLight);
-  const setRedLight = useStatePartSetter(getRedLight, setQueryRedLight);
+  const isRedLight = useQueryState(getRedLight, String, parseRedLight);
+  const setRedLight = useQueryStateSetter(getRedLight, setQueryRedLight);
   const toggle = useCallback(() => setRedLight(isRedLight => !isRedLight), [setRedLight]);
   return [isRedLight, toggle] as const;
 };

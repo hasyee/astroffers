@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useResultList } from '../result/result.hooks';
-import { useStatePart, useStatePartSetter } from '../query/query.hooks';
+import { useQueryState, useQueryStateSetter } from '../query/query.hooks';
 import type { Query } from '../router/router.types';
 import { omitQuery, parseQuery, serializeQuery } from '../router/router.utils';
 import type { ListSearch, SortBy } from './list.types';
@@ -31,9 +31,9 @@ const setQuerySortBy = (query: Query, sortBy: SortBy): Query => ({
 });
 
 /** Order of the list */
-export const useSortBy = () => useStatePart(getSortBy, keepSortBy, parseSortBy);
+export const useSortBy = () => useQueryState(getSortBy, keepSortBy, parseSortBy);
 
-export const useSortBySetter = () => useStatePartSetter(getSortBy, setQuerySortBy);
+export const useSortBySetter = () => useQueryStateSetter(getSortBy, setQuerySortBy);
 
 const getSearch = (query: Query) => searchFromQuery(query, emptySearch);
 const serializeSearch = (search: ListSearch) => serializeQuery(searchToQuery(search));
@@ -45,9 +45,9 @@ const setQuerySearch = (query: Query, search: ListSearch): Query => ({
 });
 
 /** Search terms of the list */
-export const useSearch = () => useStatePart(getSearch, serializeSearch, parseSearch);
+export const useSearch = () => useQueryState(getSearch, serializeSearch, parseSearch);
 
-export const useSearchSetter = () => useStatePartSetter(getSearch, setQuerySearch);
+export const useSearchSetter = () => useQueryStateSetter(getSearch, setQuerySearch);
 
 export const useSearchValueSetter = (key: keyof ListSearch) => {
   const setSearch = useSearchSetter();
@@ -75,8 +75,8 @@ const setQueryImages = (query: Query, hasImages: boolean): Query => ({
 
 /** The comfortable table with the images of the objects (the default), or the compact one without them */
 export const useListImages = () => {
-  const hasImages = useStatePart(getImages, String, parseImages);
-  const setImages = useStatePartSetter(getImages, setQueryImages);
+  const hasImages = useQueryState(getImages, String, parseImages);
+  const setImages = useQueryStateSetter(getImages, setQueryImages);
   const toggleImages = useCallback(() => setImages(hasImages => !hasImages), [setImages]);
   return [hasImages, toggleImages] as const;
 };

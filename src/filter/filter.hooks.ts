@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import type { ObjectFilter } from '../calculator/calculator.types';
-import { useStatePart, useStatePartSetter } from '../query/query.hooks';
+import { useQueryState, useQueryStateSetter } from '../query/query.hooks';
 import { useSearchSetter, useSortBySetter } from '../list/list.hooks';
 import { defaultSortBy, emptySearch } from '../list/list.utils';
 import type { Query } from '../router/router.types';
@@ -16,9 +16,9 @@ const setQueryFilter = (query: Query, filter: ObjectFilter): Query => ({
   ...filterToQuery(filter)
 });
 
-export const useFilter = () => useStatePart(getFilter, serializeFilter, parseFilter);
+export const useFilter = () => useQueryState(getFilter, serializeFilter, parseFilter);
 
-export const useFilterSetter = () => useStatePartSetter(getFilter, setQueryFilter);
+export const useFilterSetter = () => useQueryStateSetter(getFilter, setQueryFilter);
 
 /** Setter of a single filter field */
 export const useFilterValueSetter = <K extends keyof ObjectFilter>(key: K) => {
