@@ -13,7 +13,7 @@ export const defaultFilter: ObjectFilter = {
   observationTime: 30,
   twilight: -18,
   altitude: 20,
-  moonless: true,
+  moonless: false,
   brightnessFilter: 'magnitude',
   magnitude: 10,
   surfaceBrightness: 14,
