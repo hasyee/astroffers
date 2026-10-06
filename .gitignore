@@ -5,3 +5,4 @@ dev-dist
 .DS_Store
 .env*.local
 npm-debug.log*
+/images

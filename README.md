@@ -65,8 +65,8 @@ the planets; refresh their elements (`src/solar/solar.json`) now and then by
 node scripts/solar.mjs
 ```
 
-Their photos (`public/solar/`) come from the Wikipedia articles of the bodies, via Wikimedia Commons; the credits and
-licenses are in `src/solar/solar.photos.ts`.
+Their photos (with the previews, see below) come from the Wikipedia articles of the bodies, via Wikimedia Commons;
+the credits and licenses are in `src/solar/solar.photos.ts`.
 
 ### Wikipedia
 
@@ -80,8 +80,20 @@ node scripts/wikipedia.mjs
 
 ### Preview images
 
-The DSS2 color previews of the objects come from the [hips2fits](https://alasky.cds.unistra.fr/hips-image-services/hips2fits)
-service of CDS (Strasbourg), with a field of view fitted to the size of the object.
+The previews of the objects are DSS2 images rendered by the
+[hips2fits](https://alasky.cds.unistra.fr/hips-image-services/hips2fits) service of CDS (Strasbourg), with a field of
+view fitted to the size of the object, re-encoded in grayscale (hips2fits renders each image on request, which takes
+up to half a minute now and then). They are served with the photos of the Solar System from the `images/` of the
+`astroffers` S3 bucket by CloudFront, at `https://images.astroffers.hasyee.com/images/<id>.preview.jpg`. Render them
+into the git-ignored `images/` (an interrupted run continues where it stopped) and upload them by
+
+```
+node scripts/previews.mjs
+aws s3 sync images s3://astroffers/images --exclude "*.tmp" \
+  --content-type image/jpeg --cache-control "public, max-age=31536000, immutable"
+```
+
+The photos of the Solar System are kept in `images/` only, and in the bucket.
 
 ## Deployment
 

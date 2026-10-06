@@ -53,7 +53,7 @@ export type NgcObject = {
   magnitude?: number;
   surfaceBrightness?: number;
   types: string[];
-  /** A bundled photo instead of the DSS2 preview (the bodies of the Solar System, which move on the sky) */
+  /** The credit of its photo, shown instead of the DSS2 preview (the bodies of the Solar System, which move on the sky) */
   photo?: Photo;
   /** The name of the object in Stellarium Web, when it is not its id upper-cased (the bodies of the Solar System) */
   skySource?: string;
@@ -61,8 +61,8 @@ export type NgcObject = {
   wikipedia?: string;
 };
 
-/** Photo of an object with its credit and license, linking to its source page */
-export type Photo = { src: string; credit: string; page: string };
+/** Credit and license of the photo of an object, linking to its source page */
+export type Photo = { credit: string; page: string };
 
 /** Visibility of an object during the observed night */
 export type NgcInfo = {

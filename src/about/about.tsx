@@ -108,7 +108,8 @@ export default function About({ isOpen, onClose }: { isOpen: boolean; onClose: (
             <tr>
               <th>Previews</th>
               <td>
-                DSS2 color survey via{' '}
+                The Second Digitized Sky Survey (DSS2), produced at the Space Telescope Science Institute under U.S.
+                Government grant NAG W-2166, rendered by{' '}
                 <a href="https://alasky.cds.unistra.fr/hips-image-services/hips2fits" target="_blank" rel="noreferrer">
                   CDS hips2fits
                 </a>

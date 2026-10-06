@@ -24,7 +24,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       workbox: {
         // of the font only its latin subset, the others are cached when a text needs them (e.g. a place name)
-        globPatterns: ['**/*.{js,css,html,png,ico,svg,webmanifest}', '**/inter-latin-wght-normal-*.woff2', 'solar/*.jpg'],
+        globPatterns: ['**/*.{js,css,html,png,ico,svg,webmanifest}', '**/inter-latin-wght-normal-*.woff2'],
         runtimeCaching: [
           {
             urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.endsWith('.woff2'),
@@ -32,10 +32,8 @@ export default defineConfig({
             options: { cacheName: 'fonts', expiration: { maxEntries: 20 } }
           },
           {
-            // the preview images are served without any cache headers, so the service worker keeps them instead
-            urlPattern: ({ url }) =>
-              url.origin === 'https://alasky.cds.unistra.fr' &&
-              url.pathname.startsWith('/hips-image-services/hips2fits'),
+            // the preview images, kept for offline use too (and beyond the HTTP cache, which may evict them sooner)
+            urlPattern: ({ url }) => url.origin === 'https://images.astroffers.hasyee.com',
             handler: 'CacheFirst',
             options: {
               cacheName: 'previews',
