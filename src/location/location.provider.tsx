@@ -3,7 +3,8 @@ import { useStateSetter, useStateValue } from '../provider/state.hooks';
 import StateProvider from '../provider/state.provider';
 import { LocationContext, useCoords } from './location.hooks';
 import type { Place } from './location.types';
-import { isSameCoords, parseStoredPlace } from './location.utils';
+import { readStored, writeStored } from '../storage/storage.utils';
+import { isSameCoords } from './location.utils';
 
 /** Follows the coordinates of the query (e.g. of a shared link) with the stored place, without a name */
 function StoredPlaceSync({ children }: PropsWithChildren<{}>) {
@@ -19,9 +20,9 @@ function StoredPlaceSync({ children }: PropsWithChildren<{}>) {
 }
 
 export default function LocationProvider({ children }: PropsWithChildren<{}>) {
-  const initialState = useMemo(() => parseStoredPlace(localStorage.getItem('location')), []);
+  const initialState = useMemo(() => readStored('location'), []);
 
-  const handleChange = useCallback((place: Place) => localStorage.setItem('location', JSON.stringify(place)), []);
+  const handleChange = useCallback((place: Place) => writeStored('location', place), []);
 
   return (
     <StateProvider context={LocationContext} initialState={initialState} onChange={handleChange}>

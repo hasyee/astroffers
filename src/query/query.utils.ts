@@ -2,13 +2,11 @@ import {
   CALENDAR_PARAMS,
   calendarFromQuery,
   calendarParamValidators,
-  calendarToQuery,
-  parseStoredCalendar
+  calendarToQuery
 } from '../calendar/calendar.utils';
 import type { Coords } from '../location/location.types';
 import {
   RED_LIGHT_PARAMS,
-  parseStoredRedLight,
   redLightFromQuery,
   redLightParamValidators,
   redLightToQuery
@@ -19,8 +17,7 @@ import {
   defaultFilter,
   filterFromQuery,
   filterParamValidators,
-  filterToQuery,
-  parseStoredFilter
+  filterToQuery
 } from '../filter/filter.utils';
 import {
   IMAGES_PARAMS,
@@ -30,9 +27,6 @@ import {
   emptySearch,
   imagesFromQuery,
   imagesParamValidators,
-  parseStoredImages,
-  parseStoredSearch,
-  parseStoredSortBy,
   imagesToQuery,
   searchFromQuery,
   searchParamValidators,
@@ -41,15 +35,10 @@ import {
   sortParamValidators,
   sortByToQuery
 } from '../list/list.utils';
-import {
-  COORDS_PARAMS,
-  coordsFromQuery,
-  coordsParamValidators,
-  coordsToQuery,
-  parseStoredPlace
-} from '../location/location.utils';
+import { COORDS_PARAMS, coordsFromQuery, coordsParamValidators, coordsToQuery } from '../location/location.utils';
 import type { ParamValidators, Query } from '../router/router.types';
 import { parseQuery, serializeQuery } from '../router/router.utils';
+import { readStored } from '../storage/storage.utils';
 import type { StoredState } from './query.types';
 
 /** Params of the state of the main view in the query */
@@ -105,12 +94,12 @@ export const stateToQuery = (
 
 export const getStoredState = (): StoredState => ({
   date: getToday(),
-  sortBy: parseStoredSortBy(localStorage.getItem('sortBy')),
-  search: parseStoredSearch(localStorage.getItem('search')),
-  hasImages: parseStoredImages(localStorage.getItem('images')),
-  isCalendarOpen: parseStoredCalendar(localStorage.getItem('calendar')),
-  isRedLight: parseStoredRedLight(localStorage.getItem('redLight')),
-  filter: parseStoredFilter(localStorage.getItem('filter'))
+  sortBy: readStored('sortBy'),
+  search: readStored('search'),
+  hasImages: readStored('images'),
+  isCalendarOpen: readStored('calendar'),
+  isRedLight: readStored('redLight'),
+  filter: readStored('filter')
 });
 
 /**
@@ -143,7 +132,7 @@ export const initQuery = () => {
         isRedLight: redLightFromQuery(query, redLightFallback),
         filter: filterFromQuery(query, filterFallback)
       },
-      coordsFromQuery(query, parseStoredPlace(localStorage.getItem('location')).coords)
+      coordsFromQuery(query, readStored('location').coords)
     )
   });
 

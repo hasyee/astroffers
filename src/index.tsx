@@ -9,11 +9,13 @@ import { lockPhoneOrientation } from './media/media.utils';
 import ResultProvider from './result/result.provider';
 import QueryStorage from './query/query.storage';
 import { initQuery } from './query/query.utils';
+import { cleanStorage } from './storage/storage.utils';
 import RouterProvider from './router/router.provider';
 import theme from './theme/theme';
 import './index.scss';
 
 // the state of the app is in the query (date, location, order, filter), completed from the stored state
+cleanStorage();
 initQuery();
 lockPhoneOrientation();
 

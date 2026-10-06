@@ -3,6 +3,7 @@ import { useCalendarOpen } from '../calendar/calendar.hooks';
 import { useFilter } from '../filter/filter.hooks';
 import { useListImages, useSearch, useSortBy } from '../list/list.hooks';
 import { useRedLight } from '../redlight/redlight.hooks';
+import { writeStored } from '../storage/storage.utils';
 
 /**
  * Stores the state of the query but the date (the filter, the order, the search, the images of the table and the
@@ -17,22 +18,22 @@ export default function QueryStorage() {
   const filter = useFilter();
 
   useEffect(() => {
-    localStorage.setItem('sortBy', sortBy);
+    writeStored('sortBy', sortBy);
   }, [sortBy]);
   useEffect(() => {
-    localStorage.setItem('search', JSON.stringify(search));
+    writeStored('search', search);
   }, [search]);
   useEffect(() => {
-    localStorage.setItem('images', String(hasImages));
+    writeStored('images', hasImages);
   }, [hasImages]);
   useEffect(() => {
-    localStorage.setItem('calendar', String(isCalendarOpen));
+    writeStored('calendar', isCalendarOpen);
   }, [isCalendarOpen]);
   useEffect(() => {
-    localStorage.setItem('redLight', String(isRedLight));
+    writeStored('redLight', isRedLight);
   }, [isRedLight]);
   useEffect(() => {
-    localStorage.setItem('filter', JSON.stringify(filter));
+    writeStored('filter', filter);
   }, [filter]);
 
   return null;
