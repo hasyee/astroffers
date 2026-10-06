@@ -1,11 +1,24 @@
-import { CALENDAR_PARAMS, calendarFromQuery, calendarToQuery, parseStoredCalendar } from '../calendar/calendar.utils';
+import {
+  CALENDAR_PARAMS,
+  calendarFromQuery,
+  calendarParamValidators,
+  calendarToQuery,
+  parseStoredCalendar
+} from '../calendar/calendar.utils';
 import type { Coords } from '../location/location.types';
-import { RED_LIGHT_PARAMS, parseStoredRedLight, redLightFromQuery, redLightToQuery } from '../redlight/redlight.utils';
-import { DATE_PARAMS, dateFromQuery, dateToQuery, getToday } from '../date/date.utils';
+import {
+  RED_LIGHT_PARAMS,
+  parseStoredRedLight,
+  redLightFromQuery,
+  redLightParamValidators,
+  redLightToQuery
+} from '../redlight/redlight.utils';
+import { DATE_PARAMS, dateFromQuery, dateParamValidators, dateToQuery, getToday } from '../date/date.utils';
 import {
   FILTER_PARAMS,
   defaultFilter,
   filterFromQuery,
+  filterParamValidators,
   filterToQuery,
   parseStoredFilter
 } from '../filter/filter.utils';
@@ -16,18 +29,27 @@ import {
   defaultSortBy,
   emptySearch,
   imagesFromQuery,
-  imagesToQuery,
+  imagesParamValidators,
   parseStoredImages,
   parseStoredSearch,
   parseStoredSortBy,
+  imagesToQuery,
   searchFromQuery,
+  searchParamValidators,
   searchToQuery,
   sortByFromQuery,
+  sortParamValidators,
   sortByToQuery
 } from '../list/list.utils';
-import { COORDS_PARAMS, coordsFromQuery, coordsToQuery, parseStoredPlace } from '../location/location.utils';
-import type { Query } from '../router/router.types';
-import { omitQuery, parseQuery, serializeQuery } from '../router/router.utils';
+import {
+  COORDS_PARAMS,
+  coordsFromQuery,
+  coordsParamValidators,
+  coordsToQuery,
+  parseStoredPlace
+} from '../location/location.utils';
+import type { ParamValidators, Query } from '../router/router.types';
+import { parseQuery, serializeQuery } from '../router/router.utils';
 import type { StoredState } from './query.types';
 
 /** Params of the state of the main view in the query */
@@ -43,6 +65,28 @@ export const STATE_PARAMS = [
 ];
 
 export const hasQueryState = (query: Query) => STATE_PARAMS.some(key => key in query);
+
+const STATE_PARAM_VALIDATORS: ParamValidators<(typeof STATE_PARAMS)[number]> = {
+  ...dateParamValidators,
+  ...coordsParamValidators,
+  ...sortParamValidators,
+  ...searchParamValidators,
+  ...imagesParamValidators,
+  ...calendarParamValidators,
+  ...redLightParamValidators,
+  ...filterParamValidators
+};
+
+const isKnownParam = (key: string): key is (typeof STATE_PARAMS)[number] => Object.hasOwn(STATE_PARAM_VALIDATORS, key);
+
+/**
+ * The query without the params unknown to the app, or having a value unknown to it (e.g. of an old version, a typo or
+ * a tracker), so they read as missing (e.g. a link having only those is a bare start)
+ */
+export const omitUnknownParams = (query: Query): Query =>
+  Object.fromEntries(
+    Object.entries(query).filter(([key, value]) => isKnownParam(key) && STATE_PARAM_VALIDATORS[key](value))
+  );
 
 /** The query of the state, in the order of the params: the date, the place and the others differing from their defaults */
 export const stateToQuery = (
@@ -71,14 +115,14 @@ export const getStoredState = (): StoredState => ({
 
 /**
  * Completes the query with the state of the app, before the first render: the date and the place always, the others
- * when they differ from their defaults. A query having any of the params (e.g. a shared link, which has the date and
- * the place) means the default by a missing one; without them (e.g. the start of the PWA) the stored state is taken,
- * the date of today and the stored place.
+ * when they differ from their defaults; the unknown params are dropped first. A query having any of the params (e.g.
+ * a shared link, which has the date and the place) means the default by a missing one; without them (e.g. the start of
+ * the PWA) the stored state is taken, the date of today and the stored place.
  */
 export const initQuery = () => {
   const { pathname, hash } = window.location;
 
-  const query = parseQuery(window.location.search);
+  const query = omitUnknownParams(parseQuery(window.location.search));
   const stored = getStoredState();
   const isShared = hasQueryState(query);
   const sortByFallback = isShared ? defaultSortBy : stored.sortBy;
@@ -100,8 +144,7 @@ export const initQuery = () => {
         filter: filterFromQuery(query, filterFallback)
       },
       coordsFromQuery(query, parseStoredPlace(localStorage.getItem('location')).coords)
-    ),
-    ...omitQuery(query, STATE_PARAMS)
+    )
   });
 
   if (search !== window.location.search)

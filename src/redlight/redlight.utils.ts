@@ -1,7 +1,11 @@
-import type { Query } from '../router/router.types';
+import type { ParamValidators, Query } from '../router/router.types';
 
 /** Query param of the red light mode: `red=1`, left out in the normal mode (the default) */
 export const RED_LIGHT_PARAMS = ['red'] as const;
+
+export const redLightParamValidators: ParamValidators<(typeof RED_LIGHT_PARAMS)[number]> = {
+  red: value => value === '1' || value === '0'
+};
 
 export const redLightFromQuery = (query: Query, fallback: boolean): boolean =>
   'red' in query ? query.red === '1' : fallback;

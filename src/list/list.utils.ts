@@ -1,5 +1,5 @@
 import type { NgcInfo } from '../calculator/calculator.types';
-import type { Query } from '../router/router.types';
+import type { ParamValidators, Query } from '../router/router.types';
 import type { ListSearch, SortBy } from './list.types';
 
 type Selector = (ngcInfo: NgcInfo) => number | string | null | undefined;
@@ -68,6 +68,8 @@ export const parseStoredSortBy = (value: string | null): SortBy => (isSortBy(val
 /** Query param of the order of the list: `sort`, left out at the default order */
 export const SORT_PARAMS = ['sort'] as const;
 
+export const sortParamValidators: ParamValidators<(typeof SORT_PARAMS)[number]> = { sort: isSortBy };
+
 export const sortByFromQuery = (query: Query, fallback: SortBy): SortBy =>
   isSortBy(query.sort) ? query.sort : fallback;
 
@@ -75,6 +77,10 @@ export const sortByToQuery = (sortBy: SortBy): Query => (sortBy === defaultSortB
 
 /** Query param of the images of the table: `img=0` for the compact table without them, left out with them (the default) */
 export const IMAGES_PARAMS = ['img'] as const;
+
+export const imagesParamValidators: ParamValidators<(typeof IMAGES_PARAMS)[number]> = {
+  img: value => value === '1' || value === '0'
+};
 
 export const imagesFromQuery = (query: Query, fallback: boolean): boolean =>
   'img' in query ? query.img !== '0' : fallback;
@@ -88,6 +94,14 @@ export const emptySearch: ListSearch = { ngc: '', messier: '', name: '' };
 
 /** Query params of the search of the list: `ngc`, `messier`, `name`, each left out when empty */
 export const SEARCH_PARAMS = ['ngc', 'messier', 'name'] as const;
+
+const isTerm = (value: string) => value !== '';
+
+export const searchParamValidators: ParamValidators<(typeof SEARCH_PARAMS)[number]> = {
+  ngc: isTerm,
+  messier: isTerm,
+  name: isTerm
+};
 
 /** The search from the query; the fallback when none of its params is there */
 export const searchFromQuery = (query: Query, fallback: ListSearch): ListSearch =>

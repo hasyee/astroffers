@@ -1,6 +1,6 @@
 import moment from 'moment';
 import type { Timestamp } from '../calculator/calculator.types';
-import type { Query } from '../router/router.types';
+import type { ParamValidators, Query } from '../router/router.types';
 
 export const getToday = (): Timestamp => moment().startOf('day').valueOf();
 
@@ -18,6 +18,10 @@ export const parseDate = (value: string | undefined): Timestamp | null => {
 
 /** Query param of the date: `date=YYYY-MM-DD` */
 export const DATE_PARAMS = ['date'] as const;
+
+export const dateParamValidators: ParamValidators<(typeof DATE_PARAMS)[number]> = {
+  date: value => parseDate(value) !== null
+};
 
 export const dateFromQuery = (query: Query, fallback: Timestamp): Timestamp => parseDate(query.date) ?? fallback;
 

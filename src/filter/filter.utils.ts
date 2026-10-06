@@ -1,6 +1,6 @@
 import type { BrightnessType, ObjectFilter, ObservationWindow, SetFilter } from '../calculator/calculator.types';
 import { constellations, objectTypes } from '../catalog/catalog.utils';
-import type { Query } from '../router/router.types';
+import type { ParamValidators, Query } from '../router/router.types';
 
 const selectAll = (keys: Record<string, string>, value = true): SetFilter =>
   Object.fromEntries(Object.keys(keys).map(key => [key, value]));
@@ -98,10 +98,23 @@ export const FILTER_PARAMS = [
   'exTypes'
 ] as const;
 
-const parseNumberParam = (value: string | undefined, min: number, max: number, fallback: number) => {
+/** The ranges of the numeric params */
+const NUMBER_PARAM_RANGES = {
+  alt: [-90, 90],
+  mag: [-30, 30],
+  sb: [-30, 30],
+  tw: [-90, 0],
+  ot: [0, 1440]
+} as const satisfies Record<string, readonly [number, number]>;
+
+const parseNumberParam = (value: string | undefined, param: keyof typeof NUMBER_PARAM_RANGES, fallback: number) => {
+  const [min, max] = NUMBER_PARAM_RANGES[param];
   const number = Number(value);
   return value?.trim() && Number.isFinite(number) && number >= min && number <= max ? number : fallback;
 };
+
+const isNumberParam = (param: keyof typeof NUMBER_PARAM_RANGES) => (value: string) =>
+  !Number.isNaN(parseNumberParam(value, param, NaN));
 
 /** The params of the observation window: `man`, `an`, `n` */
 const observationWindowParams: Record<ObservationWindow, string> = {
@@ -147,14 +160,34 @@ const setToParams = (setFilter: SetFilter, includedParam: string, excludedParam:
     : { [includedParam]: selected.join(',') };
 };
 
+/** A list of a set: none (empty) or at least one known key */
+const isSetParam = (setFilter: SetFilter) => (value: string) =>
+  value === '' || value.split(',').some(key => Object.hasOwn(setFilter, key));
+
+export const filterParamValidators: ParamValidators<(typeof FILTER_PARAMS)[number]> = {
+  alt: isNumberParam('alt'),
+  blt: value => Object.values(brightnessLimitTypeParams).includes(value),
+  mag: isNumberParam('mag'),
+  sb: isNumberParam('sb'),
+  tw: isNumberParam('tw'),
+  ot: isNumberParam('ot'),
+  ow: value => Object.values(observationWindowParams).includes(value),
+  ml: value => value === '1' || value === '0',
+  bf: value => value === 'magnitude' || value === 'surfaceBrightness',
+  const: isSetParam(defaultFilter.constellations),
+  exConst: isSetParam(defaultFilter.constellations),
+  types: isSetParam(defaultFilter.types),
+  exTypes: isSetParam(defaultFilter.types)
+};
+
 /** The filter from the query; a missing or invalid param is taken from the fallback */
 export const filterFromQuery = (query: Query, fallback: ObjectFilter): ObjectFilter => ({
-  altitude: parseNumberParam(query.alt, -90, 90, fallback.altitude),
+  altitude: parseNumberParam(query.alt, 'alt', fallback.altitude),
   brightnessLimitType: parseBrightnessLimitTypeParam(query, fallback.brightnessLimitType),
-  magnitude: parseNumberParam(query.mag, -30, 30, fallback.magnitude),
-  surfaceBrightness: parseNumberParam(query.sb, -30, 30, fallback.surfaceBrightness),
-  twilight: parseNumberParam(query.tw, -90, 0, fallback.twilight),
-  observationTime: parseNumberParam(query.ot, 0, 1440, fallback.observationTime),
+  magnitude: parseNumberParam(query.mag, 'mag', fallback.magnitude),
+  surfaceBrightness: parseNumberParam(query.sb, 'sb', fallback.surfaceBrightness),
+  twilight: parseNumberParam(query.tw, 'tw', fallback.twilight),
+  observationTime: parseNumberParam(query.ot, 'ot', fallback.observationTime),
   observationWindow: parseObservationWindowParam(query, fallback.observationWindow),
   constellations: parseSetParams(query.const, query.exConst, fallback.constellations),
   types: parseSetParams(query.types, query.exTypes, fallback.types)

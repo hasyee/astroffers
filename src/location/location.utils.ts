@@ -1,4 +1,4 @@
-import type { Query } from '../router/router.types';
+import type { ParamValidators, Query } from '../router/router.types';
 import type { Coords, Place } from './location.types';
 
 export const defaultPlace: Place = { coords: { lng: 19, lat: 47 }, name: '' };
@@ -42,6 +42,11 @@ export const COORDS_PARAMS = ['lng', 'lat'] as const;
 const parseDegrees = (value: string | undefined, limit: number) => {
   const degrees = Number(value);
   return value?.trim() && Number.isFinite(degrees) && Math.abs(degrees) <= limit ? degrees : null;
+};
+
+export const coordsParamValidators: ParamValidators<(typeof COORDS_PARAMS)[number]> = {
+  lng: value => parseDegrees(value, 180) !== null,
+  lat: value => parseDegrees(value, 90) !== null
 };
 
 export const coordsFromQuery = (query: Query, fallback: Coords): Coords => {
