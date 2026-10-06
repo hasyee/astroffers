@@ -1,13 +1,15 @@
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import Button from '@mui/material/Button';
+import Collapse from '@mui/material/Collapse';
 import Paper from '@mui/material/Paper';
+import classnames from 'classnames';
 import moment from 'moment';
 import { type MouseEvent, useCallback } from 'react';
 import { formatIntervalEnd, formatIntervalStart } from '../display/display.utils';
 import { downloadCsv } from '../export/export.utils';
+import { useFilter } from '../filter/filter.hooks';
 import { useDisplayedList } from '../list/list.hooks';
 import Moon from '../moon/moon';
-import { useFilter } from '../filter/filter.hooks';
 import { useNight, useResultParams } from '../result/result.hooks';
 import NightChart from './summary.chart';
 import NightTable from './summary.night';
@@ -18,12 +20,15 @@ const formatPercent = (value: number) => `${Math.round(value * 100)}%`;
 type Props = {
   /** The bar of a phone */
   compact?: boolean;
-  /** The bar shows the times of the night below it while the calendar is open, and toggles the calendar */
+  /** The bar shows the times of the night below it */
   isExpanded?: boolean;
+  /** Its expanding and collapsing are animated */
+  isAnimated?: boolean;
+  /** A click on the bar, which is not clickable without it */
   onToggle?: () => void;
 };
 
-export default function Summary({ compact = false, isExpanded = false, onToggle }: Props) {
+export default function Summary({ compact = false, isExpanded = false, isAnimated = true, onToggle }: Props) {
   // the night arrives before the list; the count and the export follow the list
   const night = useNight();
   const { moonless } = useFilter();
@@ -50,7 +55,7 @@ export default function Summary({ compact = false, isExpanded = false, onToggle 
   if (compact) {
     return (
       <div className="Summary compact">
-        <div className="bar" onClick={onToggle}>
+        <div className={classnames('bar', { clickable: onToggle })} onClick={onToggle}>
           <div className="count">
             <div className="value">{list.length}</div>
             <div className="label">objects</div>
@@ -74,12 +79,11 @@ export default function Summary({ compact = false, isExpanded = false, onToggle 
           </div>
           <NightChart date={date} nightInfo={nightInfo} size={42} />
         </div>
-        {/* shown at once with the calendar, which fills the rest of the screen */}
-        {isExpanded && (
+        <Collapse in={isExpanded} timeout={isAnimated ? undefined : 0}>
           <div className="details">
             <NightTable nightInfo={nightInfo} />
           </div>
-        )}
+        </Collapse>
       </div>
     );
   }

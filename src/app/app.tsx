@@ -85,18 +85,39 @@ function WideLayout({ isCalendarOpen, onToggleCalendar }: LayoutProps) {
   );
 }
 
-/** Summary bar, cards and the filter in a drawer; the open calendar shows the times of the night below it */
+/**
+ * Summary bar, cards and the filter in a drawer. The times of the night below the bar are toggled by the bar, and
+ * opened with the calendar (by the date of the header); while the calendar is open, the bar does nothing and the date
+ * closes both.
+ */
 function CompactLayout({ isCalendarOpen, onToggleCalendar }: LayoutProps) {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+  // animated by the bar alone, at once with the calendar (which appears and disappears at once)
+  const [isSummaryAnimated, setIsSummaryAnimated] = useState(true);
   const handleOpenFilter = useCallback(() => setIsFilterOpen(true), []);
   const handleCloseFilter = useCallback(() => setIsFilterOpen(false), []);
+  const handleToggleSummary = useCallback(() => {
+    setIsSummaryOpen(isOpen => !isOpen);
+    setIsSummaryAnimated(true);
+  }, []);
+  const handleToggleCalendar = useCallback(() => {
+    onToggleCalendar();
+    setIsSummaryOpen(!isCalendarOpen);
+    setIsSummaryAnimated(false);
+  }, [isCalendarOpen, onToggleCalendar]);
 
   return (
     <div className="App compact">
-      <Header onMenuClick={handleOpenFilter} isCalendarOpen={isCalendarOpen} onCalendarClick={onToggleCalendar} />
+      <Header onMenuClick={handleOpenFilter} isCalendarOpen={isCalendarOpen} onCalendarClick={handleToggleCalendar} />
       <main className={classnames({ 'calendar-open': isCalendarOpen })}>
         <Calendar isOpen={isCalendarOpen} compact />
-        <Summary compact isExpanded={isCalendarOpen} onToggle={onToggleCalendar} />
+        <Summary
+          compact
+          isExpanded={isSummaryOpen || isCalendarOpen}
+          isAnimated={isSummaryAnimated}
+          onToggle={isCalendarOpen ? undefined : handleToggleSummary}
+        />
         <List compact />
       </main>
       <FilterDrawer isOpen={isFilterOpen} onClose={handleCloseFilter} />
