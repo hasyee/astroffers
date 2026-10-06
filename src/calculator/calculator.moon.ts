@@ -36,7 +36,8 @@ const getLowerHalfDayArcsOfMoon = ({ start, end }: Interval, location: Position)
   const observer = toObserver(location);
   const from = moment(start).startOf('day').valueOf();
   const crosses = getCrosses(observer, from, moment(end).endOf('day').valueOf());
-  if (crosses.length === 0) return getAltitude(Body.Moon, from, observer) > 0 ? [] : [{ start: -Infinity, end: Infinity }];
+  if (crosses.length === 0)
+    return getAltitude(Body.Moon, from, observer) > 0 ? [] : [{ start: -Infinity, end: Infinity }];
   return crosses.reduce<Interval[]>((halfDayArcs, cross) => {
     if (cross.type === 'set') return [...halfDayArcs, { start: cross.time, end: Infinity }];
     else {
