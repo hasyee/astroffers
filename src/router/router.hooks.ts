@@ -10,7 +10,7 @@ import type {
   RouteMatch,
   RouterLocation
 } from './router.types';
-import { joinPath, matchPath, parseQuery, pickQuery, popSegments, serializeQuery } from './router.utils';
+import { joinPath, matchPath, parseQuery, popSegments, serializeQuery } from './router.utils';
 
 // `RouterLocation` / `usePathname` instead of tinc's `Location` / `useLocation`, not to mix them up with the
 // geographic location of the app (`location/`)
@@ -80,12 +80,6 @@ export function useQuery(): Query {
 /** A value selected from the query; the selector has to return a primitive (or another stable value) */
 export function useQuerySelector<S>(selector: (query: Query) => S): S {
   return useStateSelector(RouterLocationContext, location => selector(parseQuery(location.search)));
-}
-
-/** A value parsed from the given params of the query, parsed again only when one of them changes */
-export function useQueryParams<T>(keys: readonly string[], parse: (query: Query) => T): T {
-  const params = useStateSelector(RouterLocationContext, location => pickQuery(location.search, keys));
-  return useMemo(() => parse(parseQuery(params)), [params, parse]);
 }
 
 /**

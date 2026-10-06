@@ -1,24 +1,25 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import type { ObjectFilter } from '../calculator/calculator.types';
-import { useQueryState, useQueryStateSetter } from '../query/query.hooks';
-import { useSearchSetter, useSortBySetter } from '../list/list.hooks';
-import { defaultSortBy, emptySearch } from '../list/list.utils';
-import type { Query } from '../router/router.types';
-import { omitQuery, parseQuery, serializeQuery } from '../router/router.utils';
-import { FILTER_PARAMS, defaultFilter, filterFromQuery, filterToQuery } from './filter.utils';
+import { SEARCH_PARAMS, SORT_PARAM } from '../list/list.utils';
+import { useQueryParams, useQueryParamsSetter } from '../query/query.hooks';
+import type { ParamValues } from '../query/query.params';
+import { FILTER_PARAMS, toFilter, toFilterParamValues } from './filter.utils';
 
-const getFilter = (query: Query) => filterFromQuery(query, defaultFilter);
-const serializeFilter = (filter: ObjectFilter) => serializeQuery(filterToQuery(filter));
-const parseFilter = (serialized: string) => getFilter(parseQuery(serialized));
-// a set param may be left out or renamed (e.g. `const` -> `exConst`), so the filter params are replaced
-const setQueryFilter = (query: Query, filter: ObjectFilter): Query => ({
-  ...omitQuery(query, FILTER_PARAMS),
-  ...filterToQuery(filter)
-});
+/** The filter of the query, keeping its identity while other params change (e.g. no recalculation) */
+export const useFilter = (): ObjectFilter => {
+  const values = useQueryParams(FILTER_PARAMS);
+  return useMemo(() => toFilter(values), [values]);
+};
 
-export const useFilter = () => useQueryState(getFilter, serializeFilter, parseFilter);
-
-export const useFilterSetter = () => useQueryStateSetter(getFilter, setQueryFilter);
+/** Setter of the filter, all of its params at once */
+export const useFilterSetter = () => {
+  const setParams = useQueryParamsSetter(FILTER_PARAMS);
+  return useCallback(
+    (update: ObjectFilter | ((filter: ObjectFilter) => ObjectFilter)) =>
+      setParams(values => toFilterParamValues(typeof update === 'function' ? update(toFilter(values)) : update)),
+    [setParams]
+  );
+};
 
 /** Setter of a single filter field */
 export const useFilterValueSetter = <K extends keyof ObjectFilter>(key: K) => {
@@ -26,14 +27,15 @@ export const useFilterValueSetter = <K extends keyof ObjectFilter>(key: K) => {
   return useCallback((value: ObjectFilter[K]) => setFilter(filter => ({ ...filter, [key]: value })), [setFilter, key]);
 };
 
-/** Resets the filter, the search and the order of the list */
+/** The params reset by the reset button: the filter, the search and the order of the list */
+const RESET_PARAMS = { ...FILTER_PARAMS, ...SEARCH_PARAMS, sort: SORT_PARAM };
+
+const RESET_VALUES = Object.fromEntries(
+  Object.entries(RESET_PARAMS).map(([name, { defaultValue }]) => [name, defaultValue])
+) as ParamValues<typeof RESET_PARAMS>;
+
+/** Resets the filter, the search and the order of the list, at once */
 export const useResetFilter = () => {
-  const setFilter = useFilterSetter();
-  const setSearch = useSearchSetter();
-  const setSortBy = useSortBySetter();
-  return useCallback(() => {
-    setFilter(defaultFilter);
-    setSearch(emptySearch);
-    setSortBy(defaultSortBy);
-  }, [setFilter, setSearch, setSortBy]);
+  const setParams = useQueryParamsSetter(RESET_PARAMS);
+  return useCallback(() => setParams(RESET_VALUES), [setParams]);
 };

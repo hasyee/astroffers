@@ -2,9 +2,6 @@ export type Params = Record<string, string>;
 
 export type Query = Record<string, string>;
 
-/** Whether a value of each param is known, to drop the unknown ones from the query */
-export type ParamValidators<K extends string> = Record<K, (value: string) => boolean>;
-
 export type RouterLocation = { pathname: string; search: string };
 
 export type RouteMatch = {

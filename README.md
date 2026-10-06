@@ -28,7 +28,8 @@ Node version: see `.nvmrc`.
 
 Vite, React 19, TypeScript, MUI 9 (dark theme), Highcharts, sass. Source files are grouped by domain
 (`src/<domain>/<domain>.<role>.ts(x)`); the state of the main view (date, location, sorting, search, images of the table, open calendar, red light, filter) lives
-in the URL query, so it can be shared, and is persisted to `localStorage` where needed (all but the date);
+in the URL query (params described in `src/query/query.params.ts`, read and written by hooks only), so it can be
+shared, and its params but the date are stored in `localStorage` as a query string for the next start;
 the rest is in small context-selector based state providers (`src/provider/`).
 
 - `calculator/`: astronomical calculations (night, Moon, visibility of the objects), run in a web worker

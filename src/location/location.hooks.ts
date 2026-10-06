@@ -2,13 +2,10 @@ import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import type { Coords, NominatimPlace, Place } from './location.types';
 import { useDebounce } from '../debounce/debounce.hooks';
 import { createStateContext, useStateSetter, useStateValue } from '../provider/state.hooks';
-import { useQuerySelector, useQuerySetter } from '../router/router.hooks';
-import { parseQuery, serializeQuery } from '../router/router.utils';
-import type { Query } from '../router/router.types';
+import { useQueryParams, useQueryParamsSetter } from '../query/query.hooks';
 import {
+  COORDS_PARAMS,
   MY_LOCATION_NAME,
-  coordsFromQuery,
-  coordsToQuery,
   defaultPlace,
   getPlaceShortName,
   isMyLocation,
@@ -19,44 +16,34 @@ import {
 /** Refresh interval of the location of the device while the app follows it */
 const FOLLOW_INTERVAL = 60 * 1000;
 
-/** The stored place (`localStorage`), the only place of its name; the coordinates come from the query */
-export const LocationContext = createStateContext<Place>(defaultPlace);
+/**
+ * The name of the place of the coordinates of the query (stored in `localStorage`; empty for typed coordinates). The
+ * coordinates change by `useLocationSetter` only, with their name (`restoreQuery` clears it for a link to another place)
+ */
+export const LocationNameContext = createStateContext('');
 
-const getCoords = (query: Query) => coordsFromQuery(query, defaultPlace.coords);
-
-/** Name of the stored place, when it is the place of the coordinates */
-const toPlace = (coords: Coords, stored: Place): Place => ({
-  coords,
-  name: isSameCoords(coords, stored.coords) ? stored.name : ''
-});
-
-const serializeCoords = (coords: Coords) => serializeQuery(coordsToQuery(coords));
-
-export const useCoords = () => {
-  // selected in a serialized form, to keep their identity while other params change
-  const serialized = useQuerySelector(query => serializeCoords(getCoords(query)));
-  return useMemo(() => getCoords(parseQuery(serialized)), [serialized]);
+/** The coordinates of the query, keeping their identity while other params change */
+export const useCoords = (): Coords => {
+  const { lng, lat } = useQueryParams(COORDS_PARAMS);
+  return useMemo(() => (lng !== null && lat !== null ? { lng, lat } : defaultPlace.coords), [lng, lat]);
 };
 
 export const useLocation = (): Place => {
   const coords = useCoords();
-  const stored = useStateValue(LocationContext);
-  return useMemo(() => toPlace(coords, stored), [coords, stored]);
+  const name = useStateValue(LocationNameContext);
+  return useMemo(() => ({ coords, name }), [coords, name]);
 };
 
-/** Stores the place with its name, and sets its coordinates in the query */
+/** Sets the coordinates of the place in the query, and stores its name */
 export const useLocationSetter = () => {
-  const stored = useStateValue(LocationContext);
-  const setStored = useStateSetter(LocationContext);
-  const setQuery = useQuerySetter();
+  const setName = useStateSetter(LocationNameContext);
+  const setCoords = useQueryParamsSetter(COORDS_PARAMS);
   return useCallback(
-    (update: Place | ((place: Place) => Place)) => {
-      const place = toPlace(getCoords(parseQuery(window.location.search)), stored);
-      const nextPlace = typeof update === 'function' ? update(place) : update;
-      setStored(nextPlace);
-      setQuery(query => ({ ...query, ...coordsToQuery(nextPlace.coords) }));
+    ({ coords, name }: Place) => {
+      setName(name);
+      setCoords(coords);
     },
-    [stored, setStored, setQuery]
+    [setName, setCoords]
   );
 };
 

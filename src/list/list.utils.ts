@@ -1,5 +1,5 @@
 import type { NgcInfo } from '../calculator/calculator.types';
-import type { ParamValidators, Query } from '../router/router.types';
+import { createBoolParam, createEnumParam, createStringParam } from '../query/query.params';
 import type { ListSearch, SortBy } from './list.types';
 
 type Selector = (ngcInfo: NgcInfo) => number | string | null | undefined;
@@ -61,69 +61,20 @@ export const sortOptions: { value: SortBy; label: string }[] = [
 
 export const defaultSortBy: SortBy = 'max';
 
-const isSortBy = (value: string | null | undefined): value is SortBy => !!value && Object.hasOwn(sorters, value);
-
-export const parseStoredSortBy = (value: string | null): SortBy => (isSortBy(value) ? value : defaultSortBy);
-
-/** Query param of the order of the list: `sort`, left out at the default order */
-export const SORT_PARAMS = ['sort'] as const;
-
-export const sortParamValidators: ParamValidators<(typeof SORT_PARAMS)[number]> = { sort: isSortBy };
-
-export const sortByFromQuery = (query: Query, fallback: SortBy): SortBy =>
-  isSortBy(query.sort) ? query.sort : fallback;
-
-export const sortByToQuery = (sortBy: SortBy): Query => (sortBy === defaultSortBy ? {} : { sort: sortBy });
+/** Query param of the order of the list: `sort` (the key of the sorter), left out at the default order */
+export const SORT_PARAM = createEnumParam('sort', Object.keys(sorters) as SortBy[], defaultSortBy);
 
 /** Query param of the images of the table: `img=0` for the compact table without them, left out with them (the default) */
-export const IMAGES_PARAMS = ['img'] as const;
-
-export const imagesParamValidators: ParamValidators<(typeof IMAGES_PARAMS)[number]> = {
-  img: value => value === '1' || value === '0'
-};
-
-export const imagesFromQuery = (query: Query, fallback: boolean): boolean =>
-  'img' in query ? query.img !== '0' : fallback;
-
-export const imagesToQuery = (hasImages: boolean): Query => (hasImages ? {} : { img: '0' });
-
-/** Shown unless turned off (nothing stored yet too) */
-export const parseStoredImages = (value: string | null) => value !== 'false';
+export const IMAGES_PARAM = createBoolParam('img', true);
 
 export const emptySearch: ListSearch = { ngc: '', messier: '', name: '' };
 
-/** Query params of the search of the list: `ngc`, `messier`, `name`, each left out when empty */
-export const SEARCH_PARAMS = ['ngc', 'messier', 'name'] as const;
-
-const isTerm = (value: string) => value !== '';
-
-export const searchParamValidators: ParamValidators<(typeof SEARCH_PARAMS)[number]> = {
-  ngc: isTerm,
-  messier: isTerm,
-  name: isTerm
-};
-
-/** The search from the query; the fallback when none of its params is there */
-export const searchFromQuery = (query: Query, fallback: ListSearch): ListSearch =>
-  SEARCH_PARAMS.some(key => key in query)
-    ? { ngc: query.ngc ?? '', messier: query.messier ?? '', name: query.name ?? '' }
-    : fallback;
-
-export const searchToQuery = (search: ListSearch): Query =>
-  Object.fromEntries(SEARCH_PARAMS.filter(key => search[key]).map(key => [key, search[key]]));
-
-/** Restores the search from its stored JSON; empty for anything malformed */
-export const parseStoredSearch = (json: string | null): ListSearch => {
-  try {
-    const stored = JSON.parse(json ?? 'null');
-    return Object.fromEntries(
-      SEARCH_PARAMS.map(key => [key, typeof stored?.[key] === 'string' ? stored[key] : ''])
-    ) as ListSearch;
-  } catch (error) {
-    console.error(error);
-    return emptySearch;
-  }
-};
+/** Query params of the search of the list: `ngc`, `messier`, `name`, each left out when empty (an empty one unknown) */
+export const SEARCH_PARAMS = {
+  ngc: createStringParam('ngc', '', { pattern: '.+' }),
+  messier: createStringParam('messier', '', { pattern: '.+' }),
+  name: createStringParam('name', '', { pattern: '.+' })
+} satisfies Record<keyof ListSearch, unknown>;
 
 export const isSearchEmpty = (search: ListSearch) => !search.ngc && !search.messier && !search.name;
 

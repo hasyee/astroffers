@@ -12,6 +12,7 @@ import { useCloseOnBack } from '../history/history.hooks';
 import List from '../list/list';
 import { useLocationFollowing } from '../location/location.hooks';
 import { useHasFilterPanel, useIsWideScreen } from '../media/media.hooks';
+import { useQueryStorage } from '../query/query.storage';
 import { useRedLightMode } from '../redlight/redlight.hooks';
 import { useCalculation } from '../result/result.hooks';
 import Sidebar from '../sidebar/sidebar';
@@ -131,6 +132,7 @@ export default function App() {
   useCalendarPrefetch();
   useLocationFollowing();
   useRedLightMode();
+  useQueryStorage();
   const isWideScreen = useIsWideScreen();
   const [isCalendarOpen, handleToggleCalendar] = useCalendarOpen();
 

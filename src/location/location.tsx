@@ -31,12 +31,12 @@ export default function Location() {
   }, [isOpen, clearLocationFetchingError]);
 
   const handleLngChange = useCallback(
-    (lng: number) => setLocation(location => ({ coords: { ...location.coords, lng }, name: '' })),
-    [setLocation]
+    (lng: number) => setLocation({ coords: { ...coords, lng }, name: '' }),
+    [coords, setLocation]
   );
   const handleLatChange = useCallback(
-    (lat: number) => setLocation(location => ({ coords: { ...location.coords, lat }, name: '' })),
-    [setLocation]
+    (lat: number) => setLocation({ coords: { ...coords, lat }, name: '' }),
+    [coords, setLocation]
   );
   const handleDialogClose = useCallback(() => {
     if (!isFetchingLocation) handleClose();

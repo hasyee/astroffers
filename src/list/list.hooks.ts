@@ -1,57 +1,23 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useResultList } from '../result/result.hooks';
-import { useQueryState, useQueryStateSetter } from '../query/query.hooks';
-import type { Query } from '../router/router.types';
-import { omitQuery, parseQuery, serializeQuery } from '../router/router.utils';
-import type { ListSearch, SortBy } from './list.types';
-import {
-  defaultSortBy,
-  emptySearch,
-  IMAGES_PARAMS,
-  imagesFromQuery,
-  imagesToQuery,
-  isSearchEmpty,
-  matchesSearch,
-  searchFromQuery,
-  searchToQuery,
-  SEARCH_PARAMS,
-  sortByFromQuery,
-  sortByToQuery,
-  SORT_PARAMS,
-  sorters
-} from './list.utils';
-
-const getSortBy = (query: Query) => sortByFromQuery(query, defaultSortBy);
-const keepSortBy = (sortBy: SortBy) => sortBy;
-const parseSortBy = (serialized: string) => serialized as SortBy;
-// the default order is left out, so the param is replaced
-const setQuerySortBy = (query: Query, sortBy: SortBy): Query => ({
-  ...omitQuery(query, SORT_PARAMS),
-  ...sortByToQuery(sortBy)
-});
+import { useQueryParam, useQueryParams, useQueryParamSetter, useQueryParamsSetter } from '../query/query.hooks';
+import type { ListSearch } from './list.types';
+import { IMAGES_PARAM, isSearchEmpty, matchesSearch, SEARCH_PARAMS, SORT_PARAM, sorters } from './list.utils';
 
 /** Order of the list */
-export const useSortBy = () => useQueryState(getSortBy, keepSortBy, parseSortBy);
+export const useSortBy = () => useQueryParam(SORT_PARAM);
 
-export const useSortBySetter = () => useQueryStateSetter(getSortBy, setQuerySortBy);
+export const useSortBySetter = () => useQueryParamSetter(SORT_PARAM);
 
-const getSearch = (query: Query) => searchFromQuery(query, emptySearch);
-const serializeSearch = (search: ListSearch) => serializeQuery(searchToQuery(search));
-const parseSearch = (serialized: string) => getSearch(parseQuery(serialized));
-// an emptied term is left out, so the search params are replaced
-const setQuerySearch = (query: Query, search: ListSearch): Query => ({
-  ...omitQuery(query, SEARCH_PARAMS),
-  ...searchToQuery(search)
-});
+/** Search terms of the list, keeping their identity while other params change */
+export const useSearch = (): ListSearch => useQueryParams(SEARCH_PARAMS);
 
-/** Search terms of the list */
-export const useSearch = () => useQueryState(getSearch, serializeSearch, parseSearch);
-
-export const useSearchSetter = () => useQueryStateSetter(getSearch, setQuerySearch);
+/** Setter of the search terms, all of the given ones at once */
+export const useSearchSetter = () => useQueryParamsSetter(SEARCH_PARAMS);
 
 export const useSearchValueSetter = (key: keyof ListSearch) => {
   const setSearch = useSearchSetter();
-  return useCallback((value: string) => setSearch(search => ({ ...search, [key]: value })), [setSearch, key]);
+  return useCallback((value: string) => setSearch({ [key]: value }), [setSearch, key]);
 };
 
 /** The result list as displayed: searched and sorted */
@@ -65,18 +31,10 @@ export const useDisplayedList = () => {
   );
 };
 
-const getImages = (query: Query) => imagesFromQuery(query, true);
-const parseImages = (serialized: string) => serialized === 'true';
-// the param is left out with the images, so it is replaced
-const setQueryImages = (query: Query, hasImages: boolean): Query => ({
-  ...omitQuery(query, IMAGES_PARAMS),
-  ...imagesToQuery(hasImages)
-});
-
 /** The comfortable table with the images of the objects (the default), or the compact one without them */
 export const useListImages = () => {
-  const hasImages = useQueryState(getImages, String, parseImages);
-  const setImages = useQueryStateSetter(getImages, setQueryImages);
+  const hasImages = useQueryParam(IMAGES_PARAM);
+  const setImages = useQueryParamSetter(IMAGES_PARAM);
   const toggleImages = useCallback(() => setImages(hasImages => !hasImages), [setImages]);
   return [hasImages, toggleImages] as const;
 };
