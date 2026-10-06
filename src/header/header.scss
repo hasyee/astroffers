@@ -13,9 +13,10 @@
     flex: 1 1 auto;
   }
 
-  // black on a phone, as the summary bar below it (a paper on a wide screen)
+  // black on a phone, as the summary bar below it, without the line (a paper on a wide screen)
   .App.compact & {
     background-color: var(--mui-palette-background-default);
+    border-bottom: 0;
   }
 
   // red as today in the calendar in the normal mode; in the red light mode in the color of the text, which the filter turns into a bright red
