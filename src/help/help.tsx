@@ -22,7 +22,7 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
           <p>
             On a wide screen the filter is on the left side, the menu button of the header hides and shows it; on a
             narrower screen or a phone it opens with the menu button. The reset button at its top restores the default
-            filter and clears the search.
+            filter and order, and clears the search.
           </p>
           <ul>
             <li>

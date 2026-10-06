@@ -65,13 +65,13 @@ const isSortBy = (value: string | null | undefined): value is SortBy => !!value 
 
 export const parseStoredSortBy = (value: string | null): SortBy => (isSortBy(value) ? value : defaultSortBy);
 
-/** Query param of the order of the list: `sort` */
+/** Query param of the order of the list: `sort`, left out at the default order */
 export const SORT_PARAMS = ['sort'] as const;
 
 export const sortByFromQuery = (query: Query, fallback: SortBy): SortBy =>
   isSortBy(query.sort) ? query.sort : fallback;
 
-export const sortByToQuery = (sortBy: SortBy): Query => ({ sort: sortBy });
+export const sortByToQuery = (sortBy: SortBy): Query => (sortBy === defaultSortBy ? {} : { sort: sortBy });
 
 /** Query param of the images of the table: `img=0` for the compact table without them, left out with them (the default) */
 export const IMAGES_PARAMS = ['img'] as const;

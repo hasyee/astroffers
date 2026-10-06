@@ -13,6 +13,7 @@ import {
   IMAGES_PARAMS,
   SEARCH_PARAMS,
   SORT_PARAMS,
+  defaultSortBy,
   emptySearch,
   imagesFromQuery,
   imagesToQuery,
@@ -43,7 +44,7 @@ export const STATE_PARAMS = [
 
 export const hasQueryState = (query: Query) => STATE_PARAMS.some(key => key in query);
 
-/** The query of the whole state, in the order of the params */
+/** The query of the state, in the order of the params: the date, the place and the others differing from their defaults */
 export const stateToQuery = (
   { date, sortBy, search, hasImages, isCalendarOpen, isRedLight, filter }: StoredState,
   coords: Coords
@@ -69,30 +70,29 @@ export const getStoredState = (): StoredState => ({
 });
 
 /**
- * Completes the query with the whole state of the app, before the first render: a param missing from the query
- * is taken from the stored state, or from the defaults (the night of today). A query having any of the params
- * (e.g. a shared link) means every object type and constellation by a missing set, no search by a missing search
- * the images, the closed calendar and the normal colors by a missing `img`, `cal` and `red`; without them (e.g. the
- * start of the PWA) the stored ones are taken too.
+ * Completes the query with the state of the app, before the first render: the date and the place always, the others
+ * when they differ from their defaults. A query having any of the params (e.g. a shared link, which has the date and
+ * the place) means the default by a missing one; without them (e.g. the start of the PWA) the stored state is taken,
+ * the date of today and the stored place.
  */
 export const initQuery = () => {
   const { pathname, hash } = window.location;
 
   const query = parseQuery(window.location.search);
   const stored = getStoredState();
-  const searchFallback = hasQueryState(query) ? emptySearch : stored.search;
-  const imagesFallback = hasQueryState(query) ? true : stored.hasImages;
-  const calendarFallback = hasQueryState(query) ? false : stored.isCalendarOpen;
-  const redLightFallback = hasQueryState(query) ? false : stored.isRedLight;
-  const filterFallback = hasQueryState(query)
-    ? { ...stored.filter, types: defaultFilter.types, constellations: defaultFilter.constellations }
-    : stored.filter;
+  const isShared = hasQueryState(query);
+  const sortByFallback = isShared ? defaultSortBy : stored.sortBy;
+  const searchFallback = isShared ? emptySearch : stored.search;
+  const imagesFallback = isShared ? true : stored.hasImages;
+  const calendarFallback = isShared ? false : stored.isCalendarOpen;
+  const redLightFallback = isShared ? false : stored.isRedLight;
+  const filterFallback = isShared ? defaultFilter : stored.filter;
 
   const search = serializeQuery({
     ...stateToQuery(
       {
         date: dateFromQuery(query, stored.date),
-        sortBy: sortByFromQuery(query, stored.sortBy),
+        sortBy: sortByFromQuery(query, sortByFallback),
         search: searchFromQuery(query, searchFallback),
         hasImages: imagesFromQuery(query, imagesFallback),
         isCalendarOpen: calendarFromQuery(query, calendarFallback),

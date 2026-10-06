@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import type { ObjectFilter } from '../calculator/calculator.types';
 import { useStatePart, useStatePartSetter } from '../query/query.hooks';
-import { useSearchSetter } from '../list/list.hooks';
-import { emptySearch } from '../list/list.utils';
+import { useSearchSetter, useSortBySetter } from '../list/list.hooks';
+import { defaultSortBy, emptySearch } from '../list/list.utils';
 import type { Query } from '../router/router.types';
 import { omitQuery, parseQuery, serializeQuery } from '../router/router.utils';
 import { FILTER_PARAMS, defaultFilter, filterFromQuery, filterToQuery } from './filter.utils';
@@ -26,12 +26,14 @@ export const useFilterValueSetter = <K extends keyof ObjectFilter>(key: K) => {
   return useCallback((value: ObjectFilter[K]) => setFilter(filter => ({ ...filter, [key]: value })), [setFilter, key]);
 };
 
-/** Resets the filter and the search of the list */
+/** Resets the filter, the search and the order of the list */
 export const useResetFilter = () => {
   const setFilter = useFilterSetter();
   const setSearch = useSearchSetter();
+  const setSortBy = useSortBySetter();
   return useCallback(() => {
     setFilter(defaultFilter);
     setSearch(emptySearch);
-  }, [setFilter, setSearch]);
+    setSortBy(defaultSortBy);
+  }, [setFilter, setSearch, setSortBy]);
 };

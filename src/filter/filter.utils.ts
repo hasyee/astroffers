@@ -59,8 +59,9 @@ export const parseStoredFilter = (json: string | null): ObjectFilter => {
 export const countSelected = (setFilter: SetFilter) => Object.values(setFilter).filter(selected => selected).length;
 
 /**
- * Query params of the filter. A set (object types, constellations) is left out when everything is selected,
- * otherwise it lists the selected keys, or the excluded ones (`ex...`) when more are selected than not.
+ * Query params of the filter, each left out at its default value. A set (object types, constellations) is left out
+ * when everything is selected, otherwise it lists the selected keys, or the excluded ones (`ex...`) when more are
+ * selected than not.
  */
 export const FILTER_PARAMS = [
   'alt',
@@ -116,14 +117,22 @@ export const filterFromQuery = (query: Query, fallback: ObjectFilter): ObjectFil
   types: parseSetParams(query.types, query.exTypes, fallback.types)
 });
 
+/** The param of a field of the filter, or none at its default value */
+const fieldToParam = <K extends keyof ObjectFilter>(
+  filter: ObjectFilter,
+  key: K,
+  param: string,
+  serialize: (value: ObjectFilter[K]) => string = String
+): Query => (filter[key] === defaultFilter[key] ? {} : { [param]: serialize(filter[key]) });
+
 export const filterToQuery = (filter: ObjectFilter): Query => ({
-  alt: String(filter.altitude),
-  bf: filter.brightnessFilter,
-  mag: String(filter.magnitude),
-  sb: String(filter.surfaceBrightness),
-  tw: String(filter.twilight),
-  ot: String(filter.observationTime),
-  ml: filter.moonless ? '1' : '0',
+  ...fieldToParam(filter, 'altitude', 'alt'),
+  ...fieldToParam(filter, 'brightnessFilter', 'bf'),
+  ...fieldToParam(filter, 'magnitude', 'mag'),
+  ...fieldToParam(filter, 'surfaceBrightness', 'sb'),
+  ...fieldToParam(filter, 'twilight', 'tw'),
+  ...fieldToParam(filter, 'observationTime', 'ot'),
+  ...fieldToParam(filter, 'moonless', 'ml', moonless => (moonless ? '1' : '0')),
   ...setToParams(filter.constellations, 'const', 'exConst'),
   ...setToParams(filter.types, 'types', 'exTypes')
 });

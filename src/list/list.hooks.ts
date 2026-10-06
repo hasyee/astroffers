@@ -17,13 +17,18 @@ import {
   SEARCH_PARAMS,
   sortByFromQuery,
   sortByToQuery,
+  SORT_PARAMS,
   sorters
 } from './list.utils';
 
 const getSortBy = (query: Query) => sortByFromQuery(query, defaultSortBy);
 const keepSortBy = (sortBy: SortBy) => sortBy;
 const parseSortBy = (serialized: string) => serialized as SortBy;
-const setQuerySortBy = (query: Query, sortBy: SortBy): Query => ({ ...query, ...sortByToQuery(sortBy) });
+// the default order is left out, so the param is replaced
+const setQuerySortBy = (query: Query, sortBy: SortBy): Query => ({
+  ...omitQuery(query, SORT_PARAMS),
+  ...sortByToQuery(sortBy)
+});
 
 /** Order of the list */
 export const useSortBy = () => useStatePart(getSortBy, keepSortBy, parseSortBy);
