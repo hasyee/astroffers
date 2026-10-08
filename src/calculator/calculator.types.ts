@@ -22,11 +22,18 @@ export type Az = { az: Radians; alt: Radians };
 
 export type CoordSeries<Coord> = { time: Timestamp; coord: Coord }[];
 
+/** A moonrise or a moonset */
+export type MoonCross = { type: 'rise' | 'set'; time: Timestamp };
+
 export type NightInfo = {
   night: Interval | null;
-  moonNight: Interval | null;
   astroNight: Interval | null;
   moonlessNight: Interval | null;
+  /**
+   * The moonrises and moonsets of the day of the clock face (from the noon of the date to the next noon), in order; a
+   * single one with the other one beside it, before the noon or after the next noon
+   */
+  moonCrosses: MoonCross[];
   moonPhase: number;
   moonIllumination: number;
 };
