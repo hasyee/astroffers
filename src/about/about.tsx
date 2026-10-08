@@ -61,7 +61,8 @@ export default function About({ isOpen, onClose }: { isOpen: boolean; onClose: (
           <div>
             <Typography variant="h5">Astroffers</Typography>
             <Typography color="text.secondary">
-              Take offers to watch at given nights by the NGC 2000 and the Messier catalogs, and from the Solar System.
+              Finds what to observe on a given night: deep-sky objects of the NGC 2000 / Messier catalogs, and the
+              bodies of the Solar System.
             </Typography>
           </div>
         </div>
