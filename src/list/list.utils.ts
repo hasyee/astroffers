@@ -39,7 +39,7 @@ export const sorters: Record<SortBy, (a: NgcInfo, b: NgcInfo) => number> = {
   constellation: by(({ object }) => object.constellation),
   from: by(({ intersection }) => intersection.start),
   to: by(({ intersection }) => intersection.end),
-  max: (a, b) => (a.max ?? 0) - (b.max ?? 0) || a.sum - b.sum,
+  max: (a, b) => by(({ max }) => max)(a, b) || a.sum - b.sum,
   sum: by(({ sum }) => sum),
   magnitude: by(({ object }) => object.magnitude),
   surfaceBrightness: by(({ object }) => object.surfaceBrightness)
