@@ -4,8 +4,26 @@ import allTypesJson from './catalog.allTypes.json';
 import constellationsJson from './catalog.constellations.json';
 import solarTypesJson from '../solar/solar.types.json';
 
+/** Groups of the object types chosen at once in the filter, by key (the double stars are in a custom choice only) */
+export const objectTypeGroups: Record<string, { label: string; types: string[] }> = {
+  galaxies: { label: 'Galaxies', types: ['Gxy'] },
+  nebulae: { label: 'Nebulae', types: ['PN', 'Neb', 'SNR'] },
+  starClusters: { label: 'Star clusters', types: ['OC', 'GC', 'Ast', 'MWSC'] },
+  solarSystem: { label: 'Solar System', types: ['Pl', 'DPl', 'MPl'] }
+};
+
+const typeNames: Record<string, string> = { ...objectTypesJson, ...solarTypesJson };
+
+/** The order of the object types in the filter: by their groups, the double stars after the star clusters */
+const typeOrder = ['Gxy', 'PN', 'Neb', 'SNR', 'OC', 'GC', 'Ast', 'MWSC', '**', 'Pl', 'DPl', 'MPl'];
+
 /** Object types that can be filtered on, by key: the ones of the catalog and of the Solar System (`solar/`) */
-export const objectTypes: Record<string, string> = { ...objectTypesJson, ...solarTypesJson };
+export const objectTypes: Record<string, string> = Object.fromEntries(
+  [...typeOrder, ...Object.keys(typeNames).filter(type => !typeOrder.includes(type))].map(type => [
+    type,
+    typeNames[type]
+  ])
+);
 
 /** Display names of every object type, by key */
 const allTypes: Record<string, string> = { ...allTypesJson, ...solarTypesJson };

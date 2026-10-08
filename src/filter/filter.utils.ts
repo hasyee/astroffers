@@ -1,9 +1,13 @@
 import type { BrightnessType, ObjectFilter, ObservationWindow, SetFilter } from '../calculator/calculator.types';
-import { constellations, objectTypes } from '../catalog/catalog.utils';
+import { constellations, objectTypeGroups, objectTypes } from '../catalog/catalog.utils';
 import { createEnumParam, createNumParam, type ParamValues, type QueryParam } from '../query/query.params';
 
 const selectAll = (keys: Record<string, string>, value = true): SetFilter =>
   Object.fromEntries(Object.keys(keys).map(key => [key, value]));
+
+/** A set of the keys of `all`, of which the `selected` ones are selected */
+const toSetFilter = (selected: string[], all: SetFilter): SetFilter =>
+  Object.fromEntries(Object.keys(all).map(key => [key, selected.includes(key)]));
 
 export const selectAllTypes = (value: boolean) => selectAll(objectTypes, value);
 
@@ -22,6 +26,19 @@ export const defaultFilter: ObjectFilter = {
 };
 
 export const countSelected = (setFilter: SetFilter) => Object.values(setFilter).filter(selected => selected).length;
+
+/** The two sets have the same keys selected */
+const isSameSet = (a: SetFilter, b: SetFilter) => Object.keys({ ...a, ...b }).every(key => !!a[key] === !!b[key]);
+
+/** The types of the group (a key of `objectTypeGroups`) selected only */
+export const selectTypeGroup = (group: string): SetFilter =>
+  toSetFilter(objectTypeGroups[group].types, defaultFilter.types);
+
+/** The choice the selected types make: `all`, a key of `objectTypeGroups`, or `custom` */
+export const getTypeChoice = (types: SetFilter) =>
+  countSelected(types) === countSelected(defaultFilter.types)
+    ? 'all'
+    : (Object.keys(objectTypeGroups).find(group => isSameSet(selectTypeGroup(group), types)) ?? 'custom');
 
 /** The param of a set: its selected keys, by default all of them (left out), or the ones left out (`-` before each) */
 const createSetParam = (key: string, setFilter: SetFilter) =>
@@ -51,9 +68,6 @@ export const FILTER_PARAMS = {
 };
 
 type FilterParamValues = ParamValues<typeof FILTER_PARAMS>;
-
-const toSetFilter = (selected: string[], all: SetFilter): SetFilter =>
-  Object.fromEntries(Object.keys(all).map(key => [key, selected.includes(key)]));
 
 const toSelected = (setFilter: SetFilter) => Object.keys(setFilter).filter(key => setFilter[key]);
 

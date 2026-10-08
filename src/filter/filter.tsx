@@ -5,12 +5,12 @@ import TextField from '@mui/material/TextField';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import type { BrightnessType, ObservationWindow } from '../calculator/calculator.types';
-import { constellations, objectTypes } from '../catalog/catalog.utils';
+import { constellations, objectTypeGroups, objectTypes } from '../catalog/catalog.utils';
 import NumberInput from '../input/input.number';
 import SelectorField from '../input/input.selector';
 import Location from '../location/location';
 import { useFilter, useFilterValueSetter, useResetFilter } from './filter.hooks';
-import { countSelected } from './filter.utils';
+import { countSelected, getTypeChoice, selectAllTypes, selectTypeGroup } from './filter.utils';
 import SetFilterDialog from './filter.set';
 import './filter.scss';
 
@@ -23,6 +23,11 @@ const observationWindowOptions: { value: ObservationWindow; label: string }[] = 
 const brightnessLimitTypeOptions: { value: BrightnessType; label: string }[] = [
   { value: 'magnitude', label: 'Magnitude' },
   { value: 'surfaceBrightness', label: 'Surface brightness' }
+];
+
+const typeChoiceOptions: { value: string; label: string }[] = [
+  { value: 'all', label: 'All' },
+  ...Object.entries(objectTypeGroups).map(([value, { label }]) => ({ value, label }))
 ];
 
 const typeCount = Object.keys(objectTypes).length;
@@ -54,6 +59,12 @@ export default function Filter() {
   const handleOpenTypes = useCallback(() => setOpenedDialog('types'), []);
   const handleOpenConstellations = useCallback(() => setOpenedDialog('constellations'), []);
   const handleCloseDialog = useCallback(() => setOpenedDialog(null), []);
+
+  const typeChoice = getTypeChoice(filter.types);
+  const handleTypeChoiceChange = useCallback(
+    (choice: string) => setTypes(choice === 'all' ? selectAllTypes(true) : selectTypeGroup(choice)),
+    [setTypes]
+  );
 
   const isMagnitude = filter.brightnessLimitType === 'magnitude';
 
@@ -125,8 +136,26 @@ export default function Filter() {
         )}
       </div>
 
-      <SelectorField
+      <TextField
+        select
         label="Object types"
+        value={typeChoice}
+        onChange={event => handleTypeChoiceChange(event.target.value)}
+      >
+        {typeChoiceOptions.map(({ value, label }) => (
+          <MenuItem key={value} value={value}>
+            {label}
+          </MenuItem>
+        ))}
+        {/* shown only, for the types selected in the dialog */}
+        {typeChoice === 'custom' && (
+          <MenuItem value="custom" disabled>
+            Custom
+          </MenuItem>
+        )}
+      </TextField>
+      <SelectorField
+        label="Selected types"
         value={`${countSelected(filter.types)} of ${typeCount} selected`}
         icon={<FilterListIcon />}
         onClick={handleOpenTypes}

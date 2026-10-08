@@ -51,8 +51,12 @@ export default function Help({ isOpen, onClose }: { isOpen: boolean; onClose: ()
               brightness is computed from the magnitude and the size, so objects without size data are left out by it.
             </li>
             <li>
-              <b>Object types and constellations:</b> select the kinds of objects (galaxies, clusters, nebulae, double
-              stars, planets, dwarf planets, asteroids and more) and the constellations you are interested in.
+              <b>Object types:</b> all of them, the galaxies, the nebulae, the star clusters or the bodies of the Solar
+              System. Under <b>Selected types</b> you can choose them one by one (planetary nebulae, open clusters,
+              double stars, asteroids and more): a choice of no group is Custom.
+            </li>
+            <li>
+              <b>Constellations:</b> select the constellations you are interested in.
             </li>
           </ul>
 
