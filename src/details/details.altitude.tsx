@@ -5,7 +5,7 @@ import type { Az, CoordSeries, Degrees, Interval, NgcInfo, NightInfo } from '../
 import { radToDeg } from '../calculator/calculator.units';
 import { toNextDay } from '../calculator/calculator.time';
 import Chart from '../chart/chart';
-import { DAYLIGHT, HIGHLIGHT, MOONLESS_NIGHT, MOON_NIGHT, TEXT, TWILIGHT } from '../chart/chart.colors';
+import { BELOW_HORIZON, DAYLIGHT, HIGHLIGHT, MOONLESS_NIGHT, MOON_NIGHT, TEXT, TWILIGHT } from '../chart/chart.colors';
 
 const HOUR = 3600 * 1000;
 
@@ -68,6 +68,8 @@ const getOptions = (
       min: -90,
       max: 90,
       tickInterval: 30,
+      // over the bands of the sky and the altitude (3), below the lines (5)
+      plotBands: [{ from: -90, to: 0, zIndex: 4, color: BELOW_HORIZON }],
       plotLines: [{ value: minAltitude, zIndex: 5, width: 2, dashStyle: 'Dash', color: TEXT }]
     },
     series: [{ type: 'line', name: 'Altitude', color: HIGHLIGHT, lineWidth: 3, marker: { enabled: false }, data }]

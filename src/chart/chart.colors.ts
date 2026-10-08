@@ -5,6 +5,8 @@ export const DAYLIGHT = 'lightblue';
 export const TWILIGHT = '#01579b';
 export const MOON_NIGHT = 'grey';
 export const MOONLESS_NIGHT = 'black';
+/** Faint cover of the sky below the horizon */
+export const BELOW_HORIZON = 'rgba(128, 128, 128, 0.5)';
 
 /** MUI dark theme palette */
 export const TEXT = theme.palette.text.primary;
