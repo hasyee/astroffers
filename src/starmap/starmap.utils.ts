@@ -1,5 +1,6 @@
 import { timeToLst } from '../calculator/calculator.lst';
 import { getElapsedYearsSinceJ2000, getEqCoordsOnDate } from '../calculator/calculator.precession';
+import type * as Astronomy from 'astronomy-engine';
 import type { Eq, NgcObject, Radians, Timestamp } from '../calculator/calculator.types';
 import { getLocation } from '../calculator/calculator.units';
 import { CONSTELLATION_LINES } from '../constellation/constellation.utils';
@@ -136,6 +137,28 @@ export const getHorizon = (time: Timestamp, coords: Coords): Horizon => {
       point: horizontalToEq(azimuth * DEG, 0),
       below: horizontalToEq(azimuth * DEG, -DEG)
     }))
+  };
+};
+
+/**
+ * The Moon of the place at a time, topocentric (its parallax is up to ~1°), J2000: its position, its angular radius,
+ * the illuminated fraction of its disc, and the position of the Sun, for the side of its bright limb
+ */
+export type Moon = { eq: Eq; radius: Radians; illuminated: number; sun: Eq };
+
+const MOON_RADIUS_KM = 1737.4;
+
+/** By `astronomy-engine`, loaded by the map (`useAstronomy`) */
+export const getMoon = (astronomy: typeof Astronomy, time: Timestamp, coords: Coords): Moon => {
+  const observer = new astronomy.Observer(coords.lat, coords.lng, 0);
+  const date = new Date(time);
+  const toEq = ({ ra, dec }: Astronomy.EquatorialCoordinates): Eq => ({ ra: (ra / 12) * Math.PI, de: dec * DEG });
+  const moon = astronomy.Equator(astronomy.Body.Moon, date, observer, false, true);
+  return {
+    eq: toEq(moon),
+    radius: Math.asin(MOON_RADIUS_KM / (moon.dist * astronomy.KM_PER_AU)),
+    illuminated: astronomy.Illumination(astronomy.Body.Moon, date).phase_fraction,
+    sun: toEq(astronomy.Equator(astronomy.Body.Sun, date, observer, false, true))
   };
 };
 

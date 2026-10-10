@@ -1,4 +1,5 @@
 import { type RefObject, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import type * as Astronomy from 'astronomy-engine';
 import type { NgcObject } from '../calculator/calculator.types';
 import { useCurrentTime } from '../date/date.hooks';
 import { getObjectImgSrc } from '../catalog/catalog.utils';
@@ -16,6 +17,7 @@ import {
   VIEW_PARAMS,
   getInitialView,
   getHorizon,
+  getMoon,
   moveView,
   toView,
   toViewParamValues
@@ -74,11 +76,42 @@ export const useStarLayers = () => {
   return layers;
 };
 
-/** The horizon of the place now, minute by minute */
-const useHorizon = () => {
+/**
+ * Loaded once in a session, at the first opening of the map, in a chunk of its own (precached, for offline use): the
+ * calculator's worker has its own copy
+ */
+let astronomyPromise: Promise<typeof Astronomy> | null = null;
+
+const loadAstronomy = () => {
+  astronomyPromise ??= import('astronomy-engine').catch(error => {
+    // to be tried again at the next opening
+    astronomyPromise = null;
+    throw error;
+  });
+  return astronomyPromise;
+};
+
+/** `astronomy-engine`, null while loading */
+const useAstronomy = () => {
+  const [astronomy, setAstronomy] = useState<typeof Astronomy | null>(null);
+  useEffect(() => {
+    let isCurrent = true;
+    loadAstronomy().then(loaded => isCurrent && setAstronomy(loaded), console.error);
+    return () => {
+      isCurrent = false;
+    };
+  }, []);
+  return astronomy;
+};
+
+/** The horizon and the Moon (null while loading) of the place now, minute by minute */
+const useSky = () => {
   const time = useCurrentTime();
   const coords = useCoords();
-  return useMemo(() => getHorizon(time, coords), [time, coords]);
+  const astronomy = useAstronomy();
+  const horizon = useMemo(() => getHorizon(time, coords), [time, coords]);
+  const moon = useMemo(() => (astronomy ? getMoon(astronomy, time, coords) : null), [astronomy, time, coords]);
+  return { horizon, moon };
 };
 
 /**
@@ -107,7 +140,7 @@ const getPointDistance = (a: Point, b: Point) => Math.hypot(a.x - b.x, a.y - b.y
 /**
  * Draws the star map of the object on the canvas, opened around it (`getInitialView`): dragged by a finger or the
  * mouse, zoomed by a pinch or the wheel around their points; turned to the zenith (or the north celestial pole) up;
- * below the horizon of now in grey. The view of the query (of a link) is shown at the opening, its changes are
+ * below the horizon of now in grey, the Moon of now in its phase. The view of the query (of a link) is shown at the opening, its changes are
  * written back to it after the gestures (at once when centered). The
  * view is kept out of the state of React, so a gesture redraws the canvas only, at most once a frame.
  */
@@ -115,7 +148,7 @@ export const useStarMapCanvas = (canvasRef: RefObject<HTMLCanvasElement | null>,
   const flip = useFlip();
   const orientationType = useOrientationType();
   const layers = useStarLayers();
-  const horizon = useHorizon();
+  const { horizon, moon } = useSky();
   const preview = usePreview(object);
   const viewParamValues = useQueryParams(VIEW_PARAMS);
   const setViewParamValues = useQueryParamsSetter(VIEW_PARAMS);
@@ -128,8 +161,8 @@ export const useStarMapCanvas = (canvasRef: RefObject<HTMLCanvasElement | null>,
   const frameRef = useRef<number | null>(null);
   const viewParamsTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   // the latest of the props, read by the frame and the listeners
-  const propsRef = useRef({ orientation, layers, object, horizon, preview, viewParamValues, setViewParamValues });
-  propsRef.current = { orientation, layers, object, horizon, preview, viewParamValues, setViewParamValues };
+  const propsRef = useRef({ orientation, layers, object, horizon, moon, preview, viewParamValues, setViewParamValues });
+  propsRef.current = { orientation, layers, object, horizon, moon, preview, viewParamValues, setViewParamValues };
 
   const redraw = useCallback(() => {
     if (frameRef.current !== null) return;
@@ -156,7 +189,7 @@ export const useStarMapCanvas = (canvasRef: RefObject<HTMLCanvasElement | null>,
     redraw();
   }, [object.id, redraw]);
 
-  useEffect(redraw, [orientation, layers, horizon, preview, redraw]);
+  useEffect(redraw, [orientation, layers, horizon, moon, preview, redraw]);
 
   /** Shows the view, and writes it into the query after the delay */
   const setView = useCallback(
