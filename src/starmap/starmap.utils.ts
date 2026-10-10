@@ -1,0 +1,118 @@
+import { timeToLst } from '../calculator/calculator.lst';
+import { getElapsedYearsSinceJ2000, getEqCoordsOnDate } from '../calculator/calculator.precession';
+import type { Eq, NgcObject, Radians, Timestamp } from '../calculator/calculator.types';
+import { getLocation } from '../calculator/calculator.units';
+import { CONSTELLATION_LINES } from '../constellation/constellation.utils';
+import type { Coords } from '../location/location.types';
+import { type ParamValues, createBoolParam, createEnumParam, createNumParam } from '../query/query.params';
+import { type Orientation, type Point, type Size, type View, createProjection, projectEq } from './starmap.projection';
+
+/**
+ * Query params of the orientation of the star map, as a telescope shows the sky, in the query on its route only:
+ * `fh=1` mirrors it horizontally, `fv=1` vertically
+ */
+export const FLIP_PARAMS = {
+  horizontal: createBoolParam('fh'),
+  vertical: createBoolParam('fv')
+};
+
+/**
+ * Query param of the point of the sky up on the star map, on its route only: the zenith (`azimuthal`, the default, as
+ * the sky is seen), or the north celestial pole (`orient=eq`, as a telescope on an equatorial mount moves)
+ */
+export const ORIENTATION_PARAM = createEnumParam('orient', { azimuthal: 'az', equatorial: 'eq' }, 'azimuthal');
+
+export const NORTH_CELESTIAL_POLE: Eq = { ra: 0, de: Math.PI / 2 };
+
+const DEG = Math.PI / 180;
+
+/** The range of the zoom, degrees */
+const MIN_FOV_DEG = 1;
+const MAX_FOV_DEG = 120;
+const MIN_FOV = MIN_FOV_DEG * DEG;
+const MAX_FOV = MAX_FOV_DEG * DEG;
+
+/**
+ * Query params of the view of the star map, on its route only (a link to the map shows the same), in degrees: its
+ * center (`ra`, `dec`) and its field of view (`fov`); without them the map opens around the object
+ * (`getInitialView`). Not stored: the next map is of another object.
+ */
+export const VIEW_PARAMS = {
+  ra: createNumParam('ra', null, { min: 0, max: 360 }),
+  dec: createNumParam('dec', null, { min: -90, max: 90 }),
+  fov: createNumParam('fov', null, { min: MIN_FOV_DEG, max: MAX_FOV_DEG })
+};
+
+const round = (decimals: number) => (value: number) => Math.round(value * 10 ** decimals) / 10 ** decimals;
+
+export const toView = ({ ra, dec, fov }: ParamValues<typeof VIEW_PARAMS>): View | null =>
+  ra !== null && dec !== null && fov !== null ? { center: { ra: ra * DEG, de: dec * DEG }, fov: fov * DEG } : null;
+
+/** To 0.001° (3.6″) the center, to 0.01° the field of view */
+export const toViewParamValues = ({ center, fov }: View): ParamValues<typeof VIEW_PARAMS> => ({
+  ra: round(3)((((center.ra / DEG) % 360) + 360) % 360),
+  dec: round(3)(center.de / DEG),
+  fov: round(2)(fov / DEG)
+});
+/** The range of the field of view of the map opened (`getInitialFov`) */
+const MIN_INITIAL_FOV = 20 * DEG;
+const MAX_INITIAL_FOV = 90 * DEG;
+/** Room around the lines of the constellation */
+const INITIAL_FOV_MARGIN = 1.15;
+
+/** The faintest stars of the layers */
+const MAX_MAGNITUDE = 10;
+/** CSS pixels */
+const MIN_STAR_RADIUS = 0.6;
+const MAX_STAR_RADIUS = 5;
+const STAR_RADIUS_PER_MAGNITUDE = 0.45;
+
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+
+const getDistance = (a: Eq, b: Eq): Radians =>
+  Math.acos(clamp(Math.sin(a.de) * Math.sin(b.de) + Math.cos(a.de) * Math.cos(b.de) * Math.cos(a.ra - b.ra), -1, 1));
+
+const toEqs = (line: number[]): Eq[] =>
+  Array.from({ length: line.length / 2 }, (_, index) => ({ ra: line[2 * index], de: line[2 * index + 1] }));
+
+/** Around the object, the lines of its constellation in it, within a range (Hydra is ~100° long) */
+export const getInitialView = (object: NgcObject): View => {
+  const distances = (CONSTELLATION_LINES[object.constellation] ?? []).flatMap(toEqs).map(eq => getDistance(object, eq));
+  return {
+    center: { ra: object.ra, de: object.de },
+    fov: clamp(2 * Math.max(0, ...distances) * INITIAL_FOV_MARGIN, MIN_INITIAL_FOV, MAX_INITIAL_FOV)
+  };
+};
+
+/** The zenith of the place at the time, J2000 (the precession of the date taken back), for the horizon of the map */
+export const getZenith = (time: Timestamp, coords: Coords): Eq => {
+  const { lat, lon } = getLocation(coords.lat, coords.lng);
+  return getEqCoordsOnDate({ ra: timeToLst(time, lon), de: lat }, -getElapsedYearsSinceJ2000(time));
+};
+
+/**
+ * The faintest stars shown: the more of them the narrower the field (5.1 at 90°, 6.6 at 40°, 8 at 20°, 10 below
+ * ~7.5°), few in a wide field, not to hide the constellations
+ */
+export const getMagnitudeLimit = (fov: Radians) => Math.min(MAX_MAGNITUDE, 3.8 + 4.5 * Math.log10(Math.PI / fov));
+
+/** CSS pixels, by the brightness of the star relative to the faintest ones shown */
+export const getStarRadius = (magnitude: number, magnitudeLimit: number) =>
+  clamp(MIN_STAR_RADIUS + STAR_RADIUS_PER_MAGNITUDE * (magnitudeLimit - magnitude), MIN_STAR_RADIUS, MAX_STAR_RADIUS);
+
+/**
+ * The view moved by a drag (or a pinch) of a point of the canvas to another one, zoomed by the factor of the field of
+ * view: the point of the sky under the first one gets under the other one
+ */
+export const moveView = (view: View, size: Size, orientation: Orientation, from: Point, to: Point, zoom = 1): View => {
+  const target = createProjection(view, size, orientation).unproject(from);
+  const zoomed = { ...view, fov: clamp(view.fov * zoom, MIN_FOV, MAX_FOV) };
+  const projection = createProjection(zoomed, size, orientation);
+  const point = projectEq(projection, target);
+  return point
+    ? {
+        ...zoomed,
+        center: projection.unproject({ x: size.width / 2 + point.x - to.x, y: size.height / 2 + point.y - to.y })
+      }
+    : zoomed;
+};

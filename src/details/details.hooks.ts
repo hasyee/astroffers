@@ -5,17 +5,20 @@ import { getLocation } from '../calculator/calculator.units';
 import { useDisplayedList } from '../list/list.hooks';
 import { useResultList, useResultParams } from '../result/result.hooks';
 import { useGoBack, useMatchPath, useNavigate } from '../router/router.hooks';
+import { DETAILS_PATH, MAP_PATH, getDetailsPath, getMapPath } from './details.utils';
 
-/** Route of the details view: the id of the object (e.g. `/m27`, `/ngc884`) */
-const DETAILS_PATH = ':id';
+/** Id of the object opened in the details view or in its star map, from the route */
+export const useOpenedId = () => {
+  const detailsMatch = useMatchPath(DETAILS_PATH);
+  const mapMatch = useMatchPath(MAP_PATH);
+  return (detailsMatch ?? mapMatch)?.id ?? null;
+};
 
-const getDetailsPath = (id: string) => `/${id}`;
+/** The details route (or the star map's) is open, even with an unknown object */
+export const useIsDetailsRoute = () => useOpenedId() !== null;
 
-/** Id of the object opened in the details view, from the route */
-export const useOpenedId = () => useMatchPath(DETAILS_PATH)?.id ?? null;
-
-/** The details route is open, even with an unknown object */
-export const useIsDetailsRoute = () => !!useMatchPath(DETAILS_PATH);
+/** The star map of the object is open in the place of its details */
+export const useIsMapRoute = () => !!useMatchPath(MAP_PATH);
 
 export const useOpenDetails = () => {
   const navigate = useNavigate();
@@ -29,6 +32,18 @@ export const useStepDetails = () => {
 };
 
 export const useCloseDetails = () => useGoBack();
+
+/** Opens the star map of the object, with a history entry; its stored params (flips) by `useQueryStorage` */
+export const useOpenMap = () => {
+  const navigate = useNavigate();
+  return useCallback((id: string) => navigate(getMapPath(id)), [navigate]);
+};
+
+/** Back to the details of the object (history back when opened in the app, else replaced) */
+export const useCloseMap = () => {
+  const id = useOpenedId();
+  return useGoBack(id === null ? '/' : getDetailsPath(id));
+};
 
 export const useOpenedNgcInfo = () => {
   const id = useOpenedId();
