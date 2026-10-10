@@ -53,3 +53,14 @@ const IMAGES_URL = 'https://images.astroffers.hasyee.com/images';
  * DSS2 image rendered by `scripts/previews.mjs`, or the photo of a body of the Solar System
  */
 export const getObjectImgSrc = ({ id }: NgcObject) => `${IMAGES_URL}/${id}.preview.jpg`;
+
+/** Arc minutes */
+const MIN_PREVIEW_FIELD_OF_VIEW = 6;
+const MAX_PREVIEW_FIELD_OF_VIEW = 180;
+
+/**
+ * The field of view of the DSS2 preview of the object (arc minutes): the object with some margin around it, as
+ * `scripts/previews.mjs` renders it (keep the two the same)
+ */
+export const getPreviewFieldOfView = ({ size }: NgcObject) =>
+  Math.min(MAX_PREVIEW_FIELD_OF_VIEW, Math.max(MIN_PREVIEW_FIELD_OF_VIEW, size ? Math.max(...size) * 1.5 : 0));
