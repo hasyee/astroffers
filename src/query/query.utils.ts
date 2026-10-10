@@ -7,7 +7,7 @@ import { LAT_PARAM, LNG_PARAM, defaultPlace } from '../location/location.utils';
 import { RED_LIGHT_PARAM } from '../redlight/redlight.utils';
 import type { Query } from '../router/router.types';
 import { matchPath, omitQuery, parseQuery, serializeQuery } from '../router/router.utils';
-import { FLIP_PARAMS } from '../starmap/starmap.utils';
+import { FLIP_PARAMS, ORIENTATION_PARAM, VIEW_PARAMS } from '../starmap/starmap.utils';
 import { readStored, writeStored } from '../storage/storage.utils';
 import { type QueryParam, hasKnownParam, paramToQuery, readParam } from './query.params';
 
@@ -27,22 +27,22 @@ export const STATE_PARAMS: QueryParam<unknown>[] = [
 /** The ones stored for the next start (`useQueryStorage`): all but the date, the night of today on every start */
 export const STORED_PARAMS = STATE_PARAMS.filter(param => param !== DATE_PARAM);
 
-/**
- * Params of the star map, in the query on its route only (`MAP_PATH`), left out of it elsewhere; stored apart
- * (`mapQuery`, by `useQueryStorage`), for the next opening of the map
- */
-export const MAP_PARAMS: QueryParam<unknown>[] = Object.values(FLIP_PARAMS);
+/** Params of the star map stored apart (`mapQuery`, by `useQueryStorage`), for the next opening of the map */
+export const STORED_MAP_PARAMS: QueryParam<unknown>[] = [...Object.values(FLIP_PARAMS), ORIENTATION_PARAM];
+
+/** Params of the star map, in the query on its route only (`MAP_PATH`), left out of it elsewhere; its view too */
+export const MAP_PARAMS: QueryParam<unknown>[] = [...STORED_MAP_PARAMS, ...Object.values(VIEW_PARAMS)];
 
 const MAP_KEYS = MAP_PARAMS.map(({ key }) => key);
 
-/** The params of the star map of the query, only the ones differing from their defaults */
-const toMapQuery = (query: Query): Query =>
-  Object.assign({}, ...MAP_PARAMS.map(param => paramToQuery(param, readParam(query, param))));
+/** The given params of the star map of the query, only the ones differing from their defaults */
+const toMapQuery = (query: Query, params: QueryParam<unknown>[]): Query =>
+  Object.assign({}, ...params.map(param => paramToQuery(param, readParam(query, param))));
 
 /** The query with the stored params of the star map, entering its route */
 export const withStoredMapParams = (query: Query): Query => ({
   ...query,
-  ...toMapQuery(parseQuery(readStored('mapQuery')))
+  ...toMapQuery(parseQuery(readStored('mapQuery')), STORED_MAP_PARAMS)
 });
 
 export const withoutMapParams = (query: Query): Query => omitQuery(query, MAP_KEYS);
@@ -81,7 +81,11 @@ export const restoreQuery = () => {
       ? (readParam(state, DATE_PARAM) ?? new Date(getToday()))
       : readParam(param === LNG_PARAM || param === LAT_PARAM ? coords : state, param);
   const mapQuery =
-    matchPath(MAP_PATH, pathname) === null ? {} : toMapQuery(isLink ? link : parseQuery(readStored('mapQuery')));
+    matchPath(MAP_PATH, pathname) === null
+      ? {}
+      : isLink
+        ? toMapQuery(link, MAP_PARAMS)
+        : toMapQuery(parseQuery(readStored('mapQuery')), STORED_MAP_PARAMS);
   const restored = serializeQuery(
     Object.assign({}, ...STATE_PARAMS.map(param => paramToQuery(param, read(param))), mapQuery)
   );

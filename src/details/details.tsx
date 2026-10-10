@@ -13,6 +13,7 @@ import type { NgcInfo, NgcObject } from '../calculator/calculator.types';
 import { getSubtitle, getTitle } from '../catalog/catalog.utils';
 import DialogTitleWithClose from '../dialog/dialog.title';
 import { useIsWideScreen } from '../media/media.hooks';
+import RedLightToggle from '../redlight/redlight.toggle';
 import { useResult } from '../result/result.hooks';
 import {
   useAdjacentNgcInfos,
@@ -26,7 +27,7 @@ import {
 } from './details.hooks';
 import DetailsContent from './details.content';
 import OpenInMenu from '../external/external.menu';
-import StarMap, { StarMapToolbar } from '../starmap/starmap';
+import StarMap from '../starmap/starmap';
 import { useSwipe } from '../swipe/swipe.hooks';
 import './details.scss';
 
@@ -174,13 +175,27 @@ export default function Details() {
   if (isWideScreen) {
     return (
       <Dialog open={!!ngcInfo} onClose={handleClose} maxWidth={false} className="Details">
-        <DialogTitleWithClose onClose={handleClose} actions={ngcInfo && <MapButton id={ngcInfo.object.id} />}>
+        <DialogTitleWithClose
+          onClose={handleClose}
+          actions={
+            <>
+              {ngcInfo && <MapButton id={ngcInfo.object.id} />}
+              <RedLightToggle />
+            </>
+          }
+        >
           {title}
         </DialogTitleWithClose>
-        <DialogContent dividers>
-          {isMapRoute ? <StarMap /> : ngcInfo && <DetailsContent ngcInfo={ngcInfo} />}
-        </DialogContent>
-        <DialogActions>{isMapRoute ? <StarMapToolbar /> : <Navigation ngcInfo={ngcInfo} />}</DialogActions>
+        {ngcInfo && isMapRoute ? (
+          <StarMap object={ngcInfo.object} />
+        ) : (
+          <>
+            <DialogContent dividers>{ngcInfo && <DetailsContent ngcInfo={ngcInfo} />}</DialogContent>
+            <DialogActions>
+              <Navigation ngcInfo={ngcInfo} />
+            </DialogActions>
+          </>
+        )}
       </Dialog>
     );
   }
@@ -203,9 +218,18 @@ export default function Details() {
           {title}
         </Typography>
         {ngcInfo && <MapButton id={ngcInfo.object.id} isCompact />}
+        <RedLightToggle />
       </div>
-      {isMapRoute ? <StarMap /> : ngcInfo && <Carousel ngcInfo={ngcInfo} />}
-      <div className="footer">{isMapRoute ? <StarMapToolbar /> : <Navigation ngcInfo={ngcInfo} isCompact />}</div>
+      {ngcInfo && isMapRoute ? (
+        <StarMap object={ngcInfo.object} />
+      ) : (
+        <>
+          {ngcInfo && <Carousel ngcInfo={ngcInfo} />}
+          <div className="footer">
+            <Navigation ngcInfo={ngcInfo} isCompact />
+          </div>
+        </>
+      )}
     </Drawer>
   );
 }

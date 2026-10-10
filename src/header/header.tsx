@@ -1,13 +1,11 @@
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { useDate } from '../date/date.hooks';
 import { formatShortDate } from '../display/display.utils';
-import { useRedLight } from '../redlight/redlight.hooks';
+import RedLightToggle from '../redlight/redlight.toggle';
 import './header.scss';
 
 type Props = {
@@ -19,7 +17,6 @@ type Props = {
 
 export default function Header({ onMenuClick, isCalendarOpen, onCalendarClick }: Props) {
   const date = useDate();
-  const [isRedLight, toggleRedLight] = useRedLight();
 
   return (
     <AppBar position="static" color="inherit" elevation={2} className="Header">
@@ -27,15 +24,7 @@ export default function Header({ onMenuClick, isCalendarOpen, onCalendarClick }:
         <MenuIcon />
       </IconButton>
       <div className="spacer" />
-      <IconButton
-        className="red-light-toggle"
-        onClick={toggleRedLight}
-        aria-label="Red light"
-        aria-pressed={isRedLight}
-        title="Red light"
-      >
-        {isRedLight ? <VisibilityIcon /> : <VisibilityOutlinedIcon />}
-      </IconButton>
+      <RedLightToggle />
       <Button
         color={isCalendarOpen ? 'primary' : 'inherit'}
         startIcon={<CalendarMonthOutlinedIcon />}

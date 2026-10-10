@@ -1,24 +1,51 @@
 .StarMap {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+
+  .sky {
+    position: relative;
+    flex: 1 1 auto;
+  }
+
+  canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    // the gestures are the map's (drag, pinch), not the browser's (scroll, zoom, pull to refresh)
+    touch-action: none;
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
 }
 
-// in the place of the details content of the dialog
+// below the title of the dialog, as the divider of its content
 .Details:not(.compact) .StarMap {
-  height: min(640px, calc(100vh - 12rem));
+  border-top: 1px solid var(--mui-palette-divider);
+
+  .sky {
+    flex: none;
+    height: min(640px, calc(100vh - 12rem));
+  }
 }
 
-// between the header and the footer of the drawer
+// between the header and the bottom of the drawer
 .Details.compact .StarMap {
   flex: 1 1 auto;
+  min-height: 0;
 }
 
-// in the middle of the footer
+// as the footer of the details, the icons in the middle
 .StarMapToolbar {
   display: flex;
+  justify-content: center;
   gap: 0.5rem;
-  margin: 0 auto;
+  padding: 0.5rem;
+  border-top: 1px solid var(--mui-palette-divider);
 
   // the icon of the horizontal flip, turned
   .vertical .MuiSvgIcon-root {

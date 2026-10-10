@@ -23,8 +23,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
-        // of the font only its latin subset, the others are cached when a text needs them (e.g. a place name)
-        globPatterns: ['**/*.{js,css,html,png,ico,svg,webmanifest}', '**/inter-latin-wght-normal-*.woff2'],
+        // of the font only its latin subset, the others are cached when a text needs them (e.g. a place name); the
+        // star layers of the map too (`bin`, under the default 2 MiB limit of a file), for offline use
+        globPatterns: ['**/*.{js,css,html,png,ico,svg,webmanifest,bin}', '**/inter-latin-wght-normal-*.woff2'],
         runtimeCaching: [
           {
             urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.endsWith('.woff2'),

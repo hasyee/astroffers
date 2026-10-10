@@ -1,0 +1,5 @@
+// red as today in the calendar in the normal mode; in the red light mode in the color of the text, which the filter
+// turns into a bright red (red itself would turn dark)
+html:not(.red-light) .RedLightToggle {
+  color: var(--mui-palette-red-dark);
+}
