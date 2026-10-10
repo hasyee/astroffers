@@ -187,7 +187,7 @@ export default function Details() {
           {title}
         </DialogTitleWithClose>
         {ngcInfo && isMapRoute ? (
-          <StarMap object={ngcInfo.object} />
+          <StarMap ngcInfo={ngcInfo} />
         ) : (
           <>
             <DialogContent dividers>{ngcInfo && <DetailsContent ngcInfo={ngcInfo} />}</DialogContent>
@@ -221,7 +221,7 @@ export default function Details() {
         <RedLightToggle />
       </div>
       {ngcInfo && isMapRoute ? (
-        <StarMap object={ngcInfo.object} />
+        <StarMap ngcInfo={ngcInfo} />
       ) : (
         <>
           {ngcInfo && <Carousel ngcInfo={ngcInfo} />}

@@ -1,6 +1,8 @@
 import { timeToLst } from '../calculator/calculator.lst';
+import { toNextDay, toNoon } from '../calculator/calculator.time';
 import { getElapsedYearsSinceJ2000, getEqCoordsOnDate } from '../calculator/calculator.precession';
-import type { Eq, NgcObject, Radians, Timestamp } from '../calculator/calculator.types';
+import type * as Astronomy from 'astronomy-engine';
+import type { Eq, NgcInfo, NgcObject, Radians, Timestamp } from '../calculator/calculator.types';
 import { getLocation } from '../calculator/calculator.units';
 import { CONSTELLATION_LINES } from '../constellation/constellation.utils';
 import type { Coords } from '../location/location.types';
@@ -86,6 +88,45 @@ export const getInitialView = (object: NgcObject): View => {
 };
 
 /**
+ * Query param of the time of the sky of the star map, on its route only: a Unix timestamp (seconds, UTC). Always in the
+ * query there, unlike the other params: the time chosen at the opening (`getOpeningTime`) depends on when the map is
+ * opened, so a link carries it to show the same sky.
+ */
+export const TIME_PARAM = createNumParam('t', null, { min: 0, max: 4102444800 });
+
+export const toTimeParamValue = (time: Timestamp) => Math.round(time / 1000);
+
+/** The object is observable at the time: in its window of the night (above the minimum altitude) */
+const isVisibleAt = ({ intersection }: NgcInfo, time: Timestamp) =>
+  time >= intersection.start && time <= intersection.end;
+
+/** The best visibility of the object, its transit without one */
+export const getBestTime = ({ max, transit }: NgcInfo) => max ?? transit;
+
+/**
+ * The time of the map opened without one, as in Stellarium: now when the object is observable now, else its best
+ * visibility (else now)
+ */
+export const getOpeningTime = (ngcInfo: NgcInfo, now: Timestamp) =>
+  isVisibleAt(ngcInfo, now) ? now : (getBestTime(ngcInfo) ?? now);
+
+/** The time of the map is still now within it, milliseconds */
+const NOW_TOLERANCE = 5 * 60 * 1000;
+
+export const isNowTime = (time: Timestamp, now: Timestamp) => Math.abs(time - now) <= NOW_TOLERANCE;
+
+export const isBestTime = (ngcInfo: NgcInfo, time: Timestamp) => {
+  const bestTime = getBestTime(ngcInfo);
+  return bestTime !== null && toTimeParamValue(bestTime) === toTimeParamValue(time);
+};
+
+/** The time is in the night of the date (from its noon to the next noon) */
+export const isInNight = (time: Timestamp, date: Timestamp) => {
+  const noon = toNoon(date);
+  return time >= noon && time < toNextDay(noon);
+};
+
+/**
  * The horizon of the place at a time, J2000: its zenith and nadir, and its directions (with a point 1° below each, for
  * the side of its label)
  */
@@ -136,6 +177,28 @@ export const getHorizon = (time: Timestamp, coords: Coords): Horizon => {
       point: horizontalToEq(azimuth * DEG, 0),
       below: horizontalToEq(azimuth * DEG, -DEG)
     }))
+  };
+};
+
+/**
+ * The Moon of the place at a time, topocentric (its parallax is up to ~1°), J2000: its position, its angular radius,
+ * the illuminated fraction of its disc, and the position of the Sun, for the side of its bright limb
+ */
+export type Moon = { eq: Eq; radius: Radians; illuminated: number; sun: Eq };
+
+const MOON_RADIUS_KM = 1737.4;
+
+/** By `astronomy-engine`, loaded by the map (`useAstronomy`) */
+export const getMoon = (astronomy: typeof Astronomy, time: Timestamp, coords: Coords): Moon => {
+  const observer = new astronomy.Observer(coords.lat, coords.lng, 0);
+  const date = new Date(time);
+  const toEq = ({ ra, dec }: Astronomy.EquatorialCoordinates): Eq => ({ ra: (ra / 12) * Math.PI, de: dec * DEG });
+  const moon = astronomy.Equator(astronomy.Body.Moon, date, observer, false, true);
+  return {
+    eq: toEq(moon),
+    radius: Math.asin(MOON_RADIUS_KM / (moon.dist * astronomy.KM_PER_AU)),
+    illuminated: astronomy.Illumination(astronomy.Body.Moon, date).phase_fraction,
+    sun: toEq(astronomy.Equator(astronomy.Body.Sun, date, observer, false, true))
   };
 };
 

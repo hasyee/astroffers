@@ -11,13 +11,16 @@ import {
   createProjection,
   projectEq
 } from './starmap.projection';
-import { type Horizon, getMagnitudeLimit, getStarRadius } from './starmap.utils';
+import { type Horizon, type Moon, getMagnitudeLimit, getStarRadius } from './starmap.utils';
 import { addScaled, cross, dot, normalize, toEq, toVector } from './starmap.vector';
 
 const BACKGROUND = theme.palette.background.default;
 const STAR = theme.palette.common.white;
 const LINE = 'rgba(255, 255, 255, 0.55)';
 const MARKER = theme.palette.primary.main;
+const MOON_LIT = theme.palette.grey[300];
+/** The dark side of the Moon, faintly, to show its whole disc */
+const MOON_DARK = 'rgba(255, 255, 255, 0.15)';
 /** The directions on the horizon, the zenith and the nadir, as the ring of the object */
 const HORIZON_LABEL = MARKER;
 /** Darker than in the altitude chart (`chart.colors.ts`), over the stars */
@@ -35,6 +38,12 @@ const HORIZON_TICK = 5;
 /** From the point of the horizon to the middle of the letter of its direction */
 const DIRECTION_LABEL_OFFSET = 18;
 const ZENITH_CROSS = 5;
+
+/** CSS pixels: the Moon is at least this large (a few pixels in a wide field, in its true size) */
+const MIN_MOON_RADIUS = 8;
+const MOON_LABEL_MARGIN = 6;
+/** Radians, a step from the Moon towards the Sun, for the side of its bright limb */
+const MOON_STEP = 0.01;
 
 /** CSS pixels: the preview of the object fades in from the first size on the screen to the second one */
 const PREVIEW_MIN_SIZE = 40;
@@ -62,6 +71,8 @@ export type StarMapScene = {
   horizon: Horizon;
   /** Of the object, masked (`createPreviewCanvas`); missing while loading, failed (e.g. offline) or none */
   preview: HTMLCanvasElement | null;
+  /** Of the place now; missing while loading */
+  moon: Moon | null;
 };
 
 const drawLines = (context: CanvasRenderingContext2D, projection: Projection, pixelRatio: number) => {
@@ -219,6 +230,51 @@ const drawPreview = (
 };
 
 /**
+ * The Moon in its phase and its true size (at least `MIN_MOON_RADIUS`), its bright limb towards the Sun however the
+ * map is turned: the lit half of the disc on the side of the Sun, closed by the terminator, a half-ellipse as wide as
+ * the illuminated fraction tells (bulging towards the Sun for a crescent, away from it beyond the half Moon)
+ */
+const drawMoon = (context: CanvasRenderingContext2D, projection: Projection, { pixelRatio, moon }: StarMapScene) => {
+  if (!moon) return;
+  const moonVector = toVector(moon.eq);
+  const sunVector = toVector(moon.sun);
+  const towardsSun = normalize(addScaled(sunVector, moonVector, -dot(sunVector, moonVector)));
+  const at = projectEq(projection, moon.eq);
+  const sunward = projectEq(projection, toEq(normalize(addScaled(moonVector, towardsSun, MOON_STEP))));
+  if (!at || !sunward) return;
+  const angle = Math.atan2(sunward.y - at.y, sunward.x - at.x);
+  const localScale = Math.hypot(sunward.x - at.x, sunward.y - at.y) / MOON_STEP;
+  const radius = Math.max(MIN_MOON_RADIUS * pixelRatio, moon.radius * localScale);
+  const isCrescent = moon.illuminated < 0.5;
+
+  context.fillStyle = MOON_DARK;
+  context.beginPath();
+  context.arc(at.x, at.y, radius, 0, 2 * Math.PI);
+  context.fill();
+
+  context.fillStyle = MOON_LIT;
+  context.beginPath();
+  context.arc(at.x, at.y, radius, angle - Math.PI / 2, angle + Math.PI / 2);
+  context.ellipse(
+    at.x,
+    at.y,
+    radius * Math.abs(2 * moon.illuminated - 1),
+    radius,
+    angle,
+    Math.PI / 2,
+    isCrescent ? -Math.PI / 2 : (3 * Math.PI) / 2,
+    isCrescent
+  );
+  context.fill();
+
+  context.fillStyle = HORIZON_LABEL;
+  context.font = `${ZENITH_FONT_SIZE * pixelRatio}px "Inter Variable", sans-serif`;
+  context.textAlign = 'left';
+  context.textBaseline = 'middle';
+  context.fillText('Moon', at.x + radius + MOON_LABEL_MARGIN * pixelRatio, at.y);
+};
+
+/**
  * The directions on the horizon by ticks, their letters below them (towards the point 1° below, wherever the map is
  * turned), and the zenith and the nadir by small crosses with their names
  */
@@ -295,6 +351,7 @@ export const drawStarMap = (context: CanvasRenderingContext2D, scene: StarMapSce
   drawLines(context, projection, scene.pixelRatio);
   drawStars(context, projection, scene);
   drawPreview(context, projection, scene);
+  drawMoon(context, projection, scene);
   drawBelowHorizon(context, projection, scene);
   drawHorizonLabels(context, projection, scene);
   drawMarker(context, projection, scene);
