@@ -107,10 +107,29 @@ export default function About({ isOpen, onClose }: { isOpen: boolean; onClose: (
               </td>
             </tr>
             <tr>
+              <th>Star map</th>
+              <td>
+                Stars from the{' '}
+                <a href="https://cdsarc.cds.unistra.fr/viz-bin/cat/I/259" target="_blank" rel="noreferrer">
+                  Tycho-2 Catalogue
+                </a>{' '}
+                (Høg et al. 2000, ESA; <span className="nowrap">CC BY-NC 3.0 IGO</span>); the lines of the
+                constellations from the modern sky culture of{' '}
+                <a
+                  href="https://github.com/Stellarium/stellarium/tree/master/skycultures/modern"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Stellarium
+                </a>{' '}
+                (<span className="nowrap">CC BY-SA 4.0</span>, as are the lines derived from it)
+              </td>
+            </tr>
+            <tr>
               <th>Previews</th>
               <td>
                 The Second Digitized Sky Survey (DSS2), produced at the Space Telescope Science Institute under U.S.
-                Government grant NAG W-2166, rendered by{' '}
+                Government grant <span className="nowrap">NAG W-2166</span>, rendered by{' '}
                 <a href="https://alasky.cds.unistra.fr/hips-image-services/hips2fits" target="_blank" rel="noreferrer">
                   CDS hips2fits
                 </a>

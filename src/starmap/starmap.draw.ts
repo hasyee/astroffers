@@ -1,4 +1,5 @@
 import type { NgcObject } from '../calculator/calculator.types';
+import { getPreviewFieldOfView } from '../catalog/catalog.utils';
 import { CONSTELLATION_LINES } from '../constellation/constellation.utils';
 import { type StarLayer, getTilesAround } from '../stars/stars.utils';
 import theme from '../theme/theme';
@@ -35,6 +36,16 @@ const HORIZON_TICK = 5;
 const DIRECTION_LABEL_OFFSET = 18;
 const ZENITH_CROSS = 5;
 
+/** CSS pixels: the preview of the object fades in from the first size on the screen to the second one */
+const PREVIEW_MIN_SIZE = 40;
+const PREVIEW_FULL_SIZE = 80;
+/** Of the radius of the preview, where its soft edge starts */
+const PREVIEW_EDGE = 0.6;
+/** Radians, a step to the north and to the east of the object, for the transformation of its preview */
+const PREVIEW_STEP = 1e-4;
+
+const DEG = Math.PI / 180;
+
 /** The faintest stars of the first layer: the second one is needed only beyond them */
 const FIRST_LAYER_MAX_MAGNITUDE = 6.5;
 
@@ -49,6 +60,8 @@ export type StarMapScene = {
   object: NgcObject;
   /** Of the place now */
   horizon: Horizon;
+  /** Of the object, masked (`createPreviewCanvas`); missing while loading, failed (e.g. offline) or none */
+  preview: HTMLCanvasElement | null;
 };
 
 const drawLines = (context: CanvasRenderingContext2D, projection: Projection, pixelRatio: number) => {
@@ -151,6 +164,60 @@ const drawBelowHorizon = (
   }
 };
 
+/** The preview image masked by a soft circle, to blend into the map without the edges of its square */
+export const createPreviewCanvas = (image: HTMLImageElement) => {
+  const canvas = document.createElement('canvas');
+  canvas.width = image.naturalWidth;
+  canvas.height = image.naturalHeight;
+  const context = canvas.getContext('2d');
+  if (!context) return canvas;
+  const radius = Math.min(canvas.width, canvas.height) / 2;
+  const gradient = context.createRadialGradient(radius, radius, radius * PREVIEW_EDGE, radius, radius, radius);
+  gradient.addColorStop(0, 'black');
+  gradient.addColorStop(1, 'transparent');
+  context.drawImage(image, 0, 0);
+  context.globalCompositeOperation = 'destination-in';
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  return canvas;
+};
+
+/**
+ * The preview of the object in its size and orientation (north up, east to the left in the image), faded in as it
+ * gets large enough on the screen; its dark background blends into the sky (`screen`). The image is small, so its
+ * projection is taken as linear: by the points of the canvas of the object and of steps to the north and the east.
+ */
+const drawPreview = (
+  context: CanvasRenderingContext2D,
+  projection: Projection,
+  { pixelRatio, object, preview }: StarMapScene
+) => {
+  if (!preview) return;
+  const at = projectEq(projection, object);
+  const north = projectEq(projection, { ra: object.ra, de: object.de + PREVIEW_STEP });
+  const east = projectEq(projection, { ra: object.ra + PREVIEW_STEP / Math.cos(object.de), de: object.de });
+  if (!at || !north || !east) return;
+  const fov = (getPreviewFieldOfView(object) / 60) * DEG;
+  const size = ((Math.hypot(north.x - at.x, north.y - at.y) / PREVIEW_STEP) * fov) / pixelRatio;
+  const opacity = Math.min(1, (size - PREVIEW_MIN_SIZE) / (PREVIEW_FULL_SIZE - PREVIEW_MIN_SIZE));
+  if (opacity <= 0) return;
+  // canvas pixels per pixel of the image, along its right (the west) and its down (the south)
+  const scale = fov / PREVIEW_STEP / preview.width;
+  context.save();
+  context.globalAlpha = opacity;
+  context.globalCompositeOperation = 'screen';
+  context.setTransform(
+    -(east.x - at.x) * scale,
+    -(east.y - at.y) * scale,
+    -(north.x - at.x) * scale,
+    -(north.y - at.y) * scale,
+    at.x,
+    at.y
+  );
+  context.drawImage(preview, -preview.width / 2, -preview.height / 2);
+  context.restore();
+};
+
 /**
  * The directions on the horizon by ticks, their letters below them (towards the point 1° below, wherever the map is
  * turned), and the zenith and the nadir by small crosses with their names
@@ -227,6 +294,7 @@ export const drawStarMap = (context: CanvasRenderingContext2D, scene: StarMapSce
   context.fillRect(0, 0, scene.size.width, scene.size.height);
   drawLines(context, projection, scene.pixelRatio);
   drawStars(context, projection, scene);
+  drawPreview(context, projection, scene);
   drawBelowHorizon(context, projection, scene);
   drawHorizonLabels(context, projection, scene);
   drawMarker(context, projection, scene);

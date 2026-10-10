@@ -31,7 +31,7 @@ const MAX_FIELD_OF_VIEW = 180;
 const CONCURRENCY = 4;
 const RETRIES = 3;
 
-/** Field of view of the preview image: the object with some margin around it */
+/** Field of view of the preview image: the object with some margin around it (the same as `getPreviewFieldOfView`) */
 const getFieldOfView = size =>
   Math.min(MAX_FIELD_OF_VIEW, Math.max(MIN_FIELD_OF_VIEW, size ? Math.max(...size) * 1.5 : 0));
 

@@ -1,12 +1,13 @@
 import { type RefObject, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { NgcObject } from '../calculator/calculator.types';
 import { useCurrentTime } from '../date/date.hooks';
+import { getObjectImgSrc } from '../catalog/catalog.utils';
 import { useCoords } from '../location/location.hooks';
 import { useQueryParam, useQueryParamSetter, useQueryParams, useQueryParamsSetter } from '../query/query.hooks';
 import starLayer1Url from '../stars/stars.1.bin?url';
 import starLayer2Url from '../stars/stars.2.bin?url';
 import { type StarLayer, decodeStarLayer } from '../stars/stars.utils';
-import { drawStarMap } from './starmap.draw';
+import { createPreviewCanvas, drawStarMap } from './starmap.draw';
 import type { Orientation, Point, Size, View } from './starmap.projection';
 import {
   FLIP_PARAMS,
@@ -80,6 +81,25 @@ const useHorizon = () => {
   return useMemo(() => getHorizon(time, coords), [time, coords]);
 };
 
+/**
+ * The DSS2 preview of the object, masked, null while loading or when it fails (e.g. offline, not cached yet); none of
+ * the bodies of the Solar System, whose photos are not to scale
+ */
+const usePreview = (object: NgcObject) => {
+  const [preview, setPreview] = useState<{ id: string; canvas: HTMLCanvasElement } | null>(null);
+  useEffect(() => {
+    if (object.photo) return;
+    const image = new Image();
+    image.crossOrigin = 'anonymous';
+    image.onload = () => setPreview({ id: object.id, canvas: createPreviewCanvas(image) });
+    image.src = getObjectImgSrc(object);
+    return () => {
+      image.onload = null;
+    };
+  }, [object]);
+  return preview?.id === object.id ? preview.canvas : null;
+};
+
 const getMiddle = (a: Point, b: Point): Point => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
 
 const getPointDistance = (a: Point, b: Point) => Math.hypot(a.x - b.x, a.y - b.y);
@@ -96,6 +116,7 @@ export const useStarMapCanvas = (canvasRef: RefObject<HTMLCanvasElement | null>,
   const orientationType = useOrientationType();
   const layers = useStarLayers();
   const horizon = useHorizon();
+  const preview = usePreview(object);
   const viewParamValues = useQueryParams(VIEW_PARAMS);
   const setViewParamValues = useQueryParamsSetter(VIEW_PARAMS);
   const orientation = useMemo<Orientation>(
@@ -107,8 +128,8 @@ export const useStarMapCanvas = (canvasRef: RefObject<HTMLCanvasElement | null>,
   const frameRef = useRef<number | null>(null);
   const viewParamsTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   // the latest of the props, read by the frame and the listeners
-  const propsRef = useRef({ orientation, layers, object, horizon, viewParamValues, setViewParamValues });
-  propsRef.current = { orientation, layers, object, horizon, viewParamValues, setViewParamValues };
+  const propsRef = useRef({ orientation, layers, object, horizon, preview, viewParamValues, setViewParamValues });
+  propsRef.current = { orientation, layers, object, horizon, preview, viewParamValues, setViewParamValues };
 
   const redraw = useCallback(() => {
     if (frameRef.current !== null) return;
@@ -135,7 +156,7 @@ export const useStarMapCanvas = (canvasRef: RefObject<HTMLCanvasElement | null>,
     redraw();
   }, [object.id, redraw]);
 
-  useEffect(redraw, [orientation, layers, horizon, redraw]);
+  useEffect(redraw, [orientation, layers, horizon, preview, redraw]);
 
   /** Shows the view, and writes it into the query after the delay */
   const setView = useCallback(
