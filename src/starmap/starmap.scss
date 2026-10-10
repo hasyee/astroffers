@@ -1,0 +1,27 @@
+.StarMap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// in the place of the details content of the dialog
+.Details:not(.compact) .StarMap {
+  height: min(640px, calc(100vh - 12rem));
+}
+
+// between the header and the footer of the drawer
+.Details.compact .StarMap {
+  flex: 1 1 auto;
+}
+
+// in the middle of the footer
+.StarMapToolbar {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0 auto;
+
+  // the icon of the horizontal flip, turned
+  .vertical .MuiSvgIcon-root {
+    transform: rotate(90deg);
+  }
+}

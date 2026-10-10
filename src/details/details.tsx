@@ -8,6 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import type { NgcInfo, NgcObject } from '../calculator/calculator.types';
 import { getSubtitle, getTitle } from '../catalog/catalog.utils';
 import DialogTitleWithClose from '../dialog/dialog.title';
@@ -16,12 +17,16 @@ import { useResult } from '../result/result.hooks';
 import {
   useAdjacentNgcInfos,
   useCloseDetails,
+  useCloseMap,
   useIsDetailsRoute,
+  useIsMapRoute,
+  useOpenMap,
   useOpenedNgcInfo,
   useStepDetails
 } from './details.hooks';
 import DetailsContent from './details.content';
 import OpenInMenu from '../external/external.menu';
+import StarMap, { StarMapToolbar } from '../starmap/starmap';
 import { useSwipe } from '../swipe/swipe.hooks';
 import './details.scss';
 
@@ -102,6 +107,38 @@ function Carousel({ ngcInfo }: { ngcInfo: NgcInfo }) {
   );
 }
 
+/** Toggles the star map in the place of the details: `/:id/map`; an icon only in the header of the compact drawer */
+function MapButton({ id, isCompact = false }: { id: string; isCompact?: boolean }) {
+  const isMapRoute = useIsMapRoute();
+  const openMap = useOpenMap();
+  const closeMap = useCloseMap();
+  const handleClick = () => (isMapRoute ? closeMap() : openMap(id));
+
+  if (isCompact) {
+    return (
+      <IconButton
+        color={isMapRoute ? 'primary' : 'default'}
+        onClick={handleClick}
+        aria-label="Map"
+        aria-pressed={isMapRoute}
+      >
+        <MapOutlinedIcon />
+      </IconButton>
+    );
+  }
+
+  return (
+    <Button
+      color={isMapRoute ? 'primary' : 'inherit'}
+      startIcon={<MapOutlinedIcon />}
+      onClick={handleClick}
+      aria-pressed={isMapRoute}
+    >
+      Map
+    </Button>
+  );
+}
+
 /** The name of the object with its catalog numbers below it, or its catalog numbers only */
 function DetailsTitle({ object }: { object: NgcObject }) {
   const subtitle = getSubtitle(object);
@@ -113,12 +150,19 @@ function DetailsTitle({ object }: { object: NgcObject }) {
   );
 }
 
+/**
+ * The details of the object, or its star map in their place (`/:id/map`) with the flips in the footer instead of the
+ * navigation; closing the map (also by the back button) returns to the details
+ */
 export default function Details() {
   const ngcInfo = useOpenedNgcInfo();
   const closeDetails = useCloseDetails();
+  const closeMap = useCloseMap();
   const isWideScreen = useIsWideScreen();
   const isDetailsRoute = useIsDetailsRoute();
+  const isMapRoute = useIsMapRoute();
   const hasResult = !!useResult();
+  const handleClose = isMapRoute ? closeMap : closeDetails;
 
   // an object not in the result (e.g. a link to an object not visible tonight with the stored filter) is left
   useEffect(() => {
@@ -126,16 +170,17 @@ export default function Details() {
   }, [isDetailsRoute, hasResult, ngcInfo, closeDetails]);
 
   const title = ngcInfo && <DetailsTitle object={ngcInfo.object} />;
-  const body = ngcInfo && <DetailsContent ngcInfo={ngcInfo} />;
 
   if (isWideScreen) {
     return (
-      <Dialog open={!!ngcInfo} onClose={closeDetails} maxWidth={false} className="Details">
-        <DialogTitleWithClose onClose={closeDetails}>{title}</DialogTitleWithClose>
-        <DialogContent dividers>{body}</DialogContent>
-        <DialogActions>
-          <Navigation ngcInfo={ngcInfo} />
-        </DialogActions>
+      <Dialog open={!!ngcInfo} onClose={handleClose} maxWidth={false} className="Details">
+        <DialogTitleWithClose onClose={handleClose} actions={ngcInfo && <MapButton id={ngcInfo.object.id} />}>
+          {title}
+        </DialogTitleWithClose>
+        <DialogContent dividers>
+          {isMapRoute ? <StarMap /> : ngcInfo && <DetailsContent ngcInfo={ngcInfo} />}
+        </DialogContent>
+        <DialogActions>{isMapRoute ? <StarMapToolbar /> : <Navigation ngcInfo={ngcInfo} />}</DialogActions>
       </Dialog>
     );
   }
@@ -144,24 +189,23 @@ export default function Details() {
     <Drawer
       anchor="right"
       open={!!ngcInfo}
-      onClose={closeDetails}
+      onClose={handleClose}
       className="Details compact"
       slotProps={{ paper: { className: 'DetailsPaper' } }}
       // the page itself does not scroll anyway, and the lock would block the pull to refresh of the browser
       disableScrollLock
     >
       <div className="header">
-        <IconButton onClick={closeDetails} aria-label="Back">
+        <IconButton onClick={handleClose} aria-label="Back">
           <ArrowBackIcon />
         </IconButton>
         <Typography variant="h6" component="h2">
           {title}
         </Typography>
+        {ngcInfo && <MapButton id={ngcInfo.object.id} isCompact />}
       </div>
-      {ngcInfo && <Carousel ngcInfo={ngcInfo} />}
-      <div className="footer">
-        <Navigation ngcInfo={ngcInfo} isCompact />
-      </div>
+      {isMapRoute ? <StarMap /> : ngcInfo && <Carousel ngcInfo={ngcInfo} />}
+      <div className="footer">{isMapRoute ? <StarMapToolbar /> : <Navigation ngcInfo={ngcInfo} isCompact />}</div>
     </Drawer>
   );
 }
