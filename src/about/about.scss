@@ -38,6 +38,11 @@
     word-break: break-word;
   }
 
+  // not broken at their hyphens (e.g. a license)
+  .nowrap {
+    white-space: nowrap;
+  }
+
   a {
     color: var(--mui-palette-primary-main);
   }
