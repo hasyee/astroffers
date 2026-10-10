@@ -1,4 +1,4 @@
-import type { Eq, NgcObject } from '../calculator/calculator.types';
+import type { NgcObject } from '../calculator/calculator.types';
 import { CONSTELLATION_LINES } from '../constellation/constellation.utils';
 import { type StarLayer, getTilesAround } from '../stars/stars.utils';
 import theme from '../theme/theme';
@@ -10,12 +10,15 @@ import {
   createProjection,
   projectEq
 } from './starmap.projection';
-import { getMagnitudeLimit, getStarRadius } from './starmap.utils';
+import { type Horizon, getMagnitudeLimit, getStarRadius } from './starmap.utils';
+import { addScaled, cross, dot, normalize, toEq, toVector } from './starmap.vector';
 
 const BACKGROUND = theme.palette.background.default;
 const STAR = theme.palette.common.white;
 const LINE = 'rgba(255, 255, 255, 0.55)';
 const MARKER = theme.palette.primary.main;
+/** The directions on the horizon, the zenith and the nadir, as the ring of the object */
+const HORIZON_LABEL = MARKER;
 /** Darker than in the altitude chart (`chart.colors.ts`), over the stars */
 const BELOW_HORIZON = 'rgba(128, 128, 128, 0.3)';
 
@@ -24,6 +27,13 @@ const LINE_WIDTH = 1.25;
 const MARKER_WIDTH = 1.5;
 const MIN_MARKER_RADIUS = 10;
 const MARKER_MARGIN = 4;
+/** The letters of the directions, larger than the names of the zenith and the nadir */
+const DIRECTION_FONT_SIZE = 18;
+const ZENITH_FONT_SIZE = 13;
+const HORIZON_TICK = 5;
+/** From the point of the horizon to the middle of the letter of its direction */
+const DIRECTION_LABEL_OFFSET = 18;
+const ZENITH_CROSS = 5;
 
 /** The faintest stars of the first layer: the second one is needed only beyond them */
 const FIRST_LAYER_MAX_MAGNITUDE = 6.5;
@@ -38,33 +48,7 @@ export type StarMapScene = {
   layers: StarLayer[] | null;
   object: NgcObject;
   /** Of the place now */
-  zenith: Eq;
-};
-
-type Vector = [number, number, number];
-
-const toVector = ({ ra, de }: Eq): Vector => [Math.cos(de) * Math.cos(ra), Math.cos(de) * Math.sin(ra), Math.sin(de)];
-
-const toEq = ([x, y, z]: Vector): Eq => ({ ra: Math.atan2(y, x), de: Math.asin(Math.min(1, Math.max(-1, z))) });
-
-const dot = (a: Vector, b: Vector) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-
-const cross = (a: Vector, b: Vector): Vector => [
-  a[1] * b[2] - a[2] * b[1],
-  a[2] * b[0] - a[0] * b[2],
-  a[0] * b[1] - a[1] * b[0]
-];
-
-/** `a + factor × b` */
-const addScaled = (a: Vector, b: Vector, factor: number): Vector => [
-  a[0] + factor * b[0],
-  a[1] + factor * b[1],
-  a[2] + factor * b[2]
-];
-
-const normalize = (a: Vector): Vector => {
-  const length = Math.hypot(...a);
-  return [a[0] / length, a[1] / length, a[2] / length];
+  horizon: Horizon;
 };
 
 const drawLines = (context: CanvasRenderingContext2D, projection: Projection, pixelRatio: number) => {
@@ -125,9 +109,9 @@ const MAX_HORIZON_RADIUS = 1e7;
 const drawBelowHorizon = (
   context: CanvasRenderingContext2D,
   projection: Projection,
-  { view, size, zenith }: StarMapScene
+  { view, size, horizon }: StarMapScene
 ) => {
-  const up = toVector(zenith);
+  const up = toVector(horizon.zenith);
   const center = toVector(view.center);
   const towardsCenter = addScaled(center, up, -dot(center, up));
   // any point of the horizon when the center is the zenith or the nadir
@@ -167,6 +151,54 @@ const drawBelowHorizon = (
   }
 };
 
+/**
+ * The directions on the horizon by ticks, their letters below them (towards the point 1° below, wherever the map is
+ * turned), and the zenith and the nadir by small crosses with their names
+ */
+const drawHorizonLabels = (
+  context: CanvasRenderingContext2D,
+  projection: Projection,
+  { pixelRatio, horizon }: StarMapScene
+) => {
+  context.strokeStyle = HORIZON_LABEL;
+  context.fillStyle = HORIZON_LABEL;
+  context.lineWidth = LINE_WIDTH * pixelRatio;
+  context.font = `${DIRECTION_FONT_SIZE * pixelRatio}px "Inter Variable", sans-serif`;
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  context.beginPath();
+  horizon.directions.forEach(({ name, point, below }) => {
+    const at = projectEq(projection, point);
+    const towards = projectEq(projection, below);
+    if (!at || !towards) return;
+    const length = Math.hypot(towards.x - at.x, towards.y - at.y);
+    const [x, y] = [(towards.x - at.x) / length, (towards.y - at.y) / length];
+    context.moveTo(at.x, at.y);
+    context.lineTo(at.x + x * HORIZON_TICK * pixelRatio, at.y + y * HORIZON_TICK * pixelRatio);
+    context.fillText(
+      name,
+      at.x + x * DIRECTION_LABEL_OFFSET * pixelRatio,
+      at.y + y * DIRECTION_LABEL_OFFSET * pixelRatio
+    );
+  });
+  context.textAlign = 'left';
+  context.font = `${ZENITH_FONT_SIZE * pixelRatio}px "Inter Variable", sans-serif`;
+  [
+    { name: 'Zenith', point: horizon.zenith },
+    { name: 'Nadir', point: horizon.nadir }
+  ].forEach(({ name, point }) => {
+    const at = projectEq(projection, point);
+    if (!at) return;
+    const arm = ZENITH_CROSS * pixelRatio;
+    context.moveTo(at.x - arm, at.y);
+    context.lineTo(at.x + arm, at.y);
+    context.moveTo(at.x, at.y - arm);
+    context.lineTo(at.x, at.y + arm);
+    context.fillText(name, at.x + arm * 2, at.y + arm * 2);
+  });
+  context.stroke();
+};
+
 /** A ring around the object, at least as large as the object */
 const drawMarker = (
   context: CanvasRenderingContext2D,
@@ -196,5 +228,6 @@ export const drawStarMap = (context: CanvasRenderingContext2D, scene: StarMapSce
   drawLines(context, projection, scene.pixelRatio);
   drawStars(context, projection, scene);
   drawBelowHorizon(context, projection, scene);
+  drawHorizonLabels(context, projection, scene);
   drawMarker(context, projection, scene);
 };
