@@ -1,7 +1,6 @@
 import { type RefObject, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type * as Astronomy from 'astronomy-engine';
-import type { NgcObject } from '../calculator/calculator.types';
-import { useCurrentTime } from '../date/date.hooks';
+import type { NgcInfo, NgcObject, Timestamp } from '../calculator/calculator.types';
 import { getObjectImgSrc } from '../catalog/catalog.utils';
 import { useCoords } from '../location/location.hooks';
 import { useQueryParam, useQueryParamSetter, useQueryParams, useQueryParamsSetter } from '../query/query.hooks';
@@ -18,6 +17,9 @@ import {
   getInitialView,
   getHorizon,
   getMoon,
+  getOpeningTime,
+  TIME_PARAM,
+  toTimeParamValue,
   moveView,
   toView,
   toViewParamValues
@@ -104,9 +106,29 @@ const useAstronomy = () => {
   return astronomy;
 };
 
-/** The horizon and the Moon (null while loading) of the place now, minute by minute */
-const useSky = () => {
-  const time = useCurrentTime();
+/**
+ * The time of the sky of the map (`TIME_PARAM`): the one of the query (of a link, or chosen), else the one chosen at
+ * the opening (`getOpeningTime`), written into the query before the paint. It does not go on: finding an object takes
+ * a few minutes.
+ */
+export const useMapTime = (ngcInfo: NgcInfo): Timestamp => {
+  const value = useQueryParam(TIME_PARAM);
+  const setValue = useQueryParamSetter(TIME_PARAM);
+  const [openingTime] = useState(() => getOpeningTime(ngcInfo, Date.now()));
+  const isMissing = value === null;
+  useLayoutEffect(() => {
+    if (isMissing) setValue(toTimeParamValue(openingTime));
+  }, [isMissing, openingTime, setValue]);
+  return value === null ? openingTime : value * 1000;
+};
+
+export const useMapTimeSetter = () => {
+  const setValue = useQueryParamSetter(TIME_PARAM);
+  return useCallback((time: Timestamp) => setValue(toTimeParamValue(time)), [setValue]);
+};
+
+/** The horizon and the Moon (null while loading) of the place at the time */
+const useSky = (time: Timestamp) => {
   const coords = useCoords();
   const astronomy = useAstronomy();
   const horizon = useMemo(() => getHorizon(time, coords), [time, coords]);
@@ -140,15 +162,19 @@ const getPointDistance = (a: Point, b: Point) => Math.hypot(a.x - b.x, a.y - b.y
 /**
  * Draws the star map of the object on the canvas, opened around it (`getInitialView`): dragged by a finger or the
  * mouse, zoomed by a pinch or the wheel around their points; turned to the zenith (or the north celestial pole) up;
- * below the horizon of now in grey, the Moon of now in its phase. The view of the query (of a link) is shown at the opening, its changes are
- * written back to it after the gestures (at once when centered). The
- * view is kept out of the state of React, so a gesture redraws the canvas only, at most once a frame.
+ * below the horizon of the time of the map in grey, its Moon in its phase. The view of the query (of a link) is shown
+ * at the opening, its changes are written back to it after the gestures (at once when centered). The view is kept out
+ * of the state of React, so a gesture redraws the canvas only, at most once a frame.
  */
-export const useStarMapCanvas = (canvasRef: RefObject<HTMLCanvasElement | null>, object: NgcObject): StarMapHandle => {
+export const useStarMapCanvas = (
+  canvasRef: RefObject<HTMLCanvasElement | null>,
+  object: NgcObject,
+  time: Timestamp
+): StarMapHandle => {
   const flip = useFlip();
   const orientationType = useOrientationType();
   const layers = useStarLayers();
-  const { horizon, moon } = useSky();
+  const { horizon, moon } = useSky(time);
   const preview = usePreview(object);
   const viewParamValues = useQueryParams(VIEW_PARAMS);
   const setViewParamValues = useQueryParamsSetter(VIEW_PARAMS);

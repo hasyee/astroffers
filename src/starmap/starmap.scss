@@ -21,6 +21,16 @@
       cursor: grabbing;
     }
   }
+
+  // the time of the sky of the map, over its corner, in the light blue of its marks
+  .time {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--mui-palette-primary-main);
+    pointer-events: none;
+  }
 }
 
 // below the title of the dialog, as the divider of its content

@@ -7,7 +7,7 @@ import { LAT_PARAM, LNG_PARAM, defaultPlace } from '../location/location.utils';
 import { RED_LIGHT_PARAM } from '../redlight/redlight.utils';
 import type { Query } from '../router/router.types';
 import { matchPath, omitQuery, parseQuery, serializeQuery } from '../router/router.utils';
-import { FLIP_PARAMS, ORIENTATION_PARAM, VIEW_PARAMS } from '../starmap/starmap.utils';
+import { FLIP_PARAMS, ORIENTATION_PARAM, TIME_PARAM, VIEW_PARAMS } from '../starmap/starmap.utils';
 import { readStored, writeStored } from '../storage/storage.utils';
 import { type QueryParam, hasKnownParam, paramToQuery, readParam } from './query.params';
 
@@ -30,8 +30,11 @@ export const STORED_PARAMS = STATE_PARAMS.filter(param => param !== DATE_PARAM);
 /** Params of the star map stored apart (`mapQuery`, by `useQueryStorage`), for the next opening of the map */
 export const STORED_MAP_PARAMS: QueryParam<unknown>[] = [...Object.values(FLIP_PARAMS), ORIENTATION_PARAM];
 
-/** Params of the star map, in the query on its route only (`MAP_PATH`), left out of it elsewhere; its view too */
-export const MAP_PARAMS: QueryParam<unknown>[] = [...STORED_MAP_PARAMS, ...Object.values(VIEW_PARAMS)];
+/**
+ * Params of the star map, in the query on its route only (`MAP_PATH`), left out of it elsewhere; its view and its time
+ * too, not stored (they are of the object)
+ */
+export const MAP_PARAMS: QueryParam<unknown>[] = [...STORED_MAP_PARAMS, ...Object.values(VIEW_PARAMS), TIME_PARAM];
 
 const MAP_KEYS = MAP_PARAMS.map(({ key }) => key);
 

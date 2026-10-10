@@ -1,7 +1,8 @@
 import { timeToLst } from '../calculator/calculator.lst';
+import { toNextDay, toNoon } from '../calculator/calculator.time';
 import { getElapsedYearsSinceJ2000, getEqCoordsOnDate } from '../calculator/calculator.precession';
 import type * as Astronomy from 'astronomy-engine';
-import type { Eq, NgcObject, Radians, Timestamp } from '../calculator/calculator.types';
+import type { Eq, NgcInfo, NgcObject, Radians, Timestamp } from '../calculator/calculator.types';
 import { getLocation } from '../calculator/calculator.units';
 import { CONSTELLATION_LINES } from '../constellation/constellation.utils';
 import type { Coords } from '../location/location.types';
@@ -84,6 +85,45 @@ export const getInitialView = (object: NgcObject): View => {
     center: { ra: object.ra, de: object.de },
     fov: clamp(2 * Math.max(0, ...distances) * INITIAL_FOV_MARGIN, MIN_INITIAL_FOV, MAX_INITIAL_FOV)
   };
+};
+
+/**
+ * Query param of the time of the sky of the star map, on its route only: a Unix timestamp (seconds, UTC). Always in the
+ * query there, unlike the other params: the time chosen at the opening (`getOpeningTime`) depends on when the map is
+ * opened, so a link carries it to show the same sky.
+ */
+export const TIME_PARAM = createNumParam('t', null, { min: 0, max: 4102444800 });
+
+export const toTimeParamValue = (time: Timestamp) => Math.round(time / 1000);
+
+/** The object is observable at the time: in its window of the night (above the minimum altitude) */
+const isVisibleAt = ({ intersection }: NgcInfo, time: Timestamp) =>
+  time >= intersection.start && time <= intersection.end;
+
+/** The best visibility of the object, its transit without one */
+export const getBestTime = ({ max, transit }: NgcInfo) => max ?? transit;
+
+/**
+ * The time of the map opened without one, as in Stellarium: now when the object is observable now, else its best
+ * visibility (else now)
+ */
+export const getOpeningTime = (ngcInfo: NgcInfo, now: Timestamp) =>
+  isVisibleAt(ngcInfo, now) ? now : (getBestTime(ngcInfo) ?? now);
+
+/** The time of the map is still now within it, milliseconds */
+const NOW_TOLERANCE = 5 * 60 * 1000;
+
+export const isNowTime = (time: Timestamp, now: Timestamp) => Math.abs(time - now) <= NOW_TOLERANCE;
+
+export const isBestTime = (ngcInfo: NgcInfo, time: Timestamp) => {
+  const bestTime = getBestTime(ngcInfo);
+  return bestTime !== null && toTimeParamValue(bestTime) === toTimeParamValue(time);
+};
+
+/** The time is in the night of the date (from its noon to the next noon) */
+export const isInNight = (time: Timestamp, date: Timestamp) => {
+  const noon = toNoon(date);
+  return time >= noon && time < toNextDay(noon);
 };
 
 /**

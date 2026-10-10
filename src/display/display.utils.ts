@@ -36,6 +36,9 @@ export const formatSize = (size?: [ArcMin, ArcMin]) => (size ? size.map(formatAr
 
 export const formatDate = (date: Timestamp) => moment(date).format('ddd, D MMM YYYY');
 
+/** A time with its day, e.g. of another night than the chosen one */
+export const formatDateTime = (time: Timestamp) => moment(time).format('D MMM, HH:mm');
+
 /** Like `formatDate`, but without the year when it is this year */
 export const formatShortDate = (date: Timestamp) =>
   moment(date).format(moment(date).isSame(moment(), 'year') ? 'ddd, D MMM' : 'ddd, D MMM YYYY');
