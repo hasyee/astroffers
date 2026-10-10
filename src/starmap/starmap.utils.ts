@@ -6,6 +6,7 @@ import { CONSTELLATION_LINES } from '../constellation/constellation.utils';
 import type { Coords } from '../location/location.types';
 import { type ParamValues, createBoolParam, createEnumParam, createNumParam } from '../query/query.params';
 import { type Orientation, type Point, type Size, type View, createProjection, projectEq } from './starmap.projection';
+import { addScaled, cross, dot, normalize, toEq, toVector } from './starmap.vector';
 
 /**
  * Query params of the orientation of the star map, as a telescope shows the sky, in the query on its route only:
@@ -84,10 +85,58 @@ export const getInitialView = (object: NgcObject): View => {
   };
 };
 
-/** The zenith of the place at the time, J2000 (the precession of the date taken back), for the horizon of the map */
-export const getZenith = (time: Timestamp, coords: Coords): Eq => {
+/**
+ * The horizon of the place at a time, J2000: its zenith and nadir, and its directions (with a point 1° below each, for
+ * the side of its label)
+ */
+export type Horizon = { zenith: Eq; nadir: Eq; directions: { name: string; point: Eq; below: Eq }[] };
+
+/** Azimuths from the north towards the east */
+const DIRECTIONS: [name: string, azimuth: number][] = [
+  ['N', 0],
+  ['E', 90],
+  ['S', 180],
+  ['W', 270]
+];
+
+/** The yearly move of the north celestial pole by the precession, towards 0h (as in `calculator.precession.ts`) */
+const POLE_PRECESSION_PER_YEAR = (20.04 / 3600) * DEG;
+
+/**
+ * A point of the sky by its horizontal coordinates (the azimuth from the north towards the east), J2000: along the
+ * east, the north and the up of the place in J2000 — the zenith of the date precessed back, the north towards the
+ * pole of the date (precessing each point back would be imprecise near the poles)
+ */
+const createHorizontalToEq = (time: Timestamp, coords: Coords) => {
   const { lat, lon } = getLocation(coords.lat, coords.lng);
-  return getEqCoordsOnDate({ ra: timeToLst(time, lon), de: lat }, -getElapsedYearsSinceJ2000(time));
+  const years = getElapsedYearsSinceJ2000(time);
+  const up = toVector(getEqCoordsOnDate({ ra: timeToLst(time, lon), de: lat }, -years));
+  const pole = toVector({ ra: 0, de: Math.PI / 2 - POLE_PRECESSION_PER_YEAR * years });
+  const north = normalize(addScaled(pole, up, -dot(pole, up)));
+  const east = cross(north, up);
+  return (azimuth: Radians, altitude: Radians) => {
+    const horizontal = Math.cos(altitude);
+    return toEq(
+      addScaled(
+        addScaled(addScaled([0, 0, 0], east, horizontal * Math.sin(azimuth)), north, horizontal * Math.cos(azimuth)),
+        up,
+        Math.sin(altitude)
+      )
+    );
+  };
+};
+
+export const getHorizon = (time: Timestamp, coords: Coords): Horizon => {
+  const horizontalToEq = createHorizontalToEq(time, coords);
+  return {
+    zenith: horizontalToEq(0, Math.PI / 2),
+    nadir: horizontalToEq(0, -Math.PI / 2),
+    directions: DIRECTIONS.map(([name, azimuth]) => ({
+      name,
+      point: horizontalToEq(azimuth * DEG, 0),
+      below: horizontalToEq(azimuth * DEG, -DEG)
+    }))
+  };
 };
 
 /**

@@ -14,7 +14,7 @@ import {
   ORIENTATION_PARAM,
   VIEW_PARAMS,
   getInitialView,
-  getZenith,
+  getHorizon,
   moveView,
   toView,
   toViewParamValues
@@ -73,11 +73,11 @@ export const useStarLayers = () => {
   return layers;
 };
 
-/** The zenith of the place now, minute by minute */
-const useZenith = () => {
+/** The horizon of the place now, minute by minute */
+const useHorizon = () => {
   const time = useCurrentTime();
   const coords = useCoords();
-  return useMemo(() => getZenith(time, coords), [time, coords]);
+  return useMemo(() => getHorizon(time, coords), [time, coords]);
 };
 
 const getMiddle = (a: Point, b: Point): Point => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
@@ -95,20 +95,20 @@ export const useStarMapCanvas = (canvasRef: RefObject<HTMLCanvasElement | null>,
   const flip = useFlip();
   const orientationType = useOrientationType();
   const layers = useStarLayers();
-  const zenith = useZenith();
+  const horizon = useHorizon();
   const viewParamValues = useQueryParams(VIEW_PARAMS);
   const setViewParamValues = useQueryParamsSetter(VIEW_PARAMS);
   const orientation = useMemo<Orientation>(
-    () => ({ up: orientationType === 'equatorial' ? NORTH_CELESTIAL_POLE : zenith, flip }),
-    [orientationType, zenith, flip]
+    () => ({ up: orientationType === 'equatorial' ? NORTH_CELESTIAL_POLE : horizon.zenith, flip }),
+    [orientationType, horizon, flip]
   );
   const viewRef = useRef<View | null>(null);
   const sizeRef = useRef<Size>({ width: 0, height: 0 });
   const frameRef = useRef<number | null>(null);
   const viewParamsTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   // the latest of the props, read by the frame and the listeners
-  const propsRef = useRef({ orientation, layers, object, zenith, viewParamValues, setViewParamValues });
-  propsRef.current = { orientation, layers, object, zenith, viewParamValues, setViewParamValues };
+  const propsRef = useRef({ orientation, layers, object, horizon, viewParamValues, setViewParamValues });
+  propsRef.current = { orientation, layers, object, horizon, viewParamValues, setViewParamValues };
 
   const redraw = useCallback(() => {
     if (frameRef.current !== null) return;
@@ -135,7 +135,7 @@ export const useStarMapCanvas = (canvasRef: RefObject<HTMLCanvasElement | null>,
     redraw();
   }, [object.id, redraw]);
 
-  useEffect(redraw, [orientation, layers, zenith, redraw]);
+  useEffect(redraw, [orientation, layers, horizon, redraw]);
 
   /** Shows the view, and writes it into the query after the delay */
   const setView = useCallback(
