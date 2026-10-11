@@ -31,7 +31,8 @@ export const useStepDetails = () => {
   return useCallback((id: string) => navigate(getDetailsPath(id)), [navigate]);
 };
 
-export const useCloseDetails = () => useGoBack();
+/** Closes the details, from their star map too (two steps back: the map was opened from the details) */
+export const useCloseDetails = () => useGoBack('/', useIsMapRoute() ? 2 : 1);
 
 /** Opens the star map of the object, with a history entry; its stored params (flips) by `useQueryStorage` */
 export const useOpenMap = () => {

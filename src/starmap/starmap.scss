@@ -37,18 +37,8 @@
   }
 }
 
-// below the title of the dialog, as the divider of its content
-.Details:not(.compact) .StarMap {
-  border-top: 1px solid var(--mui-palette-divider);
-
-  .sky {
-    flex: none;
-    height: min(640px, calc(100vh - 12rem));
-  }
-}
-
 // between the header and the bottom of the drawer
-.Details.compact .StarMap {
+.Details .StarMap {
   flex: 1 1 auto;
   min-height: 0;
 }

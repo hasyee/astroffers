@@ -15,5 +15,8 @@ export type BreadcrumbName = { name: string; to: string };
 export type NavigateStep = string | number;
 export type NavigateQuery = Query | ((currentQuery: Query) => Query);
 
-/** State of the history entries pushed by the app */
-export type HistoryState = { isInApp?: boolean } | null;
+/**
+ * State of the history entries pushed by the app: how many of them lead to the entry (0 or missing for the first
+ * page of the app, e.g. a link); a replaced entry keeps it
+ */
+export type HistoryState = { depth?: number } | null;

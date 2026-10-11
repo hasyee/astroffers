@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useMemo } from 'react';
+import classnames from 'classnames';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import CloseIcon from '@mui/icons-material/Close';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import type { NgcInfo, NgcObject } from '../calculator/calculator.types';
 import { getSubtitle, getTitle } from '../catalog/catalog.utils';
-import DialogTitleWithClose from '../dialog/dialog.title';
 import { useIsWideScreen } from '../media/media.hooks';
 import RedLightToggle from '../redlight/redlight.toggle';
 import { useResult } from '../result/result.hooks';
@@ -108,34 +107,25 @@ function Carousel({ ngcInfo }: { ngcInfo: NgcInfo }) {
   );
 }
 
-/** Toggles the star map in the place of the details: `/:id/map`; an icon only in the header of the compact drawer */
-function MapButton({ id, isCompact = false }: { id: string; isCompact?: boolean }) {
+/**
+ * Switches between the details and the star map in their place (`/:id/map`), named and drawn as the other one; an icon
+ * only in the header of the compact drawer
+ */
+function ViewSwitch({ id, isCompact = false }: { id: string; isCompact?: boolean }) {
   const isMapRoute = useIsMapRoute();
   const openMap = useOpenMap();
   const closeMap = useCloseMap();
   const handleClick = () => (isMapRoute ? closeMap() : openMap(id));
+  const label = isMapRoute ? 'Details' : 'Map';
+  const icon = isMapRoute ? <InfoOutlinedIcon /> : <MapOutlinedIcon />;
 
-  if (isCompact) {
-    return (
-      <IconButton
-        color={isMapRoute ? 'primary' : 'default'}
-        onClick={handleClick}
-        aria-label="Map"
-        aria-pressed={isMapRoute}
-      >
-        <MapOutlinedIcon />
-      </IconButton>
-    );
-  }
-
-  return (
-    <Button
-      color={isMapRoute ? 'primary' : 'inherit'}
-      startIcon={<MapOutlinedIcon />}
-      onClick={handleClick}
-      aria-pressed={isMapRoute}
-    >
-      Map
+  return isCompact ? (
+    <IconButton onClick={handleClick} aria-label={label} title={label}>
+      {icon}
+    </IconButton>
+  ) : (
+    <Button color="inherit" startIcon={icon} onClick={handleClick}>
+      {label}
     </Button>
   );
 }
@@ -152,81 +142,58 @@ function DetailsTitle({ object }: { object: NgcObject }) {
 }
 
 /**
- * The details of the object, or its star map in their place (`/:id/map`) with the flips in the footer instead of the
- * navigation; closing the map (also by the back button) returns to the details
+ * The details of the object in a drawer from the right, over the list (full-screen on a phone), or its star map in
+ * their place (`/:id/map`) with its toolbar in the footer instead of the navigation; closing (the close button, a click
+ * beside, Escape) closes the map too, the Details button and the back button return from it to the details
  */
 export default function Details() {
   const ngcInfo = useOpenedNgcInfo();
   const closeDetails = useCloseDetails();
-  const closeMap = useCloseMap();
-  const isWideScreen = useIsWideScreen();
+  const isCompact = !useIsWideScreen();
   const isDetailsRoute = useIsDetailsRoute();
   const isMapRoute = useIsMapRoute();
   const hasResult = !!useResult();
-  const handleClose = isMapRoute ? closeMap : closeDetails;
 
   // an object not in the result (e.g. a link to an object not visible tonight with the stored filter) is left
   useEffect(() => {
     if (isDetailsRoute && hasResult && !ngcInfo) closeDetails();
   }, [isDetailsRoute, hasResult, ngcInfo, closeDetails]);
 
-  const title = ngcInfo && <DetailsTitle object={ngcInfo.object} />;
-
-  if (isWideScreen) {
-    return (
-      <Dialog open={!!ngcInfo} onClose={handleClose} maxWidth={false} className="Details">
-        <DialogTitleWithClose
-          onClose={handleClose}
-          actions={
-            <>
-              {ngcInfo && <MapButton id={ngcInfo.object.id} />}
-              <RedLightToggle />
-            </>
-          }
-        >
-          {title}
-        </DialogTitleWithClose>
-        {ngcInfo && isMapRoute ? (
-          <StarMap ngcInfo={ngcInfo} />
-        ) : (
-          <>
-            <DialogContent dividers>{ngcInfo && <DetailsContent ngcInfo={ngcInfo} />}</DialogContent>
-            <DialogActions>
-              <Navigation ngcInfo={ngcInfo} />
-            </DialogActions>
-          </>
-        )}
-      </Dialog>
-    );
-  }
-
   return (
     <Drawer
       anchor="right"
       open={!!ngcInfo}
-      onClose={handleClose}
-      className="Details compact"
+      onClose={closeDetails}
+      className={classnames('Details', { compact: isCompact })}
       slotProps={{ paper: { className: 'DetailsPaper' } }}
       // the page itself does not scroll anyway, and the lock would block the pull to refresh of the browser
       disableScrollLock
     >
       <div className="header">
-        <IconButton onClick={handleClose} aria-label="Back">
-          <ArrowBackIcon />
-        </IconButton>
         <Typography variant="h6" component="h2">
-          {title}
+          {ngcInfo && <DetailsTitle object={ngcInfo.object} />}
         </Typography>
-        {ngcInfo && <MapButton id={ngcInfo.object.id} isCompact />}
+        {ngcInfo && <ViewSwitch id={ngcInfo.object.id} isCompact={isCompact} />}
         <RedLightToggle />
+        {/* on the right, towards the edge the drawer slides back to */}
+        <IconButton onClick={closeDetails} aria-label="Close" edge="end">
+          <CloseIcon />
+        </IconButton>
       </div>
       {ngcInfo && isMapRoute ? (
         <StarMap ngcInfo={ngcInfo} />
       ) : (
         <>
-          {ngcInfo && <Carousel ngcInfo={ngcInfo} />}
+          {ngcInfo &&
+            (isCompact ? (
+              <Carousel ngcInfo={ngcInfo} />
+            ) : (
+              <div className="content">
+                <DetailsContent ngcInfo={ngcInfo} />
+              </div>
+            ))}
           <div className="footer">
-            <Navigation ngcInfo={ngcInfo} isCompact />
+            <Navigation ngcInfo={ngcInfo} isCompact={isCompact} />
           </div>
         </>
       )}

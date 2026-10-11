@@ -137,7 +137,10 @@ export function useNavigate({ replace = false }: { replace?: boolean } = {}) {
       const search = serializeQuery(resolvedQuery);
       if (pathname + search === window.location.pathname + window.location.search) return;
       if (replace) window.history.replaceState(window.history.state, '', pathname + search);
-      else window.history.pushState({ isInApp: true } satisfies HistoryState, '', pathname + search);
+      else {
+        const depth = ((window.history.state as HistoryState)?.depth ?? 0) + 1;
+        window.history.pushState({ depth } satisfies HistoryState, '', pathname + search);
+      }
       setLocation({ pathname, search });
     },
     [replace, setLocation, match, isQuerySticky]
@@ -149,17 +152,17 @@ export function useLocationId(name: string): string | null {
 }
 
 /**
- * Leaves a route opened over the main view (e.g. a dialog): steps back in the history when the route was opened
- * in the app, so the back button of the phone does not open it again; otherwise (opened by a link or a bookmark)
- * replaces it with the fallback path, not to leave the app.
+ * Leaves a route opened over the main view (e.g. a dialog), or the given number of them opened on each other: steps
+ * back in the history when they were opened in the app, so the back button of the phone does not open them again;
+ * otherwise (opened by a link or a bookmark) replaces the route with the fallback path, not to leave the app.
  */
-export function useGoBack(fallback = '/') {
+export function useGoBack(fallback = '/', steps = 1) {
   const navigate = useNavigate({ replace: true });
 
   return useCallback(() => {
-    if ((window.history.state as HistoryState)?.isInApp) window.history.back();
+    if (((window.history.state as HistoryState)?.depth ?? 0) >= steps) window.history.go(-steps);
     else navigate(fallback);
-  }, [navigate, fallback]);
+  }, [navigate, fallback, steps]);
 }
 
 /** Steps to the parent path when the deleted document (by the result of a mutation) is the one in the path */

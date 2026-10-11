@@ -1,46 +1,18 @@
-.Details:not(.compact) .MuiDialog-paper {
+// a panel over the list on a wide screen, as wide as the details need, the full screen on a phone
+.Details .DetailsPaper {
   width: 880px;
   max-width: calc(100vw - 2rem);
-}
+  // as the sidebar's
+  border-left: 1px solid var(--mui-palette-divider);
 
-// in the title of the dialog and in the header of the drawer
-.DetailsTitle {
-  display: block;
-
-  .title,
-  .subtitle {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .subtitle {
-    font-size: 0.8rem;
-    font-weight: 400;
-    line-height: 1.3;
-    color: var(--mui-palette-text-secondary);
-  }
-}
-
-// previous on the left, next on the right, as in the compact footer
-.Details:not(.compact) .MuiDialogActions-root {
-  justify-content: space-between;
-}
-
-.Details.compact .DetailsPaper {
-  width: 100%;
-  // a page of the app rather than a floating panel
-  background-color: var(--mui-palette-background-default);
-
-  // as high as the header of the app
+  // as high as the header of the app; the close button on the right, towards the edge the drawer slides back to
   .header {
     flex: 0 0 auto;
     display: flex;
     align-items: center;
     gap: 0.25rem;
     height: 50px;
-    padding: 0 1rem 0 0.25rem;
+    padding: 0 1rem;
     border-bottom: 1px solid var(--mui-palette-divider);
 
     // as the titles of the dialogs (theme), to fit the longer names
@@ -49,6 +21,34 @@
       min-width: 0;
       font-size: 1rem;
     }
+  }
+
+  // the details of a wide screen, scrolling between the header and the footer
+  .content {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 1rem 1.5rem;
+  }
+
+  // previous on the left, next on the right, the Open in menu between them
+  .footer {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-top: 1px solid var(--mui-palette-divider);
+  }
+}
+
+.Details.compact .DetailsPaper {
+  width: 100%;
+  max-width: none;
+  border-left: 0;
+  // a page of the app rather than a floating panel
+  background-color: var(--mui-palette-background-default);
+
+  .header {
+    padding: 0 0.5rem 0 1rem;
   }
 
   .Carousel {
@@ -74,13 +74,25 @@
       touch-action: pan-y;
     }
   }
+}
 
-  .footer {
-    flex: 0 0 auto;
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem;
-    border-top: 1px solid var(--mui-palette-divider);
+// in the header of the drawer
+.DetailsTitle {
+  display: block;
+
+  .title,
+  .subtitle {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .subtitle {
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--mui-palette-text-secondary);
   }
 }
 
@@ -102,6 +114,8 @@
     background-color: black;
     border-radius: 2px;
     overflow: hidden;
+    // opens the star map
+    cursor: pointer;
 
     img {
       width: 100%;

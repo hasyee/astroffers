@@ -5,7 +5,7 @@ import type { NgcInfo } from '../calculator/calculator.types';
 import { getObjectImgSrc, getTitle } from '../catalog/catalog.utils';
 import { toDetails } from '../display/display.utils';
 import { useResultNightInfo, useResultParams } from '../result/result.hooks';
-import { useHorizontalCoords } from './details.hooks';
+import { useHorizontalCoords, useOpenMap } from './details.hooks';
 import AltitudeChart from './details.altitude';
 import AzimuthChart from './details.azimuth';
 
@@ -19,17 +19,18 @@ function Property({ label, value }: { label: string; value: string }) {
 }
 
 /**
- * The DSS2 preview, or the photo of a body of the Solar System with a link to its source; the image opens nothing
- * (a tapped large version loaded so slowly that the app seemed stuck)
+ * The DSS2 preview, or the photo of a body of the Solar System with a link to its source; a click on it opens the star
+ * map (not a large version of the image: it loaded so slowly that the app seemed stuck)
  */
 function Preview({ ngcInfo }: { ngcInfo: NgcInfo }) {
   const { photo } = ngcInfo.object;
+  const openMap = useOpenMap();
   const src = getObjectImgSrc(ngcInfo.object);
   const [loadedSrc, setLoadedSrc] = useState<string | null>(null);
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
 
   return (
-    <div className="Preview">
+    <div className="Preview" onClick={() => openMap(ngcInfo.object.id)} title="Open the star map">
       {loadedSrc !== src && failedSrc !== src && <CircularProgress />}
       {failedSrc === src ? (
         <div className="unavailable">Preview is unavailable</div>
@@ -44,7 +45,13 @@ function Preview({ ngcInfo }: { ngcInfo: NgcInfo }) {
         />
       )}
       {photo ? (
-        <a className="credit" href={photo.page} target="_blank" rel="noreferrer">
+        <a
+          className="credit"
+          href={photo.page}
+          target="_blank"
+          rel="noreferrer"
+          onClick={event => event.stopPropagation()}
+        >
           {photo.credit}
         </a>
       ) : (
