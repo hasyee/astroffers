@@ -215,14 +215,18 @@ export const getSunAltitude = (sun: Body, { zenith }: Horizon): Radians =>
 export type SkyPhase = 'daylight' | 'twilight' | 'night';
 
 /**
- * The sunrise and the sunset themselves are twilight (an object best visible at the sunset): the altitude at their
- * times is not exactly the nominal one, -0.827° to -0.838° by the radius of the Sun over the year, ~0.01° more by the
- * J2000 frame of the map
+ * A boundary belongs to the darker phase (an object best visible at the sunset is in the twilight, at the end of the
+ * twilight in the night), by a margin: the altitude at the times of the night is not exactly the nominal one — at the
+ * sunset -0.827° to -0.838° by the radius of the Sun over the year —, and the time of the map is rounded to a second
  */
-const DAYLIGHT_MARGIN = 0.05 * DEG;
+const PHASE_MARGIN = 0.05 * DEG;
 
 export const getSkyPhase = (sunAltitude: Radians, twilight: Radians): SkyPhase =>
-  sunAltitude > SUNSET_ALTITUDE * DEG + DAYLIGHT_MARGIN ? 'daylight' : sunAltitude >= twilight ? 'twilight' : 'night';
+  sunAltitude > SUNSET_ALTITUDE * DEG + PHASE_MARGIN
+    ? 'daylight'
+    : sunAltitude > twilight + PHASE_MARGIN
+      ? 'twilight'
+      : 'night';
 
 /** A body of the place at a time, topocentric, J2000: its position and its angular radius */
 export type Body = { eq: Eq; radius: Radians };
