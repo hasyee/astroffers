@@ -1,5 +1,6 @@
-import type { NgcObject } from '../calculator/calculator.types';
+import type { NgcObject, Radians } from '../calculator/calculator.types';
 import { getPreviewFieldOfView } from '../catalog/catalog.utils';
+import { DAYLIGHT, MOONLESS_NIGHT, TWILIGHT } from '../chart/chart.colors';
 import { CONSTELLATION_LINES } from '../constellation/constellation.utils';
 import { type StarLayer, getTilesAround } from '../stars/stars.utils';
 import theme from '../theme/theme';
@@ -17,22 +18,30 @@ import {
   type Horizon,
   type Moon,
   type Pole,
+  type SkyPhase,
   getDistance,
   getMagnitudeLimit,
   getStarRadius
 } from './starmap.utils';
 import { addScaled, cross, dot, normalize, toEq, toVector } from './starmap.vector';
 
-const BACKGROUND = theme.palette.background.default;
+/** The altitude of the Sun where the sky gets its daylight */
+const DAYLIGHT_ALTITUDE = 10 * (Math.PI / 180);
+/**
+ * Its daylight is darker than the charts': their daylight mixed into their twilight this much, not to wash out the
+ * white stars and marks
+ */
+const DAYLIGHT_RATIO = 0.5;
 const STAR = theme.palette.common.white;
 const LINE = 'rgba(255, 255, 255, 0.55)';
-const MARKER = theme.palette.primary.main;
+/** The ring of the object, its arrow, the directions on the horizon, the poles and the names of the bodies */
+const MARK = theme.palette.primary.main;
+/** Over the light blue sky of the daylight */
+const DAYLIGHT_MARK = theme.palette.common.white;
 const SUN = theme.palette.warning.main;
 const MOON_LIT = theme.palette.grey[300];
 /** The dark side of the Moon, faintly, to show its whole disc */
 const MOON_DARK = 'rgba(255, 255, 255, 0.15)';
-/** The directions on the horizon and the poles of the orientation, as the ring of the object */
-const HORIZON_LABEL = MARKER;
 /** Darker than in the altitude chart (`chart.colors.ts`), over the stars */
 const BELOW_HORIZON = 'rgba(128, 128, 128, 0.3)';
 
@@ -96,6 +105,12 @@ export type StarMapScene = {
   /** Of the place at the time of the map; missing while loading */
   sun: Body | null;
   moon: Moon | null;
+  /** The altitude of the Sun; missing while loading (a night sky) */
+  sunAltitude: Radians | null;
+  /** Of the filter, the altitude of the Sun where the night begins */
+  twilight: Radians;
+  /** By the altitude of the Sun; missing while loading */
+  phase: SkyPhase | null;
 };
 
 const drawLines = (context: CanvasRenderingContext2D, projection: Projection, pixelRatio: number) => {
@@ -262,14 +277,17 @@ const getDiscRadius = (projection: Projection, pixelRatio: number, { eq, radius 
   return Math.max(MIN_BODY_RADIUS * pixelRatio, radius * localScale);
 };
 
+const getMarkColor = ({ phase }: StarMapScene) => (phase === 'daylight' ? DAYLIGHT_MARK : MARK);
+
 const drawBodyLabel = (
   context: CanvasRenderingContext2D,
-  pixelRatio: number,
+  scene: StarMapScene,
   name: string,
   at: Point,
   radius: number
 ) => {
-  context.fillStyle = HORIZON_LABEL;
+  const { pixelRatio } = scene;
+  context.fillStyle = getMarkColor(scene);
   context.font = `${LABEL_FONT_SIZE * pixelRatio}px "Inter Variable", sans-serif`;
   context.textAlign = 'left';
   context.textBaseline = 'middle';
@@ -277,7 +295,8 @@ const drawBodyLabel = (
 };
 
 /** The Sun as a disc of its true size (at least `MIN_BODY_RADIUS`) */
-const drawSun = (context: CanvasRenderingContext2D, projection: Projection, { pixelRatio, sun }: StarMapScene) => {
+const drawSun = (context: CanvasRenderingContext2D, projection: Projection, scene: StarMapScene) => {
+  const { pixelRatio, sun } = scene;
   if (!sun) return;
   const at = projectEq(projection, sun.eq);
   if (!at) return;
@@ -286,7 +305,7 @@ const drawSun = (context: CanvasRenderingContext2D, projection: Projection, { pi
   context.beginPath();
   context.arc(at.x, at.y, radius, 0, 2 * Math.PI);
   context.fill();
-  drawBodyLabel(context, pixelRatio, 'Sun', at, radius);
+  drawBodyLabel(context, scene, 'Sun', at, radius);
 };
 
 /**
@@ -294,11 +313,8 @@ const drawSun = (context: CanvasRenderingContext2D, projection: Projection, { pi
  * map is turned: the lit half of the disc on the side of the Sun, closed by the terminator, a half-ellipse as wide as
  * the illuminated fraction tells (bulging towards the Sun for a crescent, away from it beyond the half Moon)
  */
-const drawMoon = (
-  context: CanvasRenderingContext2D,
-  projection: Projection,
-  { pixelRatio, sun, moon }: StarMapScene
-) => {
+const drawMoon = (context: CanvasRenderingContext2D, projection: Projection, scene: StarMapScene) => {
+  const { pixelRatio, sun, moon } = scene;
   if (!moon || !sun) return;
   const moonVector = toVector(moon.eq);
   const sunVector = toVector(sun.eq);
@@ -329,20 +345,17 @@ const drawMoon = (
     isCrescent
   );
   context.fill();
-  drawBodyLabel(context, pixelRatio, 'Moon', at, radius);
+  drawBodyLabel(context, scene, 'Moon', at, radius);
 };
 
 /**
  * The directions on the horizon by ticks, their letters below them (towards the point 1° below, wherever the map is
  * turned), and the poles of the orientation by small crosses with their names
  */
-const drawLabels = (
-  context: CanvasRenderingContext2D,
-  projection: Projection,
-  { pixelRatio, horizon, poles }: StarMapScene
-) => {
-  context.strokeStyle = HORIZON_LABEL;
-  context.fillStyle = HORIZON_LABEL;
+const drawLabels = (context: CanvasRenderingContext2D, projection: Projection, scene: StarMapScene) => {
+  const { pixelRatio, horizon, poles } = scene;
+  context.strokeStyle = getMarkColor(scene);
+  context.fillStyle = getMarkColor(scene);
   context.lineWidth = LINE_WIDTH * pixelRatio;
   context.font = `${DIRECTION_FONT_SIZE * pixelRatio}px "Inter Variable", sans-serif`;
   context.textAlign = 'center';
@@ -386,7 +399,7 @@ const getMarkerRadius = (projection: Projection, { pixelRatio, object }: StarMap
 const drawMarker = (context: CanvasRenderingContext2D, projection: Projection, scene: StarMapScene) => {
   const point = projectEq(projection, scene.object);
   if (!point) return;
-  context.strokeStyle = MARKER;
+  context.strokeStyle = getMarkColor(scene);
   context.lineWidth = MARKER_WIDTH * scene.pixelRatio;
   context.beginPath();
   context.arc(point.x, point.y, getMarkerRadius(projection, scene), 0, 2 * Math.PI);
@@ -431,8 +444,8 @@ const drawObjectArrow = (context: CanvasRenderingContext2D, projection: Projecti
   const tail = { x: tip.x - x * ARROW_LENGTH * pixelRatio, y: tip.y - y * ARROW_LENGTH * pixelRatio };
   const headWidth = ARROW_HEAD_WIDTH * pixelRatio;
 
-  context.strokeStyle = MARKER;
-  context.fillStyle = MARKER;
+  context.strokeStyle = getMarkColor(scene);
+  context.fillStyle = getMarkColor(scene);
   context.lineWidth = ARROW_WIDTH * pixelRatio;
   context.beginPath();
   context.moveTo(tail.x, tail.y);
@@ -455,10 +468,27 @@ const drawObjectArrow = (context: CanvasRenderingContext2D, projection: Projecti
   context.fillText(label, tail.x - x * offset, tail.y - y * offset);
 };
 
+/**
+ * The sky by the altitude of the Sun, in the colors of the charts (`chart.colors.ts`), continuous: from the night to the
+ * twilight between the twilight of the filter and the sunrise, then on to the daylight (darker, `DAYLIGHT_RATIO`)
+ */
+const drawSky = (context: CanvasRenderingContext2D, { size, sunAltitude, twilight }: StarMapScene) => {
+  const altitude = sunAltitude ?? twilight;
+  const [from, to, ratio] =
+    altitude < 0
+      ? [MOONLESS_NIGHT, TWILIGHT, (altitude - twilight) / -twilight]
+      : [TWILIGHT, DAYLIGHT, Math.min(1, altitude / DAYLIGHT_ALTITUDE) * DAYLIGHT_RATIO];
+  context.fillStyle = from;
+  context.fillRect(0, 0, size.width, size.height);
+  context.globalAlpha = Math.min(1, Math.max(0, ratio));
+  context.fillStyle = to;
+  context.fillRect(0, 0, size.width, size.height);
+  context.globalAlpha = 1;
+};
+
 export const drawStarMap = (context: CanvasRenderingContext2D, scene: StarMapScene) => {
   const projection = createProjection(scene.view, scene.size, scene.orientation);
-  context.fillStyle = BACKGROUND;
-  context.fillRect(0, 0, scene.size.width, scene.size.height);
+  drawSky(context, scene);
   drawLines(context, projection, scene.pixelRatio);
   drawStars(context, projection, scene);
   drawPreview(context, projection, scene);

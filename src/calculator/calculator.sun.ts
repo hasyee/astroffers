@@ -9,7 +9,7 @@ import { toNoon, toNextDay } from './calculator.time';
 const MINUTE = 60 * 1000;
 
 /** Geometric altitude of the center of the Sun at sunset and sunrise, when its upper limb touches the horizon */
-const SUNSET_ALTITUDE = -0.833;
+export const SUNSET_ALTITUDE = -0.833;
 
 /**
  * The next time after `from`, within a day, when the Sun gets below (-1) or above (+1) the altitude: the horizon (0)

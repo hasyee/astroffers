@@ -22,7 +22,7 @@
     }
   }
 
-  // the time of the sky of the map, over its corner, in the light blue of its marks
+  // the time of the sky of the map, over its corner, in the light blue of its marks (white over the daylight)
   .time {
     position: absolute;
     top: 0.5rem;
@@ -30,6 +30,10 @@
     font-size: 0.8rem;
     color: var(--mui-palette-primary-main);
     pointer-events: none;
+
+    &.daylight {
+      color: var(--mui-palette-common-white);
+    }
   }
 }
 

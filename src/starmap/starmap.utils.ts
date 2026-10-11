@@ -1,4 +1,5 @@
 import { timeToLst } from '../calculator/calculator.lst';
+import { SUNSET_ALTITUDE } from '../calculator/calculator.sun';
 import { toNextDay, toNoon } from '../calculator/calculator.time';
 import { getElapsedYearsSinceJ2000, getEqCoordsOnDate } from '../calculator/calculator.precession';
 import type * as Astronomy from 'astronomy-engine';
@@ -202,6 +203,26 @@ export const getCelestialPoles = (time: Timestamp): Pole[] => {
     { name: 'SP', point: { ra: north.ra + Math.PI, de: -north.de } }
   ];
 };
+
+/** The geometric altitude of the Sun (of its center) */
+export const getSunAltitude = (sun: Body, { zenith }: Horizon): Radians =>
+  Math.asin(clamp(dot(toVector(sun.eq), toVector(zenith)), -1, 1));
+
+/**
+ * The light of the sky by the altitude of the Sun: daylight between the sunrise and the sunset (their upper limb on the
+ * horizon, as the night of the app), twilight down to the twilight of the filter (`tw`), night below it
+ */
+export type SkyPhase = 'daylight' | 'twilight' | 'night';
+
+/**
+ * The sunrise and the sunset themselves are twilight (an object best visible at the sunset): the altitude at their
+ * times is not exactly the nominal one, -0.827° to -0.838° by the radius of the Sun over the year, ~0.01° more by the
+ * J2000 frame of the map
+ */
+const DAYLIGHT_MARGIN = 0.05 * DEG;
+
+export const getSkyPhase = (sunAltitude: Radians, twilight: Radians): SkyPhase =>
+  sunAltitude > SUNSET_ALTITUDE * DEG + DAYLIGHT_MARGIN ? 'daylight' : sunAltitude >= twilight ? 'twilight' : 'night';
 
 /** A body of the place at a time, topocentric, J2000: its position and its angular radius */
 export type Body = { eq: Eq; radius: Radians };

@@ -2,6 +2,7 @@ import { type RefObject, useCallback, useEffect, useLayoutEffect, useMemo, useRe
 import type * as Astronomy from 'astronomy-engine';
 import type { NgcInfo, NgcObject, Timestamp } from '../calculator/calculator.types';
 import { getObjectImgSrc } from '../catalog/catalog.utils';
+import { FILTER_PARAMS } from '../filter/filter.utils';
 import { useCoords } from '../location/location.hooks';
 import { useQueryParam, useQueryParamSetter, useQueryParams, useQueryParamsSetter } from '../query/query.hooks';
 import starLayer1Url from '../stars/stars.1.bin?url';
@@ -18,7 +19,9 @@ import {
   getInitialView,
   getHorizon,
   getMoon,
+  getSkyPhase,
   getSun,
+  getSunAltitude,
   getOpeningTime,
   TIME_PARAM,
   toTimeParamValue,
@@ -26,6 +29,8 @@ import {
   toView,
   toViewParamValues
 } from './starmap.utils';
+
+const DEG = Math.PI / 180;
 
 /** Zoom of a step of the wheel, by its delta (pixels) */
 const WHEEL_ZOOM = 0.0015;
@@ -129,15 +134,23 @@ export const useMapTimeSetter = () => {
   return useCallback((time: Timestamp) => setValue(toTimeParamValue(time)), [setValue]);
 };
 
-/** The horizon, the Sun and the Moon (null while loading) of the place at the time */
-const useSky = (time: Timestamp) => {
+/**
+ * The sky of the place at the time: its horizon, the Sun and the Moon (null while loading), the altitude of the Sun and
+ * its light (`SkyPhase`) by the twilight of the filter
+ */
+export const useSky = (time: Timestamp) => {
   const coords = useCoords();
   const astronomy = useAstronomy();
+  const twilight = useQueryParam(FILTER_PARAMS.twilight) * DEG;
   const horizon = useMemo(() => getHorizon(time, coords), [time, coords]);
   const sun = useMemo(() => (astronomy ? getSun(astronomy, time, coords) : null), [astronomy, time, coords]);
   const moon = useMemo(() => (astronomy ? getMoon(astronomy, time, coords) : null), [astronomy, time, coords]);
-  return { horizon, sun, moon };
+  const sunAltitude = sun ? getSunAltitude(sun, horizon) : null;
+  const phase = sunAltitude === null ? null : getSkyPhase(sunAltitude, twilight);
+  return { horizon, sun, moon, twilight, sunAltitude, phase };
 };
+
+export type Sky = ReturnType<typeof useSky>;
 
 /**
  * The DSS2 preview of the object, masked, null while loading or when it fails (e.g. offline, not cached yet); none of
@@ -172,12 +185,12 @@ const getPointDistance = (a: Point, b: Point) => Math.hypot(a.x - b.x, a.y - b.y
 export const useStarMapCanvas = (
   canvasRef: RefObject<HTMLCanvasElement | null>,
   object: NgcObject,
-  time: Timestamp
+  time: Timestamp,
+  { horizon, sun, moon, twilight, sunAltitude, phase }: Sky
 ): StarMapHandle => {
   const flip = useFlip();
   const orientationType = useOrientationType();
   const layers = useStarLayers();
-  const { horizon, sun, moon } = useSky(time);
   const preview = usePreview(object);
   const viewParamValues = useQueryParams(VIEW_PARAMS);
   const setViewParamValues = useQueryParamsSetter(VIEW_PARAMS);
@@ -199,6 +212,9 @@ export const useStarMapCanvas = (
     poles,
     sun,
     moon,
+    twilight,
+    sunAltitude,
+    phase,
     preview,
     viewParamValues,
     setViewParamValues
@@ -211,6 +227,9 @@ export const useStarMapCanvas = (
     poles,
     sun,
     moon,
+    twilight,
+    sunAltitude,
+    phase,
     preview,
     viewParamValues,
     setViewParamValues
@@ -241,7 +260,7 @@ export const useStarMapCanvas = (
     redraw();
   }, [object.id, redraw]);
 
-  useEffect(redraw, [orientation, layers, horizon, sun, moon, preview, redraw]);
+  useEffect(redraw, [orientation, layers, horizon, sun, moon, twilight, sunAltitude, phase, preview, redraw]);
 
   /** Shows the view, and writes it into the query after the delay */
   const setView = useCallback(

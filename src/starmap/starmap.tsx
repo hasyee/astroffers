@@ -16,11 +16,14 @@ import {
   useMapTimeSetter,
   useOrientationType,
   useOrientationTypeSetter,
+  useSky,
   useStarMapCanvas
 } from './starmap.hooks';
 import { EquatorialMountIcon } from './starmap.icon';
-import { getBestTime, isBestTime, isInNight, isNowTime } from './starmap.utils';
+import { type SkyPhase, getBestTime, isBestTime, isInNight, isNowTime } from './starmap.utils';
 import './starmap.scss';
+
+const SKY_PHASE_NAMES: Record<SkyPhase, string> = { daylight: 'Daylight', twilight: 'Twilight', night: 'Night' };
 
 /**
  * Chooses the time of the map: now, or the best visibility of the object; the one the time of the map is (now within a
@@ -117,21 +120,25 @@ function StarMapToolbar({ handle, ngcInfo, time }: { handle: StarMapHandle; ngcI
 }
 
 /**
- * The stars and the lines of the constellations around the object, marked by a ring, and the horizon of the time of
- * the map, written in its corner (with its day when not in the chosen night); its toolbar below it, in the place of the
+ * The stars and the lines of the constellations around the object, marked by a ring, and the sky of the time of the
+ * map, written in its corner (with its day when not in the chosen night) with its light; its toolbar below it, in the place of the
  * content and the footer of the details
  */
 export default function StarMap({ ngcInfo }: { ngcInfo: NgcInfo }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const date = useDate();
   const time = useMapTime(ngcInfo);
-  const handle = useStarMapCanvas(canvasRef, ngcInfo.object, time);
+  const sky = useSky(time);
+  const handle = useStarMapCanvas(canvasRef, ngcInfo.object, time, sky);
 
   return (
     <div className="StarMap">
       <div className="sky">
         <canvas ref={canvasRef} />
-        <div className="time">{isInNight(time, date) ? formatTime(time) : formatDateTime(time)}</div>
+        <div className={`time ${sky.phase ?? ''}`}>
+          {isInNight(time, date) ? formatTime(time) : formatDateTime(time)}
+          {sky.phase && ` · ${SKY_PHASE_NAMES[sky.phase]}`}
+        </div>
       </div>
       <StarMapToolbar handle={handle} ngcInfo={ngcInfo} time={time} />
     </div>
