@@ -4,7 +4,6 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import FilterCenterFocusIcon from '@mui/icons-material/FilterCenterFocus';
 import FlipIcon from '@mui/icons-material/Flip';
-import PublicIcon from '@mui/icons-material/Public';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import type { NgcInfo, Timestamp } from '../calculator/calculator.types';
 import { useDate } from '../date/date.hooks';
@@ -19,6 +18,7 @@ import {
   useOrientationTypeSetter,
   useStarMapCanvas
 } from './starmap.hooks';
+import { EquatorialMountIcon } from './starmap.icon';
 import { getBestTime, isBestTime, isInNight, isNowTime } from './starmap.utils';
 import './starmap.scss';
 
@@ -106,7 +106,7 @@ function StarMapToolbar({ handle, ngcInfo, time }: { handle: StarMapHandle; ngcI
         aria-pressed={isEquatorial}
         title="Equatorial orientation"
       >
-        <PublicIcon />
+        <EquatorialMountIcon />
       </IconButton>
       <TimeMenu ngcInfo={ngcInfo} time={time} />
       <IconButton onClick={handle.centerObject} aria-label="Center the object" title="Center the object">
