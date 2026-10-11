@@ -11,7 +11,7 @@ import {
   createProjection,
   projectEq
 } from './starmap.projection';
-import { type Horizon, type Moon, getMagnitudeLimit, getStarRadius } from './starmap.utils';
+import { type Horizon, type Moon, getDistance, getMagnitudeLimit, getStarRadius } from './starmap.utils';
 import { addScaled, cross, dot, normalize, toEq, toVector } from './starmap.vector';
 
 const BACKGROUND = theme.palette.background.default;
@@ -38,6 +38,16 @@ const HORIZON_TICK = 5;
 /** From the point of the horizon to the middle of the letter of its direction */
 const DIRECTION_LABEL_OFFSET = 18;
 const ZENITH_CROSS = 5;
+
+/** CSS pixels: the arrow towards the object off the canvas, its tip inside the edge by the margin */
+const ARROW_MARGIN = 20;
+const ARROW_LENGTH = 28;
+const ARROW_WIDTH = 2;
+const ARROW_HEAD_LENGTH = 10;
+/** Half of the width of its head */
+const ARROW_HEAD_WIDTH = 6;
+/** Between the tail of the arrow and the box of its label */
+const ARROW_LABEL_MARGIN = 4;
 
 /** CSS pixels: the Moon is at least this large (a few pixels in a wide field, in its true size) */
 const MIN_MOON_RADIUS = 8;
@@ -322,26 +332,82 @@ const drawHorizonLabels = (
   context.stroke();
 };
 
-/** A ring around the object, at least as large as the object */
-const drawMarker = (
-  context: CanvasRenderingContext2D,
-  projection: Projection,
-  { pixelRatio, object }: StarMapScene
-) => {
-  const point = projectEq(projection, object);
+/** Of the ring around the object, at least as large as the object (device pixels) */
+const getMarkerRadius = (projection: Projection, { pixelRatio, object }: StarMapScene) => {
+  const size = object.size ? (Math.max(...object.size) / 60 / 2) * DEG * projection.scale : 0;
+  return Math.max(MIN_MARKER_RADIUS * pixelRatio, size + MARKER_MARGIN * pixelRatio);
+};
+
+const drawMarker = (context: CanvasRenderingContext2D, projection: Projection, scene: StarMapScene) => {
+  const point = projectEq(projection, scene.object);
   if (!point) return;
-  const size = object.size ? (Math.max(...object.size) / 60 / 2) * (Math.PI / 180) * projection.scale : 0;
   context.strokeStyle = MARKER;
-  context.lineWidth = MARKER_WIDTH * pixelRatio;
+  context.lineWidth = MARKER_WIDTH * scene.pixelRatio;
   context.beginPath();
-  context.arc(
-    point.x,
-    point.y,
-    Math.max(MIN_MARKER_RADIUS * pixelRatio, size + MARKER_MARGIN * pixelRatio),
-    0,
-    2 * Math.PI
-  );
+  context.arc(point.x, point.y, getMarkerRadius(projection, scene), 0, 2 * Math.PI);
   context.stroke();
+};
+
+/** Degrees, one decimal below 10° */
+const formatDistance = (distance: number) => {
+  const degrees = distance / DEG;
+  return `${degrees < 10 ? degrees.toFixed(1) : Math.round(degrees)}°`;
+};
+
+/**
+ * An arrow at the edge of the canvas towards the object when its ring is off the canvas, on the radius from the center
+ * to the object, with its distance from the center inside. The projection is azimuthal, so the direction of the radius
+ * is the direction of the great circle to the object: dragging the map along it is the shortest way there. The object
+ * is projected without leaving out the far side, to have a direction behind the observer too (all but the antipode).
+ */
+const drawObjectArrow = (context: CanvasRenderingContext2D, projection: Projection, scene: StarMapScene) => {
+  const { view, size, pixelRatio, object } = scene;
+  const point = projection.project(object.ra, Math.sin(object.de), Math.cos(object.de), -1);
+  if (!point || !Number.isFinite(point.x) || !Number.isFinite(point.y)) return;
+  const ringRadius = getMarkerRadius(projection, scene);
+  const isRingOnCanvas =
+    point.x > -ringRadius &&
+    point.y > -ringRadius &&
+    point.x < size.width + ringRadius &&
+    point.y < size.height + ringRadius;
+  if (isRingOnCanvas) return;
+
+  const [centerX, centerY] = [size.width / 2, size.height / 2];
+  const length = Math.hypot(point.x - centerX, point.y - centerY);
+  const [x, y] = [(point.x - centerX) / length, (point.y - centerY) / length];
+  // where the radius crosses the edge of the canvas, inset by the margin
+  const margin = ARROW_MARGIN * pixelRatio;
+  const reach = Math.min(
+    x === 0 ? Infinity : (centerX - margin) / Math.abs(x),
+    y === 0 ? Infinity : (centerY - margin) / Math.abs(y)
+  );
+  const tip = { x: centerX + x * reach, y: centerY + y * reach };
+  const headBase = { x: tip.x - x * ARROW_HEAD_LENGTH * pixelRatio, y: tip.y - y * ARROW_HEAD_LENGTH * pixelRatio };
+  const tail = { x: tip.x - x * ARROW_LENGTH * pixelRatio, y: tip.y - y * ARROW_LENGTH * pixelRatio };
+  const headWidth = ARROW_HEAD_WIDTH * pixelRatio;
+
+  context.strokeStyle = MARKER;
+  context.fillStyle = MARKER;
+  context.lineWidth = ARROW_WIDTH * pixelRatio;
+  context.beginPath();
+  context.moveTo(tail.x, tail.y);
+  context.lineTo(headBase.x, headBase.y);
+  context.stroke();
+  context.beginPath();
+  context.moveTo(tip.x, tip.y);
+  context.lineTo(headBase.x - y * headWidth, headBase.y + x * headWidth);
+  context.lineTo(headBase.x + y * headWidth, headBase.y - x * headWidth);
+  context.closePath();
+  context.fill();
+
+  // the label inside the tail, its box just clear of it in any direction
+  const label = formatDistance(getDistance(view.center, object));
+  context.font = `${ZENITH_FONT_SIZE * pixelRatio}px "Inter Variable", sans-serif`;
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  const halfExtent = (Math.abs(x) * context.measureText(label).width + Math.abs(y) * ZENITH_FONT_SIZE * pixelRatio) / 2;
+  const offset = halfExtent + ARROW_LABEL_MARGIN * pixelRatio;
+  context.fillText(label, tail.x - x * offset, tail.y - y * offset);
 };
 
 export const drawStarMap = (context: CanvasRenderingContext2D, scene: StarMapScene) => {
@@ -355,4 +421,5 @@ export const drawStarMap = (context: CanvasRenderingContext2D, scene: StarMapSce
   drawBelowHorizon(context, projection, scene);
   drawHorizonLabels(context, projection, scene);
   drawMarker(context, projection, scene);
+  drawObjectArrow(context, projection, scene);
 };

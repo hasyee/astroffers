@@ -72,7 +72,7 @@ const STAR_RADIUS_PER_MAGNITUDE = 0.45;
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
-const getDistance = (a: Eq, b: Eq): Radians =>
+export const getDistance = (a: Eq, b: Eq): Radians =>
   Math.acos(clamp(Math.sin(a.de) * Math.sin(b.de) + Math.cos(a.de) * Math.cos(b.de) * Math.cos(a.ra - b.ra), -1, 1));
 
 const toEqs = (line: number[]): Eq[] =>
