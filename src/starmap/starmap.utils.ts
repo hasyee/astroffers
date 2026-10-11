@@ -65,9 +65,12 @@ const INITIAL_FOV_MARGIN = 1.15;
 /** The faintest stars of the layers */
 const MAX_MAGNITUDE = 10;
 /** CSS pixels */
-const MIN_STAR_RADIUS = 0.6;
-const MAX_STAR_RADIUS = 5;
-const STAR_RADIUS_PER_MAGNITUDE = 0.45;
+const MIN_STAR_RADIUS = 0.5;
+const MAX_STAR_RADIUS = 4;
+const STAR_RADIUS_PER_MAGNITUDE = 0.36;
+/** Of the faintest stars shown (the smallest ones are faint anyway), full from this many magnitudes brighter */
+const MIN_STAR_OPACITY = 0.38;
+const STAR_OPACITY_RANGE = 5;
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
@@ -264,15 +267,28 @@ export const getMoon = (astronomy: typeof Astronomy, time: Timestamp, coords: Co
   illuminated: astronomy.Illumination(astronomy.Body.Moon, new Date(time)).phase_fraction
 });
 
+/** CSS pixels across the shorter side of the canvas the magnitude limit is set for (`getMagnitudeLimit`) */
+const MAGNITUDE_LIMIT_CANVAS_SIZE = 500;
+
 /**
- * The faintest stars shown: the more of them the narrower the field (5.1 at 90°, 6.6 at 40°, 8 at 20°, 10 below
- * ~7.5°), few in a wide field, not to hide the constellations
+ * The faintest stars shown: the more of them the narrower the field (on a canvas of the reference size 5.1 at 90°,
+ * 6.6 at 40°, 8 at 20°, 10 below ~7.5°), few in a wide field, not to hide the constellations. By the sky of a pixel
+ * rather than the field of view alone: the field taken to the reference size, so a smaller canvas (a phone) shows as
+ * many stars on an area of the screen, not the same stars crowded.
  */
-export const getMagnitudeLimit = (fov: Radians) => Math.min(MAX_MAGNITUDE, 3.8 + 4.5 * Math.log10(Math.PI / fov));
+export const getMagnitudeLimit = (fov: Radians, canvasSize: number) =>
+  Math.min(MAX_MAGNITUDE, 3.8 + 4.5 * Math.log10((Math.PI * canvasSize) / (fov * MAGNITUDE_LIMIT_CANVAS_SIZE)));
 
 /** CSS pixels, by the brightness of the star relative to the faintest ones shown */
 export const getStarRadius = (magnitude: number, magnitudeLimit: number) =>
   clamp(MIN_STAR_RADIUS + STAR_RADIUS_PER_MAGNITUDE * (magnitudeLimit - magnitude), MIN_STAR_RADIUS, MAX_STAR_RADIUS);
+
+/**
+ * By the brightness of the star relative to the faintest ones shown, as the radius: linear in the magnitude (itself
+ * logarithmic, as the eye sees), from the faintest ones to the ones this much brighter (the flux would fade too fast)
+ */
+export const getStarOpacity = (magnitude: number, magnitudeLimit: number) =>
+  clamp(MIN_STAR_OPACITY + ((1 - MIN_STAR_OPACITY) * (magnitudeLimit - magnitude)) / STAR_OPACITY_RANGE, 0, 1);
 
 /**
  * The view moved by a drag (or a pinch) of a point of the canvas to another one, zoomed by the factor of the field of

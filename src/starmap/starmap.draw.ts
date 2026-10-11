@@ -21,6 +21,7 @@ import {
   type SkyPhase,
   getDistance,
   getMagnitudeLimit,
+  getStarOpacity,
   getStarRadius
 } from './starmap.utils';
 import { addScaled, cross, dot, normalize, toEq, toVector } from './starmap.vector';
@@ -33,7 +34,7 @@ const DAYLIGHT_ALTITUDE = 10 * (Math.PI / 180);
  */
 const DAYLIGHT_RATIO = 0.5;
 const STAR = theme.palette.common.white;
-const LINE = 'rgba(255, 255, 255, 0.55)';
+const LINE = 'rgba(255, 255, 255, 0.4)';
 /** The ring of the object, its arrow, the directions on the horizon, the poles and the names of the bodies */
 const MARK = theme.palette.primary.main;
 /** Over the light blue sky of the daylight */
@@ -83,6 +84,9 @@ const PREVIEW_EDGE = 0.6;
 const PREVIEW_STEP = 1e-4;
 
 const DEG = Math.PI / 180;
+
+/** Steps of the opacity of the stars from 0 to 1 (8 from the faintest ones), a fill each; no banding shows */
+const STAR_OPACITY_STEPS = 12;
 
 /** The faintest stars of the first layer: the second one is needed only beyond them */
 const FIRST_LAYER_MAX_MAGNITUDE = 6.5;
@@ -138,10 +142,10 @@ const drawStars = (
   projection: Projection,
   { view, size, pixelRatio, layers }: StarMapScene
 ) => {
-  const magnitudeLimit = getMagnitudeLimit(view.fov);
+  const magnitudeLimit = getMagnitudeLimit(view.fov, Math.min(size.width, size.height) / pixelRatio);
   const minCos = Math.cos(projection.radius);
-  context.fillStyle = STAR;
-  context.beginPath();
+  // a path of the stars of each step of the opacity, filled at once
+  const paths = Array.from({ length: STAR_OPACITY_STEPS + 1 }, () => new Path2D());
   (layers ?? [])
     .filter((_, index) => index === 0 || magnitudeLimit > FIRST_LAYER_MAX_MAGNITUDE)
     .forEach(layer =>
@@ -151,12 +155,18 @@ const drawStars = (
           const point = projection.project(layer.ra[index], layer.sinDe[index], layer.cosDe[index], minCos);
           if (!point || point.x < 0 || point.y < 0 || point.x > size.width || point.y > size.height) continue;
           const radius = getStarRadius(layer.magnitude[index], magnitudeLimit) * pixelRatio;
-          context.moveTo(point.x + radius, point.y);
-          context.arc(point.x, point.y, radius, 0, 2 * Math.PI);
+          const path = paths[Math.round(getStarOpacity(layer.magnitude[index], magnitudeLimit) * STAR_OPACITY_STEPS)];
+          path.moveTo(point.x + radius, point.y);
+          path.arc(point.x, point.y, radius, 0, 2 * Math.PI);
         }
       })
     );
-  context.fill();
+  context.fillStyle = STAR;
+  paths.forEach((path, step) => {
+    context.globalAlpha = step / STAR_OPACITY_STEPS;
+    context.fill(path);
+  });
+  context.globalAlpha = 1;
 };
 
 /** Beyond it the circle of the horizon is drawn as a straight line (device pixels) */
