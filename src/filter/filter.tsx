@@ -17,7 +17,7 @@ import './filter.scss';
 const observationWindowOptions: { value: ObservationWindow; label: string }[] = [
   { value: 'moonlessNight', label: 'Moonless astronomical night' },
   { value: 'astroNight', label: 'Astronomical night' },
-  { value: 'night', label: 'Night' }
+  { value: 'night', label: 'All night' }
 ];
 
 const brightnessLimitTypeOptions: { value: BrightnessType; label: string }[] = [
