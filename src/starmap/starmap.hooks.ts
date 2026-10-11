@@ -11,9 +11,10 @@ import { createPreviewCanvas, drawStarMap } from './starmap.draw';
 import type { Orientation, Point, Size, View } from './starmap.projection';
 import {
   FLIP_PARAMS,
-  NORTH_CELESTIAL_POLE,
   ORIENTATION_PARAM,
   VIEW_PARAMS,
+  getCelestialPoles,
+  getHorizonPoles,
   getInitialView,
   getHorizon,
   getMoon,
@@ -180,10 +181,11 @@ export const useStarMapCanvas = (
   const preview = usePreview(object);
   const viewParamValues = useQueryParams(VIEW_PARAMS);
   const setViewParamValues = useQueryParamsSetter(VIEW_PARAMS);
-  const orientation = useMemo<Orientation>(
-    () => ({ up: orientationType === 'equatorial' ? NORTH_CELESTIAL_POLE : horizon.zenith, flip }),
-    [orientationType, horizon, flip]
+  const poles = useMemo(
+    () => (orientationType === 'equatorial' ? getCelestialPoles(time) : getHorizonPoles(horizon)),
+    [orientationType, time, horizon]
   );
+  const orientation = useMemo<Orientation>(() => ({ up: poles[0].point, flip }), [poles, flip]);
   const viewRef = useRef<View | null>(null);
   const sizeRef = useRef<Size>({ width: 0, height: 0 });
   const frameRef = useRef<number | null>(null);
@@ -194,13 +196,25 @@ export const useStarMapCanvas = (
     layers,
     object,
     horizon,
+    poles,
     sun,
     moon,
     preview,
     viewParamValues,
     setViewParamValues
   });
-  propsRef.current = { orientation, layers, object, horizon, sun, moon, preview, viewParamValues, setViewParamValues };
+  propsRef.current = {
+    orientation,
+    layers,
+    object,
+    horizon,
+    poles,
+    sun,
+    moon,
+    preview,
+    viewParamValues,
+    setViewParamValues
+  };
 
   const redraw = useCallback(() => {
     if (frameRef.current !== null) return;

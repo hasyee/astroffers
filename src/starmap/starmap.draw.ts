@@ -12,7 +12,15 @@ import {
   createProjection,
   projectEq
 } from './starmap.projection';
-import { type Body, type Horizon, type Moon, getDistance, getMagnitudeLimit, getStarRadius } from './starmap.utils';
+import {
+  type Body,
+  type Horizon,
+  type Moon,
+  type Pole,
+  getDistance,
+  getMagnitudeLimit,
+  getStarRadius
+} from './starmap.utils';
 import { addScaled, cross, dot, normalize, toEq, toVector } from './starmap.vector';
 
 const BACKGROUND = theme.palette.background.default;
@@ -23,7 +31,7 @@ const SUN = theme.palette.warning.main;
 const MOON_LIT = theme.palette.grey[300];
 /** The dark side of the Moon, faintly, to show its whole disc */
 const MOON_DARK = 'rgba(255, 255, 255, 0.15)';
-/** The directions on the horizon, the zenith and the nadir, as the ring of the object */
+/** The directions on the horizon and the poles of the orientation, as the ring of the object */
 const HORIZON_LABEL = MARKER;
 /** Darker than in the altitude chart (`chart.colors.ts`), over the stars */
 const BELOW_HORIZON = 'rgba(128, 128, 128, 0.3)';
@@ -33,13 +41,13 @@ const LINE_WIDTH = 1.25;
 const MARKER_WIDTH = 1.5;
 const MIN_MARKER_RADIUS = 10;
 const MARKER_MARGIN = 4;
-/** The letters of the directions, larger than the names of the zenith and the nadir */
+/** The letters of the directions, larger than the other labels */
 const DIRECTION_FONT_SIZE = 18;
-const ZENITH_FONT_SIZE = 13;
+const LABEL_FONT_SIZE = 13;
 const HORIZON_TICK = 5;
 /** From the point of the horizon to the middle of the letter of its direction */
 const DIRECTION_LABEL_OFFSET = 18;
-const ZENITH_CROSS = 5;
+const POLE_CROSS = 5;
 
 /** CSS pixels: the arrow towards the object off the canvas, its tip inside the edge by the margin */
 const ARROW_MARGIN = 20;
@@ -81,6 +89,8 @@ export type StarMapScene = {
   object: NgcObject;
   /** Of the place at the time of the map */
   horizon: Horizon;
+  /** Of the orientation, the one up first */
+  poles: Pole[];
   /** Of the object, masked (`createPreviewCanvas`); missing while loading, failed (e.g. offline) or none */
   preview: HTMLCanvasElement | null;
   /** Of the place at the time of the map; missing while loading */
@@ -260,7 +270,7 @@ const drawBodyLabel = (
   radius: number
 ) => {
   context.fillStyle = HORIZON_LABEL;
-  context.font = `${ZENITH_FONT_SIZE * pixelRatio}px "Inter Variable", sans-serif`;
+  context.font = `${LABEL_FONT_SIZE * pixelRatio}px "Inter Variable", sans-serif`;
   context.textAlign = 'left';
   context.textBaseline = 'middle';
   context.fillText(name, at.x + radius + BODY_LABEL_MARGIN * pixelRatio, at.y);
@@ -324,12 +334,12 @@ const drawMoon = (
 
 /**
  * The directions on the horizon by ticks, their letters below them (towards the point 1° below, wherever the map is
- * turned), and the zenith and the nadir by small crosses with their names
+ * turned), and the poles of the orientation by small crosses with their names
  */
-const drawHorizonLabels = (
+const drawLabels = (
   context: CanvasRenderingContext2D,
   projection: Projection,
-  { pixelRatio, horizon }: StarMapScene
+  { pixelRatio, horizon, poles }: StarMapScene
 ) => {
   context.strokeStyle = HORIZON_LABEL;
   context.fillStyle = HORIZON_LABEL;
@@ -353,14 +363,11 @@ const drawHorizonLabels = (
     );
   });
   context.textAlign = 'left';
-  context.font = `${ZENITH_FONT_SIZE * pixelRatio}px "Inter Variable", sans-serif`;
-  [
-    { name: 'Zenith', point: horizon.zenith },
-    { name: 'Nadir', point: horizon.nadir }
-  ].forEach(({ name, point }) => {
+  context.font = `${LABEL_FONT_SIZE * pixelRatio}px "Inter Variable", sans-serif`;
+  poles.forEach(({ name, point }) => {
     const at = projectEq(projection, point);
     if (!at) return;
-    const arm = ZENITH_CROSS * pixelRatio;
+    const arm = POLE_CROSS * pixelRatio;
     context.moveTo(at.x - arm, at.y);
     context.lineTo(at.x + arm, at.y);
     context.moveTo(at.x, at.y - arm);
@@ -440,10 +447,10 @@ const drawObjectArrow = (context: CanvasRenderingContext2D, projection: Projecti
 
   // the label inside the tail, its box just clear of it in any direction
   const label = formatDistance(getDistance(view.center, object));
-  context.font = `${ZENITH_FONT_SIZE * pixelRatio}px "Inter Variable", sans-serif`;
+  context.font = `${LABEL_FONT_SIZE * pixelRatio}px "Inter Variable", sans-serif`;
   context.textAlign = 'center';
   context.textBaseline = 'middle';
-  const halfExtent = (Math.abs(x) * context.measureText(label).width + Math.abs(y) * ZENITH_FONT_SIZE * pixelRatio) / 2;
+  const halfExtent = (Math.abs(x) * context.measureText(label).width + Math.abs(y) * LABEL_FONT_SIZE * pixelRatio) / 2;
   const offset = halfExtent + ARROW_LABEL_MARGIN * pixelRatio;
   context.fillText(label, tail.x - x * offset, tail.y - y * offset);
 };
@@ -458,7 +465,7 @@ export const drawStarMap = (context: CanvasRenderingContext2D, scene: StarMapSce
   drawSun(context, projection, scene);
   drawMoon(context, projection, scene);
   drawBelowHorizon(context, projection, scene);
-  drawHorizonLabels(context, projection, scene);
+  drawLabels(context, projection, scene);
   drawMarker(context, projection, scene);
   drawObjectArrow(context, projection, scene);
 };

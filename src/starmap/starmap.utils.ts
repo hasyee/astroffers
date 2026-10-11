@@ -25,8 +25,6 @@ export const FLIP_PARAMS = {
  */
 export const ORIENTATION_PARAM = createEnumParam('orient', { azimuthal: 'az', equatorial: 'eq' }, 'azimuthal');
 
-export const NORTH_CELESTIAL_POLE: Eq = { ra: 0, de: Math.PI / 2 };
-
 const DEG = Math.PI / 180;
 
 /** The range of the zoom, degrees */
@@ -143,6 +141,12 @@ const DIRECTIONS: [name: string, azimuth: number][] = [
 /** The yearly move of the north celestial pole by the precession, towards 0h (as in `calculator.precession.ts`) */
 const POLE_PRECESSION_PER_YEAR = (20.04 / 3600) * DEG;
 
+/** The north celestial pole of the date of the time, J2000 */
+const getNorthPoleOfDate = (time: Timestamp): Eq => ({
+  ra: 0,
+  de: Math.PI / 2 - POLE_PRECESSION_PER_YEAR * getElapsedYearsSinceJ2000(time)
+});
+
 /**
  * A point of the sky by its horizontal coordinates (the azimuth from the north towards the east), J2000: along the
  * east, the north and the up of the place in J2000 — the zenith of the date precessed back, the north towards the
@@ -152,7 +156,7 @@ const createHorizontalToEq = (time: Timestamp, coords: Coords) => {
   const { lat, lon } = getLocation(coords.lat, coords.lng);
   const years = getElapsedYearsSinceJ2000(time);
   const up = toVector(getEqCoordsOnDate({ ra: timeToLst(time, lon), de: lat }, -years));
-  const pole = toVector({ ra: 0, de: Math.PI / 2 - POLE_PRECESSION_PER_YEAR * years });
+  const pole = toVector(getNorthPoleOfDate(time));
   const north = normalize(addScaled(pole, up, -dot(pole, up)));
   const east = cross(north, up);
   return (azimuth: Radians, altitude: Radians) => {
@@ -178,6 +182,25 @@ export const getHorizon = (time: Timestamp, coords: Coords): Horizon => {
       below: horizontalToEq(azimuth * DEG, -DEG)
     }))
   };
+};
+
+/**
+ * The poles of the circle of the orientation of the map, marked by crosses with their names, the one up first: the
+ * zenith and the nadir of the horizon (azimuthal), or the celestial poles of the date (equatorial)
+ */
+export type Pole = { name: string; point: Eq };
+
+export const getHorizonPoles = ({ zenith, nadir }: Horizon): Pole[] => [
+  { name: 'Zenith', point: zenith },
+  { name: 'Nadir', point: nadir }
+];
+
+export const getCelestialPoles = (time: Timestamp): Pole[] => {
+  const north = getNorthPoleOfDate(time);
+  return [
+    { name: 'NP', point: north },
+    { name: 'SP', point: { ra: north.ra + Math.PI, de: -north.de } }
+  ];
 };
 
 /** A body of the place at a time, topocentric, J2000: its position and its angular radius */
