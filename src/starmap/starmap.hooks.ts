@@ -17,6 +17,7 @@ import {
   getInitialView,
   getHorizon,
   getMoon,
+  getSun,
   getOpeningTime,
   TIME_PARAM,
   toTimeParamValue,
@@ -127,13 +128,14 @@ export const useMapTimeSetter = () => {
   return useCallback((time: Timestamp) => setValue(toTimeParamValue(time)), [setValue]);
 };
 
-/** The horizon and the Moon (null while loading) of the place at the time */
+/** The horizon, the Sun and the Moon (null while loading) of the place at the time */
 const useSky = (time: Timestamp) => {
   const coords = useCoords();
   const astronomy = useAstronomy();
   const horizon = useMemo(() => getHorizon(time, coords), [time, coords]);
+  const sun = useMemo(() => (astronomy ? getSun(astronomy, time, coords) : null), [astronomy, time, coords]);
   const moon = useMemo(() => (astronomy ? getMoon(astronomy, time, coords) : null), [astronomy, time, coords]);
-  return { horizon, moon };
+  return { horizon, sun, moon };
 };
 
 /**
@@ -162,7 +164,7 @@ const getPointDistance = (a: Point, b: Point) => Math.hypot(a.x - b.x, a.y - b.y
 /**
  * Draws the star map of the object on the canvas, opened around it (`getInitialView`): dragged by a finger or the
  * mouse, zoomed by a pinch or the wheel around their points; turned to the zenith (or the north celestial pole) up;
- * below the horizon of the time of the map in grey, its Moon in its phase. The view of the query (of a link) is shown
+ * below the horizon of the time of the map in grey, its Sun, its Moon in its phase. The view of the query (of a link) is shown
  * at the opening, its changes are written back to it after the gestures (at once when centered). The view is kept out
  * of the state of React, so a gesture redraws the canvas only, at most once a frame.
  */
@@ -174,7 +176,7 @@ export const useStarMapCanvas = (
   const flip = useFlip();
   const orientationType = useOrientationType();
   const layers = useStarLayers();
-  const { horizon, moon } = useSky(time);
+  const { horizon, sun, moon } = useSky(time);
   const preview = usePreview(object);
   const viewParamValues = useQueryParams(VIEW_PARAMS);
   const setViewParamValues = useQueryParamsSetter(VIEW_PARAMS);
@@ -187,8 +189,18 @@ export const useStarMapCanvas = (
   const frameRef = useRef<number | null>(null);
   const viewParamsTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   // the latest of the props, read by the frame and the listeners
-  const propsRef = useRef({ orientation, layers, object, horizon, moon, preview, viewParamValues, setViewParamValues });
-  propsRef.current = { orientation, layers, object, horizon, moon, preview, viewParamValues, setViewParamValues };
+  const propsRef = useRef({
+    orientation,
+    layers,
+    object,
+    horizon,
+    sun,
+    moon,
+    preview,
+    viewParamValues,
+    setViewParamValues
+  });
+  propsRef.current = { orientation, layers, object, horizon, sun, moon, preview, viewParamValues, setViewParamValues };
 
   const redraw = useCallback(() => {
     if (frameRef.current !== null) return;
@@ -215,7 +227,7 @@ export const useStarMapCanvas = (
     redraw();
   }, [object.id, redraw]);
 
-  useEffect(redraw, [orientation, layers, horizon, moon, preview, redraw]);
+  useEffect(redraw, [orientation, layers, horizon, sun, moon, preview, redraw]);
 
   /** Shows the view, and writes it into the query after the delay */
   const setView = useCallback(

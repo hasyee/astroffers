@@ -180,27 +180,41 @@ export const getHorizon = (time: Timestamp, coords: Coords): Horizon => {
   };
 };
 
-/**
- * The Moon of the place at a time, topocentric (its parallax is up to ~1°), J2000: its position, its angular radius,
- * the illuminated fraction of its disc, and the position of the Sun, for the side of its bright limb
- */
-export type Moon = { eq: Eq; radius: Radians; illuminated: number; sun: Eq };
+/** A body of the place at a time, topocentric, J2000: its position and its angular radius */
+export type Body = { eq: Eq; radius: Radians };
 
+/** And the illuminated fraction of its disc (its bright limb is towards the Sun) */
+export type Moon = Body & { illuminated: number };
+
+const SUN_RADIUS_KM = 695700;
 const MOON_RADIUS_KM = 1737.4;
 
 /** By `astronomy-engine`, loaded by the map (`useAstronomy`) */
-export const getMoon = (astronomy: typeof Astronomy, time: Timestamp, coords: Coords): Moon => {
-  const observer = new astronomy.Observer(coords.lat, coords.lng, 0);
-  const date = new Date(time);
-  const toEq = ({ ra, dec }: Astronomy.EquatorialCoordinates): Eq => ({ ra: (ra / 12) * Math.PI, de: dec * DEG });
-  const moon = astronomy.Equator(astronomy.Body.Moon, date, observer, false, true);
-  return {
-    eq: toEq(moon),
-    radius: Math.asin(MOON_RADIUS_KM / (moon.dist * astronomy.KM_PER_AU)),
-    illuminated: astronomy.Illumination(astronomy.Body.Moon, date).phase_fraction,
-    sun: toEq(astronomy.Equator(astronomy.Body.Sun, date, observer, false, true))
-  };
+const getBody = (
+  astronomy: typeof Astronomy,
+  body: Astronomy.Body,
+  radiusKm: number,
+  time: Timestamp,
+  coords: Coords
+): Body => {
+  const { ra, dec, dist } = astronomy.Equator(
+    body,
+    new Date(time),
+    new astronomy.Observer(coords.lat, coords.lng, 0),
+    false,
+    true
+  );
+  return { eq: { ra: (ra / 12) * Math.PI, de: dec * DEG }, radius: Math.asin(radiusKm / (dist * astronomy.KM_PER_AU)) };
 };
+
+export const getSun = (astronomy: typeof Astronomy, time: Timestamp, coords: Coords): Body =>
+  getBody(astronomy, astronomy.Body.Sun, SUN_RADIUS_KM, time, coords);
+
+/** Topocentric: its parallax is up to ~1° */
+export const getMoon = (astronomy: typeof Astronomy, time: Timestamp, coords: Coords): Moon => ({
+  ...getBody(astronomy, astronomy.Body.Moon, MOON_RADIUS_KM, time, coords),
+  illuminated: astronomy.Illumination(astronomy.Body.Moon, new Date(time)).phase_fraction
+});
 
 /**
  * The faintest stars shown: the more of them the narrower the field (5.1 at 90°, 6.6 at 40°, 8 at 20°, 10 below
