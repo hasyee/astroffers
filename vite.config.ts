@@ -35,6 +35,9 @@ export default defineConfig({
         // of the font only its latin subset, the others are cached when a text needs them (e.g. a place name); the
         // star layers of the map too (`bin`, under the default 2 MiB limit of a file), for offline use
         globPatterns: ['**/*.{js,css,html,png,ico,svg,webmanifest,bin}', '**/inter-latin-wght-normal-*.woff2'],
+        // a navigation to a file (e.g. /sitemap.xml, /robots.txt opened in a tab) goes to the server, not to the app,
+        // which would take it for an object and replace it with /; the routes of the app have no extension
+        navigateFallbackDenylist: [/\.[^/]+$/],
         runtimeCaching: [
           {
             urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.endsWith('.woff2'),
