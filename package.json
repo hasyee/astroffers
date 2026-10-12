@@ -31,6 +31,7 @@
     "@vitejs/plugin-react": "^6.1.1",
     "oxlint": "^1.86.0",
     "prettier": "^3.9.9",
+    "puppeteer-core": "^25.13.0",
     "sass": "^1.105.1",
     "sharp": "^0.35.5",
     "typescript": "^7.0.2",
