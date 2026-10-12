@@ -1,5 +1,4 @@
 import { type RefObject, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import type * as Astronomy from 'astronomy-engine';
 import type { NgcInfo, NgcObject, Timestamp } from '../calculator/calculator.types';
 import { getObjectImgSrc } from '../catalog/catalog.utils';
 import { FILTER_PARAMS } from '../filter/filter.utils';
@@ -7,25 +6,25 @@ import { useCoords } from '../location/location.hooks';
 import { useQueryParam, useQueryParamSetter, useQueryParams, useQueryParamsSetter } from '../query/query.hooks';
 import starLayer1Url from '../stars/stars.1.bin?url';
 import starLayer2Url from '../stars/stars.2.bin?url';
-import { type StarLayer, decodeStarLayer } from '../stars/stars.utils';
+import { decodeStarLayer } from '../stars/stars.utils';
 import { createPreviewCanvas, drawStarMap } from './starmap.draw';
 import type { Orientation, Point, Size, View } from './starmap.projection';
 import {
   FLIP_PARAMS,
   ORIENTATION_PARAM,
+  TIME_PARAM,
   VIEW_PARAMS,
   getCelestialPoles,
+  getHorizon,
   getHorizonPoles,
   getInitialView,
-  getHorizon,
   getMoon,
+  getOpeningTime,
   getSkyPhase,
   getSun,
   getSunAltitude,
-  getOpeningTime,
-  TIME_PARAM,
-  toTimeParamValue,
   moveView,
+  toTimeParamValue,
   toView,
   toViewParamValues
 } from './starmap.utils';
@@ -54,63 +53,46 @@ export type StarMapHandle = {
   centerObject: () => void;
 };
 
-/** Loaded once in a session, at the first opening of the map (precached by the service worker, for offline use) */
-let starLayersPromise: Promise<StarLayer[]> | null = null;
+/**
+ * Loads once in a session, at the first opening of the map (precached by the service worker, for offline use); tried
+ * again at the next opening after a failure
+ */
+const createLoader = <T>(load: () => Promise<T>) => {
+  let promise: Promise<T> | null = null;
+  return () => {
+    promise ??= load().catch(error => {
+      promise = null;
+      throw error;
+    });
+    return promise;
+  };
+};
 
-const loadStarLayers = () => {
-  starLayersPromise ??= Promise.all(
+const loadStarLayers = createLoader(() =>
+  Promise.all(
     [starLayer1Url, starLayer2Url].map(async url => {
       const response = await fetch(url);
       if (!response.ok) throw new Error(`${url}: ${response.status}`);
       return decodeStarLayer(await response.arrayBuffer());
     })
-  ).catch(error => {
-    // to be tried again at the next opening
-    starLayersPromise = null;
-    throw error;
-  });
-  return starLayersPromise;
-};
+  )
+);
 
-/** The star layers, null while loading */
-export const useStarLayers = () => {
-  const [layers, setLayers] = useState<StarLayer[] | null>(null);
+/** In chunks of their own: the calculator's worker has its own copies */
+const loadAstronomy = createLoader(() => import('astronomy-engine'));
+const loadSolar = createLoader(() => import('../solar/solar.utils'));
+
+/** What the loader loads, null while loading */
+const useLoaded = <T>(load: () => Promise<T>) => {
+  const [loaded, setLoaded] = useState<T | null>(null);
   useEffect(() => {
     let isCurrent = true;
-    loadStarLayers().then(loaded => isCurrent && setLayers(loaded), console.error);
+    load().then(value => isCurrent && setLoaded(() => value), console.error);
     return () => {
       isCurrent = false;
     };
-  }, []);
-  return layers;
-};
-
-/**
- * Loaded once in a session, at the first opening of the map, in a chunk of its own (precached, for offline use): the
- * calculator's worker has its own copy
- */
-let astronomyPromise: Promise<typeof Astronomy> | null = null;
-
-const loadAstronomy = () => {
-  astronomyPromise ??= import('astronomy-engine').catch(error => {
-    // to be tried again at the next opening
-    astronomyPromise = null;
-    throw error;
-  });
-  return astronomyPromise;
-};
-
-/** `astronomy-engine`, null while loading */
-const useAstronomy = () => {
-  const [astronomy, setAstronomy] = useState<typeof Astronomy | null>(null);
-  useEffect(() => {
-    let isCurrent = true;
-    loadAstronomy().then(loaded => isCurrent && setAstronomy(loaded), console.error);
-    return () => {
-      isCurrent = false;
-    };
-  }, []);
-  return astronomy;
+  }, [load]);
+  return loaded;
 };
 
 /**
@@ -135,19 +117,21 @@ export const useMapTimeSetter = () => {
 };
 
 /**
- * The sky of the place at the time: its horizon, the Sun and the Moon (null while loading), the altitude of the Sun and
- * its light (`SkyPhase`) by the twilight of the filter
+ * The sky of the place at the time: its horizon, the Sun and the Moon (null while loading), the other bodies of the Solar
+ * System (none while loading), the altitude of the Sun and its light (`SkyPhase`) by the twilight of the filter
  */
 export const useSky = (time: Timestamp) => {
   const coords = useCoords();
-  const astronomy = useAstronomy();
+  const astronomy = useLoaded(loadAstronomy);
+  const solar = useLoaded(loadSolar);
   const twilight = useQueryParam(FILTER_PARAMS.twilight) * DEG;
   const horizon = useMemo(() => getHorizon(time, coords), [time, coords]);
   const sun = useMemo(() => (astronomy ? getSun(astronomy, time, coords) : null), [astronomy, time, coords]);
   const moon = useMemo(() => (astronomy ? getMoon(astronomy, time, coords) : null), [astronomy, time, coords]);
+  const solarBodies = useMemo(() => solar?.getSolarSystemObjects(time) ?? [], [solar, time]);
   const sunAltitude = sun ? getSunAltitude(sun, horizon) : null;
   const phase = sunAltitude === null ? null : getSkyPhase(sunAltitude, twilight);
-  return { horizon, sun, moon, twilight, sunAltitude, phase };
+  return { horizon, sun, moon, solarBodies, twilight, sunAltitude, phase };
 };
 
 export type Sky = ReturnType<typeof useSky>;
@@ -178,19 +162,21 @@ const getPointDistance = (a: Point, b: Point) => Math.hypot(a.x - b.x, a.y - b.y
 /**
  * Draws the star map of the object on the canvas, opened around it (`getInitialView`): dragged by a finger or the
  * mouse, zoomed by a pinch or the wheel around their points; turned to the zenith (or the north celestial pole) up;
- * below the horizon of the time of the map in grey, its Sun, its Moon in its phase. The view of the query (of a link) is shown
- * at the opening, its changes are written back to it after the gestures (at once when centered). The view is kept out
- * of the state of React, so a gesture redraws the canvas only, at most once a frame.
+ * below the horizon of the time of the map in grey, its Sun, its Moon in its phase, its planets and asteroids. The view
+ * of the query (of a link) is shown at the opening, its changes are written back to it after the gestures (at once when
+ * centered). The view is kept out of the state of React, so a gesture redraws the canvas only, at most once a frame.
  */
 export const useStarMapCanvas = (
   canvasRef: RefObject<HTMLCanvasElement | null>,
-  object: NgcObject,
+  listObject: NgcObject,
   time: Timestamp,
-  { horizon, sun, moon, twilight, sunAltitude, phase }: Sky
+  { horizon, sun, moon, solarBodies, twilight, sunAltitude, phase }: Sky
 ): StarMapHandle => {
+  // a body of the Solar System where it is at the time of the map, not in the middle of the night of the list
+  const object = solarBodies.find(({ id }) => id === listObject.id) ?? listObject;
   const flip = useFlip();
   const orientationType = useOrientationType();
-  const layers = useStarLayers();
+  const layers = useLoaded(loadStarLayers);
   const preview = usePreview(object);
   const viewParamValues = useQueryParams(VIEW_PARAMS);
   const setViewParamValues = useQueryParamsSetter(VIEW_PARAMS);
@@ -212,6 +198,7 @@ export const useStarMapCanvas = (
     poles,
     sun,
     moon,
+    solarBodies,
     twilight,
     sunAltitude,
     phase,
@@ -227,6 +214,7 @@ export const useStarMapCanvas = (
     poles,
     sun,
     moon,
+    solarBodies,
     twilight,
     sunAltitude,
     phase,
@@ -260,7 +248,19 @@ export const useStarMapCanvas = (
     redraw();
   }, [object.id, redraw]);
 
-  useEffect(redraw, [orientation, layers, horizon, sun, moon, twilight, sunAltitude, phase, preview, redraw]);
+  useEffect(redraw, [
+    orientation,
+    layers,
+    horizon,
+    sun,
+    moon,
+    solarBodies,
+    twilight,
+    sunAltitude,
+    phase,
+    preview,
+    redraw
+  ]);
 
   /** Shows the view, and writes it into the query after the delay */
   const setView = useCallback(

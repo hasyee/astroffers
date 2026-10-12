@@ -240,7 +240,7 @@ export type Moon = Body & { illuminated: number };
 const SUN_RADIUS_KM = 695700;
 const MOON_RADIUS_KM = 1737.4;
 
-/** By `astronomy-engine`, loaded by the map (`useAstronomy`) */
+/** By `astronomy-engine`, loaded by the map (`loadAstronomy`) */
 const getBody = (
   astronomy: typeof Astronomy,
   body: Astronomy.Body,

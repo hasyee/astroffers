@@ -72,7 +72,7 @@ const ARROW_LABEL_MARGIN = 4;
 /** CSS pixels: the Sun and the Moon are at least this large (a few pixels in a wide field, in their true size) */
 const MIN_BODY_RADIUS = 8;
 const BODY_LABEL_MARGIN = 6;
-/** Radians, a step from the Sun or the Moon, for the scale of the projection at it (and the side of the lit limb) */
+/** Radians, a step from a body, for the scale of the projection at it (and the side of the lit limb of the Moon) */
 const BODY_STEP = 0.01;
 
 /** CSS pixels: the preview of the object fades in from the first size on the screen to the second one */
@@ -109,6 +109,8 @@ export type StarMapScene = {
   /** Of the place at the time of the map; missing while loading */
   sun: Body | null;
   moon: Moon | null;
+  /** The planets, the dwarf planets and the asteroids at the time of the map (geocentric); none while loading */
+  solarBodies: NgcObject[];
   /** The altitude of the Sun; missing while loading (a night sky) */
   sunAltitude: Radians | null;
   /** Of the filter, the altitude of the Sun where the night begins */
@@ -279,13 +281,16 @@ const drawPreview = (
 
 /**
  * The radius of the disc of a body on the canvas: in its true size (by the scale of the projection at it, from a step
- * to its north), at least `MIN_BODY_RADIUS`
+ * to its north), at least the minimum (device pixels)
  */
-const getDiscRadius = (projection: Projection, pixelRatio: number, { eq, radius }: Body, at: Point) => {
+const getDiscRadius = (projection: Projection, { eq, radius }: Body, at: Point, minRadius: number) => {
   const north = projectEq(projection, { ra: eq.ra, de: eq.de + BODY_STEP });
   const localScale = north ? Math.hypot(north.x - at.x, north.y - at.y) / BODY_STEP : projection.scale;
-  return Math.max(MIN_BODY_RADIUS * pixelRatio, radius * localScale);
+  return Math.max(minRadius, radius * localScale);
 };
+
+/** Half of the larger size of the object */
+const getObjectRadius = ({ size }: NgcObject): Radians => (size ? (Math.max(...size) / 60 / 2) * DEG : 0);
 
 const getMarkColor = ({ phase }: StarMapScene) => (phase === 'daylight' ? DAYLIGHT_MARK : MARK);
 
@@ -310,7 +315,7 @@ const drawSun = (context: CanvasRenderingContext2D, projection: Projection, scen
   if (!sun) return;
   const at = projectEq(projection, sun.eq);
   if (!at) return;
-  const radius = getDiscRadius(projection, pixelRatio, sun, at);
+  const radius = getDiscRadius(projection, sun, at, MIN_BODY_RADIUS * pixelRatio);
   context.fillStyle = SUN;
   context.beginPath();
   context.arc(at.x, at.y, radius, 0, 2 * Math.PI);
@@ -333,7 +338,7 @@ const drawMoon = (context: CanvasRenderingContext2D, projection: Projection, sce
   const sunward = projectEq(projection, toEq(normalize(addScaled(moonVector, towardsSun, BODY_STEP))));
   if (!at || !sunward) return;
   const angle = Math.atan2(sunward.y - at.y, sunward.x - at.x);
-  const radius = getDiscRadius(projection, pixelRatio, moon, at);
+  const radius = getDiscRadius(projection, moon, at, MIN_BODY_RADIUS * pixelRatio);
   const isCrescent = moon.illuminated < 0.5;
 
   context.fillStyle = MOON_DARK;
@@ -356,6 +361,33 @@ const drawMoon = (context: CanvasRenderingContext2D, projection: Projection, sce
   );
   context.fill();
   drawBodyLabel(context, scene, 'Moon', at, radius);
+};
+
+/**
+ * The planets, the dwarf planets and the asteroids as discs of their true size, at least as large as a star of their
+ * magnitude, and as opaque (`getStarRadius`, `getStarOpacity`), with their names: dots in a wide field, discs when
+ * zoomed in. Hidden beyond the magnitude limit as the stars, but the object of the map, shown as a star at the limit.
+ * Their phase, oblateness, rings and moons are left out.
+ */
+const drawSolarBodies = (context: CanvasRenderingContext2D, projection: Projection, scene: StarMapScene) => {
+  const { view, size, pixelRatio, object, solarBodies } = scene;
+  const magnitudeLimit = getMagnitudeLimit(view.fov, Math.min(size.width, size.height) / pixelRatio);
+  solarBodies.forEach(body => {
+    if (body.magnitude === undefined) return;
+    const limit = body.id === object.id ? Math.max(magnitudeLimit, body.magnitude) : magnitudeLimit;
+    if (body.magnitude > limit) return;
+    const at = projectEq(projection, body);
+    if (!at) return;
+    const minRadius = getStarRadius(body.magnitude, limit) * pixelRatio;
+    const radius = getDiscRadius(projection, { eq: body, radius: getObjectRadius(body) }, at, minRadius);
+    context.fillStyle = STAR;
+    context.globalAlpha = getStarOpacity(body.magnitude, limit);
+    context.beginPath();
+    context.arc(at.x, at.y, radius, 0, 2 * Math.PI);
+    context.fill();
+    context.globalAlpha = 1;
+    drawBodyLabel(context, scene, body.name ?? body.id, at, radius);
+  });
 };
 
 /**
@@ -401,10 +433,8 @@ const drawLabels = (context: CanvasRenderingContext2D, projection: Projection, s
 };
 
 /** Of the ring around the object, at least as large as the object (device pixels) */
-const getMarkerRadius = (projection: Projection, { pixelRatio, object }: StarMapScene) => {
-  const size = object.size ? (Math.max(...object.size) / 60 / 2) * DEG * projection.scale : 0;
-  return Math.max(MIN_MARKER_RADIUS * pixelRatio, size + MARKER_MARGIN * pixelRatio);
-};
+const getMarkerRadius = (projection: Projection, { pixelRatio, object }: StarMapScene) =>
+  Math.max(MIN_MARKER_RADIUS * pixelRatio, getObjectRadius(object) * projection.scale + MARKER_MARGIN * pixelRatio);
 
 const drawMarker = (context: CanvasRenderingContext2D, projection: Projection, scene: StarMapScene) => {
   const point = projectEq(projection, scene.object);
@@ -502,6 +532,7 @@ export const drawStarMap = (context: CanvasRenderingContext2D, scene: StarMapSce
   drawLines(context, projection, scene.pixelRatio);
   drawStars(context, projection, scene);
   drawPreview(context, projection, scene);
+  drawSolarBodies(context, projection, scene);
   drawSun(context, projection, scene);
   drawMoon(context, projection, scene);
   drawBelowHorizon(context, projection, scene);
