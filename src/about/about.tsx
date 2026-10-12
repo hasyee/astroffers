@@ -60,10 +60,7 @@ export default function About({ isOpen, onClose }: { isOpen: boolean; onClose: (
           <img src="/icons/icon-192x192.png" alt="" />
           <div>
             <Typography variant="h5">Astroffers</Typography>
-            <Typography color="text.secondary">
-              Finds what to observe on a given night: deep-sky objects of the NGC 2000 / Messier catalogs, and the
-              bodies of the Solar System.
-            </Typography>
+            <Typography color="text.secondary">{import.meta.env.DESCRIPTION as string}</Typography>
           </div>
         </div>
         <table>

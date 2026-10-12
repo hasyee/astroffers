@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- the main view only: the details of an object (/:id) depend on the night and the place, and close when it is not visible -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://astroffers.hasyee.com/</loc>
+  </url>
+</urlset>

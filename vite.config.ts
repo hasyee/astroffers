@@ -6,9 +6,17 @@ import { VitePWA } from 'vite-plugin-pwa';
 // the background of the app (`theme.ts`)
 const THEME_COLOR = '#000000';
 
+/**
+ * Of the About dialog (`import.meta.env.DESCRIPTION`), the manifest and `index.html` (`%DESCRIPTION%`: the meta
+ * description, Open Graph and JSON-LD)
+ */
+const DESCRIPTION =
+  'Finds what to observe on a given night: deep-sky objects of the NGC 2000 / Messier catalogs, and the bodies of the Solar System.';
+
 export default defineConfig({
   define: {
-    'import.meta.env.VERSION': JSON.stringify(process.env.VERSION || process.env.RENDER_GIT_COMMIT)
+    'import.meta.env.VERSION': JSON.stringify(process.env.VERSION || process.env.RENDER_GIT_COMMIT),
+    'import.meta.env.DESCRIPTION': JSON.stringify(DESCRIPTION)
   },
   // reachable from the local network too, e.g. from a phone (`vite preview` takes it over)
   server: {
@@ -20,6 +28,7 @@ export default defineConfig({
   plugins: [
     react(),
     oxlint(),
+    { name: 'description', transformIndexHtml: html => html.replaceAll('%DESCRIPTION%', DESCRIPTION) },
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
@@ -47,7 +56,7 @@ export default defineConfig({
       manifest: {
         name: 'Astroffers',
         short_name: 'Astroffers',
-        description: 'Take offers to watch at given nights by the NGC 2000 and the Messier catalogs',
+        description: DESCRIPTION,
         start_url: '.',
         display: 'standalone',
         theme_color: THEME_COLOR,
