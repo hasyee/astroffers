@@ -55,11 +55,7 @@ function HeaderCell({ column }: { column: Column }) {
           placeholder={column.search === 'name' ? 'Search' : '#'}
           value={search[column.search]}
           onChange={event => setSearchValue(event.target.value)}
-          endAdornment={
-            column.search !== 'ngc'
-              ? getSearchAnyAdornment(column.search, search[column.search], setSearchValue)
-              : undefined
-          }
+          endAdornment={getSearchAnyAdornment(column.search, search[column.search], setSearchValue)}
         />
       )}
     </th>

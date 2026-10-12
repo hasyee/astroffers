@@ -81,8 +81,9 @@ export const isSearchEmpty = (search: ListSearch) => !search.ngc && !search.mess
 /** Search term matching every object that has the field at all (toggled by `SearchAnyAdornment`) */
 export const SEARCH_ANY = '*';
 
-const matchesMessier = (term: string, messier: number | undefined) =>
-  !term || (term === SEARCH_ANY ? messier !== undefined : String(messier) === term);
+/** An NGC or a Messier number */
+const matchesNumber = (term: string, value: number | undefined) =>
+  !term || (term === SEARCH_ANY ? value !== undefined : String(value) === term);
 
 const matchesName = (term: string, name: string | undefined) =>
   !term || (term === SEARCH_ANY ? !!name : !!name?.toLowerCase().includes(term.toLowerCase()));
@@ -90,6 +91,6 @@ const matchesName = (term: string, name: string | undefined) =>
 export const matchesSearch =
   ({ ngc, messier, name }: ListSearch) =>
   ({ object }: NgcInfo) =>
-    (!ngc.trim() || String(object.ngc) === ngc.trim()) &&
-    matchesMessier(messier.trim(), object.messier) &&
+    matchesNumber(ngc.trim(), object.ngc) &&
+    matchesNumber(messier.trim(), object.messier) &&
     matchesName(name.trim(), object.name);

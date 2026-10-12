@@ -64,7 +64,10 @@ function Toolbar() {
             placeholder="NGC"
             value={search.ngc}
             onChange={event => setNgc(event.target.value)}
-            slotProps={{ htmlInput: { inputMode: 'numeric' } }}
+            slotProps={{
+              htmlInput: { inputMode: 'numeric' },
+              input: { endAdornment: getSearchAnyAdornment('ngc', search.ngc, setNgc) }
+            }}
           />
           <TextField
             type="search"

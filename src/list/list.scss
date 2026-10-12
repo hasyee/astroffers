@@ -154,6 +154,7 @@
   }
 
   // room for the asterisk button of its search, also while it is hidden, not to resize the column by typing
+  th.ngc .search,
   th.messier .search {
     min-width: 4.5rem;
   }
@@ -319,7 +320,7 @@
   }
 }
 
-// the asterisk toggle of the Messier and the name search (`list.search.tsx`)
+// the asterisk toggle of the searches (`list.search.tsx`)
 .SearchAnyAdornment .MuiIconButton-root {
   padding: 3px;
   margin-right: -4px;
